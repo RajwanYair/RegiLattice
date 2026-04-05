@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -64,7 +64,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-autorun-all",
                     Label = "Disable AutoRun on All Drive Types",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Disables AutoRun on all drive types (removable, fixed, optical, network, RAM disk). Prevents automatic execution of malware from inserted USB drives or optical media — one of the most common infection vectors. Default: AutoRun enabled for some types. Recommended: 255 (all types).",
                     Tags = ["autoplay", "autorun", "usb", "removable", "security", "policy"],
@@ -81,7 +81,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-for-removable",
                     Label = "Disable AutoPlay on Removable Drives",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Turns off the AutoPlay dialog for removable storage (USB flash drives, memory cards). Users must manually open and browse inserted removable media. Default: AutoPlay dialog shown. Recommended: 1.",
                     Tags = ["autoplay", "usb", "removable", "security", "policy"],
@@ -98,7 +98,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-for-optical",
                     Label = "Disable AutoPlay on Optical Drives (CD/DVD/Blu-ray)",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Disables the AutoPlay dialog when a CD, DVD, or Blu-ray disc is inserted. Prevents automatic installation, media play, or execution of disc content. Default: AutoPlay shown for optical discs. Recommended: 1.",
                     Tags = ["autoplay", "cd", "dvd", "optical", "media", "security", "policy"],
@@ -115,7 +115,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-for-network",
                     Label = "Disable AutoPlay on Network Drives",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Prevents the AutoPlay dialog from opening when a network drive is mapped or connected. Eliminates risk from autorun.inf files on network shares. Default: AutoPlay disabled on network by default in Windows 10+. Recommended: 1 for explicit policy enforcement.",
                     Tags = ["autoplay", "network", "share", "smb", "security", "policy"],
@@ -132,7 +132,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-set-default-action-none",
                     Label = "Set AutoPlay Default Action to 'Take No Action'",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Configures the AutoPlay default handler for all media types to 'Take no action'. Even if AutoPlay is not fully disabled, no action is taken automatically on media insertion. Default: Windows auto-selects handler. Recommended: 1.",
                     Tags = ["autoplay", "default-action", "media", "security", "policy"],
@@ -149,7 +149,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-block-autorun-inf",
                     Label = "Block autorun.inf Execution from Any Drive",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Explicitly blocks execution of autorun.inf files from all drive types. The autorun.inf mechanism is the primary vehicle for USB weaponisation. Default: blocked on fixed/network drives in modern Windows, but enforced here for all types. Recommended: 1.",
                     Tags = ["autoplay", "autorun.inf", "usb", "malware", "security", "policy"],
@@ -166,7 +166,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-block-user-override",
                     Label = "Block Users from Changing AutoPlay Settings",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Prevents users from changing AutoPlay settings in Settings → Bluetooth & Devices → AutoPlay. Ensures the IT-configured AutoPlay policy cannot be overridden by end users. Default: users can change. Recommended: 1.",
                     Tags = ["autoplay", "user-restriction", "settings", "security", "policy"],
@@ -183,7 +183,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-for-camera-import",
                     Label = "Disable AutoPlay for Camera / Photo Import",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Prevents the AutoPlay dialog from offering to import photos/videos when a digital camera or phone is connected. Users must manually launch the import workflow. Default: AutoPlay dialog offered. Recommended: 1 to prevent unintended data access.",
                     Tags = ["autoplay", "camera", "photo", "import", "privacy", "policy"],
@@ -200,7 +200,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-log-media-insertions",
                     Label = "Audit Log Media Insertion Events",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Enables logging of removable media insertion events to the Security audit log. Provides a device usage trail for DLP and forensic investigations. Default: not audited. Recommended: 1 on monitored endpoints.",
                     Tags = ["autoplay", "audit", "media", "usb", "dlp", "forensics", "policy"],
@@ -217,7 +217,7 @@ internal static class PolicyDesktop
                 {
                     Id = "autoplay-disable-for-mtp-devices",
                     Label = "Disable AutoPlay for MTP / Portable Devices",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Turns off AutoPlay for MTP (Media Transfer Protocol) devices such as smartphones, tablets, and MP3 players. Stops automatic launch of Windows Photo Import or Windows Media Player when a mobile device is connected. Default: AutoPlay dialog offered. Recommended: 1.",
                     Tags = ["autoplay", "mtp", "mobile", "portable-device", "privacy", "policy"],
@@ -250,7 +250,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-all-drives",
                 Label = "Disable AutoRun on All Drive Types",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -268,7 +268,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-autoplay-default",
                 Label = "Disable AutoPlay Default Handler",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -286,7 +286,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-autoplay-policy",
                 Label = "Disable AutoPlay via System Policy",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -304,7 +304,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-network-drive-autoplay",
                 Label = "Disable AutoPlay on Network Drives",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -322,7 +322,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-mixed-content-autoplay",
                 Label = "Disable AutoPlay for Mixed-Content Drives",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -340,7 +340,7 @@ internal static class PolicyDesktop
             {
                 Id = "autorun-disable-enhanced-autoplay",
                 Label = "Disable Enhanced AutoPlay Search",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -368,7 +368,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-calibration",
                 Label = "Disable Display Color Calibration",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -390,7 +390,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-icm-support",
                 Label = "Disable Image Colour Management (ICM)",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -412,7 +412,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-hide-color-management-ui",
                 Label = "Hide Color Management Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -433,7 +433,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-auto-display-calibration",
                 Label = "Disable Automatic Display Calibration",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -455,7 +455,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-block-icc-profile-install",
                 Label = "Block User ICC Profile Installation",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -477,7 +477,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-night-light-gpo",
                 Label = "Disable Night Light via Group Policy",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -499,7 +499,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-hdr-gpo",
                 Label = "Disable HDR Display Support via Group Policy",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -521,7 +521,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-wcs-service",
                 Label = "Disable Windows Color System Background Service",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -543,7 +543,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-color-rendering-intent",
                 Label = "Lock Colour Rendering Intent to Absolute Colorimetric",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -565,7 +565,7 @@ internal static class PolicyDesktop
             {
                 Id = "colcal-disable-auto-color-correction",
                 Label = "Disable Auto Color Correction",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -609,7 +609,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-disable-hdr-battery-impact",
                 Label = "Disable HDR Streaming Battery Compensation",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -627,7 +627,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-set-sdr-brightness-hdr-mode",
                 Label = "Increase SDR Content Brightness in HDR Mode (80 nits)",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -645,7 +645,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-disable-auto-color-management",
                 Label = "Disable Automatic Display Color Management",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -663,7 +663,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-enable-hdr-wcg-apps",
                 Label = "Enable HDR and WCG for Apps",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -681,7 +681,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-disable-dwm-color-depth",
                 Label = "Disable DWM 10-bit Color Override",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -699,7 +699,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-disable-night-light-gamma",
                 Label = "Disable Night Light Gamma Ramp Interference",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -717,7 +717,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-enable-calibration-system",
                 Label = "Enable ICM Gamma Calibration System-Wide",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -735,7 +735,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-disable-hdr-auto-adjust",
                 Label = "Disable HDR Automatic Tone Mapping",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -753,7 +753,7 @@ internal static class PolicyDesktop
             {
                 Id = "color-force-full-color-range",
                 Label = "Force Full Color Range RGB (0-255)",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -781,7 +781,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-enable-network-compartmentalization",
                 Label = "Enable Network Isolation for Application Groups",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -798,7 +798,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-restrict-localhost-loopback",
                 Label = "Restrict Localhost Loopback Access Between Compartments",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -815,7 +815,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-enable-process-isolation",
                 Label = "Enable Process Memory Isolation Between Windows Compartments",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -832,7 +832,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-restrict-file-system-access",
                 Label = "Restrict File System Access Based on Compartment Membership",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -849,7 +849,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-enforce-object-permissions",
                 Label = "Enforce Object Access Permissions for Compartment Boundaries",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -866,7 +866,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-audit-boundary-violations",
                 Label = "Enable Audit Logging for Compartment Boundary Violations",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -883,7 +883,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-restrict-registry-access",
                 Label = "Restrict Registry Access Based on Application Compartment",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -900,7 +900,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-disable-cross-compartment-clipboard",
                 Label = "Disable Clipboard Sharing Across Security Compartments",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -917,7 +917,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-enable-mandatory-integrity",
                 Label = "Enforce Mandatory Integrity Control for Compartment Processes",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -934,7 +934,7 @@ internal static class PolicyDesktop
             {
                 Id = "compart-restrict-interprocess-communication",
                 Label = "Restrict IPC Mechanisms Across Compartment Boundaries",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -962,7 +962,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-disable-all-control-panel",
                 Label = "Control Panel Policy: Disable Access to All Control Panel Items",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Prevents all users from opening the Control Panel and PC Settings app. Control Panel contains sensitive system configuration dialogs including network settings, user accounts, and security options. On locked-down workstations this policy prevents unauthorised system reconfiguration.",
                 Tags = ["control panel", "restriction", "access", "policy"],
@@ -980,7 +980,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-hide-personalization-settings",
                 Label = "Control Panel Policy: Hide Personalization from Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Removes the Personalization item from the Control Panel and hides the right-click desktop personalization context menu entry. On shared/managed workstations, personalisation access can be used to change the desktop background (watermark bypass), install screen savers with custom payloads, or modify display scaling.",
                 Tags = ["control panel", "personalization", "theme", "restriction", "policy"],
@@ -998,7 +998,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-hide-user-accounts",
                 Label = "Control Panel Policy: Hide User Accounts from Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Hides the User Accounts section from the Control Panel. Standard users should not be able to navigate the user accounts management interface where they might attempt password changes, account type modifications, or credential manager access.",
                 Tags = ["control panel", "user accounts", "restriction", "policy"],
@@ -1016,7 +1016,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-hide-add-remove-programs",
                 Label = "Control Panel Policy: Restrict Add/Remove Programs in Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Hides the Programs and Features (Add/Remove Programs) applet from the Control Panel. This prevents standard users from uninstalling installed software, adding Windows Features, or modifying installed programs. Useful on kiosk and managed endpoints where software management is IT-controlled.",
                 Tags = ["control panel", "add remove programs", "uninstall", "restriction", "policy"],
@@ -1034,7 +1034,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-disable-change-password",
                 Label = "Control Panel Policy: Prevent Users from Changing Their Password",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Prevents standard users from navigating to Control Panel > User Accounts > Change Password. In environments where passwords are centrally managed via Active Directory or MDM policy, allowing local password changes creates synchronisation conflicts and bypasses the centralised credential management flow.",
                 Tags = ["control panel", "password", "change", "user accounts", "policy"],
@@ -1052,7 +1052,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-restrict-network-connections",
                 Label = "Control Panel Policy: Restrict Network Connections from Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Prevents standard users from accessing Network Connections in the Control Panel. Network Connections allows users to add/remove VPN entries, configure DNS, change adapter settings, and create ad-hoc networks — all actions that can bypass corporate network access controls.",
                 Tags = ["control panel", "network", "connections", "restriction", "policy"],
@@ -1079,7 +1079,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-hide-system-properties",
                 Label = "Control Panel Policy: Hide System Properties from Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Prevents access to the System Properties applet (sysdm.cpl) via Control Panel. System Properties exposes settings for computer name changes, domain joins, hardware device manager, remote desktop access, and environment variables — all sensitive configuration surfaces on managed workstations.",
                 Tags = ["control panel", "system", "properties", "restriction", "policy"],
@@ -1097,7 +1097,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-disable-power-options",
                 Label = "Control Panel Policy: Prevent Access to Power Options in Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Blocks user access to Power Options in the Control Panel. Users with access to Power Options can override sleep/hibernate settings, disable fast startup, create custom power plans, and modify sleep-on-lock behaviour — changes that may conflict with enterprise energy compliance or security lockout policies.",
                 Tags = ["control panel", "power", "sleep", "restriction", "policy"],
@@ -1115,7 +1115,7 @@ internal static class PolicyDesktop
             {
                 Id = "ctrlpanel-hide-windows-update-settings",
                 Label = "Control Panel Policy: Hide Windows Update from Control Panel",
-                Category = "Display",
+                Category = "Display — Auto Play",
                 Description =
                     "Hides the Windows Update item in the Control Panel. On managed devices where Windows Update is controlled by WSUS, Intune, or Configuration Manager, exposing the Windows Update control panel section allows users to manually trigger updates, pause updates, or change the update server — potentially disrupting managed patching schedules.",
                 Tags = ["control panel", "windows update", "restriction", "policy"],
@@ -1145,7 +1145,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-disable-d3d-debug-layer",
                     Label = "Disable Direct3D Debug Layer in Production",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Disables the Direct3D Debug Layer (D3D11_CREATE_DEVICE_DEBUG / DX12 debug flag) in production environments, preventing verbose GPU validation from activating when debug runtimes are installed on production machines.",
                     Tags = ["direct3d", "debug-layer", "gpu", "production", "policy"],
@@ -1162,7 +1162,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-disable-d3d-warp-fallback",
                     Label = "Disable Direct3D WARP Software Renderer Fallback",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Prevents applications from using the WARP (Windows Advanced Rasterisation Platform) CPU-based software renderer as a fallback when hardware Direct3D is unavailable, ensuring all D3D rendering uses physical GPU hardware.",
                     Tags = ["direct3d", "warp", "software-renderer", "gpu", "policy"],
@@ -1179,7 +1179,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-set-feature-level-minimum-11",
                     Label = "Require Minimum Direct3D Feature Level 11.0",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets a minimum required Direct3D feature level of 11.0, preventing applications from requesting feature levels below D3D11 and ensuring all GPU workloads use modern shader models and resource bindings.",
                     Tags = ["direct3d", "feature-level", "d3d11", "gpu", "policy"],
@@ -1196,7 +1196,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-disable-dxgi-fullscreen-opt",
                     Label = "Disable DXGI Fullscreen Optimisations App-Wide",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Disables DXGI Fullscreen Optimisations at system policy level, preventing Windows from overriding fullscreen exclusive mode with a windowed swap chain, which can cause frame timing inconsistencies in precision rendering.",
                     Tags = ["dxgi", "fullscreen-optimisations", "exclusive-mode", "direct3d", "policy"],
@@ -1213,7 +1213,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-enable-auto-hdr",
                     Label = "Enable Direct3D Auto HDR for SDR Application Upscaling",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Enables Windows Auto HDR which algorithmically expands the luminance range of SDR Direct3D 11 and 12 applications for HDR display output, improving visual quality of DX applications without source code changes.",
                     Tags = ["direct3d", "auto-hdr", "hdr", "display", "policy"],
@@ -1230,7 +1230,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-disable-d3d-telemetry",
                     Label = "Disable Direct3D Telemetry Reporting to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Prevents the Direct3D runtime from sending application GPU usage, feature level, and performance telemetry to Microsoft, protecting information about GPU workload characteristics from cloud disclosure.",
                     Tags = ["direct3d", "telemetry", "privacy", "microsoft", "policy"],
@@ -1247,7 +1247,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-enable-dx12-ultimate",
                     Label = "Enable DirectX 12 Ultimate Feature Set Policy",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Configures the system to prefer the DirectX 12 Ultimate feature set (Shader Model 6.6, Mesh Shaders, Sampler Feedback, DirectX Raytracing 1.1) when available, enabling applications to use the highest GPU capability tier.",
                     Tags = ["direct3d", "dx12-ultimate", "raytracing", "mesh-shader", "policy"],
@@ -1264,7 +1264,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-restrict-gpu-access-sandboxed",
                     Label = "Restrict Direct3D GPU Access in Sandboxed AppContainer Processes",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Configures reduced-privilege Direct3D access for AppContainer (UWP sandbox) processes, preventing sandboxed applications from accessing full GPU command queue capabilities that could be used for side-channel attacks.",
                     Tags = ["direct3d", "appcontainer", "sandbox", "gpu-access", "security", "policy"],
@@ -1281,7 +1281,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-log-d3d-device-removed",
                     Label = "Log Direct3D Device Removed Events for Diagnostics",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Enables Application event log entries for DXGI_ERROR_DEVICE_REMOVED and DXGI_ERROR_DEVICE_HUNG events generated by Direct3D, providing diagnostic information about GPU hardware failures, driver crashes, and TDR events.",
                     Tags = ["direct3d", "device-removed", "event-log", "diagnostics", "policy"],
@@ -1298,7 +1298,7 @@ internal static class PolicyDesktop
                 {
                     Id = "d3dpol-disable-overlay-planes",
                     Label = "Disable DirectX Hardware Overlay Planes",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Disables DXGI hardware overlay planes that allow applications to render directly into GPU overlay surfaces, preventing overlay plane usage that bypasses DWM compositing and can lead to display corruption on multi-monitor setups.",
                     Tags = ["direct3d", "dxgi", "overlay-planes", "display", "policy"],
@@ -1326,7 +1326,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-enable-d3d12-shader-cache",
                     Label = "DirectX: Enable D3D12 Shader Cache for Faster Game Load Times",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets D3D12AllowSoftwareFallback=0 and relies on the D3D12 shader cache (DXGI shader disk cache) enabled by default. Sets DisableD3D12ShaderCache=0 in Display policy to explicitly keep shader caching enabled. "
                         + "D3D12 shader compilation caching stores pre-compiled GPU programs to disk so that subsequent runs of the same game or application do not need to recompile shaders from scratch. Without the cache, every game launch triggers fresh GPU shader compilation — causing stuttering and load times that can exceed 5 minutes in large open-world titles. Keeping this enabled is important on imaging/VDI scenarios where the cache may be inadvertently cleared.",
@@ -1344,7 +1344,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-disable-dxgi-information-queue",
                     Label = "DirectX: Disable DXGI Debug Information Queue Logging",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets DisableDXGIInfoQueue=1 in GraphicsDrivers registry. Disables the DXGI debug information queue, which logs verbose DXGI API validation messages to the debug output stream in debug builds. "
                         + "The DXGI information queue is a developer debugging tool that has no benefit in production builds. Disabling it eliminates the per-frame memory allocation overhead of maintaining the queue ring buffer, which can cause visible micro-stutters when the queue fills and wraps around — particularly noticeable in frame-time sensitive applications on lower-end hardware.",
@@ -1362,7 +1362,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-enable-flipex-presentation-model",
                     Label = "DirectX: Enable DXGI FlipEx Swap Chain for Reduced Presentation Latency",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets ForceFlipEx=1 in GraphicsDrivers registry. Instructs the DXGI flip model to use the FlipEx presentation path (Flip Discard with direct scanout) when available, bypassing the desktop window manager (DWM) composition pass. "
                         + "FlipEx allows full-screen exclusive applications to directly control the scanout buffer without the frame going through DWM composition. This eliminates one full frame of latency compared to the DWM composition path (Blit model), reducing end-to-end input-to-photon latency by ~8–16 ms on a 60 Hz display. This is the primary latency optimisation for competitive games.",
@@ -1380,7 +1380,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-disable-display-power-saving-technology",
                     Label = "DirectX: Disable Display Power-Saving Technology for Accurate Color",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets DisableDisplayPowerSaving=1 in GraphicsDrivers registry. Disables vendor-specific display power-saving technologies (Intel DPST, AMD VDDG, NVIDIA SmartGPU) that dynamically adjust backlight and GPU power based on displayed content brightness. "
                         + "Display power-saving technologies alter the luminance and colour rendering of the GPU scanout in real time. This makes accurate colour reproduction impossible for photo editing, video colour grading, and design work. Disabling it restores consistent, unmodified colour output from the GPU — essential for any colour-managed workflow.",
@@ -1399,7 +1399,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-disable-directx-diagnostic-reporting",
                     Label = "DirectX: Disable DirectX Diagnostic Reporting to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets DisableDiagnosticReporting=1 in Display policy. Prevents the DirectX diagnostics subsystem from sending GPU compatibility reports, DirectX error events, and driver crash dumps to Microsoft's telemetry pipeline. "
                         + "DirectX diagnostic reporting can include driver version information, GPU model details, and crash callstacks, which constitute system fingerprinting data. On secure or air-gapped environments, turning off all outbound diagnostic reporting channels is a standard hardening measure.",
@@ -1417,7 +1417,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-disable-display-driver-auto-updates",
                     Label = "DirectX: Disable Automatic Display Driver Updates via Windows Update",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets ExcludeWUDriversForDisplay=1 in Display policy. Prevents Windows Update from automatically installing newer display driver versions. "
                         + "Display driver updates during production hours can cause unexpected desktop resolution changes, HDR/SDR rendering behaviour changes, WHQL validation differences, and application crashes in software that depends on specific driver API behaviour. Enterprise GPU workstations should pin driver versions through a controlled update process rather than allowing automatic WU-driven driver installs.",
@@ -1435,7 +1435,7 @@ internal static class PolicyDesktop
                 {
                     Id = "dxshdr-enable-gpu-virtual-memory-deduplication",
                     Label = "DirectX: Enable GPU Virtual Memory Page Deduplication",
-                    Category = "Display",
+                    Category = "Display — Auto Play",
                     Description =
                         "Sets EnableGPUPageDeduplication=1 in GraphicsDrivers registry. Enables page deduplication for GPU-accessible virtual memory, allowing the OS to coalesce identical read-only GPU memory pages (common in texture streaming) into shared physical pages. "
                         + "GPU texture streaming in games and rendering applications often loads the same texture mips into multiple contexts (shadow maps, reflection captures, environment renders). Page deduplication can reduce VRAM pressure by 5–15% in texture-heavy workloads, helping devices with lower VRAM capacities handle more assets without evicting and reloading from system RAM.",
@@ -1463,7 +1463,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-block-driver-install",
                 Label = "Block Display Driver Installation by Users",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1485,7 +1485,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-force-standard-vga",
                 Label = "Force Standard VGA Display Adapter",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1507,7 +1507,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-dxva",
                 Label = "Disable DirectX Video Acceleration (DXVA)",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1529,7 +1529,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-wddm-gpu-compute",
                 Label = "Disable GPU Compute (DirectCompute) in WDDM",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1551,7 +1551,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-display-scaling",
                 Label = "Disable Custom Display Scaling (DPI Override) via Policy",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1572,7 +1572,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-display-rotation",
                 Label = "Disable Display Rotation by Users",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1594,7 +1594,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-mirroring",
                 Label = "Disable Multi-Monitor Display Mirroring",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1616,7 +1616,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-resolution-change",
                 Label = "Lock Display Resolution via Policy",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1638,7 +1638,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-refresh-rate-change",
                 Label = "Lock Display Refresh Rate via Policy",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1660,7 +1660,7 @@ internal static class PolicyDesktop
             {
                 Id = "dispadp-disable-color-depth-change",
                 Label = "Lock Display Colour Depth via Policy",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1692,7 +1692,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-quiet-hours",
                     Label = "Disable Focus Assist via Policy",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowQuietHours=0 to disable Focus Assist (Quiet Hours) via Group Policy. Prevents users from activating Focus Assist manually or via automatic rules. All notifications are always delivered.",
                     Tags = ["focus assist", "quiet hours", "notifications", "policy"],
@@ -1709,7 +1709,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-automatic-rules",
                     Label = "Disable Focus Assist Automatic Rules",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowScheduledQuietHours=0 to prevent Focus Assist from activating automatically based on time-of-day rules, duplicate display, or gaming/fullscreen detection.",
                     Tags = ["focus assist", "automatic rules", "schedule", "policy"],
@@ -1726,7 +1726,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-game-mode-dnd",
                     Label = "Disable Focus Assist in Game Mode",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowGameModeQuietHours=0 to prevent Windows from automatically enabling Focus Assist when a game is detected as running in fullscreen. Ensures notifications are visible during gaming sessions.",
                     Tags = ["focus assist", "game mode", "gaming", "notifications", "policy"],
@@ -1743,7 +1743,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-presentation-dnd",
                     Label = "Disable Focus Assist When Presenting",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowPresentationModeQuietHours=0 to prevent Windows from automatically activating Focus Assist when a duplicate display (projector/second monitor) is detected. Prevents accidental notification suppression in meeting rooms.",
                     Tags = ["focus assist", "presentation", "display", "notifications", "policy"],
@@ -1760,7 +1760,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-summary-notification",
                     Label = "Disable Focus Assist Summary Notification",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowSummaryNotification=0 to suppress the 'You missed N notifications while Focus Assist was on' toast that appears after a Focus Assist session ends. Reduces notification clutter on shared machines.",
                     Tags = ["focus assist", "summary", "notification", "policy"],
@@ -1777,7 +1777,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-fullscreen-dnd",
                     Label = "Disable Focus Assist in Fullscreen Apps",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowFullScreenModeQuietHours=0 to prevent Windows from automatically activating Focus Assist when any application is running in fullscreen mode. Ensures notifications are delivered in all display states.",
                     Tags = ["focus assist", "fullscreen", "apps", "notifications", "policy"],
@@ -1794,7 +1794,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-lock-priority-list",
                     Label = "Lock Focus Assist Priority List",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets LockPriorityList=1 to prevent users from modifying the Focus Assist priority list that determines which apps and contacts can break through Focus Assist. Enforces a consistent notification priority on managed devices.",
                     Tags = ["focus assist", "priority", "policy", "lock"],
@@ -1811,7 +1811,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-out-of-hours-rule",
                     Label = "Disable Focus Assist Outside Working Hours Rule",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowOutOfHoursQuietHours=0 to prevent Focus Assist from automatically activating during hours outside those defined as 'working hours' in the Windows calendar. Ensures uniform notification delivery.",
                     Tags = ["focus assist", "working hours", "schedule", "policy"],
@@ -1828,7 +1828,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-disable-first-hour-rule",
                     Label = "Disable Focus Assist First Hour After Resume Rule",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets AllowFirstHourQuietHours=0 to prevent Windows from enabling Focus Assist for the first hour after the device resumes from sleep or hibernation. Ensures immediate notification delivery after wake.",
                     Tags = ["focus assist", "resume", "sleep", "notifications", "policy"],
@@ -1845,7 +1845,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fa-force-priority-only-mode",
                     Label = "Force Focus Assist Priority-Only Mode",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets DefaultProfile=1 to configure Focus Assist to only allow notifications from priority contacts and apps through when activated. Prevents the 'Alarms only' level and limits Focus Assist to the least invasive mode.",
                     Tags = ["focus assist", "priority", "mode", "policy"],
@@ -1874,7 +1874,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-block-user-font-install",
                     Label = "Block Standard Users from Installing Fonts",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents standard (non-administrator) users from installing fonts per-user via the Settings app or drag-and-drop, ensuring font management is controlled by IT and that untrusted fonts (a known exploitation vector) are not installed.",
                     Tags = ["fonts", "installation", "standard-user", "security", "policy"],
@@ -1891,7 +1891,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-disable-online-font-provider",
                     Label = "Disable Windows Online Font Provider",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Disables the Windows Online Font Provider service that streams fonts from Microsoft's cloud on demand, preventing outbound font download requests and ensuring all fonts used are locally installed and auditable.",
                     Tags = ["fonts", "online-provider", "cloud", "privacy", "policy"],
@@ -1908,7 +1908,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-disable-font-streaming-uap",
                     Label = "Disable Font Streaming for Universal Apps",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents Universal Windows Platform (UWP) apps from requesting font streaming from Microsoft's online font provider, ensuring that Store apps cannot silently download fonts as part of rendering pipelines.",
                     Tags = ["fonts", "uwp", "streaming", "cloud", "policy"],
@@ -1925,7 +1925,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-block-admin-font-from-web",
                     Label = "Warn Before Installing Fonts Downloaded from the Web",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Configures Windows to display a security warning when an administrator attempts to install a font file downloaded from the internet, reducing the risk of admins silently installing font files with embedded exploit code.",
                     Tags = ["fonts", "web-download", "security-warning", "admin", "policy"],
@@ -1942,7 +1942,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-block-font-preview",
                     Label = "Block Font Preview in Font Viewer for Untrusted Sources",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents standard users from previewing font files from untrusted locations in the Font Viewer, reducing the attack surface for font-parsing vulnerabilities triggered simply by previewing a crafted font file.",
                     Tags = ["fonts", "font-preview", "untrusted", "security", "policy"],
@@ -1959,7 +1959,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-disable-font-telemetry",
                     Label = "Disable Font Provider Telemetry to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents the Windows font provider service from sending telemetry about font usage, installed font families, and font-related application activity to Microsoft.",
                     Tags = ["fonts", "telemetry", "privacy", "microsoft", "policy"],
@@ -1976,7 +1976,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-set-font-antialiasing-cleartype",
                     Label = "Enforce ClearType Font Antialiasing for All Users",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enforces ClearType sub-pixel antialiasing for all user sessions via policy, overriding per-user font smoothing settings to ensure consistent, high-quality text rendering on all LCD displays in the organisation.",
                     Tags = ["fonts", "cleartype", "antialiasing", "rendering", "policy"],
@@ -1993,7 +1993,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-disable-eudcedit",
                     Label = "Disable Creation of End User Defined Character (EUDC) Fonts",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents users from creating custom EUDC (End User Defined Character) fonts using the EUDC Editor, which would install per-user font registry entries that are not centrally managed.",
                     Tags = ["fonts", "eudc", "custom-characters", "policy"],
@@ -2010,7 +2010,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-restrict-font-subsetting",
                     Label = "Restrict Font Subsetting to Prevent Embedded Sensitive Data",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Configures Windows font embedding policy to allow printout-only font embedding, preventing applications from creating documents with fully embedded fonts that could be used to covertly exfiltrate data via font steganography.",
                     Tags = ["fonts", "embedding", "subsetting", "data-exfiltration", "policy"],
@@ -2027,7 +2027,7 @@ internal static class PolicyDesktop
                 {
                     Id = "fontpol-audit-font-install-events",
                     Label = "Audit Font Installation Events in Security Log",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enables Security event log entries for every font installation or removal event on the system, providing change-management visibility into font inventory changes for security and compliance auditing.",
                     Tags = ["fonts", "audit", "event-log", "change-management", "policy"],
@@ -2054,7 +2054,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-online-fonts",
                 Label = "Disable Online Font Provider",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2071,7 +2071,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-font-streaming",
                 Label = "Disable Font Streaming",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2088,7 +2088,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-font-download-suggestions",
                 Label = "Disable Font Download Suggestions",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2105,7 +2105,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-update-check",
                 Label = "Disable Font Provider Update Checks",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2122,7 +2122,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-auto-install",
                 Label = "Disable Font Auto-Installation",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2139,7 +2139,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-per-user-fonts",
                 Label = "Disable Per-User Font Installation",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2156,7 +2156,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-font-cache",
                 Label = "Disable Font Provider Cache",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2173,7 +2173,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-telemetry",
                 Label = "Disable Font Provider Telemetry",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2190,7 +2190,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-emoji-font",
                 Label = "Disable Cloud Emoji Font Downloads",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2207,7 +2207,7 @@ internal static class PolicyDesktop
             {
                 Id = "fontprov-disable-third-party-provider",
                 Label = "Disable Third-Party Font Provider Registration",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2236,7 +2236,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-enable-dwm-hardware-acceleration",
                     Label = "Enforce DWM Hardware Acceleration is Always On",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Ensures the Desktop Window Manager (DWM) uses GPU hardware acceleration for compositing, preventing software fallback rendering that consumes excessive CPU and produces visual artefacts on modern hardware.",
                     Tags = ["dwm", "hardware-acceleration", "gpu", "rendering", "policy"],
@@ -2253,7 +2253,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-disable-rdp-software-rendering",
                     Label = "Disable Software Rendering for RDP Sessions",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents Remote Desktop sessions from falling back to GDI software rendering when a GPU is available, ensuring RemoteFX or hardware-accelerated codec paths are always used for consistent performance.",
                     Tags = ["gdi", "rdp", "software-rendering", "remotedesktop", "policy"],
@@ -2270,7 +2270,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-enable-gdi-scaling",
                     Label = "Enable GDI DPI Scaling for Legacy Applications",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enables system-wide GDI-based DPI scaling for legacy applications that do not declare DPI awareness, preventing blurry rendering of older software on high-DPI monitors without requiring per-app compatibility flags.",
                     Tags = ["gdi", "dpi-scaling", "high-dpi", "legacy-apps", "policy"],
@@ -2287,7 +2287,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-disable-directdraw-hw-acceleration",
                     Label = "Disable DirectDraw Hardware Acceleration",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Disables DirectDraw hardware acceleration, forcing all DirectDraw rendering to use the software emulation path. Used in environments where GPU driver instability causes crashes or display corruption.",
                     Tags = ["directdraw", "hardware-acceleration", "gpu-driver", "stability", "policy"],
@@ -2304,7 +2304,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-set-gdi-batch-limit",
                     Label = "Set GDI Batch Limit to Optimise Rendering Performance",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets the GDI batching limit to 0 (immediate flush) to ensure all GDI drawing calls are synchronously sent to the display driver, improving rendering correctness on systems with unstable batch coalescing.",
                     Tags = ["gdi", "batch-limit", "rendering", "performance", "policy"],
@@ -2321,7 +2321,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-block-gdi-object-table-growth",
                     Label = "Limit Per-Process GDI Object Count to 10000",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Sets the per-process GDI object limit to 10000 (down from the default 65536), preventing GDI handle exhaustion attacks where a single process allocates all available GDI handles and crashes other processes.",
                     Tags = ["gdi", "handle-limit", "object-table", "dos-prevention", "policy"],
@@ -2338,7 +2338,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-disable-printer-gdi-metafile",
                     Label = "Disable GDI Printer Metafile Spool Format",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Disables the legacy EMF (Enhanced Metafile) spool format for GDI-based printing and forces direct printing via the XPS document pipeline, reducing exposure to EMF file parsing vulnerabilities in the spooler.",
                     Tags = ["gdi", "metafile", "printing", "spooler", "security", "policy"],
@@ -2355,7 +2355,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-enable-gdi-audit",
                     Label = "Enable GDI Object Creation Audit Logging",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enables lightweight audit logging for GDI object creation and destruction at the policy level, providing visibility into unusual GDI handle consumption patterns that may indicate malicious UI automation or exploitation attempts.",
                     Tags = ["gdi", "audit", "object-creation", "event-log", "policy"],
@@ -2372,7 +2372,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-disable-gdi-screen-capture",
                     Label = "Block GDI-Based Screen Capture by Standard Applications",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Restricts the ability of standard (non-elevated) applications to capture the entire screen via BitBlt from the desktop DC, limiting screen capture to applications with explicit capture permissions.",
                     Tags = ["gdi", "screen-capture", "bitblt", "privacy", "policy"],
@@ -2389,7 +2389,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gdipol-disable-gdi-telemetry",
                     Label = "Disable GDI Renderer Telemetry Reporting to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents the GDI rendering subsystem from sending object usage, rendering performance, and driver compatibility telemetry to Microsoft.",
                     Tags = ["gdi", "telemetry", "privacy", "microsoft", "policy"],
@@ -2418,7 +2418,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-disable-winml-gpu",
                     Label = "Disable Windows ML GPU Inference",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents Windows Machine Learning (WinML) from executing inference operations on the GPU, forcing model evaluation to the CPU, which can reduce power consumption and GPU memory pressure on non-AI workstation deployments.",
                     Tags = ["windows-ml", "gpu-inference", "ai", "compute", "policy"],
@@ -2435,7 +2435,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-limit-winml-vram",
                     Label = "Limit Windows ML VRAM Usage to 2 GB",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Caps the amount of GPU VRAM that Windows ML inference sessions can allocate to 2048 MB, preventing WinML workloads from consuming all available GPU memory and degrading rendering performance of foreground applications.",
                     Tags = ["windows-ml", "vram", "memory-limit", "gpu", "policy"],
@@ -2452,7 +2452,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-disable-directml-third-party",
                     Label = "Block Third-Party DirectML Operator Packages",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents third-party applications from loading external DirectML operator packages outside of the Windows SDK, reducing the attack surface from unsigned or malicious ML operator DLLs loaded into application GPU compute contexts.",
                     Tags = ["directml", "operator-packages", "third-party", "security", "policy"],
@@ -2469,7 +2469,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-disable-winml-telemetry",
                     Label = "Disable Windows ML Telemetry Reporting to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents Windows ML from sending model inference statistics, GPU capability, and API usage telemetry to Microsoft, protecting information about AI workload characteristics from cloud disclosure.",
                     Tags = ["windows-ml", "telemetry", "privacy", "microsoft", "policy"],
@@ -2486,7 +2486,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-set-gpu-compute-app-priority",
                     Label = "Set Foreground App GPU Compute Priority to High",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Configures the GPU compute scheduler to give foreground applications higher compute queue priority than background GPU processes, ensuring interactive AI and graphics applications are not starved by background ML training jobs.",
                     Tags = ["gpu", "compute-priority", "scheduler", "foreground", "policy"],
@@ -2503,7 +2503,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-disable-cuda-in-wsl",
                     Label = "Disable CUDA GPU Passthrough into WSL2",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Disables CUDA and DirectX GPU passthrough into WSL2 virtual machines, preventing WSL2 Linux processes from accessing GPU compute resources and potential GPU-level privilege escalation from Linux guest to Windows host.",
                     Tags = ["gpu", "wsl2", "cuda", "gpu-passthrough", "security", "policy"],
@@ -2520,7 +2520,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-restrict-gpu-access-untrusted",
                     Label = "Restrict GPU Compute Access for Untrusted Applications",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enables GPU access filtering for untrusted (non-publisher-verified, non-Store) applications, preventing low-reputation software from accessing GPU compute queues that could be used for crypto-mining without user consent.",
                     Tags = ["gpu", "compute-access", "untrusted-apps", "cryptomining", "security", "policy"],
@@ -2537,7 +2537,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-enable-compute-audit",
                     Label = "Enable GPU Compute Session Audit Logging",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Enables audit logging of GPU compute session creation and destruction events, recording which processes open compute contexts on the GPU for security monitoring of GPU resource usage patterns.",
                     Tags = ["gpu", "compute", "audit", "event-log", "session", "policy"],
@@ -2554,7 +2554,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-disable-npn-compute",
                     Label = "Disable NPU Compute Offload for IntelAI / Microsoft NPU",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Prevents applications from using the NPU (Neural Processing Unit) for compute offload on Copilot+ and Intel AI Boost hardware, ensuring AI workloads run on the GPU or CPU where execution can be monitored and controlled.",
                     Tags = ["npu", "compute-offload", "ai", "copilot-plus", "policy"],
@@ -2571,7 +2571,7 @@ internal static class PolicyDesktop
                 {
                     Id = "gpucmp-set-vram-reservation",
                     Label = "Reserve GPU VRAM Headroom for System Compositor",
-                    Category = "Display",
+                    Category = "Display — Display Adapter",
                     Description =
                         "Reserves a guaranteed amount of GPU VRAM for the DWM compositor and system UI rendering, preventing GPU compute and ML workloads from exhausting VRAM and causing desktop compositing failures.",
                     Tags = ["gpu", "vram", "reservation", "compositor", "stability", "policy"],
@@ -2598,7 +2598,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-dxgi-flip-model",
                 Label = "Disable DXGI Flip Model Override",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2620,7 +2620,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-mpo",
                 Label = "Disable Multi-Plane Overlay",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2642,7 +2642,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-variable-refresh",
                 Label = "Disable Variable Refresh Rate (VRR/FreeSync/G-Sync) Policy",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2664,7 +2664,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-gpu-scheduler",
                 Label = "Disable Hardware GPU Scheduler",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2686,7 +2686,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-auto-hdr",
                 Label = "Disable Auto HDR Policy Enforcement",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2708,7 +2708,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-dx12-resource-binding",
                 Label = "Disable Experimental DX12 Resource Binding",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2730,7 +2730,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-telemetry",
                 Label = "Disable Graphics Driver Telemetry",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2752,7 +2752,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-preemption",
                 Label = "Disable Fine-Grained GPU Preemption",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2775,7 +2775,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-d3d12-warp-updates",
                 Label = "Disable D3D12 WARP Software Renderer Updates",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2797,7 +2797,7 @@ internal static class PolicyDesktop
             {
                 Id = "gfxdrv-disable-display-required",
                 Label = "Disable Display Required Power Request Override",
-                Category = "Display",
+                Category = "Display — Display Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2833,7 +2833,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-language-hotkey",
                 Label = "Disable Input Language Switching Hotkeys",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2853,7 +2853,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-restrict-user-locale",
                 Label = "Prevent Users from Changing System Locale",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2872,7 +2872,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-touch-keyboard-auto-show",
                 Label = "Disable Touch Keyboard Auto-Show",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2892,7 +2892,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-input-personalisation",
                 Label = "Disable Input Personalisation Data Collection",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2912,7 +2912,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-tablet-mode-switch",
                 Label = "Disable Automatic Tablet Mode Switching",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2932,7 +2932,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-handwriting-sharing",
                 Label = "Disable Handwriting Model Data Sharing with Microsoft",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2952,7 +2952,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-emoji-panel",
                 Label = "Disable Emoji Panel (Win+.)",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2971,7 +2971,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-block-ime-network",
                 Label = "Block IME from Accessing Network Resources",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2990,7 +2990,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-voice-typing",
                 Label = "Disable Voice Typing (Win+H Dictation)",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3011,7 +3011,7 @@ internal static class PolicyDesktop
             {
                 Id = "impol-disable-cursor-thickness-change",
                 Label = "Prevent Users from Changing Cursor Pointer Size",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3040,7 +3040,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-restrict-ink-collection",
                     Label = "Restrict Implicit Ink Collection",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets RestrictImplicitInkCollection=1 to prevent Windows from collecting ink strokes silently in the background for personalisation purposes. Default: 0 (collection allowed). Recommended for privacy: 1.",
                     Tags = ["input", "ink", "collection", "privacy", "policy"],
@@ -3057,7 +3057,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-inking-keyboard-personalization",
                     Label = "Disable Inking and Typing Personalization",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowInkingAndTypingPersonalization=0 to block the inking and typing personalisation feature that builds a personal dictionary from writing samples. Prevents sharing of handwriting/typing data with Microsoft.",
                     Tags = ["input", "inking", "typing", "personalisation", "privacy", "policy"],
@@ -3074,7 +3074,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-user-dictionary",
                     Label = "Disable Cloud User Dictionary Sync",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowUserDictionary=0 to prevent the personalised input dictionary from being synced with Microsoft servers. Local dictionary still functions; cloud backup and cross-device sync are blocked.",
                     Tags = ["input", "dictionary", "sync", "privacy", "policy"],
@@ -3091,7 +3091,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-ink-learning",
                     Label = "Disable Ink Recognition Learning",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowInkRecognitionLearning=0 to prevent the handwriting recogniser from learning and adapting to this user's writing style over time. Useful on shared or kiosk devices where per-user learning is undesirable.",
                     Tags = ["input", "ink", "recognition", "learning", "policy"],
@@ -3108,7 +3108,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-text-prediction",
                     Label = "Disable Cloud-Based Text Prediction",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowTextPrediction=0 to disable cloud-assisted text prediction and autocomplete features. Local offline prediction is unaffected. Reduces data transmission associated with keyboard input.",
                     Tags = ["input", "text prediction", "autocomplete", "privacy", "policy"],
@@ -3125,7 +3125,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-linguistic-collection",
                     Label = "Disable Linguistic Data Collection",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowLinguisticDataCollection=0 to block Windows from sending linguistic data (autocorrect feedback, text samples) to Microsoft for improving language models. Complementary to RestrictImplicitTextCollection.",
                     Tags = ["input", "linguistic", "collection", "privacy", "policy"],
@@ -3142,7 +3142,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-handwriting-telemetry",
                     Label = "Disable Handwriting Error Reporting",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowHandwritingErrorReports=0 to prevent the handwriting recognition engine from sending error reports and misrecognition samples to Microsoft. Reduces telemetry from pen-enabled devices.",
                     Tags = ["input", "handwriting", "telemetry", "reporting", "policy"],
@@ -3159,7 +3159,7 @@ internal static class PolicyDesktop
                 {
                     Id = "inpp-disable-input-data-upload",
                     Label = "Disable Input Data Upload to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Sets AllowInputDataUpload=0 to prevent Windows from uploading any collected input personalisation data (ink, text, voice) to Microsoft's servers. Applies a blanket block on all input-related cloud data transmission.",
                     Tags = ["input", "upload", "telemetry", "privacy", "policy"],
@@ -3190,7 +3190,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-task-manager",
                 Label = "Kiosk: Disable Task Manager",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [SysPolicy],
@@ -3207,7 +3207,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-registry-editor",
                 Label = "Kiosk: Disable Registry Editor Access",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [SysPolicy],
@@ -3224,7 +3224,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-cmd",
                 Label = "Kiosk: Disable Command Prompt for Standard Users",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [SysPolicy],
@@ -3241,7 +3241,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-run-dialog",
                 Label = "Kiosk: Remove Run Dialog from Start Menu",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [ExplorerPolicy],
@@ -3258,7 +3258,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-lock-lock-screen",
                 Label = "Kiosk: Prevent Changing Lock Screen Image via Policy",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [GpoSys],
@@ -3275,7 +3275,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-camera-on-lockscreen",
                 Label = "Kiosk: Disable Camera Access from Lock Screen",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [GpoSys],
@@ -3292,7 +3292,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-prevent-logoff-shutdown",
                 Label = "Kiosk: Remove Shut Down and Restart from Start Menu",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [ExplorerPolicy],
@@ -3319,7 +3319,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-enable-kiosk-mode",
                 Label = "Enable Kiosk Browser Lockdown Mode",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3336,7 +3336,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-restrict-allowed-urls",
                 Label = "Restrict Kiosk Browser to Allowed URLs Only",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3353,7 +3353,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-browser-extensions",
                 Label = "Disable Browser Extensions in Kiosk Mode",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3370,7 +3370,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-enable-end-session-button",
                 Label = "Enable End Session Button in Kiosk Browser",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3387,7 +3387,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-configure-idle-timeout-reset",
                 Label = "Configure Kiosk Browser Idle Timeout Session Reset",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3404,7 +3404,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-block-popups",
                 Label = "Block Pop-up Windows in Kiosk Browser",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3421,7 +3421,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-developer-tools",
                 Label = "Disable Developer Tools in Kiosk Browser",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3438,7 +3438,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-download-manager",
                 Label = "Disable Browser Download Manager in Kiosk Mode",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3455,7 +3455,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-clear-session-data-on-exit",
                 Label = "Clear All Session Data When Kiosk Browser Restarts",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3472,7 +3472,7 @@ internal static class PolicyDesktop
             {
                 Id = "kiosk-disable-address-bar",
                 Label = "Hide Address Bar in Kiosk Browser",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3499,7 +3499,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-language-pack-install",
                 Label = "Block User Language Pack Installation",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3521,7 +3521,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-restrict-language-change",
                 Label = "Restrict Language Display Setting Change",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3543,7 +3543,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-ime-telemetry",
                 Label = "Disable IME Telemetry Upload",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3565,7 +3565,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-cloud-candidate",
                 Label = "Disable IME Cloud Candidate Lookup",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3587,7 +3587,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-handwriting-recognition-improvement",
                 Label = "Disable Language Handwriting Recognition Improvement",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3609,7 +3609,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-ocr-telemetry",
                 Label = "Disable Language OCR Telemetry",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3631,7 +3631,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-speech-recognition-telemetry",
                 Label = "Disable Speech Recognition Language Telemetry",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3653,7 +3653,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-keyboard-telemetry",
                 Label = "Disable Keyboard Layout Telemetry",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3675,7 +3675,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-language-online-update",
                 Label = "Disable Automatic Language Pack Online Update",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3697,7 +3697,7 @@ internal static class PolicyDesktop
             {
                 Id = "langopt-disable-language-sync",
                 Label = "Disable Language Settings Sync",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3731,7 +3731,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-mobility-center",
                 Label = "Disable Windows Mobility Center (Machine)",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoMobilityCenter=1 in the machine-side Mobility Center policy key. "
                     + "Disables Windows Mobility Center (quicklaunch panel for brightness, volume, battery, "
@@ -3751,7 +3751,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-mobility-center-user",
                 Label = "Disable Windows Mobility Center (Current User)",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoMobilityCenter=1 in the per-user Mobility Center policy key. "
                     + "Removes the Mobility Center shortcut and prevents the panel from being opened "
@@ -3771,7 +3771,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-presentation-settings",
                 Label = "Disable Presentation Settings Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoPresentationSettings=1 in the machine Mobility Center policy key. "
                     + "Removes the Presentation Settings tile from Mobility Center, preventing users from "
@@ -3791,7 +3791,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-battery-tile",
                 Label = "Disable Battery Status Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoBatteryTile=1 in the machine Mobility Center policy key. "
                     + "Hides the battery status tile in Windows Mobility Center. "
@@ -3811,7 +3811,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-sync-center-tile",
                 Label = "Disable Sync Center Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoSyncCenterTile=1 in the machine Mobility Center policy key. "
                     + "Removes the Sync Center tile from Windows Mobility Center. "
@@ -3831,7 +3831,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-display-tile",
                 Label = "Disable External Display Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoExternalDisplayTile=1 in the machine Mobility Center policy key. "
                     + "Hides the external display (projector/monitor) connection tile from Mobility Center. "
@@ -3850,7 +3850,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-screen-rotation-tile",
                 Label = "Disable Screen Rotation Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoScreenRotationTile=1 in the machine Mobility Center policy key. "
                     + "Removes the screen rotation tile from Mobility Center. "
@@ -3870,7 +3870,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-wireless-tile",
                 Label = "Disable Wireless Network Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoWirelessNetworkTile=1 in the machine Mobility Center policy key. "
                     + "Hides the Wi-Fi / wireless network tile from Mobility Center. "
@@ -3890,7 +3890,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-disable-volume-tile",
                 Label = "Disable Volume Tile in Mobility Center",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoVolumeTile=1 in the machine Mobility Center policy key. "
                     + "Removes the speaker volume slider tile from Mobility Center. "
@@ -3910,7 +3910,7 @@ internal static class PolicyDesktop
             {
                 Id = "mob-remove-mobility-center-from-context",
                 Label = "Remove Windows Mobility Center from Context Menu",
-                Category = "Display",
+                Category = "Display — Input Method",
                 Description =
                     "Sets NoMobilityCenterContextMenu=1 in the machine Explorer policy key. "
                     + "Removes the Windows Mobility Center entry from the desktop right-click context menu. "
@@ -3942,7 +3942,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-disable-connected-standby",
                     Label = "Disable Modern Standby (S0 Low-Power Idle) — Use S3 Sleep",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Disables Modern Standby (S0ix) and falls back to the traditional S3 sleep state. S0 keeps the network and background apps active during sleep, which can interfere with security tools, drain battery unexpectedly, and create wake-on-network attack surfaces.",
                     Tags = ["modern-standby", "s0", "s3-sleep", "power", "disable"],
@@ -3962,7 +3962,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-block-network-during-standby",
                     Label = "Block Network Activity During Modern Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Prevents the NIC from remaining active and processing network packets while the device is in Modern Standby. Reduces the attack surface from wake-on-LAN exploitation, rogue DHCP offers, and directed broadcast attacks arriving while the user is away.",
                     Tags = ["modern-standby", "network", "wifi", "attack-surface", "security"],
@@ -3982,7 +3982,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-disable-smart-standby",
                     Label = "Disable Adaptive Smart Standby Adjustments",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Disables the intelligent standby system that dynamically adjusts deep-sleep exit rates based on historical usage patterns. When disabled, the system uses fixed configured timeouts rather than ML-driven adaptive transitions.",
                     Tags = ["modern-standby", "adaptive", "smart-standby", "power", "predictable"],
@@ -4002,7 +4002,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-disable-background-tasks-in-standby",
                     Label = "Disable Background Task Execution During Modern Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Prevents application background tasks from running while the system is in Modern Standby. Background tasks in S0 consume battery, can trigger wake-locks that prevent deep sleep, and may leak user data via cloud sync while the device appears powered off.",
                     Tags = ["modern-standby", "background-tasks", "battery", "privacy", "s0"],
@@ -4022,7 +4022,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-disable-maintenance-in-standby",
                     Label = "Disable Automatic Maintenance Execution During Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Prevents the Windows Automatic Maintenance scheduler from running maintenance tasks (Disk Defrag, Windows Defender scans, app updates) while the device is in Modern Standby. Avoids unexpected disk I/O, CPU wake, and battery drain during standby periods.",
                     Tags = ["modern-standby", "maintenance", "automatic-maintenance", "battery", "scheduling"],
@@ -4042,7 +4042,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-require-fast-startup-disabled",
                     Label = "Disable Hybrid Shutdown / Fast Startup (Hiberboot)",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Disables Hybrid Shutdown (Fast Startup / Hiberboot) which persists kernel session to the hibernate file across reboots. Hiberboot bypasses full driver reinitialisation and can leave security tools in stale state; full cold boot is safer and more predictable.",
                     Tags = ["modern-standby", "fast-startup", "hiberboot", "hibernate", "cold-boot"],
@@ -4062,7 +4062,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-set-idle-standby-timeout",
                     Label = "Set Plugged-In Idle-to-Standby Timeout to 30 Minutes",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Configures the AC (plugged-in) idle timeout before the system enters Modern Standby or sleep to 30 minutes (1800 seconds). Reduces the window in which an unattended unlocked workstation is physically accessible before it locks and suspends.",
                     Tags = ["modern-standby", "idle-timeout", "screen-lock", "power", "physical-security"],
@@ -4082,7 +4082,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-block-wake-timers-in-standby",
                     Label = "Block Programmatic Wake Timers During Modern Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Prevents applications and scheduled tasks from setting wake timers that force the system out of Modern Standby. Rogue or poorly coded applications can use wake timers to keep the device powered on continuously; blocking timers enforces true standby.",
                     Tags = ["modern-standby", "wake-timer", "power", "battery", "security"],
@@ -4102,7 +4102,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-disable-wol-in-standby",
                     Label = "Disable Wake-on-LAN During Modern Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Prevents the NIC from processing Wake-on-LAN (WoL) magic packets while the device is in Modern Standby. Eliminates the network-based remote-wake attack surface; an attacker with network access cannot remotely wake and attack the device.",
                     Tags = ["modern-standby", "wake-on-lan", "wol", "network", "security"],
@@ -4122,7 +4122,7 @@ internal static class PolicyDesktop
                 {
                     Id = "mstandby-require-password-on-resume",
                     Label = "Require Password When Resuming from Modern Standby",
-                    Category = "Display",
+                    Category = "Display — Input Method",
                     Description =
                         "Forces credential re-entry when the device resumes from Modern Standby or sleep. Without this policy the screen may stay unlocked after resume, exposing the session to physical access attacks on shared or temporarily unattended machines.",
                     Tags = ["modern-standby", "password-resume", "screen-lock", "credential", "physical-security"],
@@ -4152,7 +4152,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-pen-workspace",
                 Label = "Disable Pen Workspace",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4174,7 +4174,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-above-lock",
                 Label = "Disable Pen Workspace Above Lock Screen",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4196,7 +4196,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-touch-keyboard-onboarding",
                 Label = "Disable Touch Keyboard Onboarding",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4217,7 +4217,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-handwriting-panel",
                 Label = "Disable Handwriting Panel",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4239,7 +4239,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-workspace-telemetry",
                 Label = "Disable Pen Workspace Telemetry",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4261,7 +4261,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-ink-replay",
                 Label = "Disable Ink Replay Logging",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4283,7 +4283,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-pen-promo",
                 Label = "Disable Pen Workspace Hardware Promo",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -4305,7 +4305,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-dictation",
                 Label = "Disable Ink Dictation Button",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4327,7 +4327,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-sticky-notes-lock",
                 Label = "Disable Sticky Notes on Lock Screen",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4349,7 +4349,7 @@ internal static class PolicyDesktop
             {
                 Id = "penws-disable-pencil-button-shortcut",
                 Label = "Disable Pen Button Shortcut to Workspace",
-                Category = "Display",
+                Category = "Display — Input Method",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -4381,7 +4381,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-disable-lock-screen",
                     Label = "Disable Interactive Lock Screen",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Removes the interactive lock screen and bypasses Cortana, search, and media controls on the lock screen. Users must enter credentials immediately. Default: enabled. Recommended: 1 (disabled) in kiosk or high-security environments.",
                     Tags = ["lock-screen", "personalization", "kiosk", "policy"],
@@ -4398,7 +4398,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-enforce-lock-screen-image",
                     Label = "Enforce Corporate Lock Screen Image",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Forces a specific corporate lock screen image path and prevents users from changing it. Ensures brand-consistent or security-warning lock screens. Default: not enforced. Recommended: set path in LockScreenImage value.",
                     Tags = ["lock-screen", "image", "corporate", "branding", "policy"],
@@ -4415,7 +4415,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-block-user-lock-screen-change",
                     Label = "Block User From Changing Lock Screen",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents non-admin users from changing the lock screen image or slide show. Enforces IT-managed lock screen content. Default: not controlled. Recommended: 1 in managed environments.",
                     Tags = ["lock-screen", "user-restriction", "personalization", "policy"],
@@ -4432,7 +4432,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-disable-lock-screen-camera",
                     Label = "Disable Camera on Lock Screen",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents the camera from being activated from the lock screen without unlocking. Closes the camera-access-without-authentication attack surface. Default: 0. Recommended: 1 (disabled).",
                     Tags = ["lock-screen", "camera", "security", "policy"],
@@ -4449,7 +4449,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-disable-lock-screen-toast",
                     Label = "Disable Toast Notifications on Lock Screen",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents toast notifications from displaying on the lock screen, hiding message previews and alert content from unauthenticated view. Default: enabled. Recommended: 1 (disabled) for data protection.",
                     Tags = ["lock-screen", "notifications", "toast", "privacy", "policy"],
@@ -4466,7 +4466,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-set-auto-slideshow",
                     Label = "Disable Lock Screen Slideshow",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables the lock screen slideshow feature that cycles through user-selected photos. Enforces a static lock screen image and prevents unintended photo disclosure on unattended PCs. Default: enabled. Recommended: 1 (disabled).",
                     Tags = ["lock-screen", "slideshow", "photos", "privacy", "policy"],
@@ -4483,7 +4483,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-block-desktop-theme-change",
                     Label = "Block Users From Changing Desktop Theme",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents standard users from applying custom desktop themes, wallpapers, or colour schemes. Enforces consistent corporate visual identity. Default: not controlled. Recommended: 1 in kiosk/call-centre environments.",
                     Tags = ["desktop", "theme", "personalization", "corporate", "policy"],
@@ -4500,7 +4500,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-disable-color-change",
                     Label = "Disable User Windows Accent Colour Change",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents users from changing the Windows accent colour used in title bars, taskbar, and UI highlights. Enforces brand-consistent UI colouring set by IT policy. Default: not controlled. Recommended: 1 in corporate environments.",
                     Tags = ["accent-color", "personalization", "ui", "corporate", "policy"],
@@ -4517,7 +4517,7 @@ internal static class PolicyDesktop
                 {
                     Id = "plock-disable-transparency-effects",
                     Label = "Disable Windows Transparency Effects via Policy",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables the acrylic transparency effects in Windows title bars and taskbar via Group Policy. Reduces GPU compositing overhead on resource-constrained hardware. Default: enabled. Recommended: 1 (disabled) on VMs and thin clients.",
                     Tags = ["transparency", "acrylic", "performance", "personalization", "policy"],
@@ -4545,7 +4545,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-disable-lock-screen-overlays",
                 Label = "Disable Lock Screen App Notification Overlays",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Removes application notification badges (email count, calendar events, alarms) from the lock screen. Reduces information leakage to unauthenticated observers.",
                 Tags = ["lock-screen", "notifications", "privacy", "policy"],
@@ -4563,7 +4563,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-force-default-lock-screen",
                 Label = "Force Default Lock Screen Image",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents users from customising the lock screen image. Forces the Windows default lock screen, blocking user-selected photos or Windows Spotlight images.",
                 Tags = ["lock-screen", "personalization", "policy"],
@@ -4581,7 +4581,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-prevent-wallpaper-change",
                 Label = "Prevent Desktop Wallpaper Changes",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents users from changing the desktop wallpaper via Settings or Control Panel. Enforces a consistent corporate desktop appearance.",
                 Tags = ["wallpaper", "personalization", "policy"],
@@ -4599,7 +4599,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-hide-background-settings",
                 Label = "Hide Background/Wallpaper Settings Page",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Removes the background/wallpaper tab from Display Properties in Control Panel, preventing users from accessing wallpaper settings.",
                 Tags = ["wallpaper", "control-panel", "policy", "personalization"],
@@ -4617,7 +4617,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-hide-screensaver-settings",
                 Label = "Hide Screensaver Settings Page",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Removes the screensaver tab from Display Properties in Control Panel, preventing users from changing screensaver settings.",
                 Tags = ["screensaver", "control-panel", "policy", "personalization"],
@@ -4635,7 +4635,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-hide-appearance-settings",
                 Label = "Hide Appearance Settings Page",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Removes the Appearance tab from Display Properties in Control Panel, preventing users from changing colour scheme and system visual style.",
                 Tags = ["appearance", "control-panel", "policy", "personalization"],
@@ -4653,7 +4653,7 @@ internal static class PolicyDesktop
             {
                 Id = "prsnlz-prevent-color-change",
                 Label = "Prevent System Colour Scheme Changes",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Blocks users from changing the Windows colour scheme (accent colours, dark/light theme selection) via Settings or Control Panel.",
                 Tags = ["theme", "colors", "control-panel", "policy", "personalization"],
@@ -4682,7 +4682,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-play-to-receiver",
                     Label = "Play To: Disable Windows Play To Receiver Feature",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets NotAllowPlayToReceiver=1 in PlayToReceiver machine policy. Disables the Windows 'Play To' receiver capability that allows other DLNA-compatible devices on the same network to push media content to this PC for playback. "
                         + "'Play To' opens this device as a DLNA media renderer, listening for UPnP/DLNA control point commands from any device on the local network. On a corporate network, this allows any DLNA-capable device (including personal mobile phones) to push multimedia content to corporate workstations without authentication. Disabling the receiver prevents the device from accepting unsolicited media content pushes.",
@@ -4700,7 +4700,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-play-to-sender",
                     Label = "Play To: Disable Windows Play To Media Source Sending",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisablePlayTo=1 in PlayToReceiver machine policy. Disables the ability for users to use this PC as a 'Play To' source — sending media from Windows Media Player, Photos, or other DLNA-compatible applications to an external DLNA renderer. "
                         + "Using this PC as a 'Play To' sender connects to UPnP devices on the network and pushes streaming data to them. On a corporate network, this could be used to stream sensitive video content from a corporate machine to a personal smart TV, Chromecast, or other unmanaged renderer. Disabling 'Play To' sender functionality prevents this data exfiltration vector.",
@@ -4718,7 +4718,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-block-wsd-device-discovery",
                     Label = "Play To: Block WSD (Web Services on Devices) Network Discovery",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableWSDDiscovery=1 in WSD machine policy. Prevents the Windows WSD (Web Services on Devices) stack from announcing this device to the local network and from probing for WSD-compatible peripherals — including networked printers, scanners, and media renderers. "
                         + "WSD uses multicast UDP probes (WS-Discovery) that announce the device's presence to all LAN segments. These broadcasts leak device identity, OS version, and service capabilities to all network listeners. Disabling WSD discovery reduces the device's network footprint.",
@@ -4737,7 +4737,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-block-wsd-printer-discovery",
                     Label = "Play To: Block WSD-Based Printer Auto-Discovery",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableWSDPrinting=1 in WSD machine policy. Prevents auto-discovery and installation of WSD-connected network printers. "
                         + "WSD printer discovery installs printers from the local network automatically without user approval by default on domain-joined machines. On enterprise networks with centralised print server management, rogue WSD printers could intercept print jobs if employees accidentally redirect documents to an unauthorised WSD printer device near them. Disabling WSD printer discovery enforces exclusively server-managed print queue access.",
@@ -4755,7 +4755,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-block-wsd-scanner-discovery",
                     Label = "Play To: Block WSD-Based Scanner Auto-Discovery",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableWSDScanning=1 in WSD machine policy. Prevents automatic discovery and installation of network scanners that advertise themselves via WSD/WIA (Windows Image Acquisition). "
                         + "WSD scanner discovery installs scanning drivers and opens WIA sessions to any WSD-compatible scanner found on the network. Unauthorised scanners on the network could be configured to receive forwarded scan-to-email jobs from misconfigured endpoints. Disabling WSD scanner discovery prevents unsolicited scanner driver installation and ensures scanning hardware is explicitly approved by IT.",
@@ -4773,7 +4773,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-play-to-dmr-advertisement",
                     Label = "Play To: Disable DLNA Digital Media Renderer Advertisement",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets NotAdvertisePlayToDevice=1 in PlayToReceiver machine policy. Prevents this Windows PC from advertising itself as a DLNA Digital Media Renderer (DMR) on the local network. "
                         + "DMR advertisement broadcasts multicast UPnP SSDP announcements that include the device's name, model, IP address, and capabilities to all devices on the network. This advertisement allows any DLNA control point (phone, tablet, smart TV) to discover and push media to the PC. Suppressing the advertisement hides the device from DLNA discovery without fully disabling the network stack services.",
@@ -4791,7 +4791,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-media-sharing-network-access",
                     Label = "Play To: Disable Media Library Network Sharing",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableMediaSharing=1 in PlayToReceiver machine policy. Prevents this PC from sharing its media library (pictures, videos, music) with other devices on the network via the Windows Media Player network sharing service. "
                         + "Media library sharing exposes the contents of the user's Documents, Pictures, and Music folders to any UPnP/DLNA media renderer on the local network without per-file access controls. On corporate networks, user Documents folders frequently contain sensitive files that the file-sharing component includes in its media index.",
@@ -4809,7 +4809,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-restrict-play-to-local-subnet-only",
                     Label = "Play To: Restrict Play To and DLNA to Local Subnet Only",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets AllowedNetworkScopes=1 in PlayToReceiver machine policy. Restricts the DLNA/Play To feature to the local subnet only, preventing cross-subnet media streaming and rendering. "
                         + "Limiting Play To to the local subnet ensures that media streaming sessions cannot traverse network routers into other VLANs or the wide internet. This is the least-restrictive enterprise hardening option for organisations where DLNA is permitted for AV room systems on a dedicated VLAN but must not be accessible from corporate workstation VLANs.",
@@ -4827,7 +4827,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-device-play-auto-start",
                     Label = "Play To: Disable Auto-Start of Play To Service at Logon",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableAutoStart=1 in PlayToReceiver machine policy. Prevents the Windows Play To Receiver service from starting automatically at user logon. "
                         + "The Play To receiver service starts in the background and maintains a network listener even when neither party has initiated a media session. This background process consumes memory, CPU, and network port capacity. Disabling auto-start ensures the service only runs when explicitly invoked, reducing the device's idle network service footprint.",
@@ -4845,7 +4845,7 @@ internal static class PolicyDesktop
                 {
                     Id = "playtodev-disable-wsd-host-discovery",
                     Label = "Play To: Disable WSD Function Discovery Host (FDHOST) Network Broadcast",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets DisableFunctionDiscoveryHostBroadcast=1 in WSD machine policy. Prevents the Function Discovery Host service from broadcasting WSD host announcements that advertise this machine's services (web services, UPnP capabilities) to other devices on the network. "
                         + "Function Discovery is the mechanism Windows uses to populate the Network window in Explorer. Broadcasting the host's function discovery metadata exposes its installed services and capabilities to all LAN listeners. On hardened workstations, eliminating unnecessary network announcements reduces the device's identifiable surface in passive network reconnaissance.",
@@ -4873,7 +4873,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-enable-screensaver",
                     Label = "Enforce Screen Saver Activation",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Mandates the screen saver is enabled for all users, ensuring the screen locks after inactivity. Prevents unattended desktop access. Default: not enforced. Recommended: 1 in all managed environments.",
                     Tags = ["screensaver", "lock", "session", "timeout", "policy"],
@@ -4890,7 +4890,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-require-password-resume",
                     Label = "Require Password on Screen Saver Resume",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Forces Windows to prompt for a password when resuming from the screen saver. Prevents access to an unattended unlocked session. Default: disabled. Recommended: 1 (enabled) for compliance.",
                     Tags = ["screensaver", "password", "security", "compliance", "policy"],
@@ -4907,7 +4907,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-set-timeout-seconds",
                     Label = "Set Screen Saver Inactivity Timeout (600s)",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets the screen saver activation delay to 600 seconds (10 minutes) of inactivity. Balances user productivity against security for typical office environments. Default: not set. Recommended: 600.",
                     Tags = ["screensaver", "timeout", "inactivity", "security", "policy"],
@@ -4924,7 +4924,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-block-user-timeout-change",
                     Label = "Block Users From Changing Screen Saver Timeout",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents users from modifying the screen saver wait time in Display Properties. Ensures the IT-mandated timeout is respected. Default: not controlled. Recommended: 1.",
                     Tags = ["screensaver", "timeout", "user-restriction", "policy"],
@@ -4941,7 +4941,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-block-user-ss-change",
                     Label = "Block Users From Changing Screen Saver",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents users from selecting a different screen saver. The IT-assigned screen saver (blank or corporate-branded) remains fixed. Default: not controlled. Recommended: 1.",
                     Tags = ["screensaver", "user-restriction", "personalization", "policy"],
@@ -4958,7 +4958,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-use-blank-ss",
                     Label = "Force Blank (Black) Screen Saver",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Forces the blank/black screen saver as the mandatory screen saver. Avoids animation CPU overhead and prevents screen burn-in from animated screensavers. Default: user-selected. Recommended: scrnsave.scr (blank).",
                     Tags = ["screensaver", "blank", "performance", "policy"],
@@ -4975,7 +4975,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-disable-user-password-change",
                     Label = "Block Users From Disabling SS Password Requirement",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Prevents users from unchecking the 'On resume, display logon screen' option in screen saver settings. Ensures password-on-resume cannot be silently disabled. Default: not controlled. Recommended: 1.",
                     Tags = ["screensaver", "password", "user-restriction", "compliance", "policy"],
@@ -4992,7 +4992,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-min-screen-timeout-30s",
                     Label = "Enforce Minimum 30-Second Screen Saver Wait",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets a minimum screen saver activation delay of 30 seconds, preventing users from setting it too low (causing frequent screen lock during active use). Default: not set. Recommended: 30.",
                     Tags = ["screensaver", "timeout", "minimum", "usability", "policy"],
@@ -5009,7 +5009,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-max-inactivity-3600s",
                     Label = "Enforce Maximum 3600-Second Inactivity Limit",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Caps the maximum screen saver inactivity wait to 3600 seconds (1 hour). Prevents users from setting an excessively long timeout that would leave unattended sessions unlocked. Default: not set. Recommended: 3600.",
                     Tags = ["screensaver", "timeout", "maximum", "security", "policy"],
@@ -5026,7 +5026,7 @@ internal static class PolicyDesktop
                 {
                     Id = "scrsvr-grace-period-zero",
                     Label = "Set Screen Saver Lock Grace Period to Zero",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Sets the grace period (seconds after screen saver starts before lock is enforced) to 0. Ensures immediate lock without a bypass window. Default: 5. Recommended: 0.",
                     Tags = ["screensaver", "grace-period", "lock", "immediate", "policy"],
@@ -5054,7 +5054,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-phone-link",
                     Label = "Disable Phone Link Clipboard Share",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables clipboard sharing between Windows and a linked Android/iOS phone via the Phone Link (Your Phone) app, preventing cross-device clipboard leakage.",
                     Tags = ["clipboard", "phone-link", "sharing", "privacy", "policy"],
@@ -5071,7 +5071,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-sync-across-devices",
                     Label = "Disable Clipboard Sync Across Devices",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables device-to-device clipboard synchronization at the policy level, complementing AllowCrossDeviceClipboard by blocking back-end sync service.",
                     Tags = ["clipboard", "sync", "devices", "privacy", "policy"],
@@ -5088,7 +5088,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-cloud-clipboard",
                     Label = "Disable Cloud Clipboard Sync",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables cloud clipboard synchronization feature that uploads clipboard contents to Microsoft's cloud for cross-device access.",
                     Tags = ["clipboard", "cloud", "sync", "privacy", "policy"],
@@ -5105,7 +5105,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-tooltip-ads",
                     Label = "Disable Clipboard History Tooltip Ads",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Hides promotional tooltips and advertisements shown in the clipboard history panel (Win+V) that encourage enabling cloud clipboard or other Microsoft services.",
                     Tags = ["clipboard", "tooltip", "ads", "privacy", "policy"],
@@ -5122,7 +5122,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-block-microsoft-apps",
                     Label = "Block Clipboard Access by Microsoft Apps",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Blocks Microsoft first-party applications from accessing the clipboard history API, reducing telemetry and data collection from clipboard contents.",
                     Tags = ["clipboard", "microsoft-apps", "privacy", "policy"],
@@ -5139,7 +5139,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-contextual-suggestions",
                     Label = "Disable Contextual Suggestions in Clipboard",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables contextual content suggestions (e.g., smart replies, URL previews) that appear in the clipboard history panel based on clipboard content analysis.",
                     Tags = ["clipboard", "suggestions", "privacy", "cloud-content", "policy"],
@@ -5156,7 +5156,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-telemetry",
                     Label = "Disable Clipboard Telemetry",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables telemetry data collection about clipboard usage patterns, preventing clipboard interaction metadata from being sent to Microsoft.",
                     Tags = ["clipboard", "telemetry", "privacy", "policy"],
@@ -5173,7 +5173,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-block-sensitive-content-detection",
                     Label = "Block Sensitive Clipboard Content Detection",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables content scanning of clipboard items for sensitive data classification (DLP-style detection) by cloud-connected services.",
                     Tags = ["clipboard", "sensitive", "dlp", "privacy", "policy"],
@@ -5190,7 +5190,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-disable-uwp-clipboard-api",
                     Label = "Disable Clipboard API for UWP Apps",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Disables the WinRT clipboard API access for Universal Windows Platform (UWP) apps, preventing packaged apps from silently reading or writing the clipboard.",
                     Tags = ["clipboard", "uwp", "api", "privacy", "policy"],
@@ -5207,7 +5207,7 @@ internal static class PolicyDesktop
                 {
                     Id = "shrdclip-restrict-same-process-paste",
                     Label = "Restrict Clipboard Paste to Same Process",
-                    Category = "Display",
+                    Category = "Display — Personalization Lock",
                     Description =
                         "Restricts the clipboard paste operation so that clipboard data can only be pasted within the same process that originally wrote it, preventing cross-process data leakage via clipboard.",
                     Tags = ["clipboard", "paste", "isolation", "security", "policy"],
@@ -5234,7 +5234,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-find-command",
                 Label = "Remove Find/Search from Start Menu",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoFind=1 in Policies\\Explorer. Removes the Find/Search shortcut and menu item from the Start menu. Prevents quick enumeration of file system contents via the built-in search dialog. Default: Find is visible.",
                 Tags = ["shell", "restriction", "search", "policy", "gpo"],
@@ -5248,7 +5248,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-logoff-menu",
                 Label = "Remove Log Off from Start Menu",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoLogoff=1 in Policies\\Explorer. Removes the Log Off entry from the Start menu, preventing users from signing out via the Start menu shortcut. Session management must be performed through other means (Task Manager, CTRL+ALT+DEL).",
                 Tags = ["shell", "restriction", "logoff", "policy", "gpo"],
@@ -5262,7 +5262,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-desktop-icons",
                 Label = "Hide All Desktop Icons",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoDesktop=1 in Policies\\Explorer. Removes all icons from the desktop surface including This PC, Recycle Bin, and user-placed shortcuts. Desktop background is still visible. Used to create clean-slate kiosk or thin-client desktops.",
                 Tags = ["shell", "restriction", "desktop", "policy", "kiosk"],
@@ -5276,7 +5276,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-drives-page",
                 Label = "Remove Drives Tab from Computer Properties",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoDrivesPage=1 in Policies\\Explorer. Removes the Drives tab from the Hardware and Storage area in System Properties, preventing detailed enumeration of physical drive properties. Reduces information leakage on shared systems.",
                 Tags = ["shell", "restriction", "drives", "policy", "gpo"],
@@ -5290,7 +5290,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-control-panel-applets",
                 Label = "Block All Control Panel Applets",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoCplApplets=1 in Policies\\Explorer. Prevents all Control Panel .cpl applets from launching, including Display, Sound, Network, System, etc. Combined with the GPO applet allow-list this creates a restricted-access Control Panel for standard users.",
                 Tags = ["shell", "restriction", "controlpanel", "policy", "gpo"],
@@ -5304,7 +5304,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-display-cpl",
                 Label = "Hide Display Control Panel Applet",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoDispCPL=1 in Policies\\Explorer. Prevents users from opening the Display applet from Control Panel or the desktop right-click menu, blocking wallpaper, resolution, and colour depth changes. Used to enforce corporate visual standards.",
                 Tags = ["shell", "restriction", "display", "policy", "gpo"],
@@ -5318,7 +5318,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-restrict-run-list",
                 Label = "Enable DisallowRun Application Restriction",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets DisallowRun=1 in Policies\\Explorer. Activates the DisallowRun enforcement mode, which blocks execution of any application names listed under the adjacent DisallowRun sub-key. Enables per-application deny-listing without requiring AppLocker or WDAC.",
                 Tags = ["shell", "restriction", "allowlist", "policy", "gpo"],
@@ -5332,7 +5332,7 @@ internal static class PolicyDesktop
             {
                 Id = "shellrst-no-network-neighborhood",
                 Label = "Hide Network Neighborhood from Explorer",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Sets NoNetHood=1 in Policies\\Explorer. Removes the Network Neighborhood (Network Places) icon from Explorer and the desktop. Users can still access UNC paths directly; this only removes the browsable discovery pane that enumerates visible network shares.",
                 Tags = ["shell", "restriction", "network", "policy", "gpo"],
@@ -5356,7 +5356,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-shutdown-on-ctrl-alt-del",
                 Label = "Disable Shutdown from Ctrl+Alt+Del Screen",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5378,7 +5378,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-require-shutdown-reason",
                 Label = "Require Shutdown Reason and Comment",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5400,7 +5400,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-restart-apps",
                 Label = "Disable App Restart After Reboot",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5422,7 +5422,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-automatic-restart",
                 Label = "Disable Automatic Restart After BSOD",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5444,7 +5444,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-legacy-logoff-script",
                 Label = "Disable Legacy Logoff Script Delay",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5466,7 +5466,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-forced-reboot-notification",
                 Label = "Disable Forced Reboot Notification Banner",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5488,7 +5488,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-power-button-action",
                 Label = "Disable Power Button Shutdown",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5510,7 +5510,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-restart-button-start",
                 Label = "Disable Restart Option in Start Menu",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5532,7 +5532,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-disable-hibernate-option",
                 Label = "Disable Hibernate Option in Shutdown Menu",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5554,7 +5554,7 @@ internal static class PolicyDesktop
             {
                 Id = "shtdwn-log-shutdown-events",
                 Label = "Enable Shutdown Event Logging",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5586,7 +5586,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-turn-off-sidebar",
                 Label = "Sidebar Policy: Turn Off Windows Sidebar",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Disables the Windows Sidebar and all desktop gadgets via Group Policy. Prevents users from running the sidebar process (Sidebar.exe) on Windows Vista/7/8 and legacy gadgets on Windows 10/11.",
                 Tags = ["sidebar", "gadgets", "legacy", "disable", "policy"],
@@ -5604,7 +5604,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-block-unsupported-packages",
                 Label = "Sidebar Policy: Block Unsupported Gadget Packages",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents execution of gadget packages that are not explicitly supported by the installed Windows version. Unsupported gadget packages can contain vulnerabilities or unsigned code.",
                 Tags = ["sidebar", "gadgets", "packages", "block", "policy"],
@@ -5622,7 +5622,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-user-gadgets",
                 Label = "Sidebar Policy: Disable Per-User Gadget Execution",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents individual users from installing and running desktop gadgets. Removes gadgets from the right-click desktop context menu and disables the gadget installation dialog.",
                 Tags = ["sidebar", "gadgets", "user", "disable", "policy"],
@@ -5640,7 +5640,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-auto-update",
                 Label = "Sidebar Policy: Disable Gadget Metadata Auto-Update",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents Windows gadgets from automatically downloading updated metadata from the Windows Live Gallery or third-party gadget feeds. Reduces network activity and potential data exfiltration.",
                 Tags = ["sidebar", "gadgets", "auto-update", "policy"],
@@ -5658,7 +5658,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-block-from-running",
                 Label = "Sidebar Policy: Block Sidebar Process from Running",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Blocks the Windows Sidebar process (sidebar.exe) from launching. CVE-2013-0088 and other CVEs affect Windows gadgets — disabling the process is a defence-in-depth mitigation.",
                 Tags = ["sidebar", "gadgets", "block", "process", "cve", "policy"],
@@ -5676,7 +5676,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-require-signed-packages",
                 Label = "Sidebar Policy: Require Signed Gadget Packages",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Enforces digital signature verification for all gadget packages before execution. Prevents loading of unsigned or tampered gadgets that could execute arbitrary code.",
                 Tags = ["sidebar", "gadgets", "signatures", "signing", "policy"],
@@ -5694,7 +5694,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-web-gadgets",
                 Label = "Sidebar Policy: Disable Internet-Connected Gadgets",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents gadgets from connecting to the internet to fetch live content (weather, news, finance widgets). Eliminates a data exfiltration channel and mitigates web content injection risks.",
                 Tags = ["sidebar", "gadgets", "web", "internet", "policy"],
@@ -5712,7 +5712,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-desktop-gadgets",
                 Label = "Sidebar Policy: Disable Desktop Gadgets",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Removes desktop gadget functionality entirely, including the right-click 'Gadgets' menu entry on the desktop. Enforces a clean desktop policy on managed enterprise endpoints.",
                 Tags = ["sidebar", "gadgets", "desktop", "disable", "policy"],
@@ -5730,7 +5730,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-third-party-gadgets",
                 Label = "Sidebar Policy: Disable Third-Party Gadget Installation",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents users from installing gadgets from third-party sources or URLs. Restricts gadget sources to the built-in Windows Gallery only, reducing the attack surface via malicious gadget packages.",
                 Tags = ["sidebar", "gadgets", "third-party", "installation", "policy"],
@@ -5748,7 +5748,7 @@ internal static class PolicyDesktop
             {
                 Id = "sidebar-disable-gadget-gallery",
                 Label = "Sidebar Policy: Disable Gadget Gallery Access",
-                Category = "Display",
+                Category = "Display — Personalization Lock",
                 Description =
                     "Prevents access to the Windows Gadget Gallery (the built-in gadget browser). Removes the ability to browse and install new gadgets from both the OS gallery and online sources.",
                 Tags = ["sidebar", "gadgets", "gallery", "lockdown", "policy"],
@@ -5778,7 +5778,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-recent-apps-in-start",
                 Label = "Start Menu: Disable recently added apps list in Start",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets DisableRecentAppsInStart=1 in StartMenuExperience policy. Hides the 'Recently "
                     + "added' section at the top of the Start menu application list.",
@@ -5793,7 +5793,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-frequently-used-programs",
                 Label = "Start Menu: Disable frequently used programs list",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets NoFrequentUsedPrograms=1 in Explorer policy. Prevents Windows from tracking and "
                     + "displaying the most frequently launched applications in the Start menu.",
@@ -5808,7 +5808,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-hide-people-bar",
                 Label = "Taskbar: Hide the People bar (contacts flyout)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets HidePeopleBar=1 in StartMenuExperience policy. Removes the People button from "
                     + "the taskbar, hiding the contacts/people flyout feature.",
@@ -5823,7 +5823,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-start-recent-docs",
                 Label = "Start Menu: Disable recent documents history in Start",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets NoRecentDocsMenu=1 in Explorer policy. Stops Windows from tracking and showing "
                     + "a recent-documents shortcut list in the Start menu and jump lists.",
@@ -5838,7 +5838,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-start-app-suggestions",
                 Label = "Start Menu: Disable app suggestions / promoted apps in Start",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets DisableRecommendedAppsInStart=1 in StartMenuExperience policy. Removes "
                     + "Microsoft-promoted app suggestions and advertisements from the Start menu.",
@@ -5853,7 +5853,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-start-recommended-section",
                 Label = "Start Menu: Disable the Recommended section in Windows 11 Start",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets DisableRecommendedItemsInStart=1 in StartMenuExperience policy. Hides the "
                     + "'Recommended' tile area at the bottom of the Windows 11 Start menu.",
@@ -5868,7 +5868,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-preview-pane",
                 Label = "Explorer: Disable the Preview Pane in File Explorer",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets NoPreviewPane=1 in Explorer policy. Disables the Preview Pane panel that "
                     + "renders a file preview on the right side of File Explorer windows.",
@@ -5883,7 +5883,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-details-pane",
                 Label = "Explorer: Disable the Details Pane in File Explorer",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets NoDetailsPane=1 in Explorer policy. Removes the Details Pane that displays "
                     + "file metadata (size, dates, author) on the right side of File Explorer.",
@@ -5898,7 +5898,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-disable-taskbar-msa-notification",
                 Label = "Taskbar: Disable MSA sign-in notification badge on taskbar",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets DisableMSANotification=1 in StartMenuExperience policy. Suppresses the "
                     + "notification badge that prompts users to sign in with a Microsoft Account.",
@@ -5913,7 +5913,7 @@ internal static class PolicyDesktop
             {
                 Id = "smmod-no-machine-boot-uninstall",
                 Label = "Start Menu: Preserve pinned items across machine boot (no uninstall prompt)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Sets NoMachineBootUninstall=1 in Explorer policy. Prevents Windows from prompting to "
                     + "remove pinned Start menu items for apps that were uninstalled on another user profile.",
@@ -5940,7 +5940,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-disable-sudo",
                     Label = "Disable Sudo for Windows",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Prevents users from using the 'sudo' command in Windows to run programs with elevated privileges from a standard terminal. Enforces traditional UAC elevation only.",
                     Tags = ["sudo", "elevation", "uac", "security", "windows-11"],
@@ -5959,7 +5959,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-force-new-window",
                     Label = "Force Sudo to Open New Window",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "When sudo is permitted, forces elevated processes to launch in a new, separate console window rather than running inline in the calling shell. Increases visibility of elevated sessions.",
                     Tags = ["sudo", "elevation", "new-window", "uac", "windows-11"],
@@ -5978,7 +5978,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-disable-inline-mode",
                     Label = "Disable Sudo Inline Execution Mode",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Prevents the 'inline' execution mode of sudo where the elevated process shares the calling terminal session. Inline mode can mask privilege escalation; this policy requires isolated execution.",
                     Tags = ["sudo", "elevation", "inline-mode", "security", "windows-11"],
@@ -5998,7 +5998,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-disable-input-disabled-mode",
                     Label = "Disable Sudo Input-Disabled Mode",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Prevents the 'input disabled' mode of sudo, which runs an elevated process with stdin closed. This mode is useful for non-interactive elevated scripts but may bypass certain security controls.",
                     Tags = ["sudo", "elevation", "input-disabled", "security", "windows-11"],
@@ -6018,7 +6018,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-require-admin-group-membership",
                     Label = "Restrict Sudo to Local Administrators Group",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Ensures that only users who are members of the local Administrators group can use sudo for Windows, preventing standard users from attempting elevation via sudo.",
                     Tags = ["sudo", "elevation", "admin-group", "access-control", "security"],
@@ -6037,7 +6037,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-enable-audit-events",
                     Label = "Enable Sudo Elevation Audit Events",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Configures Windows to write an audit log entry whenever a process is elevated via sudo. Audit entries include the calling user, the target executable, and the elevation timestamp.",
                     Tags = ["sudo", "elevation", "audit", "compliance", "event-log"],
@@ -6056,7 +6056,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-block-network-elevated-processes",
                     Label = "Block Elevated Processes from Accessing Network",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Restricts network access for processes elevated via sudo, preventing elevated shells from making outbound network connections. Limits lateral movement potential from elevated contexts.",
                     Tags = ["sudo", "elevation", "network", "security", "hardening"],
@@ -6076,7 +6076,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-enforce-credential-prompt",
                     Label = "Always Prompt for Credentials on Sudo Elevation",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Requires the user to enter explicit credentials (password or Windows Hello) before each sudo elevation, even within an existing authenticated session. Prevents silent re-elevation.",
                     Tags = ["sudo", "elevation", "credential-prompt", "uac", "security"],
@@ -6096,7 +6096,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-log-elevated-command-line",
                     Label = "Log Command-Line Arguments for Sudo-Elevated Processes",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Enables command-line logging for all processes elevated through sudo, recording the full command line in the Windows event log. Aids forensic investigation of elevation abuse.",
                     Tags = ["sudo", "elevation", "command-line", "audit", "forensics"],
@@ -6116,7 +6116,7 @@ internal static class PolicyDesktop
                 {
                     Id = "sudopol-block-unapproved-shells",
                     Label = "Block Sudo Elevation from Unapproved Shell Hosts",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Restricts sudo elevation to approved shell host executables (Windows Terminal, PowerShell 7, cmd.exe). Prevents elevation from unusual hosts such as scripting engines or third-party terminals.",
                     Tags = ["sudo", "elevation", "shell", "allowlist", "security"],
@@ -6155,7 +6155,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-reduce-wait-to-kill-timeout",
                 Label = "Reduce WaitToKillServiceTimeout to 5 Seconds",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6173,7 +6173,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-reduce-hung-app-timeout",
                 Label = "Reduce HungAppTimeout to 4 Seconds",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6191,7 +6191,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-enable-auto-end-tasks",
                 Label = "Enable AutoEndTasks (Kill Hung Apps on Logout)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6209,7 +6209,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-disable-shutdown-event-tracker",
                 Label = "Disable Shutdown Event Tracker (No Reason Required)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 2,
@@ -6227,7 +6227,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-suppress-logoff-scripts-run-at-shutdown",
                 Label = "Run Logoff Scripts Simultaneously with Shutdown Scripts",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6251,7 +6251,7 @@ internal static class PolicyDesktop
             {
                 Id = "shdn-suppress-logoff-slow-scripts-ui",
                 Label = "Disable 'Slow Script' Warning at Shutdown",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6289,7 +6289,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-prevent-handwriting-data-sharing",
                 Label = "Prevent Handwriting Data Sharing with Microsoft",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Prevents Windows from sharing handwriting recognition data with Microsoft to improve handwriting recognition.",
                 Tags = ["tablet", "privacy", "handwriting", "group-policy"],
                 NeedsAdmin = true,
@@ -6302,7 +6302,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-prevent-handwriting-error-reports",
                 Label = "Prevent Handwriting Error Reporting",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Stops Windows from sending handwriting recognition error reports to Microsoft.",
                 Tags = ["tablet", "privacy", "handwriting", "group-policy", "telemetry"],
                 NeedsAdmin = true,
@@ -6315,7 +6315,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-disable-ink-ball-game",
                 Label = "Disable InkBall Game",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Removes the InkBall game from the Start menu and blocks access via Group Policy.",
                 Tags = ["tablet", "debloat", "group-policy", "games"],
                 NeedsAdmin = true,
@@ -6328,7 +6328,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-turn-off-passwordless",
                 Label = "Turn Off Tablet PC Passwordless Experience",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Disables the passwordless login experience on Tablet PC, requiring a password for sign-in.",
                 Tags = ["tablet", "security", "group-policy", "login"],
                 NeedsAdmin = true,
@@ -6341,7 +6341,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-prevent-handwriting-personalization",
                 Label = "Prevent Handwriting Personalization Collection",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Blocks Windows from collecting typed and handwriting data to build a personalized dictionary for handwriting recognition.",
                 Tags = ["tablet", "privacy", "handwriting", "group-policy"],
@@ -6355,7 +6355,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-disable-pen-training-support",
                 Label = "Disable Pen Training and Support",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Turns off the Tablet PC pen training and pen support documentation from the Tablet PC optional components.",
                 Tags = ["tablet", "debloat", "group-policy", "pen"],
                 NeedsAdmin = true,
@@ -6368,7 +6368,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-turn-off-pen-feedback",
                 Label = "Turn Off Pen Haptic Feedback",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Disables haptic and visual ink feedback when using a digital pen on a touch display.",
                 Tags = ["tablet", "pen", "group-policy", "input"],
                 NeedsAdmin = true,
@@ -6381,7 +6381,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-disable-touch-input",
                 Label = "Disable Touch Input (Tablet PC Policy)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Disables all touch-based input processing via Group Policy. Useful for kiosk or hardened deployments without touch screens.",
                 Tags = ["tablet", "touch", "group-policy", "input", "kiosk"],
@@ -6395,7 +6395,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-disable-touchscreen-scroll",
                 Label = "Disable Touchscreen Panning and Scrolling Inertia",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description =
                     "Disables momentum scrolling (inertia) and panning on touchscreens to reduce accidental scrolling in productivity apps.",
                 Tags = ["tablet", "touch", "group-policy", "input"],
@@ -6409,7 +6409,7 @@ internal static class PolicyDesktop
             {
                 Id = "tabpol-disable-flick-gestures",
                 Label = "Disable Pen and Touch Flick Gestures",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 Description = "Disables pen and touch flick gestures (quick swipe shortcuts) system-wide via Group Policy.",
                 Tags = ["tablet", "touch", "pen", "group-policy", "input"],
                 NeedsAdmin = true,
@@ -6436,7 +6436,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-disable-three-finger-slide-task-view",
                 Label = "Disable Three-Finger Slide (Task View / Switch Apps)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6454,7 +6454,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-disable-four-finger-slide",
                 Label = "Disable Four-Finger Slide (Virtual Desktop Navigation)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6472,7 +6472,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-reverse-scroll-direction",
                 Label = "Enable Reverse (Natural) Scroll Direction",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6490,7 +6490,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-disable-pinch-to-zoom",
                 Label = "Disable Pinch-to-Zoom Gesture",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6508,7 +6508,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-set-sensitivity-most-sensitive",
                 Label = "Set Touchpad Sensitivity to Most Sensitive",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6526,7 +6526,7 @@ internal static class PolicyDesktop
             {
                 Id = "tpad-disable-edge-swipe",
                 Label = "Disable Edge Swipe for Action Center / Widgets",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6555,7 +6555,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-video-capture",
                 Label = "Disable Video Capture Device Access",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6577,7 +6577,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-screen-capture",
                 Label = "Disable Screen Capture via Policy",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6599,7 +6599,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-broadcast",
                 Label = "Disable Live Broadcast Capture",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6621,7 +6621,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-game-capture",
                 Label = "Disable Game DVR-style Video Capture",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6643,7 +6643,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-audio-capture",
                 Label = "Disable Audio Capture with Video",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6665,7 +6665,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-require-admin-for-capture",
                 Label = "Require Admin Rights for Video Capture",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6687,7 +6687,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-camera-telemetry",
                 Label = "Disable Camera Capture Telemetry",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6709,7 +6709,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-virtual-camera",
                 Label = "Disable Virtual Camera Device Access",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6731,7 +6731,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-media-capture-api",
                 Label = "Disable MediaCapture API for UWP Apps",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6753,7 +6753,7 @@ internal static class PolicyDesktop
             {
                 Id = "vcap-disable-background-capture",
                 Label = "Disable Background Video Capture",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6785,7 +6785,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-touch-keyboard",
                 Label = "Disable Automatic Touch Keyboard Pop-Up",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6807,7 +6807,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-emoji-panel",
                 Label = "Disable Emoji Panel (Win+.)",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6829,7 +6829,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-keyboard-sound",
                 Label = "Disable Virtual Keyboard Key Click Sound",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6850,7 +6850,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-handwriting-button",
                 Label = "Disable Touch Keyboard Handwriting Button",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6872,7 +6872,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-keyboard-telemetry",
                 Label = "Disable Virtual Keyboard Telemetry",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6895,7 +6895,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-fullscreen-keyboard",
                 Label = "Disable Full-Screen Keyboard in Desktop Apps",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6917,7 +6917,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-keyboard-animations",
                 Label = "Disable Touch Keyboard Animations",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6939,7 +6939,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-voice-dictation-key",
                 Label = "Disable Voice Dictation Key on Touch Keyboard",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6961,7 +6961,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-split-keyboard",
                 Label = "Disable Split Touch Keyboard Mode",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6983,7 +6983,7 @@ internal static class PolicyDesktop
             {
                 Id = "vkbd-disable-wide-keyboard",
                 Label = "Disable Wide Touch Keyboard Layout",
-                Category = "Display",
+                Category = "Display — Start Menu Modern",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -7017,7 +7017,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-block-display-driver-fallback",
                     Label = "Block Fallback to Microsoft Basic Display Adapter",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Prevents Windows from falling back to the Microsoft Basic Display Adapter (2048×1152 VESA-only) when the GPU driver crashes, maintaining the last known working display driver and attempting recovery instead.",
                     Tags = ["wddm", "basic-display", "driver-fallback", "recovery", "policy"],
@@ -7034,7 +7034,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-disable-dxgi-flip-discard",
                     Label = "Disable Presentation Model Flip-Discard Optimisation",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Disables the DXGI flip-discard presentation model that reuses swap chain surfaces, falling back to flip-sequential for maximum frame ordering correctness in trading and video production environments where tearing prevention is critical.",
                     Tags = ["wddm", "dxgi", "flip-discard", "presentation", "policy"],
@@ -7051,7 +7051,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-log-tdr-events",
                     Label = "Log GPU TDR Recovery Events to System Event Log",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Enables System event log entries (EventID 4101, Display driver stopped responding and has recovered) for GPU TDR events, providing a history of GPU hangs and recovery cycles for diagnostics.",
                     Tags = ["wddm", "tdr", "event-log", "audit", "gpu-stability", "policy"],
@@ -7068,7 +7068,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-disable-gpu-driver-telemetry",
                     Label = "Disable WDDM GPU Driver Telemetry to Microsoft",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Prevents the Windows Display Driver Model from sending GPU driver crash reports, TDR telemetry, and hardware capability telemetry to Microsoft, protecting GPU model/driver version information from cloud disclosure.",
                     Tags = ["wddm", "telemetry", "privacy", "gpu", "microsoft", "policy"],
@@ -7085,7 +7085,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-enable-virtual-display",
                     Label = "Enable Virtual Display Adapter for Headless Operation",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Enables the Windows virtual display adapter (IndirectDisplay) for headless server scenarios, providing a software display output that supports RDP and remote management tools without a physical GPU or monitor.",
                     Tags = ["wddm", "virtual-display", "headless", "rdp", "server", "policy"],
@@ -7102,7 +7102,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wddmpol-set-gpu-priority-realtime",
                     Label = "Set GPU Work Item Priority to Normal for System Processes",
-                    Category = "Display",
+                    Category = "Display — Start Menu Modern",
                     Description =
                         "Configures the WDDM scheduler to run system and background GPU work items at Normal priority, preventing GPU starvation of foreground applications by long-running background ML or compute workloads.",
                     Tags = ["wddm", "gpu-priority", "scheduler", "background", "policy"],
@@ -7129,7 +7129,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-wia-service",
                 Label = "Image Acquisition: Disable WIA (Windows Image Acquisition) Service",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the Windows Image Acquisition (WIA) service via Group Policy, preventing scanners, cameras, and other WIA-compatible imaging devices from automatically launching the scanning wizard when connected. WIA devices can auto-trigger Windows Explorer and photo import dialogs. On managed workstations where scanning occurs through dedicated document management software, disabling WIA eliminates uncontrolled ad-hoc scanning to unmanaged locations.",
                 Tags = ["image acquisition", "wia", "scanner", "camera", "policy"],
@@ -7147,7 +7147,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-restrict-user-device-install",
                 Label = "Image Acquisition: Restrict User-Initiated Device Installation for Cameras",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents standard users from installing WIA-compatible cameras and imaging devices without administrator approval. Without this policy, plugging in a consumer camera can trigger a Plug-and-Play installation that adds imaging device drivers and WIA entries to the system. On managed environments, device drivers should only be installed through approved software deployment channels.",
                 Tags = ["image acquisition", "wia", "camera", "device install", "policy"],
@@ -7165,7 +7165,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-transferring-without-policy",
                 Label = "Image Acquisition: Disable Image Transfer Without Policy Approval",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Blocks WIA from transferring images from connected cameras, scanners, or memory cards to the local filesystem without an approved destination policy being applied. Without this control, users can freely dump images from connected devices to any local folder, bypassing document management systems and creating unmanaged data. Enabling this policy ensures all image transfer operations occur through sanctioned software.",
                 Tags = ["image acquisition", "wia", "image transfer", "data control", "policy"],
@@ -7184,7 +7184,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-scan-to-fax",
                 Label = "Image Acquisition: Disable Scan-to-Fax WIA Feature",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the WIA Scan-to-Fax destination that allows users to scan a document directly to a fax number through a Windows Fax and Scan workflow. Scan-to-fax functionality can be exploited to exfiltrate documents outside the organisation's content inspection boundary — fax transmissions often bypass DLP controls that monitor email and file-share uploads. Disabling this destination ensures all document workflows go through monitored channels.",
                 Tags = ["image acquisition", "scan to fax", "wia", "data loss prevention", "policy"],
@@ -7202,7 +7202,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-autoplay-camera",
                 Label = "Image Acquisition: Disable AutoPlay for Camera Devices",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents Windows AutoPlay from automatically launching when a camera or memory card is inserted, suppressing the dialog that asks what action to take (view photos, import as a folder, etc.). AutoPlay-triggered actions can automatically copy images from connected devices to default Photos or OneDrive locations without user awareness. Disabling AutoPlay ensures device connections require deliberate user action.",
                 Tags = ["image acquisition", "autoplay", "camera", "memory card", "policy"],
@@ -7220,7 +7220,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-require-driver-signing",
                 Label = "Image Acquisition: Require Signed Drivers for WIA Devices",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Enforces that only digitally-signed drivers can be loaded for WIA imaging devices. Unsigned WIA device drivers are a known malware vector — adversaries have used crafted WIA drivers to establish persistent kernel-mode access. Requiring driver signing ensures that all imaging device drivers are verifiable against Microsoft's WHQL certificate chain or a trusted enterprise root CA.",
                 Tags = ["image acquisition", "wia", "driver signing", "security", "policy"],
@@ -7238,7 +7238,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-scan-to-sharepoint",
                 Label = "Image Acquisition: Disable Scan-to-SharePoint WIA Feature",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the WIA Scan-to-SharePoint destination that allows users to scan documents and automatically upload them to a SharePoint document library via the Windows Scan app. Scan-to-SharePoint can bypass normal document governance workflows by depositing files directly into collaboration sites without metadata tagging, classification, or legal-hold review. Disabling this destination ensures all scanned documents go through the organisation's records management system.",
                 Tags = ["image acquisition", "scan to sharepoint", "wia", "document governance", "policy"],
@@ -7256,7 +7256,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-disable-scanner-to-network",
                 Label = "Image Acquisition: Disable Scan-to-Network Share Feature",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the built-in scan-to-network-share facility in the WIA STI (Still Image) architecture that allows scanners with FTP/SMB push capability to send files directly to a Windows shared folder. Scan-to-network-share bypasses normal document management channels and can be used to exfiltrate documents to unauthorized UNC paths. Managed scanning environments should use dedicated secure document capture software instead.",
                 Tags = ["image acquisition", "scanner", "network share", "data transfer", "policy"],
@@ -7274,7 +7274,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-block-scan-to-email",
                 Label = "Image Acquisition: Block Scan-to-Email Functionality",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents the Windows Fax and Scan application and WIA-connected scanners from using the scan-to-email feature, which attaches scanned documents directly to email drafts. Scan-to-email can bypass DLP (Data Loss Prevention) policies by sending scanned documents through the default email client without content inspection. In regulated environments, document distribution must be controlled through DLP-aware channels.",
                 Tags = ["image acquisition", "scanner", "email", "dlp", "policy"],
@@ -7292,7 +7292,7 @@ internal static class PolicyDesktop
             {
                 Id = "imgacquire-restrict-scan-destination",
                 Label = "Image Acquisition: Restrict Scan Destination to Approved Paths Only",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Enforces that WIA scan operations can only save documents to pre-approved local paths or managed network shares defined in Group Policy. Without this restriction, users can direct scanned content to removable drives, personal cloud sync folders (OneDrive, Dropbox), or mapped drives outside the corporate network perimeter. Restricting destinations ensures all scanned documents are stored in auditable, managed locations.",
                 Tags = ["image acquisition", "scanner", "destination", "restriction", "policy"],
@@ -7322,7 +7322,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-serial-keys",
                 Label = "Accessibility Policy: Disable Serial Keys Support",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables Serial Keys accessibility support, which allows alternative input devices (joysticks, switches) connected to the serial port. Disabling reduces the attack surface on managed endpoints without physical accessibility hardware.",
                 Tags = ["accessibility", "serial-keys", "input", "policy"],
@@ -7340,7 +7340,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-sound-sentry",
                 Label = "Accessibility Policy: Disable SoundSentry Visual Flash",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables SoundSentry, which flashes the screen or a window when a critical sound plays. On enterprise environments with active CAD/3D rendering, unexpected screen flashes can interfere with rendering workflows.",
                 Tags = ["accessibility", "soundsentry", "flash", "audio", "policy"],
@@ -7358,7 +7358,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-high-contrast-hotkey",
                 Label = "Accessibility Policy: Disable High Contrast Mode Hotkey",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents users from accidentally enabling High Contrast mode via the Left Alt+Left Shift+Print Screen keyboard shortcut. Avoids unexpected UI colour inversions that can disrupt productivity applications.",
                 Tags = ["accessibility", "high-contrast", "hotkey", "keyboard", "policy"],
@@ -7376,7 +7376,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-toggle-keys",
                 Label = "Accessibility Policy: Disable Toggle Keys Hotkey",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables activation of Toggle Keys (a beep when pressing Caps Lock, Num Lock, or Scroll Lock) via the Num Lock hotkey shortcut. Prevents unexpected beeping on endpoints with shared keyboards.",
                 Tags = ["accessibility", "toggle-keys", "keyboard", "policy"],
@@ -7394,7 +7394,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-sticky-keys-hotkey",
                 Label = "Accessibility Policy: Disable Sticky Keys Hotkey",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the Sticky Keys prompt when Shift is pressed 5 times. Sticky Keys can interrupt gaming and productivity workflows when activated accidentally, and is better enabled via Settings if needed.",
                 Tags = ["accessibility", "sticky-keys", "keyboard", "hotkey", "policy"],
@@ -7412,7 +7412,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-filter-keys-hotkey",
                 Label = "Accessibility Policy: Disable Filter Keys Hotkey",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables the Filter Keys shortcut activated by holding the Right Shift key for 8 seconds. Filter Keys can cause significant input delay if triggered accidentally.",
                 Tags = ["accessibility", "filter-keys", "keyboard", "hotkey", "policy"],
@@ -7430,7 +7430,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-bounce-keys",
                 Label = "Accessibility Policy: Disable Bounce Keys for Keyboard Repeat",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables Bounce Keys (Filter Keys variant) that ignores brief multiple key presses. While useful for accessibility, this setting can reduce keyboard responsiveness when not needed.",
                 Tags = ["accessibility", "bounce-keys", "filter-keys", "keyboard", "policy"],
@@ -7448,7 +7448,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-mouse-keys-hotkey",
                 Label = "Accessibility Policy: Disable Mouse Keys Hotkey",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Disables activation of Mouse Keys via the Left Alt+Left Shift+Num Lock shortcut. Mouse Keys redirects numpad input to pointer movement, which is a common source of unexpected mouse behaviour on laptops.",
                 Tags = ["accessibility", "mouse-keys", "hotkey", "numpad", "policy"],
@@ -7466,7 +7466,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-magnifier-startup",
                 Label = "Accessibility Policy: Disable Magnifier Auto-Start",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents Windows Magnifier from starting automatically when a user signs in. Magnifier auto-start is sometimes triggered by a registry artefact on downgraded or re-imaged systems.",
                 Tags = ["accessibility", "magnifier", "startup", "policy"],
@@ -7484,7 +7484,7 @@ internal static class PolicyDesktop
             {
                 Id = "a11ypol-disable-narrator-startup",
                 Label = "Accessibility Policy: Disable Narrator Auto-Start on Sign-In",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 Description =
                     "Prevents Windows Narrator (screen reader) from starting automatically at sign-in. Narrator auto-activation can be triggered by accessibility registry artefacts on shared or re-used endpoints.",
                 Tags = ["accessibility", "narrator", "screen-reader", "startup", "policy"],
@@ -7512,7 +7512,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-restrict-ink-workspace-on-lockscreen",
                 Label = "Restrict Windows Ink Workspace Access from the Lock Screen",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7529,7 +7529,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-restrict-ink-workspace-to-approved-users",
                 Label = "Restrict Windows Ink Workspace Feature Access to Authorized User Groups",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7546,7 +7546,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-disable-ink-personalization-data-collection",
                 Label = "Disable Ink and Typing Personalization Data Collection for Windows Ink",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7563,7 +7563,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-enforce-ink-clipboard-restrictions",
                 Label = "Enforce Clipboard Restrictions for Ink Content Sharing Between Applications",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7580,7 +7580,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-block-ink-workspace-third-party-apps",
                 Label = "Block Third-Party Applications from Integrating with Windows Ink Workspace",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7597,7 +7597,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-disable-cloud-ink-sync",
                 Label = "Disable Synchronization of Windows Ink Notes to Cloud Storage Services",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7614,7 +7614,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-enforce-stylus-firmware-attestation",
                 Label = "Enforce Firmware Attestation Checks for Connected Stylus and Pen Devices",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7631,7 +7631,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-audit-ink-workspace-activity",
                 Label = "Enable Audit Logging for Windows Ink Workspace Activation and Feature Use",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7648,7 +7648,7 @@ internal static class PolicyDesktop
             {
                 Id = "inkwsadv-restrict-ink-workspace-on-shared-devices",
                 Label = "Apply Strict Ink Workspace Restrictions on Shared and Kiosk Devices",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7681,7 +7681,7 @@ internal static class PolicyDesktop
             {
                 Id = "search-disable-web-results-policy",
                 Label = "Disable Web Results in Search via Policy",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7699,7 +7699,7 @@ internal static class PolicyDesktop
             {
                 Id = "search-disable-safe-search",
                 Label = "Disable SafeSearch Filter in Windows Search",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7717,7 +7717,7 @@ internal static class PolicyDesktop
             {
                 Id = "search-disable-find-my-files",
                 Label = "Disable Enhanced 'Find My Files' Deep Search",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7735,7 +7735,7 @@ internal static class PolicyDesktop
             {
                 Id = "search-disable-recent-activities-search",
                 Label = "Disable Recent Activities in Search Results",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7753,7 +7753,7 @@ internal static class PolicyDesktop
             {
                 Id = "search-disable-device-sync-search",
                 Label = "Disable Cross-Device Search Sync",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7781,7 +7781,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wsidx-prevent-remote-queries",
                     Label = "Prevent Remote Search Queries via Windows Search",
-                    Category = "Display",
+                    Category = "Display — Wia Image Acquisition",
                     Description =
                         "Blocks remote clients from querying the local Windows Search index over the network. Default: allowed. Recommended: disabled for workstations.",
                     Tags = ["search", "indexing", "remote", "privacy", "policy"],
@@ -7798,7 +7798,7 @@ internal static class PolicyDesktop
                 {
                     Id = "wsidx-disable-safe-search",
                     Label = "Set Search SafeSearch to Strict via Policy",
-                    Category = "Display",
+                    Category = "Display — Wia Image Acquisition",
                     Description = "Enforces SafeSearch strict mode for web results in Windows Search. Applies via Group Policy. Default: moderate.",
                     Tags = ["search", "safe-search", "content-filter", "policy"],
                     NeedsAdmin = true,
@@ -7824,7 +7824,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-restrict-hyper-v-management-to-admins",
                 Label = "Restrict Hyper-V Management Operations to Administrator Accounts",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7841,7 +7841,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-disable-hyper-v-on-workstations",
                 Label = "Disable Hyper-V Virtualization Platform on Standard Enterprise Workstations",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7858,7 +7858,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-enforce-synthetic-device-security",
                 Label = "Enforce Security Configuration for Hyper-V Synthetic Devices",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7875,7 +7875,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-enable-vm-snapshot-encryption",
                 Label = "Enable Encryption of Virtual Machine Snapshots and Saved States",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7892,7 +7892,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-restrict-vm-clipboard-sharing",
                 Label = "Restrict Clipboard Sharing Between Hyper-V Guest and Host",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7909,7 +7909,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-audit-vm-management-operations",
                 Label = "Enable Audit Logging for All Hyper-V Virtual Machine Management Operations",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7926,7 +7926,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-enforce-secure-boot-for-vms",
                 Label = "Enforce Secure Boot Configuration for Hyper-V Generation 2 VMs",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7943,7 +7943,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-restrict-vm-network-access",
                 Label = "Restrict Hyper-V Virtual Machine Network Access Configuration",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7960,7 +7960,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-block-nested-virtualization",
                 Label = "Block Nested Virtualization in Hyper-V Guest Virtual Machines",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7977,7 +7977,7 @@ internal static class PolicyDesktop
             {
                 Id = "virtz-configure-vm-memory-protection",
                 Label = "Configure Enhanced Memory Protection for Hyper-V Virtual Machines",
-                Category = "Display",
+                Category = "Display — Wia Image Acquisition",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,

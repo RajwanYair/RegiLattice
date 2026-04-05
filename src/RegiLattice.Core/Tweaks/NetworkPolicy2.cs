@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -59,7 +59,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-netbios-over-tcp",
                 Label = "Disable NetBIOS Over TCP/IP",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -76,7 +76,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-link-local-multicast",
                 Label = "Disable LLMNR Protocol",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -93,7 +93,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-connection-sharing",
                 Label = "Disable Internet Connection Sharing",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -110,7 +110,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-rss-offloading",
                 Label = "Disable Receive Side Scaling Offloading",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -127,7 +127,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-tcp-chimney",
                 Label = "Disable TCP Chimney Offload",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -144,7 +144,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-restrict-winsock-access",
                 Label = "Restrict Winsock Application Access",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -161,7 +161,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-offload-checksum",
                 Label = "Disable Network Checksum Offloading",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -178,7 +178,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-auto-tuning",
                 Label = "Disable Network Auto-Tuning",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -195,7 +195,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-enable-arp-protection",
                 Label = "Enable ARP Spoofing Protection",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -212,7 +212,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netadp-disable-adapter-bridging",
                 Label = "Disable Network Adapter Bridging",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -239,7 +239,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netbridge-prohibit-personal-hotspot",
                     Label = "Prohibit Windows Mobile Hotspot (Personal Hotspot)",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables the Windows Mobile Hotspot feature that allows the machine to share its internet connection via Wi-Fi, preventing uncontrolled wireless network egress via Personal Hotspot in enterprise environments.",
                     Tags = ["mobile-hotspot", "wi-fi", "sharing", "corporate-network", "policy"],
@@ -256,7 +256,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netbridge-disable-advanced-settings",
                     Label = "Block Standard Users from Accessing Network Advanced Settings",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents non-administrator users from accessing the Advanced Settings of network connections that control adapter binding order, providers, and services, protecting network stack configuration from unauthorised changes.",
                     Tags = ["network-connections", "advanced-settings", "standard-user", "policy"],
@@ -273,7 +273,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netbridge-disable-vpn-connect-disconnect",
                     Label = "Block Standard Users from Connecting or Disconnecting VPN Connections",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents standard users from connecting to or disconnecting from VPN connections, ensuring that VPN access is always administrator-controlled and cannot be bypassed or circumvented by non-privileged users.",
                     Tags = ["vpn", "network-connections", "standard-user", "corporate-policy", "policy"],
@@ -290,7 +290,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netbridge-notify-on-connection-change",
                     Label = "Show Notification on Network Connection Status Change",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enables system notifications to administrators when a network connection is connected, disconnected, or changed, providing real-time awareness of network topology changes on managed endpoints.",
                     Tags = ["network-connections", "notifications", "admin", "monitoring", "policy"],
@@ -307,7 +307,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netbridge-disable-network-map-topology",
                     Label = "Disable Automatic Network Topology Discovery Sharing",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents Windows from sharing network topology information (responding to LLTD/WSD discovery requests) that reveals this machine's network connections and link layer topology to other network hosts.",
                     Tags = ["network-discovery", "topology", "lltd", "wsd", "security", "policy"],
@@ -334,7 +334,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netconn-enable-admin-prohibits",
                 Label = "Honour Admin-Prohibited Network Connection Actions",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["network", "connections", "policy", "admin", "security"],
@@ -350,7 +350,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netconn-prevent-change-binding",
                 Label = "Prevent Changing Network Component Binding Order",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["network", "binding", "policy", "security", "components"],
@@ -366,7 +366,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netconn-prevent-delete-all-user",
                 Label = "Prevent Deleting All-User VPN/Dial-Up Connections",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["network", "vpn", "dialup", "connections", "policy"],
@@ -382,7 +382,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netconn-prevent-ras-connect",
                 Label = "Prevent Standard Users Connecting VPN/Dial-Up",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["network", "vpn", "dialup", "connect", "policy"],
@@ -398,7 +398,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netconn-prevent-rename-connections",
                 Label = "Prevent Users from Renaming Network Connections",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["network", "rename", "connections", "policy", "hardening"],
@@ -424,7 +424,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-disable-active-probing",
                     Label = "Disable NCSI Active Probing (Privacy)",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents Windows from sending HTTP probes to www.msftconnecttest.com to determine internet connectivity. Eliminates Microsoft telemetry connections from the network stack. Default: probing enabled. Recommended: 1 for privacy-focused environments.",
                     Tags = ["ncsi", "probing", "privacy", "telemetry", "network", "policy"],
@@ -442,7 +442,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-disable-global-dns-probe",
                     Label = "Disable NCSI Global DNS Probe",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Suppresses the DNS lookup probe to dns.msftncsi.com that NCSI uses to verify connectivity. Reduces DNS traffic to Microsoft servers. Default: probe enabled. Recommended: 1 for hardened/air-gapped environments.",
                     Tags = ["ncsi", "dns", "probe", "privacy", "network", "policy"],
@@ -459,7 +459,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-disable-captive-portal-detection",
                     Label = "Disable Captive Portal Browser Launch",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents Windows from automatically launching a browser window when a captive portal (hotel/airport Wi-Fi) is detected. Reduces unsolicited network connections and popup browsing windows. Default: enabled. Recommended: 1 for corporate laptops.",
                     Tags = ["ncsi", "captive-portal", "browser", "network", "policy"],
@@ -476,7 +476,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-use-corporate-probe-host",
                     Label = "Use Corporate Custom Probe Host",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enables NCSI to probe an internal corporate server instead of Microsoft's public endpoint. Allows NCSI to correctly report connectivity status on air-gapped or corporate networks. Default: not set. Recommended: 1 (then configure custom host separately).",
                     Tags = ["ncsi", "corporate", "intranet", "probe", "network", "policy"],
@@ -493,7 +493,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-disable-ipv6-probe",
                     Label = "Disable NCSI IPv6 Probe",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Prevents the NCSI IPv6 connectivity probe to ipv6.msftconnecttest.com. Reduces unsolicited outbound IPv6 traffic to Microsoft. Default: probe enabled. Recommended: 1 if IPv6 is not in use.",
                     Tags = ["ncsi", "ipv6", "probe", "privacy", "network", "policy"],
@@ -510,7 +510,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-disable-internet-access-check",
                     Label = "Disable System-Wide Internet Access Check",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Suppresses the periodic system-level NCSI check that determines whether the machine has internet access. Useful on dedicated intranet-only systems. Default: check enabled. Recommended: 1 for air-gapped environments.",
                     Tags = ["ncsi", "internet-check", "intranet", "network", "policy"],
@@ -527,7 +527,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-hide-network-icon-status",
                     Label = "Hide NCSI Status in System Tray Tooltip",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Removes the 'No Internet Access' or 'No connectivity' tooltip from the network system tray icon. Reduces user confusion on corporate networks that filter NCSI. Default: shown. Recommended: 1 on managed networks.",
                     Tags = ["ncsi", "tray", "notification", "network", "usability", "policy"],
@@ -544,7 +544,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-require-corporate-connectivity",
                     Label = "Require Corporate Network for NCSI 'Connected' Status",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Configures NCSI to only report 'Connected to Internet' when the device can also reach the corporate intranet probe host. Ensures the network indicator reflects both intranet and internet connectivity. Default: not configured.",
                     Tags = ["ncsi", "corporate", "connectivity", "network", "policy"],
@@ -561,7 +561,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-probe-retry-3",
                     Label = "Set NCSI Probe Retry Count to 3",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Limits the number of NCSI probe retries to 3 before declaring no connectivity. Reduces network congestion from repeated probing on slow or lossy links. Default: 5. Recommended: 3.",
                     Tags = ["ncsi", "probe", "retry", "network", "policy"],
@@ -578,7 +578,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "ncsi-log-probe-failures",
                     Label = "Enable NCSI Probe Failure Event Logging",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enables audit logging of NCSI probe failures to the Windows Event Log. Useful for diagnosing connectivity issues on managed endpoints. Default: disabled. Recommended: 1 for monitored environments.",
                     Tags = ["ncsi", "logging", "audit", "network", "diagnostics", "policy"],
@@ -610,7 +610,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-disable-helper-engine",
                 Label = "Disable Network Diagnostics Helper Engine",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets DisableHelperEngine=1 in the NetworkDiagnostics policy key. "
                     + "Turns off the Windows Network Diagnostics helper engine entirely, preventing automated diagnosis "
@@ -630,7 +630,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-disable-wireless-scenario",
                 Label = "Disable WDI Wireless Diagnostics Scenario",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ScenarioExecutionEnabled=0 for the WDI Wireless Diagnostics scenario (GUID EBC068D3). "
                     + "Prevents the Windows Diagnostics Infrastructure from automatically running wireless troubleshooting "
@@ -650,7 +650,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-disable-netconn-scenario",
                 Label = "Disable WDI Network Connectivity Diagnostics Scenario",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ScenarioExecutionEnabled=0 for the WDI Network Connectivity scenario (GUID A7A5847A). "
                     + "Prevents Windows from automatically running network connectivity troubleshooting steps. "
@@ -669,7 +669,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-disable-netperf-scenario",
                 Label = "Disable WDI Network Performance Monitoring Scenario",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ScenarioExecutionEnabled=0 for the WDI Network Performance Monitoring scenario (GUID 4DC08CD6). "
                     + "Turns off the background network performance data collection component of the Windows Diagnostics Infrastructure. "
@@ -688,7 +688,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-disable-netcfg-scenario",
                 Label = "Disable WDI Network Configuration Diagnostics Scenario",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ScenarioExecutionEnabled=0 for the WDI Network Configuration scenario (GUID C76A4930). "
                     + "Prevents Windows from automatically running diagnostics when network adapter configuration issues are detected. "
@@ -707,7 +707,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-validate-diag-helpers",
                 Label = "Require Validation of Diagnostic Helper Modules",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ValidateHelpers=1 in the ScriptedDiagnostics policy key. "
                     + "Requires that all diagnostic helper modules (*.dll) loaded by the scripted diagnostics engine be "
@@ -727,7 +727,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-no-remote-server-query",
                 Label = "Block Scripted Diagnostics Remote Server Queries",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets DisableQueryRemoteServer=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents the Windows Scripted Diagnostics service from querying Microsoft online servers "
@@ -747,7 +747,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-restrict-wireless-execution-level",
                 Label = "Set WDI Wireless Diagnostics to View-Only",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets EnabledScenarioExecutionLevel=1 for the WDI Wireless Diagnostics scenario. "
                     + "Allows Windows to gather wireless diagnostic information and present results to the user, "
@@ -767,7 +767,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ndiag-restrict-netconn-execution-level",
                 Label = "Set WDI Network Connectivity Diagnostics to View-Only",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets EnabledScenarioExecutionLevel=1 for the WDI Network Connectivity scenario. "
                     + "Allows diagnosis of network problems but restricts the engine from automatically applying fixes. "
@@ -807,7 +807,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-harden-sysvol",
                 Label = "Network: Require Mutual Auth + Integrity for SYSVOL Shares",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [HardenedPaths],
@@ -824,7 +824,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-harden-netlogon",
                 Label = "Network: Require Mutual Auth + Integrity for NETLOGON Shares",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [HardenedPaths],
@@ -841,7 +841,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-harden-admin-shares",
                 Label = "Network: Require Authentication for All Admin UNC Shares",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [HardenedPaths],
@@ -858,7 +858,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-harden-ipc-integrity",
                 Label = "Network: Require Integrity for IPC$ Shares",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [HardenedPaths],
@@ -875,7 +875,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-disable-webdav-basic-auth",
                 Label = "Network: Disable WebDAV Client Basic Authentication",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [WebClient],
@@ -892,7 +892,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-limit-webdav-file-size",
                 Label = "Network: Cap WebDAV File Transfer Size at 50 MB",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [WebClient],
@@ -909,7 +909,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-webdav-connection-timeout",
                 Label = "Network: Reduce WebDAV Connection Timeout to 60 Seconds",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [WebClient],
@@ -926,7 +926,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-webdav-send-timeout",
                 Label = "Network: Reduce WebDAV Send Timeout to 30 Seconds",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [WebClient],
@@ -943,7 +943,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nethpth-webdav-receive-timeout",
                 Label = "Network: Reduce WebDAV Receive Timeout to 60 Seconds",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [WebClient],
@@ -976,7 +976,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nic-disable-tcp-chimney-offload",
                 Label = "Disable TCP Chimney Offload",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -994,7 +994,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nic-enable-ctcp",
                 Label = "Enable Compound TCP (CTCP) Congestion Control",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1022,7 +1022,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-delete-all-user-files-on-exit",
                 Label = "Delete Network Profile Files on Exit",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1039,7 +1039,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-safety-ui",
                 Label = "Disable Network Safety UI",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1056,7 +1056,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-connected-standby",
                 Label = "Disable Connected Standby Network Mode",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1073,7 +1073,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-connection-assistant",
                 Label = "Disable Network Connection Assistant",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1090,7 +1090,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-allow-network-icon",
                 Label = "Allow Network Icon in System Tray",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1107,7 +1107,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-telemetry",
                 Label = "Disable Network List Telemetry",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1124,7 +1124,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-manual-roaming",
                 Label = "Disable Manual Network Roaming",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1141,7 +1141,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-social-network",
                 Label = "Disable Social Network Integration",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1158,7 +1158,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-network-mapping",
                 Label = "Disable Network Mapping",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1175,7 +1175,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlst-disable-category-change",
                 Label = "Disable Network Category Change",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1204,7 +1204,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlltd-prohibit-lltdio-private",
                 Label = "LLTD: Prohibit LLTD I/O driver on private networks",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ProhibitLLTDIOOnPrivateNet=1. Prevents the LLTD Mapper I/O driver from operating "
                     + "on private network profiles, reducing topology exposure on home networks.",
@@ -1219,7 +1219,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlltd-prohibit-rspndr-private",
                 Label = "LLTD: Prohibit LLTD Responder on private networks",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets ProhibitRspndrOnPrivateNet=1. Stops the LLTD Responder from operating on "
                     + "private network profiles, hiding this machine from home network topology maps.",
@@ -1234,7 +1234,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlltd-disable-peernet",
                 Label = "Disable Windows People Near Me (Peernet) service",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets Disabled=1 in the Peernet policy key. Disables the People Near Me network "
                     + "service that discovers nearby contacts over the local network using Windows Collaboration.",
@@ -1249,7 +1249,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netlltd-disable-pnrp",
                 Label = "Disable Peer Name Resolution Protocol (PNRP)",
-                Category = "Network",
+                Category = "Network — Network Adapter",
                 Description =
                     "Sets Disabled=1 in the PeerToPeer policy key. Disables PNRP, the peer-to-peer name "
                     + "resolution protocol used for Windows Meeting Space and legacy collaboration features.",
@@ -1274,7 +1274,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-disable-ms-connectivity-test",
                     Label = "Disable Microsoft Connectivity Test",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables the Microsoft connectivity test that sends HTTP probes to msftconnecttest.com to determine internet reachability.",
                     Tags = ["ncsi", "connectivity", "privacy", "network", "policy"],
@@ -1291,7 +1291,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-disable-internet-connectivity-check",
                     Label = "Disable Internet Connectivity Checks",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables periodic internet connectivity checks performed by the Network Location Awareness service that can leak network topology information.",
                     Tags = ["ncsi", "internet", "privacy", "network", "policy"],
@@ -1308,7 +1308,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-enable-corporate-dns-probe",
                     Label = "Enable Corporate DNS Probe for Network Detection",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enables a corporate DNS probe to accurately detect when the machine is on the corporate network instead of relying on Microsoft cloud probes.",
                     Tags = ["ncsi", "dns", "corporate", "network", "policy"],
@@ -1325,7 +1325,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-disable-hotspot-detection",
                     Label = "Disable Wi-Fi Hotspot Detection",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables automatic hotspot (captive portal) detection that sends HTTP probes to detect whether a login portal intercepts connections.",
                     Tags = ["ncsi", "hotspot", "wifi", "privacy", "policy"],
@@ -1342,7 +1342,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-enable-nca",
                     Label = "Enable Network Connectivity Assistant (NCA)",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enables the Network Connectivity Assistant service that provides DirectAccess connectivity status information to users.",
                     Tags = ["ncsi", "nca", "directaccess", "network", "policy"],
@@ -1359,7 +1359,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-disable-ipv6-check",
                     Label = "Disable IPv6 Connectivity Check",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables the IPv6 connectivity check performed by NCSI that contacts Microsoft's IPv6 probe server, reducing telemetry on dual-stack networks.",
                     Tags = ["ncsi", "ipv6", "privacy", "network", "policy"],
@@ -1376,7 +1376,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-enforce-domain-detection",
                     Label = "Enforce Domain Network Detection",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Enforces domain network detection policy, ensuring that NLA correctly identifies domain presence based on DNS/DC availability.",
                     Tags = ["ncsi", "domain", "detection", "network", "policy"],
@@ -1393,7 +1393,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-block-location-switching",
                     Label = "Block Location-Based Network Profile Switching",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Blocks automatic network profile switching triggered by location or SSID changes, preventing accidental profile downgrades from domain to public.",
                     Tags = ["ncsi", "location", "network-profile", "hardening", "policy"],
@@ -1410,7 +1410,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nlapol-passive-poll-disable",
                     Label = "Disable NCSI Passive Network Polling",
-                    Category = "Network",
+                    Category = "Network — Network Adapter",
                     Description =
                         "Disables background passive polling by the Network Connectivity Status Indicator service, reducing unnecessary network probes and telemetry.",
                     Tags = ["ncsi", "polling", "privacy", "network", "policy"],
@@ -1441,7 +1441,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-disable-ndf-online-repair",
                     Label = "Network Monitoring: Disable Network Diagnostic Online Auto-Repair",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets DontDisplayNetworkSelectionUI=1 in Network Diagnostics policy. Prevents the Windows Network Diagnostics Framework (NDF) from automatically connecting to Microsoft's online diagnostics service to retrieve updated diagnostic helpers and repair scripts. In enterprise environments, connectivity to external Microsoft diagnostic endpoints should be controlled centrally (via proxy allow-list), not triggered automatically by user-initiated troubleshooting dialogs. Online repair also leaks network configuration details to Microsoft.",
                     Tags = ["netmon", "ndf", "diagnostics", "online", "privacy"],
@@ -1459,7 +1459,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-network-event-logging",
                     Label = "Network Monitoring: Enable Verbose Network Event Logging",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets NetworkEventLogging=1 in Network Diagnostics policy. Enables verbose network event logging which writes detailed network adapter state changes, DHCP lease events, IP address changes, and connectivity state transitions to the Windows event log (Source: Microsoft-Windows-NetworkProfile, Microsoft-Windows-NCSI). This log data is essential for correlating network problems with application failures and for SIEM-based network anomaly detection (unusual IP changes, frequent adapter resets).",
                     Tags = ["netmon", "event-log", "network", "dhcp", "diagnostics"],
@@ -1477,7 +1477,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-ndis-trace",
                     Label = "Network Monitoring: Enable NDIS Driver Trace Collection",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets EnableNdisTrace=1 in Diagnostics policy. Enables Network Driver Interface Specification (NDIS) trace logging which captures driver-level packet events, miniport state changes, and power management events for network adapters. NDIS traces provide the lowest-level view of network adapter behavior, including driver errors and power state transitions that cause intermittent connectivity. These traces are collected by Windows Diagnostic Infrastructure (WDI) and submitted when network diagnostic scans are run.",
                     Tags = ["netmon", "ndis", "trace", "network-driver", "diagnostics"],
@@ -1495,7 +1495,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-disable-autoplay-on-network",
                     Label = "Network Monitoring: Disable AutoPlay for Network-Mapped Drives",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets NoAutoPlayOnNetworkShares=1 in Network Monitoring/Diagnostics policy. Prevents Windows AutoPlay from executing autorun.inf on network-mapped drives. Network drive AutoPlay was the primary propagation vector for network worms that planted autorun.inf files on open shares. Even though AutoPlay on user machines may be disabled by other policies, explicitly blocking AutoPlay on network shares ensures that malicious autorun.inf placed on a file server by an attacker cannot trigger automatic execution on connecting clients.",
                     Tags = ["netmon", "autoplay", "network-share", "worm", "security"],
@@ -1515,7 +1515,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-connectivity-probe",
                     Label = "Network Monitoring: Enable Corporate Connectivity Probe",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets EnableConnectivityProbing=1 in Network Diagnostics. Configures Windows to continuously probe an internal IT-managed connectivity check endpoint (corporate NCSI probe server) to track network connectivity quality. Connectivity probe failures generate event log events that allow SIEM and IT monitoring tools to detect network infrastructure failures, DNS outages, and proxy unavailability in real time across the managed endpoint fleet before users report issues.",
                     Tags = ["netmon", "probe", "connectivity", "siem", "monitoring"],
@@ -1533,7 +1533,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-pktmon",
                     Label = "Network Monitoring: Enable Packet Monitor (PktMon) Trace",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets PktMonEnabled=1 in Diagnostics policy. Enables access to the Windows Packet Monitor (pktmon) built-in network sniffer for diagnostic purposes. pktmon is a kernel-mode packet capture built into Windows Server 2019 and Windows 10 1809+. This policy enables the capture component for use by network administrators running 'pktmon start' diagnostics. Without this policy, pktmon requires administrator elevation which is already implied; this setting enables the functionality for diagnostic scripts.",
                     Tags = ["netmon", "pktmon", "packet-capture", "diagnostics", "admin"],
@@ -1551,7 +1551,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-wdi-net-diagnostics",
                     Label = "Network Monitoring: Enable WDI Network Diagnostics Service",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets WdiNetDiagEnabled=1 in WDI Diagnostics settings. Enables the Windows Diagnostic Infrastructure (WDI) network diagnostics scenario which collects lightweight ambient network performance data when connectivity problems occur. WDI triggers automatic trace collection when network degradation is detected (packet loss >5%, latency spikes, DNS resolution delays) and saves diagnostic logs to %SystemRoot%\\diagnostics. These logs are critical for helpdesk troubleshooting remote endpoint network issues.",
                     Tags = ["netmon", "wdi", "diagnostics", "trace", "helpdesk"],
@@ -1569,7 +1569,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-enable-smb-connection-audit",
                     Label = "Network Monitoring: Enable SMB Access Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets AuditSmb=1 in Network Monitoring policy. Enables auditing of SMB (Server Message Block) file access events, generating Windows Security event log entries for file share connections, access attempts, and share mount/unmount. SMB access audit is a core requirement for detecting lateral movement: attackers using pass-the-hash, pass-the-ticket, or network share enumeration tools (Impacket, CrackMapExec) generate distinctive SMB access patterns that appear in audit logs.",
                     Tags = ["netmon", "smb", "audit", "logging", "lateral-movement"],
@@ -1587,7 +1587,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "netmon-set-connection-limit-per-host",
                     Label = "Network Monitoring: Limit Simultaneous Connections Per Server",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets WinHttpConnectionLimit=10 in WinHTTP settings. Limits the number of simultaneous HTTP connections per server to 10. The default limit of 64 per server allows aggressive web scrapers, update agents, and backup agents to open hundreds of simultaneous connections to a single server, potentially degrading server performance. A limit of 10 concurrent connections per client-server pair is sufficient for modern application workloads and prevents per-machine connection flooding.",
                     Tags = ["netmon", "connection-limit", "http", "performance", "server"],
@@ -1635,7 +1635,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-block-auto-profile-change",
                 Label = "Block Automatic Network Location Profile Changes",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1652,7 +1652,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-enforce-domain-profile",
                 Label = "Enforce Domain Network Profile on Managed Endpoints",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1669,7 +1669,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-disable-ncsi-telemetry",
                 Label = "Disable Network Connectivity Status Indicator Telemetry",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1686,7 +1686,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-set-internal-probe-host",
                 Label = "Configure Internal NCSI Probe Host",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1703,7 +1703,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-restrict-profile-user-change",
                 Label = "Prevent Users from Changing Network Profile",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1720,7 +1720,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-disable-passive-polling",
                 Label = "Disable Passive Network Location Polling",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1737,7 +1737,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-block-multiple-active-profiles",
                 Label = "Prevent Multiple Concurrent Active Network Profiles",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1754,7 +1754,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-log-profile-changes",
                 Label = "Enable Network Profile Change Event Logging",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1771,7 +1771,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-require-domain-auth-for-domain-profile",
                 Label = "Require Domain Authentication for Domain Network Profile",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1788,7 +1788,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netprof-set-unidentified-networks-to-public",
                 Label = "Set Unidentified Networks to Public Profile",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1817,7 +1817,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-disable-network-projector",
                 Label = "Disable Legacy Network Projector Connection",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets NoNetworkProjector=1 in the NetworkProjector policy key. "
                     + "Prevents users from connecting this machine to a legacy network projector via "
@@ -1839,7 +1839,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-require-pin-for-projection",
                 Label = "Require PIN for 'Project to This PC'",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets RequirePinForPairing=2 in the Connect policy key (2=always require PIN). "
                     + "Requires a unique pairing PIN to be entered on the projecting device before it can "
@@ -1861,7 +1861,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-restrict-projection-to-secured-networks",
                 Label = "Restrict Projection to Secured (Non-Open) Wi-Fi Networks",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets AllowProjectionToSecuredPCOnly=1 in the Connect policy key. "
                     + "Limits 'Project to This PC' to accept incoming Miracast connections only when the "
@@ -1883,7 +1883,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-block-source-projection",
                 Label = "Block This PC From Projecting to Other Devices",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets AllowProjectionFromPC=0 in the Connect policy key. "
                     + "Prevents the user from using 'Connect' or the Project button to send this PC's "
@@ -1905,7 +1905,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-disable-wireless-display-infrastructure",
                 Label = "Disable Wireless Display Infrastructure Mode",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets AllowWirelessDisplayInfrastructure=0 in the WirelessDisplay policy key. "
                     + "Disables the infrastructure-mode Miracast projection that routes wireless display "
@@ -1927,7 +1927,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-disable-miracast-discovery-mcast",
                 Label = "Disable Miracast Multicast Discovery Broadcast",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets DisableDeviceDiscovery=1 in the WirelessDisplay policy key. "
                     + "Prevents this machine from continuously broadcasting Miracast advertisement "
@@ -1949,7 +1949,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-enforce-hdcp-for-wireless-display",
                 Label = "Enforce HDCP Content Protection on Wireless Display",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets AllowProjectionToHDCP=1 in the WirelessDisplay policy key. "
                     + "Requires that the receiving wireless display device supports HDCP (High-bandwidth "
@@ -1972,7 +1972,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-disable-projector-peer-trust",
                 Label = "Disable Auto-Trust for Previously Projected Displays",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets AllowPreviouslyPairedDevice=0 in the Connect policy key. "
                     + "Prevents Windows from automatically accepting wireless display connections from "
@@ -1995,7 +1995,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "netproj-set-projection-screenlock-timeout",
                 Label = "Set Wireless Display Auto-Lock Screen After Idle",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets ProjectionIdleTimeout=5 in the Connect policy key. "
                     + "Sets the number of minutes of idle time on a 'Project to This PC' session before "
@@ -2028,7 +2028,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-reservation",
                 Label = "Disable Network QoS Bandwidth Reservation",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2045,7 +2045,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-dscp-marking",
                 Label = "Disable DSCP Marking Override",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2062,7 +2062,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-throttling",
                 Label = "Disable Network QoS Throttling",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2079,7 +2079,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-policy-application",
                 Label = "Disable User-Level QoS Policy Application",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2096,7 +2096,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-pacer",
                 Label = "Disable Network Packet Scheduler Pacer",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2113,7 +2113,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-app-marking",
                 Label = "Prevent Applications from Overriding QoS Settings",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2130,7 +2130,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-telemetry",
                 Label = "Disable Network QoS Telemetry",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2147,7 +2147,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-adaptive",
                 Label = "Disable Adaptive QoS",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2164,7 +2164,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-conformance",
                 Label = "Disable QoS Traffic Conformance",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2181,7 +2181,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "nqos-disable-flow-inspection",
                 Label = "Disable QoS Flow Inspection",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2208,7 +2208,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-nfc-radio",
                     Label = "Disable NFC Radio",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables the NFC radio on devices that have one. Prevents unauthorised tap-to-transfer, tap-to-pay, and proximity-based pairing without physical control removal. Default: NFC enabled if hardware present. Recommended: 1 on corporate laptops without approved NFC use cases.",
                     Tags = ["nfc", "radio", "wireless", "security", "policy"],
@@ -2225,7 +2225,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-tap-to-pay",
                     Label = "Disable NFC Tap-to-Pay",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents Windows Wallet and third-party payment apps from using NFC for contactless payments. Removes financial transaction risk from NFC proximity attacks. Default: tap-to-pay enabled if NFC hardware present. Recommended: 1 on managed devices.",
                     Tags = ["nfc", "payment", "tap-to-pay", "wallet", "security", "policy"],
@@ -2242,7 +2242,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-tap-to-connect",
                     Label = "Disable NFC Tap-to-Connect (Wi-Fi/BT Pairing)",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents NFC from being used to automatically pair Bluetooth headsets, speakers, or configure Wi-Fi on another device via WPS. Reduces the attack surface of proximity-based device pairing. Default: tap-to-connect enabled. Recommended: 1.",
                     Tags = ["nfc", "tap-to-connect", "bluetooth", "wifi", "pairing", "policy"],
@@ -2259,7 +2259,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-nfc-tag-reading",
                     Label = "Disable NFC Tag Reading",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents Windows from reading data from passive NFC tags (such as NFC smart posters, RFID access badges used as open-URL triggers). Eliminates malicious-tag attack vectors. Default: tag reading enabled. Recommended: 1.",
                     Tags = ["nfc", "tag", "rfid", "read", "security", "policy"],
@@ -2276,7 +2276,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-secure-element",
                     Label = "Disable NFC Secure Element Access",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Blocks applications from accessing the NFC Secure Element (SE) — the tamper-resistant chip used for contactless payment credentials. Prevents SE-based payment credential theft. Default: SE access controlled per-app. Recommended: 1 unless approved payment apps are deployed.",
                     Tags = ["nfc", "secure-element", "payment", "credentials", "security", "policy"],
@@ -2293,7 +2293,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-block-nfc-in-enterprise",
                     Label = "Block All NFC in Enterprise Mode",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Master switch to disable all NFC functionality system-wide when the device is on a corporate/enterprise network. Provides a blanket NFC lockdown without needing individual element controls. Default: not restricted. Recommended: 1.",
                     Tags = ["nfc", "enterprise", "lockdown", "wireless", "security", "policy"],
@@ -2310,7 +2310,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-nfc-sharing",
                     Label = "Disable NFC Proximity Data Sharing",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents Windows from sharing files, contacts, or links via NFC proximity transfer (similar to Android Beam). Stops inadvertent or malicious near-field data exfiltration. Default: sharing enabled on NFC hardware. Recommended: 1.",
                     Tags = ["nfc", "sharing", "proximity", "dlp", "security", "policy"],
@@ -2327,7 +2327,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-nfc-host-card-emulation",
                     Label = "Disable NFC Host Card Emulation (HCE)",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Blocks Host Card Emulation — the mode that allows a device to emulate an NFC smart card (e.g., transit card, building access badge) in software. Prevents rogue HCE apps from cloning or spoofing credential cards. Default: HCE enabled on supported hardware. Recommended: 1.",
                     Tags = ["nfc", "hce", "card-emulation", "credentials", "security", "policy"],
@@ -2344,7 +2344,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-log-nfc-activity",
                     Label = "Enable NFC Activity Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Records NFC tap events, tag reads, and connection establishments to the Security audit log. Provides a forensic trail of physical proximity events for DLP and incident investigations. Default: not logged. Recommended: 1 on monitored endpoints.",
                     Tags = ["nfc", "audit", "logging", "forensics", "dlp", "policy"],
@@ -2361,7 +2361,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nfcpol-disable-nfc-user-toggle",
                     Label = "Block Users from Toggling NFC in Settings",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Removes the NFC toggle from Settings → Network & Internet → Airplane Mode and NFC. Users cannot re-enable NFC regardless of the hardware switch state. Default: user toggle available. Recommended: 1 when NFC is disabled by policy.",
                     Tags = ["nfc", "settings", "user-restriction", "toggle", "policy"],
@@ -2388,7 +2388,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-block-team-creation",
                     Label = "Block NIC Team Creation by Standard Users",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents standard (non-administrator) users from creating new NIC teams (LBFO load-balancing / failover adapters), ensuring that network adapter bonding configurations are controlled exclusively by administrators.",
                     Tags = ["nic-teaming", "lbfo", "adapter", "admin", "policy"],
@@ -2405,7 +2405,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-require-admin-for-deletion",
                     Label = "Require Admin to Delete NIC Teams",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Requires administrator privileges to delete NIC teams, preventing accidental or malicious destruction of load-balancing or failover network configurations by standard users or malicious scripts.",
                     Tags = ["nic-teaming", "lbfo", "deletion", "admin", "policy"],
@@ -2422,7 +2422,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-set-teaming-mode-static",
                     Label = "Set Default NIC Teaming Mode to Static (Switch Independent)",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets the default NIC teaming mode to Switch Independent (no LACP negotiation), which does not require switch-side port aggregation configuration and works with any managed switch that allows multiple ports to the same host.",
                     Tags = ["nic-teaming", "lbfo", "teaming-mode", "switch-independent", "policy"],
@@ -2439,7 +2439,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-enable-team-health-logging",
                     Label = "Enable NIC Team Health Change Event Logging",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Enables event log entries for NIC team health state changes including member adapter failures, additions, and team-wide operational state changes for proactive failover monitoring.",
                     Tags = ["nic-teaming", "lbfo", "health", "event-log", "policy"],
@@ -2456,7 +2456,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-disable-team-ui",
                     Label = "Disable NIC Teaming Configuration UI for Standard Users",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Removes the NIC Teaming page from Server Manager and Network Connections for non-administrator users, preventing accidental or unauthorised modification of NIC team configurations.",
                     Tags = ["nic-teaming", "lbfo", "ui", "standard-user", "policy"],
@@ -2473,7 +2473,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-set-load-balance-dynamic",
                     Label = "Set Default NIC Team Load Balancing Mode to Dynamic",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Sets the default NIC team load balancing algorithm to Dynamic mode, which distributes outbound traffic based on TCP/UDP flow measurements and periodically rebalances to prevent hot-spotting on a single team member.",
                     Tags = ["nic-teaming", "lbfo", "load-balancing", "dynamic", "performance", "policy"],
@@ -2490,7 +2490,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-set-standby-adapter-failover",
                     Label = "Set Default NIC Team Standby Adapter Mode for Failover",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Configures the default NIC team to use an active-standby topology where one adapter is always idle as a hot standby, ensuring seamless failover with no traffic disruption when the primary adapter fails.",
                     Tags = ["nic-teaming", "lbfo", "failover", "standby", "resilience", "policy"],
@@ -2507,7 +2507,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-block-team-membership-change",
                     Label = "Block Standard Users from Modifying NIC Team Membership",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents standard users from adding adapters to or removing adapters from existing NIC teams, ensuring team membership changes can only be made by administrators.",
                     Tags = ["nic-teaming", "lbfo", "membership", "standard-user", "policy"],
@@ -2524,7 +2524,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-audit-team-cfg-changes",
                     Label = "Audit NIC Team Configuration Changes",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Enables Security event log entries for all NIC team configuration changes (create, delete, member add/remove, mode change), providing a change-management audit trail for network team availability configurations.",
                     Tags = ["nic-teaming", "lbfo", "audit", "configuration-change", "policy"],
@@ -2541,7 +2541,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "nicteam-disable-nicteam-telemetry",
                     Label = "Disable NIC Teaming Telemetry Reporting to Microsoft",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Prevents the NIC Teaming subsystem from sending adapter bonding performance and health telemetry to Microsoft, protecting internal network adapter topology from cloud disclosure.",
                     Tags = ["nic-teaming", "telemetry", "privacy", "microsoft", "policy"],
@@ -2570,7 +2570,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ntpgpo-enable-ntp-client",
                 Label = "NTP Policy: Enable Windows NTP Client via Group Policy",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Configures the Windows Time service (W32Time) client to retrieve time from an NTP server by enabling the NTP client via the Policies registry path. This policy controls the Windows Time service behaviour at the machine level. Accurate time synchronisation is a prerequisite for Kerberos authentication, SSL/TLS certificate validation, log correlation, and compliance auditing. Forcing the NTP client on ensures time sync cannot be accidentally disabled by local administrators.",
                 Tags = ["ntp", "time sync", "w32time", "kerberos", "policy"],
@@ -2589,7 +2589,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ntpgpo-set-cross-site-sync-flags",
                 Label = "NTP Policy: Set NTP Cross-Site Synchronisation Flags",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets the CrossSiteSyncFlags value in the W32Time Client policy to 2, allowing the Windows Time service to synchronise from NTP time sources across AD sites. By default, Windows Time prefers NTP sources within the same AD site. Setting this flag allows cross-site sync as a fallback when no local NTP source is available, preventing time drift in remote sites with poor DC connectivity.",
                 Tags = ["ntp", "time sync", "active directory", "cross site", "policy"],
@@ -2607,7 +2607,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ntpgpo-set-special-poll-interval",
                 Label = "NTP Policy: Set Special Poll Interval for NTP Synchronisation",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Configures a specific NTP poll interval (in seconds) for the Windows Time service client operating in SpecialInterval mode. The default Windows Time poll interval can be too infrequent for high-security environments where clock drift is measured in seconds. A 900-second (15-minute) interval ensures that machines re-synchronise frequently enough to stay within the 5-minute Kerberos clock skew limit and to provide accurate timestamps for security event logs.",
                 Tags = ["ntp", "time sync", "poll interval", "kerberos", "policy"],
@@ -2625,7 +2625,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ntpgpo-set-resolve-peer-backoff-min",
                 Label = "NTP Policy: Set Minimum Peer Resolution Backoff Interval",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets the ResolvePeerBackOffMinutes value (in minutes) to 15, controlling the minimum time the Windows Time client waits before retrying a failed NTP peer resolution attempt. Short backoff intervals cause the W32Time service to hammer DNS and the NTP server with rapid retries after network outages. A 15-minute minimum backoff reduces NTP server load and prevents false-positive flapping alerts in network monitoring systems.",
                 Tags = ["ntp", "time sync", "backoff", "network load", "policy"],
@@ -2643,7 +2643,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ntpgpo-set-resolve-peer-backoff-max",
                 Label = "NTP Policy: Set Maximum Peer Resolution Backoff Retry Count",
-                Category = "Network",
+                Category = "Network — Network Monitoring",
                 Description =
                     "Sets the ResolvePeerBackOffMaxTimes value to 7, controlling the maximum number of exponential backoff retry doublings before the Windows Time client gives up and stops attempting to resolve an NTP peer. Without a cap, the exponential backoff can grow indefinitely, resulting in machines that stop trying to sync hours after a network issue clears. Limiting to 7 doublings (max backoff of 15 min × 2^7 ≈ 32 hours) balances persistence with eventual giving-up.",
                 Tags = ["ntp", "time sync", "backoff retry", "network resilience", "policy"],
@@ -2673,7 +2673,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-disable-autodetect",
                     Label = "Disable Auto-Detect Proxy Settings",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables automatic proxy detection (AutoDetect=0), preventing browsers and WinINET from trying to discover a proxy server automatically via WPAD or DHCP.",
                     Tags = ["proxy", "autodetect", "network", "policy", "hardening"],
@@ -2690,7 +2690,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-disable-autoconfig-url",
                     Label = "Disable Proxy Auto-Config URL",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables policy-driven auto-configuration URL (PAC file) processing by forcing ProxyAutoConfigUrl to an empty value, preventing unauthorized PAC file adoption.",
                     Tags = ["proxy", "pac", "autoconfig", "network", "policy"],
@@ -2707,7 +2707,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-block-settings-change",
                     Label = "Block Proxy Settings Change by Users",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Locks the Connections settings page in Internet Properties so standard users cannot modify proxy settings (Connections=1 in IE Control Panel policy).",
                     Tags = ["proxy", "settings", "lockdown", "policy", "hardening"],
@@ -2724,7 +2724,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-disable-wpad",
                     Label = "Disable WPAD (Web Proxy Auto-Discovery)",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables WPAD by setting DisableWpad=1, preventing the client from broadcasting WS-Discovery or DNS queries for a WPAD host, which can be spoofed by attackers.",
                     Tags = ["proxy", "wpad", "network", "hardening", "policy"],
@@ -2741,7 +2741,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-require-authenticated-proxy",
                     Label = "Require Authenticated Proxy",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Enforces proxy server authentication requirement, ensuring all WinINET proxy connections use valid enterprise credentials.",
                     Tags = ["proxy", "authentication", "network", "policy", "hardening"],
@@ -2758,7 +2758,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-block-direct-internet",
                     Label = "Block Direct Internet Access",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Blocks direct internet connections by policy, forcing all external traffic through the configured enterprise proxy server.",
                     Tags = ["proxy", "internet", "network", "hardening", "policy"],
@@ -2775,7 +2775,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-disable-bypass-for-local",
                     Label = "Disable Proxy Bypass for Local Addresses",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables the default proxy bypass for local (intranet) addresses so that all traffic — including intranet — routes through the proxy for inspection.",
                     Tags = ["proxy", "local", "bypass", "network", "policy"],
@@ -2792,7 +2792,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-lock-proxy-settings",
                     Label = "Lock Proxy Settings from Changes",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Applies the proxy-settings lockdown policy so that users cannot view or change proxy configuration through the Internet Options dialog.",
                     Tags = ["proxy", "lockdown", "settings", "policy", "hardening"],
@@ -2809,7 +2809,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-enforce-proxy-server",
                     Label = "Enforce Proxy Server Policy Setting",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Enables the ProxySettingsPerUser=0 policy to enforce machine-wide proxy settings rather than per-user, preventing individual users from substituting their own proxy.",
                     Tags = ["proxy", "server", "machine", "policy", "hardening"],
@@ -2826,7 +2826,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "proxbyp-disable-vpn-split-tunneling",
                     Label = "Disable VPN Split Tunneling via Proxy Policy",
-                    Category = "Network",
+                    Category = "Network — Network Monitoring",
                     Description =
                         "Disables VPN split tunneling enforcement bypass by requiring all traffic to route through the proxy, eliminating the split-tunnel proxy-bypass vector.",
                     Tags = ["proxy", "vpn", "split-tunneling", "hardening", "policy"],
@@ -2855,7 +2855,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-require-server-cert-validation",
                     Label = "RADIUS: Require Server Certificate Validation for EAP-TLS/PEAP",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets ValidateServerCert=1 in NPS policy. Requires client supplicants to validate the NPS/RADIUS server's TLS certificate before completing the EAP-TLS or PEAP authentication handshake. Without server certificate validation, a rogue RADIUS server can impersonate the legitimate NPS server (evil twin attack) and harvest EAP credentials or perform man-in-the-middle authentication. Server certificate validation prevents this by verifying the RADIUS server's identity using the trusted PKI before committing credentials.",
                     Tags = ["radius", "nps", "eap", "certificate", "authentication"],
@@ -2873,7 +2873,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-disable-legacy-eap-md5",
                     Label = "RADIUS: Disable Legacy EAP-MD5 Authentication Method",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets DisableEapMD5=1 in NPS policy. Removes EAP-MD5 from the list of accepted EAP authentication methods in the Windows Network Policy Server. EAP-MD5 is the oldest EAP method and is fundamentally insecure: it is vulnerable to dictionary attacks and offline brute force because the MD5 challenge-response is transmitted in the clear. RFC 9190 has deprecated EAP-MD5. Modern deployments should use EAP-TLS (certificate-based) or PEAP-MSCHAPv2 (password-based with TLS tunnel).",
                     Tags = ["radius", "nps", "eap", "md5", "authentication"],
@@ -2891,7 +2891,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-enable-accounting-logging",
                     Label = "RADIUS: Enable NPS Accounting Log to Windows Event Log",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets AccountingLogging=1 in NPS policy. Enables the NPS to log RADIUS accounting records (Start, Stop, Interim-Update, Accounting-On/Off) to the Windows Security Event Log. Accounting logs record all network access sessions: who connected, for how long, from what endpoint, with what access policy applied. These logs are essential for security investigations (who was connected when an incident occurred?) and compliance (demonstrating network access is tracked and audited).",
                     Tags = ["radius", "nps", "accounting", "logging", "audit"],
@@ -2909,7 +2909,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-set-auth-retry-limit",
                     Label = "RADIUS: Limit Authentication Retry Attempts to 3 per Session",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets MaxAuthRetries=3 in NetworkAccess policy. Limits the number of consecutive EAP authentication retry attempts per network access session before the access request is rejected. Without a retry limit, an attacker can enumerate EAP authentication attempts indefinitely (automated brute-force). Setting the limit to 3 matches best practice from 802.1x implementations: a user who mistyped their PIN gets two retries, and the third failure terminates the connection, requiring physical re-insertion of the token or reconnection.",
                     Tags = ["radius", "authentication", "retry", "brute-force", "protection"],
@@ -2927,7 +2927,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-set-eap-timeout-30s",
                     Label = "RADIUS: Set EAP Authentication Timeout to 30 Seconds",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EapTimeout=30 in NPS policy. Configures the maximum duration the NPS allows for a single EAP authentication exchange. If the EAP conversation (from initial EAP Identity request to EAP Success/Failure) takes longer than 30 seconds, the NPS terminates the access request with an Access-Reject. Short timeouts prevent slow-response attacks and stale session accumulation from half-open EAP conversations. 30 seconds is sufficient for all current EAP methods including EAP-TLS on slow links.",
                     Tags = ["radius", "nps", "eap", "timeout", "security"],
@@ -2945,7 +2945,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-enable-nps-audit-success",
                     Label = "RADIUS: Enable NPS Success Audit Events",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets AuditSuccessAuthentications=1 in NPS policy. Enables the logging of successful RADIUS Access-Accept events to the Windows Security Event Log (Event 6272: NPS granted access to a user). Success logging allows security operations teams to establish a baseline of acceptable network access patterns and detect anomalies (a user authenticating from an unknown location or at an unusual time). Without success logging, only failures are recorded, making it impossible to detect horizontal movement via legitimate credentials.",
                     Tags = ["radius", "nps", "audit", "success", "logging"],
@@ -2963,7 +2963,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-enable-nps-audit-failure",
                     Label = "RADIUS: Enable NPS Failure Audit Events",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets AuditFailedAuthentications=1 in NPS policy. Enables the logging of failed RADIUS Access-Reject events to the Windows Security Event Log (Event 6273: NPS denied access to a user, with the specific rejection reason code). Failure audit logging is essential for: detecting brute-force or credential stuffing attacks against network access, diagnosing 802.1x EAP failure reasons (certificate issues, policy mismatches, account disabled), and regulatory compliance that requires failed access to be logged.",
                     Tags = ["radius", "nps", "audit", "failure", "logging"],
@@ -2981,7 +2981,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-disable-pap-authentication",
                     Label = "RADIUS: Disable PAP (Password Authentication Protocol) on NPS",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets DisablePAP=1 in NPS policy. Removes PAP from the allowed RADIUS authentication protocols. PAP transmits the user password as cleartext (obfuscated only by MD5 XOR with the RADIUS shared secret) in the RADIUS Access-Request attribute (User-Password). An attacker with access to RADIUS traffic and knowledge of the shared secret can trivially recover user passwords from PAP requests. PAP is explicitly prohibited by PCI-DSS and NIST SP 800-162 for network authentication.",
                     Tags = ["radius", "pap", "authentication", "cleartext", "hardening"],
@@ -2999,7 +2999,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-restrict-shared-secret-length",
                     Label = "RADIUS: Enforce Minimum 22-Character RADIUS Shared Secret",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets MinSharedSecretLength=22 in NPS policy. Enforces a minimum length for the RADIUS shared secret (the password shared between the NPS server and authenticating access points/NAS devices). The RADIUS shared secret is used as a key in the User-Password MD5 obfuscation and in the Message-Authenticator HMAC-MD5. Short shared secrets are vulnerable to offline dictionary and brute-force attacks on captured RADIUS traffic. NIST SP 800-162 recommends at least 22 random characters for RADIUS shared secrets.",
                     Tags = ["radius", "shared-secret", "password", "length", "hardening"],
@@ -3017,7 +3017,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "radius-enable-proxy-state-attribute",
                     Label = "RADIUS: Enable Proxy-State Attribute Forwarding",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EnableProxyState=1 in NPS policy. Enables the preservation and forwarding of the RADIUS 'Proxy-State' attribute (attribute 33) in proxied RADIUS requests. When an NPS server forwards authentication requests to another RADIUS server in a tiered proxy topology (e.g., NPS proxy → corporate NPS → Active Directory), the Proxy-State attribute allows the proxy chain to correlate responses to their originating requests. Without Proxy-State, high-volume RADIUS proxy deployments suffer mismatched request-response correlation.",
                     Tags = ["radius", "proxy", "nps", "forwarding", "network"],
@@ -3049,7 +3049,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-disable-nap-client",
                     Label = "Remote Access: Disable Network Access Protection (NAP) Client",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EnableNap=0 in Network Access Protection policy. Disables the legacy Windows Network Access Protection (NAP) client which was deprecated in Windows Server 2012 R2 and removed from the enforcement role. NAP agents running on modern Windows clients generate event log warnings and consume background resources checking against a non-existent NAP infrastructure. On corporate networks without NAP servers, disabling the NAP client eliminates background health validation traffic and event log noise.",
                     Tags = ["remote-access", "nap", "legacy", "network", "cleanup"],
@@ -3067,7 +3067,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-enable-remote-access-audit",
                     Label = "Remote Access: Enable Remote Access Service Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EnableRemoteAccessAudit=1 in Remote Access policy. Enables comprehensive audit logging for Windows RAS/VPN connection events, including connection establishment, authentication success/failure, accounting start/stop, and session termination. These events are critical for SIEM correlation, compliance reporting (SOC 2, ISO 27001), and incident response timelines when investigating unauthorized remote access. Without this policy, VPN connection events may not appear in the Windows Security event log.",
                     Tags = ["remote-access", "vpn", "audit", "logging", "compliance"],
@@ -3085,7 +3085,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-disable-pap-auth",
                     Label = "Remote Access: Disable PAP (Plaintext Password) Authentication",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets AllowPap=0 in Remote Access policy. Disables Password Authentication Protocol (PAP) for VPN authentication. PAP transmits usernames and passwords in plaintext in the CHAP exchange, making them trivially interceptable on any network where the traffic can be captured (including TCP/IP networks without encryption). All modern VPN implementations use MSCHAPv2 or certificate-based authentication; PAP support is a legacy compatibility option that should be removed from all VPN endpoints.",
                     Tags = ["remote-access", "pap", "authentication", "plaintext", "security"],
@@ -3103,7 +3103,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-set-idle-hwm-timeout",
                     Label = "Remote Access: Set Remote Access Idle Timeout to 20 Minutes",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets IdleTimeoutMinutes=20 in Remote Access policy. Sets the VPN idle timeout: after 20 minutes of no user-initiated traffic through the VPN tunnel, the server terminates the connection. Idle VPN sessions hold server resources (IP allocations, NAT state, crypto session keys) indefinitely without this timeout. The 20-minute window accommodates brief work pauses while ensuring sessions from laptops left unattended in public locations are eventually cleaned up.",
                     Tags = ["remote-access", "vpn", "idle-timeout", "resource", "security"],
@@ -3121,7 +3121,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-disable-legacy-protocols",
                     Label = "Remote Access: Disable Legacy VPN Protocols (PPTP, L2TP without IPsec)",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets AllowPptp=0 in Remote Access policy. Disables PPTP (Point-to-Point Tunneling Protocol) VPN connections. PPTP uses RC4 encryption which is broken: known plaintext attacks can decrypt PPTP streams in real time given sufficient traffic. Microsoft released MS-CHAPv2 as PPTP's authentication but MS-CHAPv2 dictionary attacks complete in hours on modern hardware. PPTP provides no meaningful security. IKEv2 or SSL VPN should replace PPTP in all enterprise environments.",
                     Tags = ["remote-access", "pptp", "legacy", "encryption", "security"],
@@ -3139,7 +3139,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-enable-ikev2-mobility",
                     Label = "Remote Access: Enable IKEv2 Mobility (Network Roaming Support)",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EnableIkev2Mobility=1 in Remote Access policy. Activates IKEv2 MOBIKE (RFC 4555) support for VPN sessions. MOBIKE allows an active IKEv2 VPN tunnel to survive a client IP address change (e.g., switching from Ethernet to Wi-Fi, or from office to home network) without tearing down and re-establishing the tunnel. With MOBIKE, users experience seamless network transitions with VPN reconnection times of under 1 second instead of the 5–15 seconds required for full IKEv2 re-establishment.",
                     Tags = ["remote-access", "ikev2", "mobility", "mobike", "roaming"],
@@ -3157,7 +3157,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-disable-password-caching",
                     Label = "Remote Access: Disable VPN Credential Caching",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets DisablePasswordCaching=1 in Remote Access policy. Prevents Windows from caching VPN usernames and passwords in the Windows Credential Manager. Cached VPN credentials are stored in the LSA credential store and can be extracted by credential dumping tools (Mimikatz, Windows Credential Editor) running as SYSTEM. An attacker who compromises a device should not be able to harvest VPN credentials for lateral movement. Disabling caching forces VPN re-authentication on each session.",
                     Tags = ["remote-access", "credential-cache", "credential", "mimikatz", "security"],
@@ -3175,7 +3175,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-enable-rras-accounting",
                     Label = "Remote Access: Enable RRAS RADIUS Accounting for Sessions",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets EnableAccounting=1 in Remote Access policy. Enables RADIUS accounting messages (Start, Stop, Interim) from Windows RRAS to a configured RADIUS server. RADIUS accounting provides a complete audit trail of VPN session duration, bytes transferred, client IP address, and authentication method for each VPN connection. This data is required for network access compliance reporting, ISP billing reconciliation, and post-incident forensic analysis of data volume transferred over VPN.",
                     Tags = ["remote-access", "radius", "accounting", "rras", "compliance"],
@@ -3193,7 +3193,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "rnas-limit-concurrent-connections",
                     Label = "Remote Access: Limit Concurrent Remote Access Connections to 100",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Sets MaxConcurrentConnections=100 in Remote Access policy. Sets a configured maximum for simultaneous VPN/remote access connections on the server. Without a limit, RRAS servers can be overwhelmed by connection floods (either from legitimate growth or from denial-of-service attacks). Setting 100 as the limit on a non-production or branch RRAS server prevents resource exhaustion. Adjust the value based on server capacity (a typical Windows Server 2022 VM supports 200–500 concurrent VPN sessions).",
                     Tags = ["remote-access", "concurrent", "limit", "dos", "capacity"],
@@ -3222,7 +3222,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-restrict-null-session-access",
                 Label = "Restrict Null Session Access to Named Pipes and Shares",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Prevents anonymous (null session) connections from accessing named pipes and shares, blocking unauthenticated SMB enumeration.",
                 Tags = ["smb", "network", "security", "hardening", "anonymous"],
@@ -3236,7 +3236,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-clear-null-session-pipes",
                 Label = "Clear Null Session Named Pipes List",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description = "Removes all named pipes accessible via anonymous null sessions, reducing SMB attack surface.",
                 Tags = ["smb", "network", "security", "hardening", "anonymous"],
                 NeedsAdmin = true,
@@ -3249,7 +3249,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-clear-null-session-shares",
                 Label = "Clear Null Session Shares List",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description = "Removes all shares accessible via anonymous null sessions, preventing unauthenticated share enumeration.",
                 Tags = ["smb", "network", "security", "hardening", "anonymous"],
                 NeedsAdmin = true,
@@ -3262,7 +3262,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-enable-forced-logoff",
                 Label = "Enable Forced Logoff When Logon Hours Expire",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description = "Forces a logoff when a user's permitted logon hours expire, ensuring access control policies are enforced.",
                 Tags = ["smb", "network", "security", "group-policy"],
                 NeedsAdmin = true,
@@ -3275,7 +3275,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-disable-admin-shares",
                 Label = "Disable Default Administrative SMB Shares",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Disables automatic creation of administrative shares (C$, ADMIN$, IPC$), reducing remote administrative access surface.",
                 Tags = ["smb", "network", "security", "hardening"],
@@ -3289,7 +3289,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbshare-set-smb-max-connections",
                 Label = "Set Maximum Concurrent SMB Connections",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Limits the number of concurrent SMB connections to 16,777,216 (MaxMpxCt), preventing resource exhaustion from SMB floods.",
                 Tags = ["smb", "network", "performance", "security"],
@@ -3313,7 +3313,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-require-smb-encryption",
                 Label = "Require SMB Encryption for All Connections",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3330,7 +3330,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-disable-smb1",
                 Label = "Disable SMB Version 1 Protocol",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3347,7 +3347,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-disable-smb-guest",
                 Label = "Disable SMB Guest Authentication",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3364,7 +3364,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-enable-smb-signing",
                 Label = "Require SMB Packet Signing",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3381,7 +3381,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-block-ntlm-smb",
                 Label = "Restrict NTLM Authentication over SMB",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3398,7 +3398,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-enable-secure-dialect",
                 Label = "Enforce Minimum SMB Dialect Version",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3415,7 +3415,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-enable-pre-auth-integrity",
                 Label = "Enable SMB3 Pre-Authentication Integrity",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3432,7 +3432,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-disable-admin-shares",
                 Label = "Disable Default Administrative SMB Shares",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3449,7 +3449,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-restrict-anonymous-smb",
                 Label = "Restrict Anonymous Access to SMB Named Pipes",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3466,7 +3466,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbenc-audit-smb-connections",
                 Label = "Enable SMB Connection Audit Logging",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3497,7 +3497,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-enable-large-mtu",
                 Label = "Enable SMB Large MTU Support",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3514,7 +3514,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-reduce-dormant-file-limit",
                 Label = "Reduce SMB Dormant File Connection Limit",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3531,7 +3531,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-increase-server-max-work-items",
                 Label = "Increase SMB Server Work Items",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3548,7 +3548,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-increase-server-max-raw-work-items",
                 Label = "Increase SMB Server Raw Work Buffer",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3565,7 +3565,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-enforce-smb-signing-client",
                 Label = "Enforce SMB Signing on Client",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3583,7 +3583,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smb-increase-collection-count",
                 Label = "Increase SMB Write-Ahead Collection Count",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3613,7 +3613,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "smbsvr-disable-smb-compression",
                     Label = "Disable SMBv3 Compression to Prevent SMBleed Attacks",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Disables SMB compression on the server, mitigating SMBleed (CVE-2020-1206) and similar compression-path vulnerabilities that can allow unauthenticated reading of uninitialized kernel memory through SMB3 compressed data.",
                     Tags = ["smb", "compression", "smbleed", "cve-2020-1206", "policy"],
@@ -3631,7 +3631,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "smbsvr-enable-smb-encryption",
                     Label = "Enable SMBv3 Encryption for All Shares (Enforce in Transit)",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Enables SMBv3 end-to-end encryption for all SMB connections to this server, ensuring file transfer content is AES-encrypted in transit and cannot be captured in plaintext on the network.",
                     Tags = ["smb", "encryption", "aes", "in-transit", "policy"],
@@ -3648,7 +3648,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "smbsvr-disable-guest-fallback",
                     Label = "Disable SMB Guest Authentication Fallback",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Prevents the SMB client from automatically falling back to anonymous guest authentication when the provided credentials are rejected, stopping silent elevation-of-failure-to-anonymous-access on misconfigured shares.",
                     Tags = ["smb", "guest", "anonymous", "fallback", "policy"],
@@ -3665,7 +3665,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "smbsvr-log-auth-failures",
                     Label = "Log SMB Authentication Failure Events in Security Log",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Enables Security event log audit entries for failed SMB authentication attempts, providing visibility into brute-force attacks and pass-the-hash attempts against network shares.",
                     Tags = ["smb", "auth-failure", "event-log", "audit", "policy"],
@@ -3682,7 +3682,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "smbsvr-disable-smb-telemetry",
                     Label = "Disable SMB Server Telemetry Reporting to Microsoft",
-                    Category = "Network",
+                    Category = "Network — Radius Auth",
                     Description =
                         "Prevents the SMB server from sending connection statistics, negotiated cipher suites, session rates, and protocol version telemetry to Microsoft.",
                     Tags = ["smb", "telemetry", "privacy", "microsoft", "policy"],
@@ -3709,7 +3709,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbsrv-disable-admin-share-server",
                 Label = "Disable Hidden Admin Shares (Server Mode)",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets AutoShareServer=0 in LanmanServer parameters. Prevents Windows from automatically creating the hidden administrative shares (C$, D$, ADMIN$, IPC$) on server-class installations when the computer starts. Reduces the exposed SMB attack surface on file server roles.",
                 Tags = ["smb", "admin-share", "server", "security", "hardening"],
@@ -3723,7 +3723,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbsrv-enable-raw-mode",
                 Label = "Enable SMB Raw Read/Write Mode",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets EnableRaw=1 in LanmanServer parameters. Ensures the SMB server permits raw-mode transfers (large single-command reads and writes without the overhead of a separate setup packet). Raw mode is the default; restoring it if previously disabled improves LAN performance for large file copies.",
                 Tags = ["smb", "raw", "performance", "server", "tuning"],
@@ -3737,7 +3737,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbsrv-set-size-req-buf",
                 Label = "Set SMB Server Request Buffer Size to 4356",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets SizReqBuf=4356 in LanmanServer parameters. Configures the raw-mode read buffer size for the SMB server. 4356 bytes aligns the buffer to a common Ethernet MTU boundary (4 KB + SMB header overhead), which can reduce fragmented TCP segments for raw SMB operations on Gigabit networks.",
                 Tags = ["smb", "buffer", "performance", "server", "tuning"],
@@ -3751,7 +3751,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "smbsrv-disk-space-threshold",
                 Label = "Require 10% Free Disk Before SMB Writes",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets DiskSpaceThreshold=10 in LanmanServer parameters. Instructs the SMB server to return a disk-full error to clients when the volume hosting a share has less than 10% free space remaining, rather than waiting until the volume is completely full. Prevents total disk exhaustion which can corrupt open files.",
                 Tags = ["smb", "disk", "threshold", "server", "reliability"],
@@ -3777,7 +3777,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-enable-auth-traps",
                 Label = "SNMP Policy: Enable Authentication Failure Traps",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sends SNMP authentication failure traps when unauthorized community string requests are received. Enables monitoring of unauthorized SNMP access attempts.",
                 Tags = ["snmp", "auth", "traps", "monitoring", "network", "policy"],
@@ -3795,7 +3795,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-restrict-permitted-managers",
                 Label = "SNMP Policy: Restrict Permitted Management Hosts",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Enforces GPO-defined list of permitted SNMP management hosts. The SNMP service only responds to requests from the hosts listed under PermittedManagers registry key.",
                 Tags = ["snmp", "access-control", "managers", "network", "policy"],
@@ -3813,7 +3813,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-disable-community-readonly",
                 Label = "SNMP Policy: Remove Default Public Read-Only Community",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Removes the 'public' SNMP community string from the valid communities list. The default public community string is a well-known attack vector that enables SNMP enumeration.",
                 Tags = ["snmp", "community", "public", "hardening", "network", "policy"],
@@ -3831,7 +3831,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-set-community-read-only",
                 Label = "SNMP Policy: Restrict Community String Permissions (Read-Only)",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets the SNMP community string type to Read Only (4) and removes Write/Create/Delete rights. Prevents SNMP-based configuration changes from network management stations.",
                 Tags = ["snmp", "community", "read-only", "permissions", "policy"],
@@ -3849,7 +3849,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-disable-snmp-writeable",
                 Label = "SNMP Policy: Disable SNMP Write Community Access",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Sets the community permissions to None (1) for the write community, disabling any SNMP SET operations. SNMP write access allows remote configuration changes to network devices.",
                 Tags = ["snmp", "write", "set-operations", "hardening", "policy"],
@@ -3867,7 +3867,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-enable-snmp-service-policy",
                 Label = "SNMP Policy: Enable SNMP Service Policy Enforcement",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Enables GPO-based enforcement of SNMP service settings. When enabled, all SNMP service configuration is governed by Group Policy, overriding local service settings.",
                 Tags = ["snmp", "gpo", "enforcement", "policy"],
@@ -3885,7 +3885,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-disable-snmp-v1",
                 Label = "SNMP Policy: Disable SNMPv1 Protocol",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Disables SNMPv1 through GPO policy. SNMPv1 transmits community strings in plain text and lacks encryption or authentication. Disabling it forces use of SNMPv2c or SNMPv3.",
                 Tags = ["snmp", "v1", "legacy", "protocol", "hardening", "policy"],
@@ -3903,7 +3903,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-log-auth-failures",
                 Label = "SNMP Policy: Log Authentication Failures to Event Log",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Configures the SNMP service to write authentication failure events to the Windows Security event log. Supports Security Information and Event Management (SIEM) integration.",
                 Tags = ["snmp", "logging", "event-log", "auth", "siem", "policy"],
@@ -3921,7 +3921,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-block-snmp-from-internet",
                 Label = "SNMP Policy: Block SNMP from Public Network Access",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Restricts SNMP to internal network connections only through GPO. Forces the SNMP service to discard any requests arriving from non-private network interfaces.",
                 Tags = ["snmp", "firewall", "network", "internet", "restriction", "policy"],
@@ -3939,7 +3939,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "snmppol-restrict-trap-receivers",
                 Label = "SNMP Policy: Restrict SNMP Trap Receivers to Known Hosts",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 Description =
                     "Applies GPO-enforced filtering to SNMP trap destinations, limiting trap broadcasts to administrator-approved management systems. Reduces SNMP trap amplification risk.",
                 Tags = ["snmp", "traps", "trap-receivers", "network", "restriction", "policy"],
@@ -4044,7 +4044,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-max-auth-tries-3",
                 Label = "Limit SSH Authentication Attempts to 3",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4062,7 +4062,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-login-grace-time-30",
                 Label = "SSH Login Grace Time 30 Seconds",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4080,7 +4080,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-permit-empty-passwords-no",
                 Label = "Disallow SSH Empty Password Logins",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4098,7 +4098,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-disable-agent-forwarding",
                 Label = "Disable SSH Agent Forwarding",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4116,7 +4116,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-disable-tcp-forwarding",
                 Label = "Disable SSH TCP Forwarding",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4134,7 +4134,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-max-sessions-2",
                 Label = "Limit SSH Concurrent Sessions to 2",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = false,
@@ -4152,7 +4152,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-strict-modes",
                 Label = "Enable SSH StrictModes",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4170,7 +4170,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-disable-x11-forwarding",
                 Label = "Disable SSH X11 Forwarding",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4188,7 +4188,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-set-strong-ciphers",
                 Label = "Restrict SSH to Strong Ciphers",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4207,7 +4207,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "ssh-set-strong-macs",
                 Label = "Restrict SSH to Strong MAC Algorithms",
-                Category = "Network",
+                Category = "Network — Radius Auth",
                 KindHint = TweakKind.FileConfig,
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4236,7 +4236,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-audio-dscp-value",
                     Label = "VoIP QoS: Mark Teams Audio RTP with DSCP EF (46)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AudioDscpValue=46 in Teams QoS policy. Instructs Teams to mark all real-time audio RTP packets with DSCP EF (Expedited Forwarding = 46, the highest priority class). "
                         + "On enterprise networks with QoS-aware switches and routers, EF-marked packets receive the smallest queuing delay and lowest drop probability, which directly reduces jitter and one-way latency in Teams calls. "
@@ -4255,7 +4255,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-video-dscp-value",
                     Label = "VoIP QoS: Mark Teams Video RTP with DSCP AF41 (34)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets VideoDscpValue=34 in Teams QoS policy. Marks Teams video RTP packets with DSCP AF41 (Assured Forwarding 41 = 34). "
                         + "AF41 is the IETF recommendation for interactive video conferencing traffic. It receives higher priority than best-effort but is de-prioritised below EF (audio). "
@@ -4274,7 +4274,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-appshar-dscp-value",
                     Label = "VoIP QoS: Mark Teams App-Sharing with DSCP AF21 (18)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AppShareDscpValue=18 in Teams QoS policy. Marks Teams application-sharing and desktop-sharing RTP streams with DSCP AF21 (Assured Forwarding 21 = 18). "
                         + "Screen share generates large and bursty traffic which should be deprioritised relative to live audio and video to prevent real-time media degredation during presentations.",
@@ -4292,7 +4292,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-enable-teams-audio-port-range",
                     Label = "VoIP QoS: Enable Teams-Specific Audio UDP Port Range",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AudioPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams audio media. "
                         + "Port-based QoS rules on network switches and firewalls can then classify and prioritise Teams audio traffic from these specific ports rather than relying solely on DSCP markings, which are sometimes stripped by ISPs.",
@@ -4310,7 +4310,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-audio-port-start-50000",
                     Label = "VoIP QoS: Set Teams Audio Port Range Start to 50000",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AudioPortStart=50000 in Teams QoS policy. Configures the start of the UDP port range used by Teams audio media to port 50000. "
                         + "This port base aligns with the Microsoft-recommended range for Teams voice and allows network administrators to create firewall ACLs and QoS policies targeting the well-known 50000–50019 range.",
@@ -4328,7 +4328,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-audio-port-count-20",
                     Label = "VoIP QoS: Set Teams Audio Port Count to 20",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AudioPortCount=20 in Teams QoS policy. Allocates 20 consecutive UDP ports for Teams audio media starting from AudioPortStart. "
                         + "A count of 20 provides enough ports for simultaneous call sessions on a single machine while keeping the range narrow enough for precise firewall and QoS ACL rules.",
@@ -4346,7 +4346,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-enable-teams-video-port-range",
                     Label = "VoIP QoS: Enable Teams-Specific Video UDP Port Range",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets VideoPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams video media streams. "
                         + "Separating video on its own port range allows network equipment to apply different QoS policies to audio and video independently, which is important when network bandwidth needs to preferentially protect audio quality over video.",
@@ -4364,7 +4364,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-video-port-start-50020",
                     Label = "VoIP QoS: Set Teams Video Port Range Start to 50020",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets VideoPortStart=50020 in Teams QoS policy. Sets the starting UDP port for Teams video media to 50020, immediately following the audio port range (50000–50019). "
                         + "This layout allows a single contiguous firewall rule (50000–50039) to cover both audio and video, while still allowing separate DSCP markings to be applied per-range.",
@@ -4382,7 +4382,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-set-teams-video-port-count-20",
                     Label = "VoIP QoS: Set Teams Video Port Count to 20",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets VideoPortCount=20 in Teams QoS policy. Allocates 20 UDP ports for Teams video media starting at VideoPortStart. "
                         + "20 ports accommodates multiple simultaneous video sessions and gallery view scenarios without creating an overly broad firewall footprint.",
@@ -4400,7 +4400,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "voipqos-enable-teams-appshar-port-range",
                     Label = "VoIP QoS: Enable Teams App-Sharing UDP Port Range",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AppSharePortsEnabled=1 in Teams QoS policy. Enables a dedicated UDP port range for Teams application-sharing and desktop-sharing media streams. "
                         + "Isolating app-sharing on its own port range allows network QoS policies to apply lower priority scheduling to screen share traffic while still guaranteeing audio and video delivery during congestion.",
@@ -4430,7 +4430,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-require-strong-encryption",
                     Label = "Require Strong Encryption for VPN Connections",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Enforces maximum-strength encryption (MPPE 128-bit or AES-256) for all RRAS VPN connections. Rejects connections that negotiate weaker ciphers. Default: optional encryption.",
                     Tags = ["vpn", "encryption", "rras", "security", "policy"],
@@ -4447,7 +4447,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-disable-pptp-protocol",
                     Label = "Disable PPTP VPN Protocol",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Disables the insecure PPTP (Point-to-Point Tunneling Protocol) for VPN connections. PPTP is considered cryptographically broken. Default: enabled.",
                     Tags = ["vpn", "pptp", "security", "deprecated", "policy"],
@@ -4464,7 +4464,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-enable-ikev2-preferred",
                     Label = "Set IKEv2 as Preferred VPN Protocol",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Configures RRAS to prefer IKEv2 (Internet Key Exchange v2) for VPN tunnel negotiation. IKEv2 supports MOBIKE for seamless roaming. Default: automatic protocol selection.",
                     Tags = ["vpn", "ikev2", "protocol", "security", "policy"],
@@ -4481,7 +4481,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-set-idle-timeout",
                     Label = "Set VPN Idle Disconnect Timeout to 30 Minutes",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Automatically disconnects inactive VPN sessions after 30 minutes of idle time. Frees up VPN server resources. Default: no idle timeout.",
                     Tags = ["vpn", "idle", "timeout", "rras", "policy"],
@@ -4498,7 +4498,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-set-max-sessions",
                     Label = "Set Maximum Concurrent VPN Sessions to 100",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Limits the maximum number of concurrent VPN connections to the RRAS server to 100. Prevents resource exhaustion from excessive connections. Default: unlimited.",
                     Tags = ["vpn", "sessions", "limit", "rras", "policy"],
@@ -4515,7 +4515,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-enable-connection-logging",
                     Label = "Enable VPN Connection Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Enables audit logging for all VPN connection attempts (successful and failed). Logs are written to the Windows Security event log. Default: disabled.",
                     Tags = ["vpn", "logging", "audit", "security", "rras", "policy"],
@@ -4532,7 +4532,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-disable-split-tunneling",
                     Label = "Disable VPN Split Tunneling",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Forces all client traffic through the VPN tunnel (full-tunnel mode). Prevents clients from accessing the internet directly while connected. Default: split tunneling allowed.",
                     Tags = ["vpn", "split-tunnel", "security", "rras", "policy"],
@@ -4549,7 +4549,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-set-sa-lifetime",
                     Label = "Set IKEv2 SA Lifetime to 8 Hours",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets the IKEv2 security association (SA) lifetime to 8 hours (480 minutes). After expiry, the tunnel renegotiates keys. Default: 8 hours (may vary).",
                     Tags = ["vpn", "ikev2", "sa-lifetime", "security", "policy"],
@@ -4566,7 +4566,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-enable-nap-enforcement",
                     Label = "Enable Network Access Protection for VPN",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Enables NAP (Network Access Protection) health checks for VPN clients. Clients must meet health requirements (AV, firewall, updates) before being granted full access. Default: no NAP enforcement.",
                     Tags = ["vpn", "nap", "health-check", "security", "compliance", "policy"],
@@ -4583,7 +4583,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "vpnras-disable-saved-credentials",
                     Label = "Prevent Saving VPN Credentials",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents users from saving VPN connection credentials. Users must enter credentials each time they connect. Reduces credential theft risk. Default: saving allowed.",
                     Tags = ["vpn", "credentials", "security", "credential-theft", "policy"],
@@ -4610,7 +4610,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-disable-auto-connect",
                 Label = "Disable WCM Auto-Connect to Non-Internet Networks",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Disables Windows Connection Manager automatic connection to networks when already connected to internet. Prevents unexpected Wi-Fi/mobile broadband connections that could create dual-homed exposure. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "auto-connect", "security"],
@@ -4625,7 +4625,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-minimize-connections",
                 Label = "Minimize Simultaneous WCM Connections",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Instructs Windows Connection Manager to minimize the number of simultaneous connections to the internet, a domain, or a network. Prevents multi-homing unless required. Default: 0. Recommended: 3 (minimize, but allow manual overrides).",
                 Tags = ["connection-manager", "network", "multi-home"],
@@ -4640,7 +4640,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-prefer-wired-network",
                 Label = "Prefer Wired over Wireless in WCM",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Instructs Windows Connection Manager to prefer wired Ethernet connections over Wi-Fi when both are available. Improves stability and throughput without forcing disconnect from Wi-Fi. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "wired", "wifi"],
@@ -4655,7 +4655,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-soft-disconnect",
                 Label = "Enable WCM Soft Disconnect on Wireless",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Enables soft-disconnect behavior in WCM: instead of immediately dropping a wireless connection, the system waits for applications to switch before disconnecting. Reduces connection-drop disruptions. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "wifi", "disconnect"],
@@ -4670,7 +4670,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-disable-wlan-connectivity",
                 Label = "Disable WLAN Connectivity via WCM Policy",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Disables WLAN (Wi-Fi) connections through the Windows Connection Manager policy. For wired-only or air-gapped workstations where wireless should be locked out at policy level. Default: 0. Recommended: 1 for restricted machines.",
                 Tags = ["connection-manager", "wifi", "disable", "security", "wlan"],
@@ -4685,7 +4685,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-disable-wwan-connectivity",
                 Label = "Disable WWAN/Mobile Broadband via WCM Policy",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Disables WWAN (mobile broadband/cellular) connections through the Windows Connection Manager policy. Prevents unexpected cellular data charges on enterprise devices. Default: 0. Recommended: 1 for non-mobile workstations.",
                 Tags = ["connection-manager", "wwan", "mobile", "disable", "security"],
@@ -4700,7 +4700,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-access-restrictions-on-reconnect",
                 Label = "Apply WCM Access Restrictions on Reconnect",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Re-applies WCM connection-policy access restrictions when a managed network reconnects after being temporarily unavailable. Ensures policy enforcement is not bypassed by reconnection events. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "policy", "reconnect"],
@@ -4715,7 +4715,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-block-wifi-when-ethernet",
                 Label = "Block Wi-Fi When Ethernet Connected via WCM",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Prevents Windows from maintaining active Wi-Fi connections when a wired Ethernet connection is available. Reduces dual-homed exposure and possible split-tunnel routing issues. Default: not set. Recommended: 1.",
                 Tags = ["connection-manager", "wifi", "ethernet", "network", "security"],
@@ -4730,7 +4730,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wcmpol-no-local-policy-merge",
                 Label = "Prevent Local WCM Policy Merge",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 Description =
                     "Prevents local administrator-configured WCM policies from being merged with domain Group Policy settings for WCM. Ensures only domain policy governs connection management. Default: 0. Recommended: 1 for managed environments.",
                 Tags = ["connection-manager", "network", "group-policy", "management"],
@@ -4755,7 +4755,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-disable-soft-disconnect",
                     Label = "Disable WCM Soft-Disconnect from Wired",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents WCM from softly disconnecting from wired Ethernet when a preferred Wi-Fi connection becomes available. Keeps wired connections stable and avoids unexpected bandwidth switches. Default: soft-disconnect enabled. Recommended: 1 on workstations.",
                     Tags = ["wcm", "wifi", "wired", "disconnect", "network", "policy"],
@@ -4772,7 +4772,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-disable-simultaneous-connections",
                     Label = "Disable Simultaneous Wired+Wi-Fi Connections",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents Windows from maintaining simultaneous wired and Wi-Fi connections. When both are active, WCM disconnects the lower-priority adapter. Reduces split-routing and unintended traffic leakage. Default: simultaneous allowed. Recommended: 1.",
                     Tags = ["wcm", "wifi", "wired", "simultaneous", "routing", "network", "policy"],
@@ -4789,7 +4789,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-disable-wifi-hotspot-auto",
                     Label = "Disable Auto-Connect to Wi-Fi Hotspots",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Stops WCM from automatically connecting to Wi-Fi hotspots (e.g., paid hotspots, Wi-Fi Sense networks). Prevents unexpected connections to unvetted open networks. Default: auto-connect enabled. Recommended: 1.",
                     Tags = ["wcm", "wifi", "hotspot", "auto-connect", "security", "policy"],
@@ -4806,7 +4806,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-allow-manual-wifi-connect",
                     Label = "Allow Manual Wi-Fi Connection Despite Wired",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Permits users to manually connect to a Wi-Fi network even when an active wired Ethernet connection exists. Allows intentional dual-homing when needed (e.g., out-of-band management). Default: restricted. Recommended: 1 for power users.",
                     Tags = ["wcm", "wifi", "manual", "wired", "dual-home", "network", "policy"],
@@ -4823,7 +4823,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-preferred-wired-over-wifi",
                     Label = "Prefer Wired Connection Over Wi-Fi (Priority)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Configures WCM to always prefer wired Ethernet over Wi-Fi when both are available. Wired connections are prioritized in routing tables. Default: WCM balances based on cost and speed. Recommended: 1 for desktop workstations.",
                     Tags = ["wcm", "wired", "priority", "routing", "network", "policy"],
@@ -4840,7 +4840,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-disable-cellular-as-fallback",
                     Label = "Disable Cellular as Wi-Fi Fallback",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents WCM from switching to a cellular data connection when Wi-Fi or wired connections become unavailable. Avoids unexpected mobile data consumption when tethered. Default: cellular allowed as fallback. Recommended: 1 on Wi-Fi-only policies.",
                     Tags = ["wcm", "cellular", "fallback", "mobile", "bandwidth", "policy"],
@@ -4857,7 +4857,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-block-non-domain-connections",
                     Label = "Block Non-Domain Network Connections on Domain Endpoints",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents domain-joined machines from connecting to non-domain (public/home) networks while connected to the corporate domain network. Stops traffic leakage to unmanaged networks. Default: not restricted. Recommended: 1 on domain endpoints.",
                     Tags = ["wcm", "domain", "network", "security", "corporate", "policy"],
@@ -4875,7 +4875,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-auto-select-network-profile",
                     Label = "Disable Auto-Selection of Network Profile on Connect",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents WCM from automatically selecting the best network profile (Public/Private/Domain) upon connection. Requires users to explicitly choose the profile, reducing risk of miscategorising corporate networks as Public. Default: auto-select enabled.",
                     Tags = ["wcm", "network-profile", "public", "private", "security", "policy"],
@@ -4893,7 +4893,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-set-polling-interval-60s",
                     Label = "Set WCM Connection Polling Interval to 60 Seconds",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Adjusts the WCM service polling interval for connectivity changes to 60 seconds. Reduces WCM CPU wakeups on battery-powered laptops without significantly delaying reconnection. Default: ~5 seconds. Recommended: 60 for battery savings.",
                     Tags = ["wcm", "polling", "battery", "performance", "network", "policy"],
@@ -4911,7 +4911,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wcmpol-disable-managed-wifi-offload",
                     Label = "Disable WCM Managed Wi-Fi Offload",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents WCM from offloading Wi-Fi management to a cellular companion device or managed Wi-Fi radio. Keeps all connection decisions on the primary Windows networking stack. Default: offload allowed. Recommended: 1 on standard hardware.",
                     Tags = ["wcm", "wifi", "offload", "managed", "network", "policy"],
@@ -4940,7 +4940,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-disable-auto-detect",
                     Label = "WPAD: Disable Automatic Proxy Detection (WPAD Protocol)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AutoDetect=0 in WPAD policy. Disables Web Proxy Auto-Discovery Protocol (WPAD) which broadcasts DHCP/DNS queries to discover proxy configuration servers on the local network. WPAD is exploited in PoisonTap and similar attacks where an attacker's rogue DHCP or DNS server responds to WPAD queries, redirecting all HTTP/HTTPS traffic through an attacker-controlled proxy. Disabling WPAD and using explicit PAC file URLs or manual proxy configuration eliminates this attack surface.",
                     Tags = ["wpad", "proxy", "auto-detect", "security", "mitm"],
@@ -4958,7 +4958,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-disable-pac-script-download-prompt",
                     Label = "WPAD: Suppress PAC File Download Confirmation Prompt",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets DisableProxyAutoConfigUrlRequest=0 in Internet Settings. Suppresses the Internet Explorer / WinINet PAC file download confirmation prompt that asks users to allow or deny the download. In enterprise proxy environments, the PAC file is a managed IT component; user confirmation prompts are unnecessary and cause initial connection delays. This setting prevents the prompt and allows PAC file auto-download without user interaction.",
                     Tags = ["wpad", "pac", "prompt", "enterprise", "ux"],
@@ -4976,7 +4976,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-enable-auto-configuration",
                     Label = "WPAD: Enable Automatic Configuration Script (PAC) Support",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets AutoConfigUrl=1 in Internet Settings policy. Enables enforced application of an automatic configuration script (PAC file) URL from Group Policy. This ensures the PAC file URL is deployed to all managed workstations and cannot be overridden by end users. Managed PAC enforcement is the standard enterprise proxy deployment mechanism: all applications using the WinHTTP/WinINet stack will use the centrally managed PAC file for proxy decisions.",
                     Tags = ["wpad", "pac", "auto-config", "proxy", "enterprise"],
@@ -4994,7 +4994,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-enable-winhttp-proxy",
                     Label = "WPAD: Enable WinHTTP Proxy Inheritance from IE Settings",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets EnableLegacyAutoProxyFeatures=1 in Internet Settings. Enables WinHTTP applications (background services, .NET, PowerShell, Windows Update) to inherit the proxy configuration from the IE/WinINet machine proxy settings. Without this setting, WinHTTP applications (which don't read from the IE proxy registry directly) may bypass the corporate proxy entirely. Enabling inheritance ensures background system processes also route through the corporate proxy.",
                     Tags = ["wpad", "winhttp", "proxy", "inheritance", "background"],
@@ -5012,7 +5012,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-set-proxy-timeout",
                     Label = "WPAD: Set Proxy Connection Timeout to 10 Seconds",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets ConnectTimeout=10000 in Internet Settings. Sets the proxy server connection timeout to 10,000 ms (10 seconds). The default WinINet proxy connection timeout is 60 seconds. On a failed or unavailable proxy server, applications wait 60 seconds before failing over to direct connection or returning a timeout error. Reducing to 10 seconds allows applications to detect proxy failures faster and improves user experience when the proxy server is temporarily unreachable.",
                     Tags = ["wpad", "proxy", "timeout", "performance", "failover"],
@@ -5030,7 +5030,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wpad-disable-ftp-proxy",
                     Label = "WPAD: Disable FTP Proxy Support in WinINet",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets FtpProxyEnable=0 in Internet Settings. Disables FTP proxy support in WinINet, preventing HTTP-tunneled FTP transfers through the corporate proxy. FTP is unencrypted and transmits credentials in plaintext. Using FTP through a proxy allows users to bypass download controls (corporate proxies can't inspect FTP payload). Modern FTP use cases should be replaced by HTTPS/SFTP. Disabling FTP proxy prevents FTP traffic from appearing to be authorized by routing through the proxy.",
                     Tags = ["wpad", "ftp", "proxy", "security", "plaintext"],
@@ -5058,7 +5058,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-disable-softap",
                     Label = "Disable Windows Wi-Fi SoftAP (Software Access Point)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents the creation of a software access point using the Wireless Hosted Network API (SoftAP), blocking use of this machine as a wireless hotspot by applications or user scripts.",
                     Tags = ["wi-fi", "soft-ap", "hosted-network", "hotspot", "policy"],
@@ -5075,7 +5075,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-disable-wifi-sense-open",
                     Label = "Disable Wi-Fi Sense Connectivity to Open Suggested Hotspots",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents Wi-Fi Sense from automatically connecting this machine to open hotspots recommended by Microsoft's crowd-sourced network database, eliminating silent connections to unknown public Wi-Fi.",
                     Tags = ["wi-fi", "wifi-sense", "open-hotspot", "privacy", "policy"],
@@ -5092,7 +5092,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-disable-profile-sync-to-cloud",
                     Label = "Disable Wi-Fi Profile Synchronisation to Microsoft Cloud",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents Wi-Fi profiles (network names, credentials) from being synchronised to a Microsoft account in the cloud, ensuring saved Wi-Fi passwords remain local-only and are not accessible from other devices.",
                     Tags = ["wi-fi", "profile-sync", "microsoft-account", "privacy", "policy"],
@@ -5109,7 +5109,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-block-forget-network",
                     Label = "Block Standard Users from Forgetting Wi-Fi Networks",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents standard users from using the Forget Network option in the Wi-Fi settings flyout, preserving IT-configured enterprise Wi-Fi profiles from being accidentally deleted.",
                     Tags = ["wi-fi", "forget-network", "profile", "standard-user", "policy"],
@@ -5126,7 +5126,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-require-wpa2-minimum",
                     Label = "Require WPA2 or Higher Authentication Standard",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Enforces a minimum WPA2 authentication standard for all Wi-Fi connections, blocking connections to WEP or open networks that can be trivially intercepted.",
                     Tags = ["wi-fi", "wpa2", "authentication", "security", "policy"],
@@ -5143,7 +5143,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-disable-random-mac",
                     Label = "Disable Randomised MAC Address for Wi-Fi (Enterprise Mode)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Disables MAC address randomisation on wireless connections to ensure consistent hardware MAC address presentation on corporate networks, which is required by 802.1X/RADIUS authentication and MAC-based network admission control.",
                     Tags = ["wi-fi", "mac-randomisation", "802.1x", "radius", "corporate", "policy"],
@@ -5160,7 +5160,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-disable-wcm-telemetry",
                     Label = "Disable Wireless Connection Manager Telemetry",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Prevents the Windows Connection Manager (WCM) from sending Wi-Fi connection quality metrics and network preference telemetry to Microsoft, protecting corporate network topology information from cloud disclosure.",
                     Tags = ["wi-fi", "wcm", "telemetry", "privacy", "microsoft", "policy"],
@@ -5177,7 +5177,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wificonn-log-connection-events",
                     Label = "Log Wireless Connection and Authentication Events",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Enables detailed logging of wireless connection establishment, authentication success/failure, and disconnection events in the Microsoft-Windows-WLAN-AutoConfig operational log for security auditing.",
                     Tags = ["wi-fi", "audit", "connection-log", "authentication", "policy"],
@@ -5214,7 +5214,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-wifi-sense-policy",
                 Label = "Disable Wi-Fi Sense via Group Policy",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5231,7 +5231,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-hotspot2-roaming",
                 Label = "Disable Hotspot 2.0 / Passpoint Auto-Connect",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5249,7 +5249,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-random-mac",
                 Label = "Disable Random Hardware MAC Address per Network",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5267,7 +5267,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-nla-wifi",
                 Label = "Disable Network Location Awareness Auto-Detect for Wi-Fi",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5285,7 +5285,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-set-wifi-as-metered",
                 Label = "Set Wi-Fi Connections as Metered (Save Data)",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5303,7 +5303,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-bluetooth-interference-avoidance",
                 Label = "Disable Wi-Fi / Bluetooth Coexistence Mode",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5321,7 +5321,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-enable-802-11d",
                 Label = "Enable 802.11d Multi-Country Regulatory Info",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5339,7 +5339,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wifi-disable-peer-to-peer",
                 Label = "Disable Wi-Fi Peer-to-Peer (Wi-Fi Direct Sharing)",
-                Category = "Network",
+                Category = "Network — Voip Quality",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5367,7 +5367,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-wpad",
                     Label = "Disable WPAD Auto-Detection",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets DisableWpad=1 to disable Web Proxy Auto-Discovery (WPAD) for WinHTTP connections system-wide. Prevents the WPAD DNS and DHCP queries that can leak internal network topology. Default: 0 (WPAD enabled).",
                     Tags = ["winhttp", "wpad", "proxy", "network", "security", "policy"],
@@ -5384,7 +5384,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-auto-proxy",
                     Label = "Disable WinHTTP Automatic Proxy",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets EnableAutoProxyResultCaching=0 to disable automatic proxy detection and result caching in WinHTTP. Forces applications using WinHTTP to use only explicitly configured proxies, blocking all auto-proxy behaviour.",
                     Tags = ["winhttp", "auto proxy", "caching", "network", "policy"],
@@ -5401,7 +5401,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-proxy-bypass-local",
                     Label = "Prevent Bypassing Proxy for Local Addresses",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets ProxyBypassLocal=0 to ensure all connections, including those to local network hosts, go through the configured proxy. Default: 1 (local addresses bypass proxy). Useful for strict audit trails.",
                     Tags = ["winhttp", "proxy bypass", "local network", "audit", "policy"],
@@ -5418,7 +5418,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-proxy-auto-config-url",
                     Label = "Block WinHTTP Auto-Config URL",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Removes the AutoConfigURL value under WinHttp policy to ensure no Proxy Auto-Configuration (PAC) file URL is enforced through Group Policy. Clears any admin-deployed auto-config URL that might route traffic unexpectedly.",
                     Tags = ["winhttp", "pac file", "auto config", "proxy", "policy"],
@@ -5435,7 +5435,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-set-connection-timeout",
                     Label = "Set WinHTTP Connection Timeout (30 s)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets DefaultConnectionSettings to enforce a 30-second connection timeout for WinHTTP calls via policy. Prevents hung proxy connections from blocking system services indefinitely. Default: no policy-enforced timeout.",
                     Tags = ["winhttp", "timeout", "connection", "network", "policy"],
@@ -5452,7 +5452,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-set-receive-timeout",
                     Label = "Set WinHTTP Receive Timeout (30 s)",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets ReceiveTimeOut=30000 (ms) to enforce a 30-second receive timeout for WinHTTP responses. Prevents system services from waiting indefinitely for a slow or unresponsive proxy to deliver a response body.",
                     Tags = ["winhttp", "timeout", "receive", "network", "policy"],
@@ -5469,7 +5469,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-ssl-vulnerability-check",
                     Label = "Disable SSL Renegotiation Downgrade in WinHTTP",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets StaticProxyFirewall=1 to tell WinHTTP to treat the proxy connection as a static firewall proxy, disabling reflective SSL renegotiation probes that can expose protocol downgrade vulnerabilities.",
                     Tags = ["winhttp", "ssl", "security", "proxy", "policy"],
@@ -5486,7 +5486,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-auth-scheme-ntlm",
                     Label = "Restrict WinHTTP to Secure Auth Schemes",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets HardCodedProxySetting=2 to prevent WinHTTP from negotiating weaker proxy authentication schemes (e.g., Basic) and limits it to NTLM/Negotiate. Reduces credential exposure across untrusted proxies.",
                     Tags = ["winhttp", "auth", "ntlm", "security", "policy"],
@@ -5503,7 +5503,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-redirect-follow",
                     Label = "Disable WinHTTP Automatic Redirect Follow",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets MaxConnections=0 under proxy policy to prevent WinHTTP from automatically following HTTP redirects through the proxy. Forces applications to handle redirects explicitly, reducing proxy-traversal SSRF exposure.",
                     Tags = ["winhttp", "redirect", "security", "ssrf", "policy"],
@@ -5520,7 +5520,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "whttp-disable-wpad-dns-lookup",
                     Label = "Disable WPAD DNS Lookup Fallback",
-                    Category = "Network",
+                    Category = "Network — Voip Quality",
                     Description =
                         "Sets DisableWpadLookup=1 to disable the DNS-based fallback mechanism used by WPAD (queries for 'wpad.<domain>') when DHCP-based WPAD fails. Prevents DNS-based WPAD name collision attacks.",
                     Tags = ["winhttp", "wpad", "dns", "security", "policy"],
@@ -5547,7 +5547,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-enable-enhanced-protected-mode",
                 Label = "Enable Enhanced Protected Mode for Internet Explorer and WinInet Clients",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5564,7 +5564,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-enforce-tls-protocol-restriction",
                 Label = "Enforce TLS Protocol Version Restrictions to Disable Legacy SSL and TLS Versions",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5581,7 +5581,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-configure-proxy-bypass-for-local",
                 Label = "Configure Proxy Bypass List to Allow Direct Access to Local Intranet Resources",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5598,7 +5598,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-disable-certificate-revocation-soft-fail",
                 Label = "Disable Soft-Fail Certificate Revocation Checking to Enforce Hard Revocation Policy",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5615,7 +5615,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-enable-https-strict-transport-security",
                 Label = "Enable HTTP Strict Transport Security Enforcement in WinInet Stack",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5632,7 +5632,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-block-mixed-content-navigation",
                 Label = "Block Navigation to Mixed HTTP and HTTPS Content in WinInet Applications",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5649,7 +5649,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-disable-automatic-proxy-detection",
                 Label = "Disable Automatic Proxy Detection and WPAD Protocol in WinInet Stack",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5666,7 +5666,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-enforce-certificate-error-handling",
                 Label = "Enforce Strict Certificate Error Handling to Prevent User Override of TLS Errors",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5683,7 +5683,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-restrict-third-party-cookie-access",
                 Label = "Restrict Third-Party Cookie Access to Reduce Cross-Site Tracking in WinInet",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5700,7 +5700,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wininet-disable-legacy-security-zones-modification",
                 Label = "Prevent User Modification of WinInet Security Zone Configuration",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5729,7 +5729,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wins-set-dns-cache-timeout",
                     Label = "WINS: Set DNS Cache Entry Maximum TTL to 1 Hour",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Sets MaxCacheTtl=3600 in DNS client policy. Caps the maximum time a successful DNS resolution result is cached in the Windows DNS resolver cache to 1 hour, regardless of the record's TTL. Longer TTL caches can cause stale A record lookups after IP address changes (failover scenarios, DR tests, cloud load balancer IP rotation). Capping at 1 hour ensures stale records don't persist beyond 1 hour in event of planned or unplanned address changes.",
                     Tags = ["wins", "dns", "cache", "ttl", "failover"],
@@ -5747,7 +5747,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wins-disable-dns-compression",
                     Label = "WINS: Disable DNS Query Payload Compression (Debug Mode)",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Sets DisableCompression=1 in DNS client policy. Disables DNS message compression in outbound DNS queries. DNS compression reduces packet size but, in rare cases, can cause parsing errors with non-RFC-compliant DNS resolvers that implement compression algorithms incorrectly (found in some embedded or appliance DNS proxies). Disabling compression is a diagnostic/debug setting: enable it when troubleshooting DNS query failures with appliance-based DNS servers that behave unexpectedly.",
                     Tags = ["wins", "dns", "compression", "debug", "diagnostic"],
@@ -5765,7 +5765,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wins-enable-smart-multi-homed",
                     Label = "WINS: Enable Smart Multi-Homed DNS Registration",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Sets EnableAutoConfig=1 in DNS client policy. Enables smart multi-homed DNS registration: when a machine has multiple network interfaces, Windows will register only the interface with the best default gateway route rather than registering all adapter IPs. This prevents DNS pollution from VPN temporary IPs, APIPA addresses, and link-local IPv6 addresses appearing in the corporate DNS zone. Smart registration ensures clients resolve to the primary routable IP address of a machine.",
                     Tags = ["wins", "dns", "multi-homed", "registration", "smart"],
@@ -5793,7 +5793,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-projection-to-pc",
                     Label = "Block Wireless Projection To This PC",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Prevents other devices from wirelessly projecting their screen to this PC via Miracast. Eliminates the risk of screen eavesdropping or unauthorised projection in shared spaces. Default: 1 (allow). Recommended: 0 in open environments.",
                     Tags = ["wireless-display", "miracast", "projection", "privacy", "policy"],
@@ -5810,7 +5810,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-require-pin-pairing",
                     Label = "Always Require PIN for Wireless Display Pairing",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Sets PIN requirement to 'Always' (2) for Miracast pairing. Prevents unauthorised devices from connecting without a confirmed PIN exchange. Default: 0 (never). Recommended: 2 (always).",
                     Tags = ["wireless-display", "pin", "pairing", "security", "policy"],
@@ -5827,7 +5827,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-receiver-input",
                     Label = "Block User Input From Wireless Display Receiver",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Prevents keyboard and mouse input from being relayed back to the PC from a wireless display receiver. Stops remote HID injection via a Miracast receiver. Default: 1 (allow). Recommended: 0.",
                     Tags = ["wireless-display", "input", "hid", "receiver", "security", "policy"],
@@ -5844,7 +5844,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-disable-auto-discovery",
                     Label = "Disable Automatic Wireless Display Discovery",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Prevents this PC from automatically discovering and advertising itself to nearby Miracast-capable devices. Reduces exposure on shared networks or public spaces. Default: 1. Recommended: 0.",
                     Tags = ["wireless-display", "discovery", "miracast", "advertisement", "policy"],
@@ -5861,7 +5861,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-infra-projection",
                     Label = "Block Infrastructure-Mode Wireless Projection",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disables Miracast projection via the local Wi-Fi infrastructure (access point). Limits projection to Wi-Fi Direct only, reducing network-based interception surface. Default: 1. Recommended: 0.",
                     Tags = ["wireless-display", "infrastructure", "wifi", "projection", "policy"],
@@ -5878,7 +5878,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-miracast-broadcast",
                     Label = "Block Miracast Broadcast Advertisement",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Prevents this PC from broadcasting Miracast availability beacons. The device is invisible to P2P Miracast senders that rely on broadcast discovery. Default: 1. Recommended: 0 in secure offices.",
                     Tags = ["wireless-display", "broadcast", "miracast", "discovery", "policy"],
@@ -5895,7 +5895,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-ble-pairing",
                     Label = "Disable Bluetooth LE Pairing for Wireless Display",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disallows Bluetooth Low Energy (BLE) as a pairing mechanism for Miracast connections. Reduces BLE attack surface during wireless display setup. Default: 1. Recommended: 0.",
                     Tags = ["wireless-display", "bluetooth", "ble", "pairing", "security", "policy"],
@@ -5912,7 +5912,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-limit-connection-count",
                     Label = "Limit Simultaneous Wireless Display Connections",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Sets the maximum number of simultaneous wireless display connections to 1. Prevents resource exhaustion and limits exposure in multi-user scan environments. Default: not restricted. Recommended: 1.",
                     Tags = ["wireless-display", "connection-limit", "resource", "policy"],
@@ -5929,7 +5929,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-require-wpa2",
                     Label = "Require WPA2 Encryption for Wireless Display",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Enforces WPA2 (or later) encryption for all Miracast Wi-Fi Direct connections. Prevents unencrypted or WEP-protected wireless display sessions. Default: not enforced. Recommended: 1.",
                     Tags = ["wireless-display", "wpa2", "encryption", "security", "policy"],
@@ -5946,7 +5946,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wdsply-block-mdm-input",
                     Label = "Block MDM Input Commands from Wireless Display",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Prevents an MDM management profile delivered via a wireless display receiver from sending input or configuration commands to this device. Closes an MDM-over-Miracast injection vector. Default: 1. Recommended: 0.",
                     Tags = ["wireless-display", "mdm", "input", "injection", "security", "policy"],
@@ -5973,7 +5973,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-auto-connect-to-open",
                 Label = "Prevent Auto-Connect to Open Wireless Networks",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5990,7 +5990,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-hosted-network",
                 Label = "Disable Wireless Hosted Network Creation",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6007,7 +6007,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-require-wpa3",
                 Label = "Require WPA3 for New Wireless Connections",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6024,7 +6024,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-social-wifi",
                 Label = "Disable Wi-Fi Sense Social Network Sharing",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6041,7 +6041,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-wlan-hotspot-auto",
                 Label = "Disable Automatic WiFi Hotspot Activation",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6058,7 +6058,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-block-peer-to-peer-wlan",
                 Label = "Block Peer-to-Peer Wireless (Ad-Hoc) Networks",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6075,7 +6075,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-wifi-roaming-aggressive",
                 Label = "Disable Aggressive WiFi Roaming",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6092,7 +6092,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-enable-wlan-auditing",
                 Label = "Enable WLAN Connection Event Auditing",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6109,7 +6109,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-disable-random-mac",
                 Label = "Disable Random MAC Address for Managed Networks",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6126,7 +6126,7 @@ internal static class PolicyNetworkExt
             {
                 Id = "wlanpol-restrict-wlan-to-approved-ssids",
                 Label = "Restrict Wireless Connections to Approved SSIDs",
-                Category = "Network",
+                Category = "Network — Win Inet",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6153,7 +6153,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-disable-wsd-discovery",
                     Label = "Disable WSD Printer Discovery",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disables Web Services for Devices (WSD) printer discovery on the local network, preventing Windows from automatically detecting and adding WSD-compatible printers via SOAP-based device profile discovery.",
                     Tags = ["wsd", "printing", "discovery", "network", "policy"],
@@ -6170,7 +6170,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-disable-wsd-advertisement",
                     Label = "Disable WSD Printer Advertisement from This Host",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Stops this Windows host from advertising locally-attached printers as WSD devices on the network, hiding accessible printers from other machines performing WSD discovery.",
                     Tags = ["wsd", "printing", "advertisement", "privacy", "policy"],
@@ -6187,7 +6187,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-require-auth-for-wsd-print",
                     Label = "Require Authentication for WSD Print Access",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Requires user authentication before accepting WSD print operations from network clients, preventing unauthorised devices from submitting print jobs via WSD.",
                     Tags = ["wsd", "printing", "authentication", "security", "policy"],
@@ -6204,7 +6204,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-block-wsd-on-public-network",
                     Label = "Block WSD Printer Discovery on Public Networks",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disables WSD printer discovery when the network location profile is set to Public, preventing printer discovery at coffeeshops, airports, or other untrusted networks.",
                     Tags = ["wsd", "printing", "public-network", "security", "policy"],
@@ -6221,7 +6221,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-limit-wsd-metadata-exposure",
                     Label = "Limit WSD Device Metadata Exposure",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Restricts the metadata returned in WSD discovery responses, hiding detailed hardware model, firmware version, and network capability information that could aid reconnaissance.",
                     Tags = ["wsd", "metadata", "privacy", "printing", "policy"],
@@ -6238,7 +6238,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-block-wsd-eventing",
                     Label = "Block WSD Eventing Subscriptions for Printers",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disables WSD eventing subscriptions that allow remote clients to subscribe to printer status events (paper out, error, job complete) via WSD push notifications, reducing unsolicited outbound connections.",
                     Tags = ["wsd", "printing", "eventing", "subscriptions", "policy"],
@@ -6255,7 +6255,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-disable-wsd-scan",
                     Label = "Disable WSD Scan (WSCN) Discovery",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Disables Windows Scan Communication Notifications (WSCN), preventing automatic discovery of WSD-compatible scanner devices over the network.",
                     Tags = ["wsd", "scanner", "wscn", "network", "policy"],
@@ -6272,7 +6272,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-require-tls-for-wsd",
                     Label = "Require TLS for WSD HTTPS Print Communication",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Forces WSD print data transmission to use HTTPS (SOAP over TLS), encrypting WSD messages and preventing plaintext interception of print content and printer control commands.",
                     Tags = ["wsd", "tls", "https", "printing", "security", "policy"],
@@ -6289,7 +6289,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-block-wsd-cross-subnet",
                     Label = "Block WSD Discovery Across Subnets",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Restricts WSD discovery to the local subnet only, preventing WSD multicast probes from being forwarded through routers and reaching printers in distant network segments.",
                     Tags = ["wsd", "printing", "subnet", "network", "policy"],
@@ -6306,7 +6306,7 @@ internal static class PolicyNetworkExt
                 {
                     Id = "wsdprt-audit-wsd-connections",
                     Label = "Enable Audit Logging for WSD Printer Connections",
-                    Category = "Network",
+                    Category = "Network — Win Inet",
                     Description =
                         "Enables event log entries whenever a WSD printer is added, removed, or a print job is submitted via WSD, providing a discovery and usage trail for network printer monitoring.",
                     Tags = ["wsd", "audit-log", "printing", "compliance", "policy"],
@@ -6334,7 +6334,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-prefer-local-responses",
             Label = "Prefer Local DNS Responses Over Cached External",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6353,7 +6353,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-update-top-domain-zones",
             Label = "Allow DNS Updates to Top-Level Domain Zones",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6372,7 +6372,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-use-name-resolution-policy",
             Label = "Enforce Name Resolution Policy Table (NRPT)",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6392,7 +6392,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-attempt-autodial",
             Label = "Disable DNS Auto-Dial Connections",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6412,7 +6412,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-devolution-level",
             Label = "Restrict DNS Devolution Level",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6432,7 +6432,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-disable-hosts-file-resolution",
             Label = "Limit Hosts File Priority in Name Resolution",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -6452,7 +6452,7 @@ internal static class PolicyDNSSecurity
         {
             Id = "net-dns-policy-register-ptr-records",
             Label = "Enable Auto-Registration of PTR Records",
-            Category = "Network",
+            Category = "Network — Win Inet",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Maintenance
         {
             Id = "maint-disable-disk-diagnostics",
             Label = "Disable Disk Diagnostics",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows Disk Diagnostic scenario via WDI policy. Reduces background disk analysis overhead.",
@@ -44,7 +44,7 @@ internal static class Maintenance
         {
             Id = "maint-disable-cleanup-nag",
             Label = "Disable Disk Cleanup Notifications",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -59,7 +59,7 @@ internal static class Maintenance
         {
             Id = "maint-compat-telemetry-minimal",
             Label = "Set Compatibility Telemetry to Minimal",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -74,7 +74,7 @@ internal static class Maintenance
         {
             Id = "maint-disable-scheduled-defrag",
             Label = "Disable Scheduled Defragmentation",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the scheduled drive optimization task. Recommended for SSDs where TRIM is sufficient. Default: enabled.",
@@ -88,7 +88,7 @@ internal static class Maintenance
         {
             Id = "maint-increase-disk-cleanup-sageset",
             Label = "Configure Disk Cleanup for All Categories",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Pre-selects all cleanup categories for Disk Cleanup sageset 0. Enables one-click full cleanup. Default: none selected.",
@@ -123,7 +123,7 @@ internal static class Maintenance
         {
             Id = "maint-sfc-scannow",
             Label = "Run System File Checker (SFC /scannow)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Runs SFC /scannow to scan and repair corrupted Windows system files. One-time repair action.",
@@ -143,7 +143,7 @@ internal static class Maintenance
         {
             Id = "maint-dism-restorehealth",
             Label = "Run DISM RestoreHealth",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -164,7 +164,7 @@ internal static class Maintenance
         {
             Id = "maint-dism-component-cleanup",
             Label = "DISM Component Store Cleanup",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Runs DISM /Cleanup-Image /StartComponentCleanup to remove superseded components and reduce WinSxS folder size.",
@@ -182,7 +182,7 @@ internal static class Maintenance
         {
             Id = "maint-flush-dns",
             Label = "Flush DNS Resolver Cache",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Clears the DNS resolver cache. Useful after changing DNS settings or when resolving stale DNS entries.",
@@ -199,7 +199,7 @@ internal static class Maintenance
         {
             Id = "maint-reset-winsock",
             Label = "Reset Winsock Catalog (netsh)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -218,7 +218,7 @@ internal static class Maintenance
         {
             Id = "maint-reset-ip-stack",
             Label = "Reset TCP/IP Stack (netsh)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Resets the TCP/IP stack to clean defaults. Fixes IP connectivity issues. Requires reboot.",
@@ -236,7 +236,7 @@ internal static class Maintenance
         {
             Id = "maint-registry-autobackup",
             Label = "Enable Automatic Registry Backup",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -271,7 +271,7 @@ internal static class Maintenance
         {
             Id = "maint-clear-recent-docs-on-exit",
             Label = "Clear Recent Documents List on Logoff",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Automatically clears the Recent Documents (MRU) history when the user logs off, preventing access trail accumulation.",
@@ -291,7 +291,7 @@ internal static class Maintenance
         {
             Id = "maint-disable-desktop-cleanup-wizard",
             Label = "Disable Desktop Cleanup Wizard",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the 'Clean up Desktop Wizard' that prompts to remove rarely used desktop icons. Default: enabled.",
@@ -305,7 +305,7 @@ internal static class Maintenance
         {
             Id = "maint-disable-crash-on-audit-fail",
             Label = "Disable Crash-on-Audit-Full (Security)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -329,7 +329,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-auto-restart",
             Label = "Disable Auto-Restart on BSOD",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Stay on BSOD screen instead of auto-rebooting. Helps read stop codes. Default: auto-restart. Recommended: disabled.",
@@ -343,7 +343,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-set-minidump",
             Label = "Set Crash Dump to Minidump",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Save only small minidumps on crash (saves disk). Default: automatic memory dump.",
@@ -357,7 +357,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-wer",
             Label = "Disable Windows Error Reporting",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disable WER service from sending error reports to Microsoft. Default: enabled. Recommended: disabled for privacy.",
@@ -371,7 +371,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-dump-overwrite",
             Label = "Disable Crash Dump Overwrite",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Keep all crash dumps instead of overwriting with latest. Default: overwrite.",
@@ -385,7 +385,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-scripted-diagnostics",
             Label = "Disable Scripted Diagnostics",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disable automatic troubleshooters and scripted diagnostics. Default: enabled.",
@@ -418,7 +418,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-perf-tracking",
             Label = "Disable Performance Tracking (WDI)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disable Windows Diagnostic Infrastructure performance tracking. Default: enabled.",
@@ -452,7 +452,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-error-dialog",
             Label = "Disable Automatic Error Dialog Boxes",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -467,7 +467,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-jit-debugger",
             Label = "Disable Auto-Attach of JIT Debugger",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -482,7 +482,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-wer-no-additional-data",
             Label = "WER: Don't Send Additional Crash Data",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -497,7 +497,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-wer-disable-archive",
             Label = "WER: Disable Local Report Archive",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -512,7 +512,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-wer-min-consent",
             Label = "WER: Send Parameters Only (Minimal Consent)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -527,7 +527,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-online-crash-analysis",
             Label = "Disable Online Crash Analysis",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents crash reports from being sent to Microsoft for online analysis. Default: enabled.",
@@ -541,7 +541,7 @@ internal static class CrashDiagnostics
         {
             Id = "crash-disable-user-mode-crashdump",
             Label = "Disable User-Mode Crash Dumps",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables creation of user-mode crash dump files when applications crash. Saves disk space. Default: dump files created.",
@@ -576,7 +576,7 @@ internal static class TimeSync
         {
             Id = "time-set-cloudflare-ntp",
             Label = "Set NTP Server to Cloudflare time.cloudflare.com",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 3,
@@ -594,7 +594,7 @@ internal static class TimeSync
         {
             Id = "time-increase-sync-interval",
             Label = "Increase NTP Sync Interval to 12 Hours",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -612,7 +612,7 @@ internal static class TimeSync
         {
             Id = "time-decrease-sync-interval",
             Label = "Decrease NTP Sync Interval to 30 Minutes (High Accuracy)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -630,7 +630,7 @@ internal static class TimeSync
         {
             Id = "time-enable-ntp-client",
             Label = "Enable NTP Client (W32Time Provider)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 3,
@@ -648,7 +648,7 @@ internal static class TimeSync
         {
             Id = "time-disable-ntp-server",
             Label = "Disable NTP Server Role (Workstation Only)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -666,7 +666,7 @@ internal static class TimeSync
         {
             Id = "time-set-type-ntp",
             Label = "Set W32Time to Use NTP (Internet Sync)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 3,
@@ -684,7 +684,7 @@ internal static class TimeSync
         {
             Id = "time-increase-max-neg-correction",
             Label = "Increase Max Negative Time Correction to 24 Hours",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 2,
@@ -702,7 +702,7 @@ internal static class TimeSync
         {
             Id = "time-set-crosssite-sync-flags",
             Label = "Set NTP Cross-Site Sync Flags (AllFlags)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -720,7 +720,7 @@ internal static class TimeSync
         {
             Id = "time-set-update-interval",
             Label = "Set W32Time Clock Update Interval (100 000 units = 10 s)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -738,7 +738,7 @@ internal static class TimeSync
         {
             Id = "time-disable-event-logging",
             Label = "Disable W32Time Verbose Event Log",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 1,
@@ -756,7 +756,7 @@ internal static class TimeSync
         {
             Id = "time-set-announce-flags",
             Label = "Set W32Time Announce Flags (Reliable Time Source)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -774,7 +774,7 @@ internal static class TimeSync
         {
             Id = "time-set-hold-period",
             Label = "Set W32Time Hold Period (5 Iterations)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -792,7 +792,7 @@ internal static class TimeSync
         {
             Id = "time-set-local-clock-dispersion",
             Label = "Set Local Clock Dispersion to 10 Seconds",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -810,7 +810,7 @@ internal static class TimeSync
         {
             Id = "time-set-large-phase-offset-threshold",
             Label = "Set Large Phase Offset Threshold to 50 ms",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -828,7 +828,7 @@ internal static class TimeSync
         {
             Id = "time-disable-vmictimeprovider",
             Label = "Disable Hyper-V / VM Integration Time Sync",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -862,7 +862,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-thumbs-network",
             Label = "Disable Thumbnail Cache on Network Folders",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents creation of hidden Thumbs.db files on network shares.",
@@ -885,7 +885,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-delivery-optimisation",
             Label = "Disable Delivery Optimisation (P2P Updates)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables peer-to-peer update sharing which can consume bandwidth and cache disk space.",
@@ -899,7 +899,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-run-disk-cleanup-silent",
             Label = "Run Disk Cleanup (Silent, All Profiles)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -922,7 +922,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-windows-temp",
             Label = "Clear Windows Temp Folder",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -940,7 +940,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-windows-update-cache",
             Label = "Clear Windows Update Download Cache",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -959,7 +959,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-font-cache",
             Label = "Clear Font Cache",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -978,7 +978,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-icon-cache",
             Label = "Clear Icon Cache Database",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -998,7 +998,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-enable-storage-sense",
             Label = "Enable Storage Sense (Automatic Cleanup)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables Storage Sense to automatically free disk space by cleaning temp files and Recycle Bin.",
@@ -1019,7 +1019,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-hibernation",
             Label = "Disable Hibernation (Free hiberfil.sys Space)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1038,7 +1038,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-compact-os",
             Label = "Enable Compact OS (Compress System Files)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1056,7 +1056,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-event-logs",
             Label = "Clear All Windows Event Logs",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -1075,7 +1075,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-reserved-storage",
             Label = "Disable Reserved Storage (7 GB)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1093,7 +1093,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-clear-prefetch",
             Label = "Clear Prefetch Cache",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -1107,7 +1107,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-reduce-recycle-bin-size",
             Label = "Limit Recycle Bin to 5% of Drive",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -1129,7 +1129,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-recent-docs",
             Label = "Disable Recent Documents Tracking",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from recording recently opened documents in Jump Lists and Quick Access.",
@@ -1143,7 +1143,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-search-history",
             Label = "Disable Search History",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows Search from persisting search queries to disk.",
@@ -1157,7 +1157,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-swap-file",
             Label = "Disable Swap File (SysMain paging supplement)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1172,7 +1172,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-auto-maintenance",
             Label = "Disable Automatic Maintenance Wake-ups",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from waking up the computer at night to run maintenance tasks.",
@@ -1186,7 +1186,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-internet-temp-auto",
             Label = "Disable Automatic Deletion of Internet Temp Files",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Internet Explorer/Legacy Edge from automatically emptying the temp cache on browser exit.",
@@ -1200,7 +1200,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-limit-disk-usage-windows-update",
             Label = "Limit Windows Update Download Disk Cache",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Caps the disk space Windows Update can use for its download cache to 1024 MB.",
@@ -1235,7 +1235,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-limit-wer-max-queue",
             Label = "Limit Windows Error Reporting Queue to 1 Report",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1250,7 +1250,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-set-minidump-count-1",
             Label = "Retain Only 1 Kernel Minidump File",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1265,7 +1265,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-crash-filter-pages",
             Label = "Filter Zero Pages from Kernel Crash Dump",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1280,7 +1280,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-installer-rollback",
             Label = "Disable MSI Installer Rollback (Save Disk Space)",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1295,7 +1295,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-limit-restore-points-5pct",
             Label = "Limit System Restore Disk Usage to 5%",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1310,7 +1310,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-activity-history",
             Label = "Disable Windows Activity History / Timeline",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1325,7 +1325,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1340,7 +1340,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-search-removable-index",
             Label = "Disable Search Indexing on Removable Drives",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1355,7 +1355,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-implicit-text-collection",
             Label = "Disable Implicit Text Data Collection",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1370,7 +1370,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-implicit-ink-collection",
             Label = "Disable Implicit Ink/Handwriting Data Collection",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1385,7 +1385,7 @@ internal static class DiskCleanup
         {
             Id = "cleanup-disable-enhanced-diagnostic-data",
             Label = "Disable Enhanced Windows Analytics Diagnostic Data",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1429,7 +1429,7 @@ internal static class Printing
         {
             Id = "printing-driver-isolation",
             Label = "Enable Print Driver Isolation",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Runs third-party print drivers in an isolated process. Prevents a buggy driver from crashing the spooler service.",
@@ -1451,7 +1451,7 @@ internal static class Printing
         {
             Id = "printing-disable-queue-logging",
             Label = "Disable Print Queue Logging",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1466,7 +1466,7 @@ internal static class Printing
         {
             Id = "printing-limit-spooler-memory",
             Label = "Limit Print Spooler Memory",
-            Category = "Maintenance",
+            Category = "Maintenance 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1481,7 +1481,7 @@ internal static class Printing
         {
             Id = "printing-disable-remote",
             Label = "Disable Remote Printing",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1496,7 +1496,7 @@ internal static class Printing
         {
             Id = "printing-print-disable-legacy-mode",
             Label = "Disable Print Spooler Legacy Mode",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1511,7 +1511,7 @@ internal static class Printing
         {
             Id = "printing-disable-driver-isolation",
             Label = "Enforce Printer Driver Isolation",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1526,7 +1526,7 @@ internal static class Printing
         {
             Id = "printing-disable-printer-sharing",
             Label = "Disable Printer Sharing Across Network",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables sharing printers with other network computers. Default: not shared.",
@@ -1540,7 +1540,7 @@ internal static class Printing
         {
             Id = "printing-copy-files-policy",
             Label = "Disable Point and Print Copy Files",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1575,7 +1575,7 @@ internal static class Printing
         {
             Id = "printing-disable-default-mgmt",
             Label = "Disable Windows Manage Default Printer",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1590,7 +1590,7 @@ internal static class Printing
         {
             Id = "printing-disable-spooler-log",
             Label = "Disable Print Spooler Event Logging",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables verbose event logging by the Print Spooler service. Reduces disk I/O from spooler log writes. Default: enabled.",
@@ -1604,7 +1604,7 @@ internal static class Printing
         {
             Id = "printing-emf-despooling",
             Label = "Enable EMF Despooling for Faster Printing",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1619,7 +1619,7 @@ internal static class Printing
         {
             Id = "printing-print-default-paper-a4",
             Label = "Set Default Paper Size to A4",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the default paper size to A4 (international standard). Changes from US Letter default. Default: Letter.",
@@ -1633,7 +1633,7 @@ internal static class Printing
         {
             Id = "printing-disable-print-notifications",
             Label = "Disable Print Job Notifications",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Suppresses toast notifications for print job completion. Default: notifications enabled.",
@@ -1667,7 +1667,7 @@ internal static class Printing
         {
             Id = "printing-disable-lpr-monitor",
             Label = "Disable LPR Port Monitor",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1682,7 +1682,7 @@ internal static class Printing
         {
             Id = "printing-disable-print-workflow-svc",
             Label = "Disable Print Workflow Service",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Print Workflow service used for custom print dialogs in Store apps. Default: manual start.",
@@ -1696,7 +1696,7 @@ internal static class Printing
         {
             Id = "printing-spooler-crash-recovery-off",
             Label = "Disable Spooler Auto-Restart on Crash",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1711,7 +1711,7 @@ internal static class Printing
         {
             Id = "printing-disable-shared-printer-browse",
             Label = "Disable Printer Browsing on Network",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic browsing and publishing of shared printers on the network. Reduces network noise. Default: enabled.",
@@ -1725,7 +1725,7 @@ internal static class Printing
         {
             Id = "printing-disable-web-pnp",
             Label = "Disable Web-Based Printer Plug and Play",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1740,7 +1740,7 @@ internal static class Printing
         {
             Id = "printing-disable-ipp-over-usb",
             Label = "Disable IPP over USB Printing",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1755,7 +1755,7 @@ internal static class Printing
         {
             Id = "printing-enable-client-side-render",
             Label = "Enable Client-Side Print Rendering",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1770,7 +1770,7 @@ internal static class Printing
         {
             Id = "printing-disable-ad-publish",
             Label = "Disable Auto-Publish Printers to Active Directory",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1785,7 +1785,7 @@ internal static class Printing
         {
             Id = "printing-disable-driver-auto-update",
             Label = "Disable Automatic Printer Driver Updates",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1815,7 +1815,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-require-https-ipp-printing",
             Label = "Require HTTPS for Internet Printing Protocol (IPP)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "ipp", "https", "security", "tls", "network"],
@@ -1830,7 +1830,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-print-workflow-service",
             Label = "Disable Print Workflow App Integration",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "workflow", "uwp", "policy", "attack surface"],
@@ -1845,7 +1845,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-wsd-ports",
             Label = "Disable WSD Port Monitor Installation",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "wsd", "port monitor", "security", "lateral movement"],
@@ -1860,7 +1860,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-enable-spooler-audit",
             Label = "Enable Print Spooler Service Audit Events",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "audit", "spooler", "logging", "security"],
@@ -1875,7 +1875,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-package-point-and-print",
             Label = "Disable Package Point-and-Print Non-Admin Install",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "security", "package point and print", "driver", "policy"],
@@ -1910,7 +1910,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-restrict-printer-connection-unsigned",
             Label = "Disallow Connecting to Servers with Unsigned Printer Drivers",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "security", "unsigned", "driver", "policy"],
@@ -1925,7 +1925,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-banner-page",
             Label = "Disable Printer Banner/Separator Page",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "paper", "waste", "eco", "banner page"],
@@ -1940,7 +1940,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-lpr-port",
             Label = "Disable LPR Port Monitor (Legacy Unix Printing)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "lpr", "legacy", "security", "port monitor"],
@@ -1955,7 +1955,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-require-https-spooler",
             Label = "Require HTTPS for Print Spooler Remote Connections",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "spooler", "https", "tls", "security"],
@@ -1971,7 +1971,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-cloud-print",
             Label = "Disable Microsoft Cloud Print (Print to Cloud)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "cloud print", "microsoft", "privacy"],
@@ -1987,7 +1987,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-wsd-multicast-discovery",
             Label = "Disable WSD Multicast Printer Discovery",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "wsd", "discovery", "multicast", "network"],
@@ -2003,7 +2003,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-internet-print-client",
             Label = "Disable Internet Printing Client",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "internet printing", "ipp", "feature", "security"],
@@ -2020,7 +2020,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-wsd-printer-announce",
             Label = "Disable WSD Printer Announce (Host Advertising)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "wsd", "announcement", "network", "privacy"],
@@ -2036,7 +2036,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-driver-update-from-wu",
             Label = "Block Automatic Print Driver Updates via Windows Update",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["printing", "driver", "windows update", "wu", "policy"],
@@ -2052,7 +2052,7 @@ internal static class PrinterAdvanced
         {
             Id = "prnta-disable-inbound-print-spooler",
             Label = "Disable Inbound Remote Print Connections (Spooler Server)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Tags = ["printing", "spooler", "remote", "network", "security"],
@@ -2080,7 +2080,7 @@ internal static class EventLogging
         {
             Id = "evtlog-increase-security-log-size",
             Label = "Increase Security Event Log to 128 MB",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the Security event log maximum size to 128 MB for better audit trail retention.",
@@ -2094,7 +2094,7 @@ internal static class EventLogging
         {
             Id = "evtlog-enable-shutdown-reason",
             Label = "Enable Shutdown Event Tracker",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prompts for a reason when shutting down or restarting the system. Useful for server/audit scenarios.",
@@ -2108,7 +2108,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-event-forwarding",
             Label = "Disable Windows Event Forwarding",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Windows Event Forwarding subscription service. Prevents events from being sent to remote collectors.",
@@ -2125,7 +2125,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-event-tracing-autologger",
             Label = "Disable Autologger Event Tracing Sessions",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables several Autologger ETW sessions that perform background diagnostic tracing.",
@@ -2139,7 +2139,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-powershell-logging",
             Label = "Disable PowerShell Script Block Logging",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables PowerShell script block logging that records all executed scripts to the event log.",
@@ -2160,7 +2160,7 @@ internal static class EventLogging
         {
             Id = "evtlog-enable-powershell-transcription",
             Label = "Enable PowerShell Transcription Logging",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables PowerShell transcription to log all input/output to a file for forensic auditing.",
@@ -2174,7 +2174,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-application-log",
             Label = "Limit Application Event Log Size",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the Application event log maximum size to 1 MB and enables auto-overwrite to free disk space.",
@@ -2196,7 +2196,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-security-audit-logon",
             Label = "Disable Logon Failure Audit",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables auditing of failed logon attempts in the Security event log. Reduces event log spam on unattended machines.",
@@ -2210,7 +2210,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-module-logging",
             Label = "Disable PowerShell Module Logging",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables PowerShell module logging, preventing every module command from being recorded in the event log.",
@@ -2224,7 +2224,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-windows-error-reporting-log",
             Label = "Disable WER Event Log Entries",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Error Reporting from writing crash and hang events to the Application event log.",
@@ -2238,7 +2238,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-setup-log",
             Label = "Limit Setup Event Log Size",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Limits the Setup event log to 1 MB with auto-overwrite, preventing unbounded growth on frequently updated systems.",
@@ -2256,7 +2256,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-forwarded-log",
             Label = "Disable Forwarded Events Log",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2271,7 +2271,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-dns-client-log",
             Label = "Disable DNS Resolver Event Tracing",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables DNS client operational event logging in the Microsoft-Windows-DNS-Client/Operational channel to reduce disk I/O.",
@@ -2306,7 +2306,7 @@ internal static class EventLogging
         {
             Id = "evtlog-disable-kernel-event-tracing",
             Label = "Disable NT Kernel Logger Session",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Sets the NT Kernel Logger ETW session to not auto-start, reducing baseline CPU and disk overhead.",
@@ -2328,7 +2328,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-disk-diagnostics",
             Label = "Disable Disk Diagnostic Scheduled Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the DiskDiagnosticDataCollector that sends disk health data to Microsoft. Default: enabled.",
@@ -2362,7 +2362,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-ngen-log",
             Label = "Disable .NET Framework NGen Log Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2400,7 +2400,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-power-diagnostics",
             Label = "Disable Power Efficiency Diagnostics",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2415,7 +2415,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-task-disable-diagtrack-service",
             Label = "Disable Connected User Experiences Service",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2430,7 +2430,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-task-disable-scheduled-diagnostics",
             Label = "Disable Scheduled Diagnostics Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2465,7 +2465,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-defender-scheduled-scan",
             Label = "Disable Windows Defender Scheduled Full Scan (GPO)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2480,7 +2480,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-mrt-run",
             Label = "Block Malicious Removal Tool Execution",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2495,7 +2495,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-ngen-32",
             Label = "Disable .NET NGEN Pre-JIT Service (32-bit)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2510,7 +2510,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-ngen-64",
             Label = "Disable .NET NGEN Pre-JIT Service (64-bit)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2525,7 +2525,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-app-usage-record",
             Label = "Disable Application Usage Recording (AppCompat)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2540,7 +2540,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-winsat-rating",
             Label = "Block Windows Experience Index (WinSAT) Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2555,7 +2555,7 @@ internal static class ScheduledTasks
         {
             Id = "schtask-disable-autoplay",
             Label = "Disable AutoPlay for All Media and Devices (GPO)",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2579,7 +2579,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-customer-experience",
             Label = "Disable Customer Experience Improvement Program Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2611,7 +2611,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-app-telemetry",
             Label = "Disable Application Telemetry Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2643,7 +2643,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-windows-maps-update",
             Label = "Disable Windows Maps Update Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2671,7 +2671,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-feedback-hub",
             Label = "Disable Feedback Hub Scheduled Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2699,7 +2699,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-disk-diagnostics",
             Label = "Disable Disk Diagnostic Data Collection",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2725,7 +2725,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-office-telemetry",
             Label = "Disable Office Telemetry Scheduled Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2751,7 +2751,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-speech-model-update",
             Label = "Disable Speech Model Auto-Update Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2777,7 +2777,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-device-census",
             Label = "Disable Device Census Telemetry Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2803,7 +2803,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-handwriting-data",
             Label = "Disable Handwriting Data Sharing Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2829,7 +2829,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-cloud-experience",
             Label = "Disable Cloud Experience Host Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2855,7 +2855,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-diagnostic-data-controller",
             Label = "Disable Diagnostic Data Controller Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2883,7 +2883,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-power-efficiency",
             Label = "Disable Power Efficiency Diagnostics Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2909,7 +2909,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-idle-maintenance",
             Label = "Disable Idle Maintenance Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2940,7 +2940,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-defrag-scheduled",
             Label = "Disable Scheduled Defragmentation",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2966,7 +2966,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-location-notification",
             Label = "Disable Location Notification Task",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -2992,7 +2992,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-windows-error-reporting",
             Label = "Disable Windows Error Reporting Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3018,7 +3018,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-family-safety",
             Label = "Disable Family Safety Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3046,7 +3046,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-autochk-rebooter",
             Label = "Disable AutoChk Reboot Notification Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3072,7 +3072,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-license-validation",
             Label = "Disable License Validation Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3098,7 +3098,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-net-framework-ngen",
             Label = "Disable .NET Framework NGEN Tasks",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3124,7 +3124,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-compat-appraiser",
             Label = "Disable Compatibility Appraiser Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3150,7 +3150,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-rac-task",
             Label = "Disable Reliability Monitor (RAC) Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3176,7 +3176,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-program-compat-updater",
             Label = "Disable Program Compatibility Data Updater",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3202,7 +3202,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-wer-queue-reporting",
             Label = "Disable WER Queue Error Reporting Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3228,7 +3228,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-device-info-collector",
             Label = "Disable Device Information Collection Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3254,7 +3254,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-smart-screen-app-id",
             Label = "Disable SmartScreen App-ID Background Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3280,7 +3280,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-mrt-telemetry",
             Label = "Disable MRT Telemetry Heartbeat Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3306,7 +3306,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-defender-cache-maintenance",
             Label = "Disable Defender Cache Maintenance Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ScheduledTask,
@@ -3332,7 +3332,7 @@ internal static class ScheduledTaskTweaks
         {
             Id = "pst-disable-usbceip",
             Label = "Disable USB CEIP Telemetry Task",
-            Category = "Maintenance",
+            Category = "Maintenance 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ScheduledTask,
@@ -3375,7 +3375,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-no-auto-restart",
                 Label = "Disable Forced Auto-Restart",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Prevents Windows from automatically restarting while a user is logged in after update installation.",
@@ -3398,7 +3398,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-set-active-hours-au",
                 Label = "Set Active Hours (8 AM - 11 PM)",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Sets Windows Update active hours to 8 AM - 11 PM to prevent restart during work.",
@@ -3422,7 +3422,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-block-driver-search",
                 Label = "Block Driver Search via Windows Update",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3440,7 +3440,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-os-upgrade",
                 Label = "Disable Windows OS Upgrade via Update",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3455,7 +3455,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-safeguard-hold",
                 Label = "Disable Windows Update Safeguard Holds",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3470,7 +3470,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-optional-updates",
                 Label = "Disable Auto-Install of Optional Updates",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3491,7 +3491,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-set-active-hours-8-20",
                 Label = "Set Windows Update Active Hours (8 AM – 8 PM)",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Sets Windows Update active hours to 8 AM – 8 PM. No restart prompts during this window. Default: auto.",
@@ -3513,7 +3513,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-seeker-updates",
                 Label = "Disable Optional Update Seeker",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Prevents Windows from seeking optional quality updates. Only mandatory updates are installed. Default: seeks all.",
@@ -3527,7 +3527,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-update-notifications",
                 Label = "Disable Update Notifications",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3548,7 +3548,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-update-orchestrator",
                 Label = "Disable Update Orchestrator Service",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -3564,7 +3564,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-wus-medic",
                 Label = "Disable Windows Update Medic Service",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -3580,7 +3580,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-set-schedule-day-saturday",
                 Label = "Schedule Updates for Saturday Installation",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3605,7 +3605,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-set-update-service-manual",
                 Label = "Set Windows Update Service to Manual Start",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -3620,7 +3620,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-require-admin-for-updates",
                 Label = "Require Admin Approval for Update Installation",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3635,7 +3635,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-metered-update-download",
                 Label = "Block Updates on Metered Connections",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3663,7 +3663,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-reboot-required-notification",
                 Label = "Disable Post-Update Reboot Notifications",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3687,7 +3687,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-third-party-preview",
                 Label = "Disable Third-Party Windows Update Preview Consent",
-                Category = "Maintenance",
+                Category = "Maintenance 3",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -3717,7 +3717,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-auto-repair",
                 Label = "Enable Automatic Component-Based Servicing Repair",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3734,7 +3734,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enforce-component-hash-verification",
                 Label = "Enforce Cryptographic Hash Verification for CBS Components",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3751,7 +3751,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-restrict-cbs-offline-servicing",
                 Label = "Restrict CBS Offline Servicing to Authorized Administrators",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3768,7 +3768,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-cbs-cleanup-scheduled",
                 Label = "Enable Scheduled Cleanup of Superseded CBS Components",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3785,7 +3785,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enforce-manifest-signing",
                 Label = "Enforce Digital Signature on CBS Component Manifests",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3802,7 +3802,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-cbs-verbose-logging",
                 Label = "Enable Verbose CBS Logging for Update Failure Diagnostics",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3819,7 +3819,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-set-cbs-store-health-check-interval",
                 Label = "Set Scheduled Interval for CBS Component Store Health Verification",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3836,7 +3836,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-block-unsigned-packages",
                 Label = "Block Installation of Unsigned or Untrusted CBS Packages",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3853,7 +3853,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-restrict-cbs-to-trusted-sources",
                 Label = "Restrict CBS Package Sources to Microsoft Update and WSUS Only",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3870,7 +3870,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-servicing-stack-updates-priority",
                 Label = "Enable Priority Installation of Servicing Stack Updates",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3897,7 +3897,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-deadline-7days",
                     Label = "WU Auto-Restart: Set Engaged Restart Deadline to 7 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EngagedRestartDeadline=7 in WU policy. After a quality update is downloaded, Windows enters 'engaged restart' mode where users are repeatedly notified. "
                         + "This value sets the absolute deadline after which Windows will force a restart regardless of user activity. "
@@ -3917,7 +3917,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-snooze-3days",
                     Label = "WU Auto-Restart: Set Engaged Restart Snooze Interval to 3 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EngagedRestartSnoozeSchedule=3 in WU policy. Controls how frequently Windows re-displays the engaged restart notification after a user dismisses it. "
                         + "Value of 3 means the reminder returns every 3 days, ensuring users don't forget a pending restart while avoiding daily interruptions that lead to notification fatigue and dismissal without action.",
@@ -3935,7 +3935,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-transition-2days",
                     Label = "WU Auto-Restart: Set Engaged Restart Transition Schedule to 2 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EngagedRestartTransitionSchedule=2 in WU policy. Controls how many days after an update becomes ready-to-install that Windows transitions from passive notifications to the more prominent 'engaged restart' mode. "
                         + "Setting this to 2 days means the first two days show soft notifications, after which the full engaged restart UI (with deadline counter) takes over.",
@@ -3953,7 +3953,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-quality-update-deadline-3days",
                     Label = "WU Auto-Restart: Set Quality Update Install Deadline to 3 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ConfigureDeadlineForQualityUpdates=3 in WU policy. Establishes a hard deadline of 3 days from when a quality (security + non-security) update is offered before Windows must restart to install it. "
                         + "For security teams managing patch compliance under CIS or NIST 800-53 patch SLAs, a 3-day restart deadline for quality updates ensures critical CVE patches are active within the compliance window.",
@@ -3971,7 +3971,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-feature-update-deadline-14days",
                     Label = "WU Auto-Restart: Set Feature Update Install Deadline to 14 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ConfigureDeadlineForFeatureUpdates=14 in WU policy. Establishes a 14-day hard deadline from when a feature update is offered before Windows must restart to complete installation. "
                         + "Feature updates are far more disruptive than quality updates (longer restart time, possible app compatibility breaks), so a longer 14-day window gives users and IT departments time to validate and prepare.",
@@ -3989,7 +3989,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-deadline-grace-period-2days",
                     Label = "WU Auto-Restart: Set Post-Deadline Grace Period to 2 Days",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ConfigureDeadlineGracePeriod=2 in WU policy. After the restart deadline passes, this grace period gives users an additional 2 days before the machine will restart outside of active hours. "
                         + "The grace period prevents the deadline enforcement from causing a disruptive forced restart mid-workday as soon as the deadline hits. The machine will restart during the next scheduled non-active hours window within the grace period.",
@@ -4007,7 +4007,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-disable-no-auto-reboot-after-deadline",
                     Label = "WU Auto-Restart: Allow Auto-Reboot After Deadline Expires",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ConfigureDeadlineNoAutoReboot=0 in WU policy. Ensures that once the deadline and grace period pass, Windows WILL automatically restart to apply the update. "
                         + "Value=0 means no moratorium on auto-reboot after the deadline. This overrides any 'NoAutoRebootWithLoggedOnUsers' policy for machines that have exceeded their deadline, ensuring patching is never blocked indefinitely by a persistent logged-on session.",
@@ -4025,7 +4025,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-restart-warning-4hours",
                     Label = "WU Auto-Restart: Set Pre-Restart Warning to 4 Hours",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ScheduleRestartWarning=4 in WU policy. When Windows schedules an automatic restart, this setting controls how many hours in advance users receive a prominent restart warning notification. "
                         + "A 4-hour advance warning gives users time to save work, close applications, and plan the restart, significantly reducing data loss from unexpected restarts.",
@@ -4043,7 +4043,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-enable-auto-restart-required-notification",
                     Label = "WU Auto-Restart: Enable Mandatory Restart Required Notification",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets SetAutoRestartRequiredNotificationDismissal=1 in WU policy. Configures Windows to show a non-dismissable restart required notification when a patch deadline is imminent. "
                         + "Without this, users can indefinitely dismiss restart prompts. With value=1, close-to-deadline notifications must be acknowledged with a concrete restart time selection rather than a simple dismiss.",
@@ -4072,7 +4072,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-disable-auto-install-on-shutdown",
                 Label = "Windows Update Pause: Disable Auto-Install Updates on Shutdown",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Prevents Windows Update from automatically installing updates when the user initiates a shutdown. "
                     + "Auto-install-on-shutdown can extend shutdown times and cause unexpected restarts, especially on laptops before meetings. "
@@ -4093,7 +4093,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-active-hours-start",
                 Label = "Windows Update Pause: Set Active Hours Start (8 AM)",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Configures the Windows Update active hours start time to 8 AM, preventing reboots for updates during business hours. "
                     + "Active hours protect users from unexpected reboots during the configured working hours window. "
@@ -4114,7 +4114,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-active-hours-end",
                 Label = "Windows Update Pause: Set Active Hours End (6 PM)",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Configures the Windows Update active hours end time to 6 PM (18:00), ensuring reboots cannot occur during standard business hours. "
                     + "With start fixed at 8 AM and end at 6 PM, the full working day is protected from forced reboots. "
@@ -4135,7 +4135,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-disable-upgrade-notifications",
                 Label = "Windows Update Pause: Disable Upgrade Notification Toasts",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Suppresses the Windows Update toast notifications that prompt users to restart for pending updates. "
                     + "In a managed environment, restart timing is controlled by IT policy — user-visible prompts are redundant and disruptive. "
@@ -4156,7 +4156,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-update-detection-frequency",
                 Label = "Windows Update Pause: Set Update Detection Frequency (22 Hours)",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets the Windows Update service to check for updates every 22 hours instead of the default automatic random interval. "
                     + "A predictable 22-hour check interval prevents multiple machines on the same network from surging the update server simultaneously. "
@@ -4177,7 +4177,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-allow-mu-updates",
                 Label = "Windows Update Pause: Allow Microsoft Update for Other Products",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Configures Windows Update to also deliver updates for other Microsoft products (Office, .NET, Visual C++) alongside OS patches. "
                     + "Receiving all Microsoft product updates through a single channel simplifies patch management and reduces the attack surface. "
@@ -4198,7 +4198,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-enforce-restart-deadline",
                 Label = "Windows Update Pause: Enforce 72-Hour Restart Deadline",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets a 72-hour mandatory restart deadline after Windows Update installs updates requiring a reboot. "
                     + "Without a deadline, users can indefinitely postpone required restarts, leaving the system vulnerable to active exploits. "
@@ -4233,7 +4233,7 @@ internal static class PolicyUpdate
             {
                 Id = "wuadv-require-update-signature",
                 Label = "Require Code-Signed Updates from WSUS",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4251,7 +4251,7 @@ internal static class PolicyUpdate
             {
                 Id = "wuadv-allow-mu-updates-with-wu",
                 Label = "Enable Microsoft Update (Office + Products) via Windows Update",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4281,7 +4281,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-deny-unidentified-device-installation",
                     Label = "WU Driver: Block Installation of Unidentified Device Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets DenyUnidentifiedDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from installing drivers for hardware devices that are not in the Windows Driver Store and do not have a matching entry in Windows Update. "
                         + "Unidentified devices are a common attack vector — malicious USB devices can present as unknown hardware that auto-installs a malicious driver. This policy requires all devices to have a recognized driver before they can function.",
@@ -4299,7 +4299,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-deny-removable-device-driver-install",
                     Label = "WU Driver: Block Automatic Driver Installation for Removable Devices",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets DenyRemovableDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from automatically installing drivers for any removable device. "
                         + "Removable devices (USB storage, USB hubs, card readers, portable audio devices) are frequently connected in enterprise environments. Without this policy, each new removable device triggers an automatic driver installation from WU, bypassing IT-managed driver sets and potentially installing unsigned or vulnerable drivers.",
@@ -4317,7 +4317,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-enforce-driver-signing-block-unsigned",
                     Label = "WU Driver: Block Installation of Unsigned Device Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets BehaviorOnFailedVerify=2 in Driver Signing policy. Configures Windows to silently block the installation of any device driver that fails digital signature verification. "
                         + "Value 2 = Block (value 1 = Warn, value 0 = Ignore). Blocking unsigned drivers prevents rootkits and malicious kernel-mode code from loading under the guise of a hardware driver. This is a critical defence-in-depth control alongside Secure Boot and HVCI.",
@@ -4335,7 +4335,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-log-driver-install-restriction-events",
                     Label = "WU Driver: Enable Event Logging for Blocked Driver Installations",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets WritePolicy=1 in DeviceInstall\\Restrictions policy. Enables Windows to write an event log entry whenever a device installation is blocked by Device Installation Policy. "
                         + "Without this, blocked installations fail silently, making it impossible to audit what hardware was attempted and blocked. With logging enabled, security teams can monitor for repeated installation attempts which may indicate hardware-based persistence attempts.",
@@ -4353,7 +4353,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-disable-windows-error-reporting-driver",
                     Label = "WU Driver: Disable Driver Crash Data Upload to Microsoft",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets DisableDriverLookup=1 in DeviceInstall\\Restrictions policy. Prevents Windows from looking up driver information and uploading crash data to the Microsoft Windows Error Reporting service when a device driver causes an error. "
                         + "In regulated environments, data sovereignty requirements may prohibit telemetry of driver crash details (device type, hardware ID, crash context) from being transmitted to Microsoft's cloud infrastructure.",
@@ -4371,7 +4371,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-prevent-non-admin-driver-install",
                     Label = "WU Driver: Restrict Driver Installation to Administrators Only",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets PreventInstallationOfDevicesNotDescribedByOtherPolicySettings=1 in DeviceInstall\\Restrictions policy. Sets a default-deny posture for device installation: only devices explicitly permitted by an allowlist policy are installed. All others are blocked. "
                         + "This inverts the default Windows behaviour (allow-by-default) into a deny-by-default stance that requires active IT involvement to introduce any new device type into the environment.",
@@ -4389,7 +4389,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-enable-device-metadata-retrieval-block",
                     Label = "WU Driver: Block Device Metadata Retrieval from Windows Update",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets PreventDeviceMetadataFromNetwork=1 in DeviceInstall policy. Prevents Windows from searching the Windows Update network service for device metadata (device icons, model pages, UWP companion apps). "
                         + "Device metadata retrieval can prompt automatic download of companion apps without explicit user action. In locked-down environments, all device metadata should be pre-staged via WSUS rather than retrieved on-demand from Microsoft servers.",
@@ -4437,7 +4437,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-set-update-notification-level-standard",
                     Label = "WU Notification: Set Update Notification Level to Standard",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets UpdateNotificationLevel=1 in WU policy. Configures the Windows Update notification level presented to users. "
                         + "Level 1 = Standard Notifications (users see action centre notifications and system tray alerts for pending updates). Level 2 = Disable all restart notifications. "
@@ -4456,7 +4456,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-suppress-restart-notification-when-busy",
                     Label = "WU Notification: Suppress Auto-Restart Notifications During Active Use",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets SuppressRestartNotification=1 in WU policy. Instructs Windows to suppress automatic restart notifications while the user is actively using the computer (mouse/keyboard activity detected). "
                         + "This prevents the restart prompt from appearing mid-presentation or mid-call, reducing user frustration while still allowing notifications when the device is idle.",
@@ -4474,7 +4474,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-disable-update-availability-popup",
                     Label = "WU Notification: Disable Update Availability Pop-Up Toast",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets SetAutoRestartNotificationExclusion=1 in WU policy. Disables the 'restart to update' toast notification pop-up that appears in the bottom-right corner of the screen. "
                         + "In enterprise SCCM/Intune-managed environments, the deployment tool provides its own notification and deadline management. The built-in WU toast in these environments creates duplicate, confusing messages that contradict the managed deployment window.",
@@ -4492,7 +4492,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-set-reboot-warning-timeout-15min",
                     Label = "WU Notification: Set Reboot Warning Timeout to 15 Minutes",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets ScheduleImminentRestartWarning=15 in WU policy. Sets the duration of the imminent-restart countdown dialog to 15 minutes. "
                         + "When Windows determines a restart is imminent (e.g., deadline approaching), this countdown gives users exactly 15 minutes to save their work before the restart proceeds. This is shorter than the ScheduleRestartWarning (advance warning hours) and is the 'last chance' save reminder.",
@@ -4510,7 +4510,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-enable-windows-update-log-events",
                     Label = "WU Notification: Enable Verbose Windows Update Event Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EnableDetailedLogging=1 in WU policy. Enables detailed verbose logging of Windows Update events to the Windows Event Log under the WindowsUpdateClient/Operational channel. "
                         + "By default, Windows Update logs minimal information. Detailed logs capture download start/stop, error codes, and deployment decisions, enabling IT to troubleshoot why updates fail, succeed late, or trigger unexpected restarts on specific machines.",
@@ -4528,7 +4528,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-enable-update-health-tools-reporting",
                     Label = "WU Notification: Enable Update Health Tools Status Reporting",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EnableUpdateHealthTools=1 in WU policy. Activates the Update Compliance Health Tools which report patch status, restart compliance, and update health metrics to Azure Monitor, Microsoft Endpoint Manager, or custom OMS workspaces. "
                         + "Without health tools enabled, IT dashboards show no patch status for affected machines, making it impossible to identify non-compliant devices in the estate.",
@@ -4546,7 +4546,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-disable-outdated-browser-notifications",
                     Label = "WU Notification: Disable Outdated Browser/App Update Notifications from WU",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets AllowNonMicrosoftSignedUpdate=0 in WU policy. Prevents Windows Update from delivering and notifying about updates from non-Microsoft third-party publishers via the Microsoft Update service. "
                         + "Third-party update notifications through Windows Update are not needed when dedicated application management tools (SCCM, Intune, Chocolatey) are already used for non-OS software, reducing noise and preventing IT-unmanaged software updates.",
@@ -4575,7 +4575,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wupol-block-internet-wu-locations",
                     Label = "Block Direct Connection to Windows Update Internet Locations",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Forces all update traffic through an internal catalog; prevents the client from contacting Microsoft update servers directly.",
                     Tags = ["windows-update", "internet", "policy", "wsus"],
@@ -4603,7 +4603,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-enable-wsus-server-mode",
                     Label = "WU Scan: Route Update Scanning Through WSUS Server",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets UseWUServer=1 in WU AU policy. Configures the Windows Update client to scan against the WSUS server configured in WUServer, rather than the public Windows Update service. "
                         + "This is the primary switch that activates WSUS-based update management. Without this flag set to 1, WUServer and WUStatusServer URL values are present in the registry but ignored by the WU client, which continues to scan against Microsoft's cloud endpoint.",
@@ -4621,7 +4621,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-enable-intranet-update-service-stats",
                     Label = "WU Scan: Enable Intranet Update Statistics Reporting",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets UseWUServer=1 and IntranetServerInternetOptions=3 in WU AU policy. Configures the WU client to send update scan statistics (detection results, download progress, installation outcomes) to the WSUS status server rather than Microsoft. "
                         + "This populates the WSUS server's reporting database, enabling IT administrators to view an accurate picture of update compliance across the enterprise from the WSUS console.",
@@ -4639,7 +4639,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-set-reboot-launch-timeout-5min",
                     Label = "WU Scan: Set Post-Install Reboot Launch Timeout to 5 Minutes",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets RebootLaunchTimeout=5 and RebootLaunchTimeoutEnabled=1 in WU policy. After updates are installed during a scheduled maintenance window and a restart is required, Windows waits this many minutes before initiating the restart automatically. "
                         + "5 minutes gives any background processes time to complete gracefully while keeping the restart within the maintenance window. Without a timeout, the restart may be postponed indefinitely if a user was actively logged in during the overnight window.",
@@ -4658,7 +4658,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-set-reboot-warning-timeout-30min",
                     Label = "WU Scan: Set Pre-Restart Warning Timeout to 30 Minutes",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets RebootWarningTimeout=30 and RebootWarningTimeoutEnabled=1 in WU policy. Configures Windows to display a countdown restart warning 30 minutes before the scheduled restart. "
                         + "30 minutes provides a comfortable window for users to save work and close applications before the restart. This setting complements ScheduleRestartWarning (hours-in-advance general notice) — the 30-minute warning is the final specific countdown before imminent restart.",
@@ -4686,7 +4686,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-wu-downloads-metered-network",
                     Label = "WU USO: Block Windows Update Downloads on Metered Networks",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets AllowAutoWindowsUpdateDownloadOverMeteredNetwork=0 in WU policy. Prevents Windows Update from automatically downloading update packages when the active network connection is marked as metered. "
                         + "On mobile devices and machines on cellular or satellite connections, unrestricted WU downloads can exhaust data allowances or incur substantial overage charges. This policy applies to both background and foreground download scenarios.",
@@ -4704,7 +4704,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-temporary-enterprise-feature-drops",
                     Label = "WU USO: Block In-Period Temporary Enterprise Feature Drops",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets AllowTemporaryEnterpriseFeatureControl=0 in WU policy. Disables the delivery of optional 'temporary enterprise feature' updates — incremental functionality enhancements that Microsoft ships between major version releases. "
                         + "These in-period feature drops are not security updates and can change application behaviour mid-support-lifecycle. Blocking them keeps the OS in a stable, enterprise-validated state between planned upgrade windows.",
@@ -4722,7 +4722,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-prevent-user-pausing-updates",
                     Label = "WU USO: Prevent Users from Pausing Windows Updates",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets SetDisablePauseUXAccess=1 in WU policy (AU subkey). Removes the 'Pause Updates' option from the Windows Update settings UI. "
                         + "Without this policy, standard users can pause updates for up to 5 weeks, leaving machines unpatched and out of compliance. This is a key control in corporate environments operating under patch management SLAs where user-initiated update deferrals are not permitted.",
@@ -4740,7 +4740,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-recommended-updates-auto-install",
                     Label = "WU USO: Block Automatic Installation of Recommended Updates",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets IncludeRecommendedUpdates=0 in WU policy. Prevents Windows Update from automatically installing 'recommended' updates which include non-security improvements, application updates, and optional Windows features. "
                         + "In enterprise environments, recommended updates should be reviewed and approved through a patch management process rather than automatically deployed, as they can change application behaviour without a security justification.",
@@ -4758,7 +4758,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-featured-software-via-wu",
                     Label = "WU USO: Block Automatic Installation of Featured Software",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets EnableFeaturedSoftware=0 in WU policy. Stops Windows Update from offering and automatically installing 'featured software' — typically free Microsoft utilities, game trials, and promotional apps. "
                         + "Without this setting, WU silently installs marketing-tied software packages that were never requested by the user or IT administrator, increasing the installed application footprint and creating an unexpected change management event.",
@@ -4776,7 +4776,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-policy-driven-other-update-source",
                     Label = "WU USO: Force Policy-Driven Update Source for Other Updates",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Cbs Update",
                     Description =
                         "Sets SetPolicyDrivenUpdateSourceForOtherUpdates=1 in WU policy. Ensures that non-feature, non-quality updates (such as drivers from the 'Other' category in WU) are sourced exclusively through the configured policy-driven update source (WSUS/SCCM). "
                         + "Without this setting, updates in the 'Other' category may still be retrieved directly from Microsoft Update regardless of the WSUS or DeliveryOptimization configuration.",
@@ -4830,7 +4830,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-fax",
                 Label = "Disable Fax Service",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets Fax=1 in the machine Fax policy key under DisabledComponents. "
                     + "Configures Windows Group Policy to mark the Fax service component as disabled at the policy level. "
@@ -4850,7 +4850,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-online-fax",
                 Label = "Disable Online Fax Service",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets OnlineFax=1 in the machine Fax policy key. "
                     + "Prevents users from sending faxes via online fax providers or cloud-based fax services. "
@@ -4870,7 +4870,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-cover-pages",
                 Label = "Disable Fax Cover Pages",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets CoverPages=1 in the machine Fax policy key. "
                     + "Prevents users from attaching cover pages to faxes sent through the Windows fax tool. "
@@ -4890,7 +4890,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-personal-cover-pages",
                 Label = "Disable Personal Fax Cover Pages",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets PersonalCoverPages=1 in the machine Fax policy key. "
                     + "Prevents users from creating or storing personal fax cover page templates ("
@@ -4910,7 +4910,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-recipients",
                 Label = "Disable Fax Recipient Book",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets DisableRecipients=1 in the machine Fax policy key. "
                     + "Removes the 'Select Recipients' feature from the Windows Fax and Scan UI, "
@@ -4930,7 +4930,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-require-send-tapi",
                 Label = "Restrict Fax to TAPI Lines Only",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets TapiOnly=1 in the machine Fax policy key. "
                     + "Forces the Windows Fax service to use only TAPI-registered lines for sending faxes, "
@@ -4950,7 +4950,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-inbound-routing",
                 Label = "Disable Inbound Fax Routing",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets InboundRouting=1 in the machine Fax policy key. "
                     + "Prevents the Windows fax service from routing incoming faxes to user inboxes or email. "
@@ -4970,7 +4970,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-archive",
                 Label = "Disable Fax Archive",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets Archive=1 in the machine Fax policy key. "
                     + "Prevents the Windows fax service from automatically archiving copies of sent and received faxes. "
@@ -4990,7 +4990,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-fax-user",
                 Label = "Disable Fax for Current User",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets Fax=1 in the per-user Fax policy key. "
                     + "Applies the fax disable policy for the current user only, without requiring a machine-wide GPO. "
@@ -5010,7 +5010,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-new-account",
                 Label = "Disable Fax New Account Creation",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Sets NewAccounts=1 in the machine Fax policy key. "
                     + "Prevents users from adding new fax accounts or configuring additional fax connections in Windows. "
@@ -5041,7 +5041,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-web-printing",
                 Label = "Disable Web Printing",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Prevents users from printing to Internet printers over HTTP.",
                 Tags = ["printing", "network", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -5054,7 +5054,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-http-printing",
                 Label = "Disable HTTP Printing",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Disables use of HTTP for connecting to printers on intranet/internet print servers.",
                 Tags = ["printing", "network", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -5067,7 +5067,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-block-spooler-rpc-endpoint",
                 Label = "Block Spooler Remote RPC Endpoint Registration",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Prevents the print spooler from registering with the remote RPC endpoint mapper, reducing remote attack surface.",
                 Tags = ["printing", "security", "group-policy", "hardening", "rpc"],
                 NeedsAdmin = true,
@@ -5080,7 +5080,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-block-kernel-mode-drivers",
                 Label = "Block Kernel-Mode Printer Drivers",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Prevents installation of kernel-mode printer drivers, which can be exploited for privilege escalation.",
                 Tags = ["printing", "security", "group-policy", "hardening", "drivers"],
                 NeedsAdmin = true,
@@ -5093,7 +5093,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-package-point-and-print-only",
                 Label = "Restrict Point and Print to Package-Aware Drivers Only",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Requires Point and Print connections to use only package-aware (.inf-packaged) printer drivers.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -5106,7 +5106,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-pnp-no-warning-on-install",
                 Label = "Require Warning + Elevation for Point and Print Driver Install",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Ensures users are warned and elevation is required when installing Point and Print drivers, mitigating PrintNightmare-class attacks.",
                 Tags = ["printing", "security", "group-policy", "hardening", "uac"],
@@ -5120,7 +5120,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-pnp-require-update-prompt",
                 Label = "Require Elevation for Point and Print Driver Updates",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Forces elevation prompt when connecting to a print server that requires a newer driver version.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -5133,7 +5133,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-print-driver-download",
                 Label = "Disable Automatic Print Driver Download from Windows Update",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Prevents Windows from automatically downloading printer drivers from Windows Update.",
                 Tags = ["printing", "network", "group-policy", "update"],
                 NeedsAdmin = true,
@@ -5146,7 +5146,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-restrict-driver-install-to-admins",
                 Label = "Restrict Printer Driver Installation to Administrators",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description =
                     "Allows only administrators to install printer drivers, preventing non-admins from installing potentially malicious drivers.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
@@ -5160,7 +5160,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-v3-printer-driver",
                 Label = "Disable v3 User-Mode Printer Drivers",
-                Category = "Maintenance",
+                Category = "Maintenance — Cbs Update",
                 Description = "Prevents the use of v3 (user-mode) printer drivers; only v4 (kernel-mode isolated) drivers are allowed.",
                 Tags = ["printing", "security", "group-policy", "drivers"],
                 NeedsAdmin = true,
@@ -5183,7 +5183,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-ipp-everywhere",
                     Label = "Disable IPP Everywhere Driverless Printing",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables the IPP Everywhere driverless printing framework, forcing Windows to rely on traditional printer drivers instead of the universal IPP print path used by modern printers.",
                     Tags = ["ipp-everywhere", "driverless-printing", "printing", "policy"],
@@ -5200,7 +5200,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-cloud-ipp-print",
                     Label = "Block Cloud IPP Print (Universal Cloud Print Path)",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks cloud-relayed IPP print paths that route print jobs through Microsoft cloud infrastructure, ensuring all print jobs are submitted directly to local network printers without cloud relay.",
                     Tags = ["ipp-everywhere", "cloud-print", "printing", "privacy", "policy"],
@@ -5217,7 +5217,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-require-pw-format",
                     Label = "Require PWG Raster Format Validation for IPP Jobs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enforces format validation for PWG Raster print data submitted via IPP Everywhere, rejecting malformed print data that could trigger parsing vulnerabilities in printer firmware.",
                     Tags = ["ipp-everywhere", "pwg-raster", "printing", "security", "policy"],
@@ -5234,7 +5234,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-apple-airprint",
                     Label = "Block Apple AirPrint via IPP Everywhere on Windows",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks the AirPrint protocol layer that allows Apple devices to print to Windows-shared printers using IPP Everywhere, preventing uncontrolled cross-platform printer sharing.",
                     Tags = ["ipp-everywhere", "airprint", "apple", "printing", "policy"],
@@ -5251,7 +5251,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-ipp-infra-service",
                     Label = "Disable IPP Infrastructure Service (Universal Print Relay)",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables the Windows IPP Infrastructure Background Service that routes IPP jobs to printers registered in Microsoft Universal Print, forcing direct queue usage.",
                     Tags = ["ipp-everywhere", "universal-print", "microsoft", "printing", "policy"],
@@ -5268,7 +5268,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-mopria-print",
                     Label = "Block Mopria Print Discovery and Submission",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks the Mopria Alliance standard print path that allows Android and other devices to discover and submit print jobs to Windows-shared printers via Mopria-compliant IPP.",
                     Tags = ["ipp-everywhere", "mopria", "android", "printing", "policy"],
@@ -5285,7 +5285,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-require-tls-12-minimum",
                     Label = "Require TLS 1.2 Minimum for IPP Everywhere HTTPS",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enforces a minimum of TLS 1.2 for IPPS connections used in IPP Everywhere print paths, blocking print traffic over TLS 1.0 or 1.1 which are deprecated and cryptographically weak.",
                     Tags = ["ipp-everywhere", "tls", "security", "printing", "policy"],
@@ -5302,7 +5302,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-pdf-print-path",
                     Label = "Disable IPP Everywhere PDF Print Format Path",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables the PDF-based print format path in IPP Everywhere, preventing Windows from generating PDF documents during the print process which avoids PDF parser vulnerabilities in printer firmware.",
                     Tags = ["ipp-everywhere", "pdf", "print-format", "security", "policy"],
@@ -5319,7 +5319,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-log-ipp-everywhere-jobs",
                     Label = "Enable Audit Logging for IPP Everywhere Print Jobs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enables event log entries for print jobs submitted via the IPP Everywhere path, providing a record of driverless print activity including job source IP and document metadata.",
                     Tags = ["ipp-everywhere", "audit-log", "printing", "compliance", "policy"],
@@ -5336,7 +5336,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-anonymous-ipp-print",
                     Label = "Block Anonymous IPP Everywhere Print Submissions",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks unauthenticated (anonymous) print job submissions via IPP Everywhere, requiring all IPP Everywhere clients to present credentials before print jobs are accepted.",
                     Tags = ["ipp-everywhere", "authentication", "anonymous", "printing", "policy"],
@@ -5363,7 +5363,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-client",
                     Label = "Disable IPP Printing Client",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables the Windows Internet Printing Protocol (IPP) client, preventing Windows from submitting print jobs to network printers using RFC 8011 IPP over TCP/631.",
                     Tags = ["ipp", "printing", "network", "security", "policy"],
@@ -5380,7 +5380,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-enforce-ipp-tls",
                     Label = "Enforce TLS for IPP Print Jobs (IPPS)",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Forces all IPP print jobs to use IPPS (IPP over TLS, port 443/631), preventing print data from being sent in plaintext over the network where it could be intercepted.",
                     Tags = ["ipp", "ipps", "tls", "printing", "security", "policy"],
@@ -5397,7 +5397,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-ipp-everywhere-auto-add",
                     Label = "Block IPP Everywhere Auto-Add Network Printers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Prevents Windows from automatically adding IPP Everywhere printers discovered on the local network via mDNS/Bonjour, stopping printers from being silently added to the system when connecting to a network.",
                     Tags = ["ipp", "ipp-everywhere", "auto-add", "mdns", "printing", "policy"],
@@ -5414,7 +5414,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-require-ipp-auth",
                     Label = "Require Authentication for IPP Print Jobs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Forces authentication for all IPP print jobs submitted to network printers, preventing anonymous IPP printing that could allow unauthorised print access or queue inspection.",
                     Tags = ["ipp", "authentication", "printing", "security", "policy"],
@@ -5431,7 +5431,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-cross-domain-ipp",
                     Label = "Block IPP Printing to Cross-Domain Servers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Restricts IPP printing to print servers within the same domain, preventing print data (which may contain sensitive content) from being submitted to external or untrusted IPP endpoints.",
                     Tags = ["ipp", "domain", "printing", "data-loss-prevention", "policy"],
@@ -5448,7 +5448,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-printer-share",
                     Label = "Disable IPP Printer Sharing Outbound from This Host",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables this host from acting as an IPP print server, stopping Windows from advertising locally configured printers as IPP endpoints that other devices can connect to.",
                     Tags = ["ipp", "printer-sharing", "printing", "security", "policy"],
@@ -5465,7 +5465,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-limit-ipp-max-job-size",
                     Label = "Limit Maximum IPP Print Job Size to 100 MB",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Caps the maximum size of a single IPP print job at 100 MB, preventing denial-of-service attacks that attempt to exhaust disk space or spooler memory via unexpectedly large print jobs.",
                     Tags = ["ipp", "print-job", "dos-protection", "printing", "policy"],
@@ -5482,7 +5482,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-compressed-jobs",
                     Label = "Disable IPP Compressed (GZIP) Job Data",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables compression (gzip/deflate) for IPP print job data, mitigating compression-based timing and oracle attacks against the IPP stream while simplifying spooler job processing.",
                     Tags = ["ipp", "compression", "printing", "security", "policy"],
@@ -5499,7 +5499,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-ipp-mdns-advertisement",
                     Label = "Block IPP Printer mDNS/Bonjour Advertisement",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Prevents this host from broadcasting locally-share printers via mDNS/Bonjour, hiding the presence of connected printers from device discovery on the local network.",
                     Tags = ["ipp", "mdns", "bonjour", "printer-discovery", "privacy", "policy"],
@@ -5516,7 +5516,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-enable-ipp-audit-log",
                     Label = "Enable IPP Print Job Audit Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enables event log entries for IPP print jobs (job start, completion, errors), providing traceability for print operations for security monitoring and compliance.",
                     Tags = ["ipp", "audit-log", "printing", "compliance", "policy"],
@@ -5543,7 +5543,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-printer-publishing",
                     Label = "Disable Automatic Printer Publishing to AD",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PublishPrinters=0 to prevent Windows from automatically publishing printers to Active Directory "
                         + "Directory Services when they are added to the system. Unpublished printers are not discoverable via "
@@ -5562,7 +5562,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-printer-pruning",
                     Label = "Disable Printer Object Pruning from AD",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PruningRetries=0 to disable the printer pruning mechanism that removes stale printer objects "
                         + "from Active Directory when the print server is unreachable. Prevents pruning in environments where "
@@ -5581,7 +5581,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-pruning-interval",
                     Label = "Set Printer Pruning Check Interval",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PruningInterval=480 to check every 8 hours (480 minutes) whether printer objects in Active Directory "
                         + "should be pruned. The default check interval is every 8 hours; a longer interval reduces AD queries "
@@ -5600,7 +5600,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-pruning-priority",
                     Label = "Set Printer Pruning Thread Priority",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PruningPriority=0 to run the printer pruning thread at low priority. "
                         + "Reduces CPU contention from the background AD pruning process on heavily loaded print servers "
@@ -5619,7 +5619,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-log-pruning-events",
                     Label = "Enable Printer Pruning Event Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PruningRetryLog=1 to record printer pruning retry and failure events to the Windows Application event log. "
                         + "Provides audit visibility into AD printer object lifecycle events for SIEM ingestion and printer infrastructure monitoring.",
@@ -5637,7 +5637,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-non-published-printer-access",
                     Label = "Block Access to Non-Published AD Printers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets NonPublishedPrinters=0 to prevent users from connecting to network printers that are not published "
                         + "in Active Directory. Ensures all printer installations go through the AD Directory Services vetting process "
@@ -5656,7 +5656,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-ipp-web-printing",
                     Label = "Disable IPP Web Printing via AD",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DisableWebPrinting=1 to prevent users from installing printers via Internet Printing Protocol (IPP) "
                         + "URLs discovered through Active Directory. Web-based printer installation bypasses network printer "
@@ -5675,7 +5675,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-server-thread-count",
                     Label = "Limit Printer DS Server Thread Count",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets ServerThread=2 to limit the number of concurrent threads used by the spooler for Active Directory "
                         + "printer publishing operations. Reducing thread count lowers CPU usage on print servers with many shared "
@@ -5694,7 +5694,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-enforce-pre-publish-printers",
                     Label = "Enforce Pre-Publication of Printers to AD",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PrePublishPrinters=1 to require printers to be pre-published to Active Directory before they "
                         + "become available to clients. Pre-publishing ensures printer metadata is available for directory browsing "
@@ -5723,7 +5723,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-enforce-driver-isolation",
                     Label = "Enforce Printer Driver Isolation (Separate Process)",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Forces printer drivers to run in isolated processes separate from the spooler service, preventing a buggy or malicious printer driver from crashing or compromising the spooler.",
                     Tags = ["printing", "driver-isolation", "spooler", "security", "policy"],
@@ -5740,7 +5740,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-unsigned-drivers",
                     Label = "Block Installation of Unsigned Printer Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks the installation of printer drivers that do not have a valid WHQL or enterprise certificate signature, preventing malicious or vulnerable unsigned printer drivers from loading.",
                     Tags = ["printing", "unsigned-driver", "security", "whql", "policy"],
@@ -5757,7 +5757,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-limit-driver-install-to-admin",
                     Label = "Restrict Printer Driver Installation to Administrators Only",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Requires administrator privileges to install any new printer driver, preventing standard users from adding potentially exploitable printer drivers via easy-to-add printer workflows.",
                     Tags = ["printing", "driver-install", "admin", "security", "policy"],
@@ -5774,7 +5774,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-v3-kernel-drivers",
                     Label = "Disable Legacy V3 Kernel-Mode Printer Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Disables legacy V3 (kernel-mode) printer drivers, allowing only V4 user-mode drivers which run isolated from the kernel and reduce the risk of privilege escalation via printer drivers.",
                     Tags = ["printing", "v3-driver", "kernel-mode", "security", "policy"],
@@ -5791,7 +5791,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-network-driver-download",
                     Label = "Block Automatic Printer Driver Download from Network",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Blocks Windows from automatically downloading printer drivers from remote print servers or Windows Update when a new printer is detected, requiring manual driver installation.",
                     Tags = ["printing", "auto-driver-download", "network", "security", "policy"],
@@ -5808,7 +5808,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-enable-enhanced-point-and-print",
                     Label = "Enable Enhanced Point and Print Restriction",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enables enhanced Point and Print restrictions requiring that drivers originate from an approved printer server list, preventing attackers from serving malicious drivers via rogue print servers.",
                     Tags = ["printing", "point-and-print", "security", "policy"],
@@ -5825,7 +5825,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-driver-update-prompt",
                     Label = "Disable Automatic Printer Driver Update Prompts",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Suppresses automatic driver update prompts from existing printer drivers via Windows Update, preventing unexpected printer driver updates that could introduce vulnerabilities.",
                     Tags = ["printing", "driver-update", "windows-update", "policy"],
@@ -5842,7 +5842,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-driver-staging-from-drivers-folder",
                     Label = "Block Driver Installation from Drivers Folder Without Inbox",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Prevents printer drivers from being installed from the Windows Drivers directory without being in the inbox driver store, blocking attack paths that stage evil drivers into the Drivers folder.",
                     Tags = ["printing", "driver-staging", "security", "policy"],
@@ -5859,7 +5859,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-printer-driver-dcom",
                     Label = "Disable DCOM Access for Printer Driver Processes",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Prevents printer driver host processes from making DCOM calls to other processes, reducing lateral movement risk if a printer driver process is compromised.",
                     Tags = ["printing", "dcom", "driver-isolation", "security", "policy"],
@@ -5876,7 +5876,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-log-driver-install-events",
                     Label = "Enable Audit Logging for Printer Driver Installs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Enables security audit events whenever a printer driver is installed, updated, or removed, providing a log trail for detecting unauthorized driver installation activity.",
                     Tags = ["printing", "audit-log", "driver-install", "security", "policy"],
@@ -5903,7 +5903,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-pointed-print-warnings",
                 Label = "Enforce Point and Print Security Warnings",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5920,7 +5920,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-v3-driver-priority",
                 Label = "Disable V3 Printer Driver Package-Aware Priority",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5937,7 +5937,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-restrict-print-server-list",
                 Label = "Restrict Point and Print to Approved Servers",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5954,7 +5954,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-print-driver-updates",
                 Label = "Disable Automatic Print Driver Updates via Windows Update",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5971,7 +5971,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-printer-extension",
                 Label = "Disable Printer Extension Apps",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -5988,7 +5988,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-rpc-over-namedpipes",
                 Label = "Disable Print Spooler RPC over Named Pipes",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6015,7 +6015,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-client-printer-redirect",
                     Label = "Printer Redirection: Disable Client Printer Redirection in RDS Sessions",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets fDisableCam=1 in Terminal Services policy. Prevents client printers from being automatically mapped into Remote Desktop Services sessions. When client printer redirection is enabled, every printer installed on the client machine is mapped into the RDS session as a session-specific printer. In large VDI deployments this creates hundreds of ghost printer objects per session host, causing significant spooler memory consumption, slow logon (each session must enumerate and map client printers), and instability. For environments where users should only print to central print servers, disabling client printer redirection is the recommended configuration.",
                     Tags = ["rds", "printer-redirection", "vdi", "rdp", "logon-speed"],
@@ -6033,7 +6033,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-enable-easy-print",
                     Label = "Printer Redirection: Enable Remote Desktop Easy Print Driver",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets UseUniversalPrinter=1 in Terminal Services policy. Enables the Remote Desktop Easy Print driver as the primary driver for redirected client printers. When Easy Print is enabled, redirected client printers use a single universal print driver on the session host rather than requiring the client's specific printer driver to be installed on every session host server. This eliminates the printer driver management burden of server-side driver installation: a 200-server RDS farm no longer needs every printer driver for every model used by clients. The Easy Print driver communicates rendering instructions to the client, which uses its own installed driver.",
                     Tags = ["rds", "easy-print", "universal-driver", "printer-redirection", "vdi"],
@@ -6051,7 +6051,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-set-printer-redirection-timeout-60s",
                     Label = "Printer Redirection: Set Printer Redirection Timeout to 60 Seconds",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PrinterRedirectionTimeout=60 in Terminal Services policy. Sets the maximum wait time during session logon for redirected printers to become available. When client printer redirection is enabled, the session host waits for the RDP printer redirection channel to report all client printers before proceeding with logon. On slow WAN connections, printer enumeration over RDP can take tens of seconds. If the session host waits indefinitely, logon appears to hang. Setting a 60-second timeout ensures logon proceeds even if some client printers fail to enumerate, preventing printer redirection from delaying session startup.",
                     Tags = ["rds", "printer-redirection", "timeout", "logon-speed", "rdp"],
@@ -6069,7 +6069,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-xps-redirection",
                     Label = "Printer Redirection: Disable XPS Printer Redirection",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DisableXpsRedirection=1 in Terminal Services policy. Prevents the Microsoft XPS Document Writer virtual printer from being redirected into user sessions. The XPS Document Writer is a file-generation virtual printer: when a user 'prints' to it, a .XPS file is created on the user's local machine. In RDS sessions, redirected XPS printing places XPS files on the user's local machine through the RDP file system redirection channel. This creates a data exfiltration path: users on session hosts with sensitive application data can 'print' documents as XPS files and take them home. Disabling XPS redirection closes this path.",
                     Tags = ["rds", "xps-printer", "data-exfiltration", "restriction", "virtual-printer"],
@@ -6087,7 +6087,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-restrict-auto-printer-creation",
                     Label = "Printer Redirection: Restrict Automatic Session Printer Creation to Default Only",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets LoadDriversForDefaultPrinterOnly=1 in Terminal Services policy. Limits automatic printer creation in RDS sessions to the client's default printer only, rather than all client printers. Mapping every client printer into every session is the primary cause of session host spooler memory exhaustion in large VDI farms. A user with 5 printers on their client machine causes 5 session-specific printer entries on every session host they connect to. 'Default printer only' mode preserves the one-click printing experience for the user's preferred printer while eliminating the overhead of mapping every lesser-used printer.",
                     Tags = ["rds", "printer-auto-creation", "default-printer", "vdi", "performance"],
@@ -6105,7 +6105,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-pdf-printer-redirect",
                     Label = "Printer Redirection: Disable PDF Printer Redirection in RDS",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DisablePDFRedirection=1 in Terminal Services policy. Prevents the Microsoft Print to PDF virtual printer from being redirected into RDS sessions. Microsoft Print to PDF, like XPS, is a file-generation virtual printer that creates PDF files on the user's local machine via the RDP file system redirection channel. This is an equally effective data exfiltration path: users can take sensitive documents from session hosts as PDF files. Enterprise DRM-protected documents that cannot be copied via clipboard or USB may still be 'printed' to local PDF files through this channel.",
                     Tags = ["rds", "pdf-printer", "data-exfiltration", "dlp", "virtual-printer"],
@@ -6123,7 +6123,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-enable-bidirectional-communication",
                     Label = "Printer Redirection: Enable Bidirectional Printer Communication",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets BidiComm=1 in Terminal Services policy. Enables bidirectional (bidi) printer communication for redirected printers in RDS sessions. Bidi communication allows the session to query the printer's current status — toner levels, paper jam conditions, available paper sizes, and duplexing capability — from within the session. Without bidi, users cannot see printer status from their RDS session and the print driver cannot adapt to the printer's available options. Bidi requires the Easy Print driver path and the client to support bidi reporting.",
                     Tags = ["rds", "bidi", "printer-status", "toner", "bidirectional"],
@@ -6141,7 +6141,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-set-max-redirected-printers-5",
                     Label = "Printer Redirection: Limit Redirected Printers Per Session to 5",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets MaxRedirectedPrinters=5 in Terminal Services policy. Caps the maximum number of client printers that can be redirected into a single RDS session. Without this limit, a user with 20+ printers installed (e.g., a power user with many VPN-connected branch printers) will have all 20 mapped into every session — consuming substantial memory and logon time on the session host server. Limiting to 5 redirected printers covers virtually all legitimate printing needs while preventing excessive session host resource consumption from clients with large printer inventories.",
                     Tags = ["rds", "printer-limit", "session", "performance", "resource"],
@@ -6159,7 +6159,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-use-compression-for-print-data",
                     Label = "Printer Redirection: Enable Compression for Redirected Print Data",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets CompressPrintData=1 in Terminal Services policy. Enables compression of print job data transmitted through the RDP printer redirection channel. Print job data (especially EMF) can be highly compressible — text-heavy documents may compress by 80%+. Without compression, printing large documents over WAN-connected RDS sessions consumes significant RDP session bandwidth. With compression enabled, the RDP virtual channel compresses the print data stream before transmission, reducing the bandwidth and time required to print large documents over slow connections.",
                     Tags = ["rds", "print-compression", "bandwidth", "wan", "rdp"],
@@ -6177,7 +6177,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-allow-only-easy-print-fallback",
                     Label = "Printer Redirection: Use Easy Print as Exclusive Fallback Driver",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets FallbackToEasyPrint=1 in Terminal Services policy. Configures RDS to use the Easy Print driver as the exclusive fallback when the client printer's specific driver is not installed on the session host. Without this setting, if the specific printer driver is absent, redirection may fail entirely or attempt to download the driver automatically. With FallbackToEasyPrint enabled, any printer whose driver is not on the server falls back to Easy Print — ensuring the printer is always usable even if not optimally configured. Eliminates 'Printer unavailable' errors from driver-absent conditions.",
                     Tags = ["rds", "easy-print", "fallback-driver", "printer-availability", "rdp"],
@@ -6207,7 +6207,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-purge-jobs-on-restart",
                     Label = "Print Job Management: Purge All Print Jobs on Spooler Restart",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets PurgeJobsOnRestart=1 in JobManagement policy. Clears all pending print jobs from all print queues when the Print Spooler service restarts. By default, the spooler preserves queued jobs across restarts, which can cause problems when a restarted spooler encounters corrupted spool files (EMF or RAW) from a failed previous session — leading to an infinite loop where the spooler starts, crashes processing a bad job, and restarts. Purging on restart ensures the spooler always starts with a clean queue. Lost jobs must be resubmitted by users.",
                     Tags = ["print-job", "spooler-restart", "queue-purge", "stability", "recovery"],
@@ -6225,7 +6225,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-max-spool-file-size-1gb",
                     Label = "Print Job Management: Set Maximum Spool File Size to 1 GB",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets MaxSpoolFileSize=1073741824 in JobManagement policy (1 GB in bytes). Sets the maximum allowed size for individual print spool files. Without a spool file size limit, a single print job (e.g., a 10,000-page CAD print run or a large PDF) can generate a spool file that consumes all available disk space on the print server, starving all other users' jobs. 1 GB is sufficient for most large-format print jobs while protecting against runaway spool generation. Jobs exceeding the limit are rejected with a 'Spool file too large' error.",
                     Tags = ["print-job", "spool-file", "disk-space", "limit", "print-server"],
@@ -6243,7 +6243,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enable-separator-page",
                     Label = "Print Job Management: Enable Separator Page Between Print Jobs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets UseSeparatorPage=1 in JobManagement policy. Enables job separator pages (banner pages) between print jobs. A separator page is a printed page inserted before each job containing: user name, date, time, and job ID. In shared printer environments, separator pages allow users to find their document among others' output in the printer tray output bin. Without separator pages, documents from multiple users in a busy shared printer pile together, causing users to accidentally take others' confidential documents — a physical information disclosure risk.",
                     Tags = ["print-job", "separator-page", "banner-page", "physical-security", "shared-printer"],
@@ -6261,7 +6261,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-job-expiry-8hours",
                     Label = "Print Job Management: Expire Unprinted Jobs After 8 Hours",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets JobExpiryHours=8 in JobManagement policy. Automatically removes print jobs that have been queued but not processed (printed) within 8 hours. Jobs can accumulate in a queue when a printer is taken offline, goes into an error state, or is deliberately paused. Without expiry, a queue can accumulate hundreds of stale jobs — some of which may contain sensitive documents submitted by users who no longer need them. 8 hours aligns with a standard business day — a job submitted in the morning and not printed by end of day is auto-purged.",
                     Tags = ["print-job", "expiry", "queue-management", "security", "cleanup"],
@@ -6279,7 +6279,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-disable-interactive-print-sharing",
                     Label = "Print Job Management: Disable Interactive Console Print Sharing",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DisableInteractivePrinterSharing=1 in Printers policy. Prevents users from interactively sharing printers through the Windows Printer Properties dialog. Without this restriction, any local user can share their local printer to the network — creating unmanaged, unmonitored print shares that bypass central print server controls. Printer sharing should only be managed through Group Policy printer deployment or by administrators. Unmanaged printer shares can also have misconfigured permissions, allowing unauthenticated network print access.",
                     Tags = ["print-job", "printer-sharing", "management", "control", "network"],
@@ -6297,7 +6297,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enforce-default-queue-priority",
                     Label = "Print Job Management: Enforce Default Queue Priority Level (49)",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DefaultPriority=49 in JobManagement policy. Sets the default print job priority to 49 (scale of 1-99, where 99 is highest). When a user does not specify a priority or when they have priority escalation rights, print jobs default to priority 49. This ensures administrators can designate executive or time-critical queues with priority 50+ that will always preempt standard user jobs. Without a defined default, systems may inherit OS defaults that vary between Windows versions, making priority management unpredictable.",
                     Tags = ["print-job", "priority", "queue-management", "fairness", "scheduling"],
@@ -6315,7 +6315,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-spool-directory-to-secured",
                     Label = "Print Job Management: Set Secure Spool Directory ACL Enforcement",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets SecureSpoolDirectory=1 in JobManagement policy. Enables ACL enforcement on the print spool directory (%SystemRoot%\\System32\\spool\\PRINTERS). By default this directory has permissive ACLs that allow any authenticated user to read or delete spool files. Spool files contain the raw or EMF rendering of documents being printed — reading them is equivalent to reading the document. With SecureSpoolDirectory enabled, only the SYSTEM account and print administrators can read spool files. Standard users cannot access other users' spool files.",
                     Tags = ["print-job", "spool-directory", "acl", "file-security", "information-disclosure"],
@@ -6333,7 +6333,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-disable-printer-status-popup",
                     Label = "Print Job Management: Disable Print Status Notification Popups",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets DisablePrinterstatusNotifications=1 in JobManagement policy. Prevents the print status notification system tray balloon and popup messages from appearing when a print job completes successfully. In enterprise environments with high print volumes, completed print job notifications are a source of notification fatigue — users who print dozens of documents per day receive an equal number of transient notifications that they learn to dismiss immediately. Disabling successful-completion notifications reduces noise; error notifications (failure, out of paper) are separately configurable and should remain enabled.",
                     Tags = ["print-job", "notifications", "user-experience", "task-bar", "status"],
@@ -6351,7 +6351,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enable-emf-spool-format",
                     Label = "Print Job Management: Use Enhanced Metafile (EMF) Spooling Format",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets UseEMFSpool=1 in JobManagement policy. Configures the print spooler to spool print jobs in Enhanced Metafile (EMF) format rather than the RAW (device-ready) format. EMF spooling returns control to the application faster — the application finishes its print call as soon as the EMF commands are written to the spool file, rather than waiting for the full rasterisation to the printer's native format. The spooler then renders EMF to RAW in the background. Faster application hand-off is the primary benefit; the trade-off is that EMF rendering errors are deferred to the spooler.",
                     Tags = ["print-job", "emf", "spool-format", "performance", "application-responsiveness"],
@@ -6369,7 +6369,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-block-untrusted-printer-fonts",
                     Label = "Print Job Management: Block Untrusted Fonts in Print Jobs",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Ipp Everywhere",
                     Description =
                         "Sets BlockUntrustedFonts=1 in JobManagement policy. Blocks loading of fonts from untrusted sources within print job processing. The Windows font parsing subsystem has historically been a high-value attack target — multiple CVEs involve malformed fonts causing kernel memory corruption during parsing. Print jobs submitted from remote clients can contain embedded fonts. By blocking fonts that are not installed in the trusted Windows font store, the attack surface for font-based exploitation via print jobs is reduced. Print jobs with embedded, untrusted fonts may render with fallback system fonts.",
                     Tags = ["print-job", "font", "untrusted-fonts", "kernel", "security"],
@@ -6397,7 +6397,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-mmc",
                 Label = "Disable Print Management MMC Console",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6414,7 +6414,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-driver-autoinstall",
                 Label = "Disable Printer Driver Auto-Install",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6431,7 +6431,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-default-mgmt",
                 Label = "Disable Default Printer Management",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6448,7 +6448,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-queue-sharing",
                 Label = "Disable Print Queue Sharing",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6465,7 +6465,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-print-pdf-rdp",
                 Label = "Disable Print to PDF from RDP",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6482,7 +6482,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-telemetry",
                 Label = "Disable Print Management Telemetry",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6499,7 +6499,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-discovery",
                 Label = "Disable Printer Discovery",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6516,7 +6516,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-xps-writer",
                 Label = "Disable Microsoft XPS Document Writer",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6533,7 +6533,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-internet-printing",
                 Label = "Disable Internet Printing",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6550,7 +6550,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-cloud-print-sharing",
                 Label = "Disable Cloud Print Sharing",
-                Category = "Maintenance",
+                Category = "Maintenance — Ipp Everywhere",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6579,7 +6579,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-spooler-on-non-print-servers",
                     Label = "Print Queue: Disable Print Spooler Service on Non-Print Servers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableSpooler=1 in Printers policy. Disables the Print Spooler service on machines that are not designated print servers. The Print Spooler service has been the subject of critical vulnerabilities including PrintNightmare (CVE-2021-34527) and SpoolFool (CVE-2022-22718). Every machine running the spooler is a potential target. Domain controllers, application servers, and most workstations do not need to act as print servers. Disabling the spooler on these machines eliminates the entire attack surface — the only cost is that users cannot share their local printers with other network users from that machine.",
                     Tags = ["print-spooler", "printnightmare", "cve-2021-34527", "security", "attack-surface"],
@@ -6597,7 +6597,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-require-rpc-authentication",
                     Label = "Print Queue: Require RPC Authentication for Printer Client Connections",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets RpcUseNamedPipeProtocol=1 in Printers/RPC policy. Requires authenticated named pipe (rather than anonymous TCP) for RPC connections to print servers. Unauthenticated or weakly-authenticated RPC endpoints allow attackers to send RPC calls to printers without valid credentials — exploitable by several PrintNightmare-era attack chains. By requiring authenticated named pipe transport, each print spooler RPC call is associated with a verified security principal, enabling access control and audit logging of all print server interactions.",
                     Tags = ["print-rpc", "authentication", "named-pipe", "security", "printnightmare"],
@@ -6615,7 +6615,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-web-based-printing",
                     Label = "Print Queue: Disable Web-Based Printer Queue Management",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableWebBasedPrinting=1 in Printers policy. Disables the Internet Information Services (IIS)-based web print queue management interface that allows users to manage print jobs via a browser on port 80. The web-based print management component requires IIS and opens an additional HTTP listener. In enterprise environments, print queue management is performed by IT via the Print Management MMC snap-in. Exposing a web interface for print queue management on domain print servers creates an unnecessary attack surface on the internal network.",
                     Tags = ["print", "web-printing", "iis", "attack-surface", "hardening"],
@@ -6633,7 +6633,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-enable-spooler-event-logging",
                     Label = "Print Queue: Enable Print Spooler Event Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets EnableEventLogging=1 in Printers policy. Enables detailed event logging in the Microsoft-Windows-PrintService/Operational event channel. Print spooler events record: job submitted, job printed, job failed, driver installed, printer added, printer deleted. Without this logging, detecting abuse of the print spooler (lateral movement, privilege escalation attempts, sensitive document printing) is impossible. The operational log is disabled by default to reduce log volume — enabling it on high-value machines (DCs, app servers, HR workstations) provides a forensic trail.",
                     Tags = ["print-spooler", "event-log", "audit", "monitoring", "forensics"],
@@ -6651,7 +6651,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-auto-download-of-drivers",
                     Label = "Print Queue: Disable Automatic Download of Printer Drivers from Windows Update",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableWindowsUpdateDriverSearching=1 in Printers policy. Prevents the Print Spooler from automatically downloading and installing printer drivers from Windows Update when a new printer is detected. Automatic driver downloads from Windows Update bypass the enterprise software approval process: the driver may not be tested in the organisation's environment, may contain outdated firmware, or might be a supply-chain compromised update. Enterprise environments should pre-stage approved drivers in driver stores and deploy them via Group Policy or Intune.",
                     Tags = ["printer-driver", "windows-update", "auto-download", "approval", "security"],
@@ -6669,7 +6669,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-enable-lpd-service-logging",
                     Label = "Print Queue: Enable Line Printer Daemon Service Audit Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets EnableLpdLogging=1 in Printers policy. Enables audit logging for the Line Printer Daemon (LPD) service when it is installed. LPD is the Unix/Linux print protocol listener (TCP port 515) that allows Unix-style lpr/lpq clients to submit print jobs to Windows print servers. LPD lacks authentication and is disabled by default on Windows Server, but legacy environments that enable it for Unix/Linux compatibility should maintain an audit log of all LPD print submissions. The log provides the source IP, user name, and document name for every LPD print job.",
                     Tags = ["lpd", "lpr", "print-audit", "unix-print", "logging"],
@@ -6697,7 +6697,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-point-and-print-unrestricted",
                 Label = "Disable Unrestricted Point and Print Driver Installation",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -6714,7 +6714,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-restrict-point-and-print-servers",
                 Label = "Restrict Point and Print to Approved Print Server List",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6731,7 +6731,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-spooler-remote-rpc",
                 Label = "Disable Remote Print Spooler RPC Connections",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -6748,7 +6748,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-web-printing-communication",
                 Label = "Disable Windows Internet Printing Protocol Communication",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6765,7 +6765,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-redirect-print-spool-directory",
                 Label = "Restrict Print Spooler Directory to Non-System Drive",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6782,7 +6782,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-spool-named-pipe",
                 Label = "Disable Print Spooler Named Pipe Access for Non-Admins",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6799,7 +6799,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-enable-detailed-spool-audit-events",
                 Label = "Enable Detailed Audit Events for Print Spooler Operations",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6816,7 +6816,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-to-file",
                 Label = "Disable Print to File Functionality for Standard Users",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6833,7 +6833,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-enforce-print-driver-signing",
                 Label = "Enforce Digital Signature Verification for Printer Drivers",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6860,7 +6860,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-disable-mxdc-rendering",
                     Label = "Disable MXDC Package Rendering in Print Spooler",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Disables the Microsoft XPS Document Converter (MXDC) rendering path in the spooler, blocking an attack vector where malicious XPS documents exploit the spooler RPC interface.",
                     Tags = ["spooler", "xps", "mxdc", "security", "policy"],
@@ -6877,7 +6877,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-disable-printer-browse-list",
                     Label = "Disable Printer Browse List on Domain",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Disables the automatic browse list that advertises available printers across a domain, reducing network discovery noise and preventing spooler-based reconnaissance.",
                     Tags = ["spooler", "printing", "browsing", "domain", "policy"],
@@ -6894,7 +6894,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-block-print-to-xps",
                     Label = "Block Print to XPS Document Writer",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Blocks the Microsoft XPS Document Writer virtual printer, preventing users from saving print jobs to XPS format files and closing the XPS writer spooler attack surface.",
                     Tags = ["spooler", "xps", "virtual-printer", "security", "policy"],
@@ -6911,7 +6911,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-block-lpt-port-printing",
                     Label = "Block LPT Parallel Port Printer Access",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Blocks the spooler from accessing LPT (parallel port) printer connections, removing a legacy attack surface on systems that do not have or use parallel port printers.",
                     Tags = ["spooler", "lpt", "parallel-port", "legacy", "policy"],
@@ -6928,7 +6928,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-disable-com-port-printing",
                     Label = "Block COM Serial Port Printer Access",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Blocks the spooler from accessing COM (serial port) printer connections, removing legacy serial printing capability that is not needed on modern systems.",
                     Tags = ["spooler", "com-port", "serial-port", "legacy", "policy"],
@@ -6945,7 +6945,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-block-outbound-spool-jobs",
                     Label = "Block Outbound Print Job Forwarding from This Machine",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Prevents this Windows machine from forwarding print jobs to remote printers via the spooler, an attack path used to steal NTLM credentials (printer capture attacks).",
                     Tags = ["spooler", "printing", "ntlm-capture", "security", "policy"],
@@ -6962,7 +6962,7 @@ internal static class PolicyPrint
                 {
                     Id = "spladv-disable-spooler-inbound-access",
                     Label = "Disable Inbound Print Spooler RPC Access",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Disables the inbound RPC interface on the Print Spooler, preventing remote machines from submitting print jobs to this machine via the spooler, closing another PrintNightmare-family attack vector.",
                     Tags = ["spooler", "rpc", "security", "printnightmare", "policy"],
@@ -6990,7 +6990,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtspool-require-signed-copy-files",
                     Label = "Require Signed Copy Files for PnP Printers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description = "Restricts printer driver copy-files during PnP association to only allow digitally signed drivers.",
                     Tags = ["print-spooler", "copy-files", "pnp", "signed-driver", "security"],
                     NeedsAdmin = true,
@@ -7006,7 +7006,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtspool-pnp-no-trusted-servers",
                     Label = "Disable Trusted Print Server Exemption for Point and Print",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description = "Removes the trusted print server list exemption, requiring admin-level approval for ALL Point and Print servers.",
                     Tags = ["print-spooler", "point-and-print", "trusted-servers", "security"],
                     NeedsAdmin = true,
@@ -7022,7 +7022,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtspool-pnp-no-forest-trust",
                     Label = "Disable Forest-Level Trust for Point and Print",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description = "Disables the implicit trust granted to print servers in the same Active Directory forest for Point and Print.",
                     Tags = ["print-spooler", "point-and-print", "forest", "ad", "trust", "security"],
                     NeedsAdmin = true,
@@ -7038,7 +7038,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtspool-pnp-elevate-driver-install",
                     Label = "Require Elevation When Installing New Printer Drivers via PnP",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description = "Forces a UAC elevation prompt when a new printer driver is installed via Point and Print.",
                     Tags = ["print-spooler", "point-and-print", "uac", "elevation", "install", "security"],
                     NeedsAdmin = true,
@@ -7070,7 +7070,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-spooler-service",
                 Label = "Disable Print Spooler Service (Non-Print Servers/Workstations)",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -7088,7 +7088,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-spooler-remote-rpc",
                 Label = "Disable Remote Print Spooler RPC (CVE-2021-1675 Mitigation)",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7107,7 +7107,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-printer-driver-download",
                 Label = "Disable Automatic Printer Driver Download from Windows Update",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7139,7 +7139,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-mxdw-pdf-writer",
                 Label = "Disable Microsoft XPS Document Writer (MXDW) Printer",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -7157,7 +7157,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-log-spooler-events",
                 Label = "Enable Print Spooler Event Logging",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7185,7 +7185,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-print-spooler-cleanup-on-idle",
                 Label = "Enable Automatic Print Spooler Cleanup When Print Queue Is Idle",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7202,7 +7202,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enforce-immediate-spool-file-deletion",
                 Label = "Enforce Immediate Deletion of Print Spool Files After Job Completion",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7219,7 +7219,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-restrict-orphan-spool-file-retention",
                 Label = "Restrict Retention of Orphaned Print Spool Files to Mandatory Cleanup Period",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7236,7 +7236,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-secure-spool-file-overwrite",
                 Label = "Enable Secure Multi-Pass Overwrite for Print Spool File Deletion",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7253,7 +7253,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-audit-spool-directory-access",
                 Label = "Enable Audit Logging for Print Spool Directory File System Access Events",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7270,7 +7270,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-restrict-spool-directory-permissions",
                 Label = "Restrict File System Permissions on Print Spool Directory to Minimum Required Access",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7287,7 +7287,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-block-spool-file-access-by-network",
                 Label = "Block Remote Network Access to Print Spooler Spool File Directory",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7304,7 +7304,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-spool-service-hardening",
                 Label = "Enable Additional Security Hardening for Print Spooler Service Operation",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -7321,7 +7321,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-configure-spool-file-encryption",
                 Label = "Configure Encryption for Print Spool Files on Disk at Rest",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -7338,7 +7338,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-disable-persistently-cached-print-jobs",
                 Label = "Disable Persistent Caching of Print Jobs in Print Spool for Offline Recovery",
-                Category = "Maintenance",
+                Category = "Maintenance — Print Queue",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -7367,7 +7367,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-print-ticket-validation",
                     Label = "Print Ticket: Enable Print Ticket Schema Validation",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets ValidatePrintTickets=1 in PrintTicket policy. Enables XML schema validation of Print Tickets before they are processed by the print driver. A Print Ticket is an XML document that describes the desired print job settings (paper size, colour mode, duplex, media type). Malformed or crafted Print Tickets with invalid XML — including oversized attribute values or deeply nested structures — can trigger XML parser vulnerabilities in GDI/XPS rendering code. Enabling validation rejects malformed Print Tickets before they reach the vulnerable parsing code, reducing the attack surface for print-job-based exploits.",
                     Tags = ["print-ticket", "xml", "validation", "security", "schema"],
@@ -7385,7 +7385,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-xps-rendering-sandbox-bypass",
                     Label = "Print Ticket: Disable XPS Rendering Sandbox Bypass",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableXpsRenderingBypass=1 in PrintTicket policy. Prevents applications from bypassing the XPS rendering pipeline sandbox. When a print job is sent as XPS data (from an application using the XPS Document Interface), the rendering is performed in a sandboxed low-privilege process. Some applications or malicious payloads can attempt to invoke a direct rendering path that bypasses the sandbox — processing XPS content with the full privilege of the calling process. Enabling this setting forces all XPS rendering through the sandboxed pipeline regardless of the caller's request.",
                     Tags = ["print-ticket", "xps", "sandbox", "security", "rendering"],
@@ -7403,7 +7403,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-restrict-print-ticket-namespace",
                     Label = "Print Ticket: Restrict Print Ticket XML Namespaces to Approved List",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets RestrictCustomNamespaces=1 in PrintTicket policy. Restricts Print Ticket XML namespaces to the standard Print Schema namespace plus explicitly approved vendor extensions. Print Tickets support vendor-defined custom XML namespaces for proprietary printer features. A maliciously crafted Print Ticket can include a large number of custom namespace declarations, causing the XML parser to resolve namespaces recursively (XML namespace expansion attack) or consume excessive memory. Restricting namespaces to known-good ones eliminates this attack vector.",
                     Tags = ["print-ticket", "xml-namespace", "security", "print-schema", "restriction"],
@@ -7421,7 +7421,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-wsd-printer-discovery-logging",
                     Label = "Print Ticket: Enable WSD Printer Discovery Logging",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets WsdDiscoveryLogging=1 in PrintTicket policy. Enables logging of Web Services on Devices (WSD) printer discovery events. WSD is the network printer discovery protocol used by Windows to automatically find and install network printers. WSD discovery responses are XML documents parsed by the Windows printer subsystem. Logging WSD discovery events provides visibility into which printers the system detected, which printers were installed automatically, and whether any unexpected WSD responses were received — useful for detecting rogue printer injection attacks where an attacker's device responds to WSD probes with a malicious printer description.",
                     Tags = ["wsd", "printer-discovery", "logging", "network", "security"],
@@ -7439,7 +7439,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-auto-wsd-install",
                     Label = "Print Ticket: Disable Automatic WSD Printer Installation",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableAutoWsdInstall=1 in Printers policy. Prevents Windows from automatically installing WSD-discovered printers without user confirmation or administrator intervention. WSD auto-install reads the printer's XML device description and installs a print driver automatically. An attacker on the local network can broadcast crafted WSD printer advertisements causing Windows to auto-install drivers from rogue printers — if the driver installation triggers a code execution vector (custom driver DLL), the auto-install path is exploitable without any user interaction. Disabling auto-install prevents unsolicited printer additions.",
                     Tags = ["wsd", "auto-install", "printer", "security", "rogue-printer"],
@@ -7457,7 +7457,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-set-max-print-ticket-size-64kb",
                     Label = "Print Ticket: Set Maximum Print Ticket XML Size to 64 KB",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets MaxPrintTicketSize=65536 in PrintTicket policy (bytes). Sets the maximum allowed size for a Print Ticket XML document to 64 KB. A legitimate Print Ticket for a printer with comprehensive feature support (media handling, finishing, stapling options, colour profiles) is typically 5-15 KB. There is no legitimate reason for a Print Ticket to be larger. Oversized Print Tickets that exceed the limit are rejected before being passed to the XML parser — preventing XML bomb attacks (exponential entity expansion) or other size-based parser exploits that would attempt to process megabytes of XML through a kernel component.",
                     Tags = ["print-ticket", "xml-size", "dos", "security", "parser"],
@@ -7475,7 +7475,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-capability-schema-enforcement",
                     Label = "Print Ticket: Enforce PrintCapabilities Schema on Driver Provider",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets EnforceCapabilitySchema=1 in PrintTicket policy. Requires print drivers to provide a schema-conformant PrintCapabilities document when queried by the print subsystem. PrintCapabilities is the XML document that describes what a printer can do (available media types, print qualities, finishing options). Some legacy drivers return malformed or empty PrintCapabilities responses causing the Windows XPS/Print Schema layer to fall back to guessed defaults or crash. Enforcing schema compliance causes drivers returning invalid PrintCapabilities to produce a validation error rather than passing corrupt XML further into the stack.",
                     Tags = ["print-ticket", "print-capabilities", "driver", "schema", "validation"],
@@ -7493,7 +7493,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-network-scan-to-print",
                     Label = "Print Ticket: Disable Network Scan-to-Print Direct Integration",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets DisableScanToPrint=1 in PrintTicket policy. Disables the Windows Scan-to-Print direct integration feature that allows WSD-enabled multi-function printers to push scanned documents directly into the Windows print queue for automatic printing. Direct scan-to-print integration accepts document data from network devices without user-initiated authentication. An attacker with access to the local network who can simulate a WSD scanner can push arbitrary document data into the print pipeline by impersonating a scannner. Disabling this feature requires users to initiate scan operations from Windows Fax and Scan or third-party software.",
                     Tags = ["scan-to-print", "wsd", "network-scanner", "security", "injection"],
@@ -7511,7 +7511,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-allow-only-v4-xps-print-path",
                     Label = "Print Ticket: Allow Only V4 XPS Print Path for Network Printers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets EnforceXpsPrintPath=1 in PrintTicket policy. Restricts network printer connections to the v4 XPS print path exclusively. The v4 XPS print path processes all print jobs through the GDI-to-XPS conversion path, running in an isolated XPS rendering host. The legacy v3 GDI direct print path processes documents in the context of the calling application or SYSTEM — a code execution vulnerability in the rendering path is much higher privilege. Enforcing the XPS path for network printers ensures malicious print data processed from network sources is contained in the lower-privilege XPS host.",
                     Tags = ["print-ticket", "v4-driver", "xps-path", "security", "isolation"],
@@ -7529,7 +7529,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-restrict-print-ticket-processing-to-users",
                     Label = "Print Ticket: Restrict Print Ticket Processing to Authorised User Sessions",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Sets RestrictToUserSessions=1 in PrintTicket policy. Restricts Print Ticket processing to originate only from authenticated user sessions (interactive or service sessions with a valid user token). Print Tickets submitted without an associated user session token (e.g., from an anonymous service account or through a NULL session SMB path) are rejected. This prevents attackers from submitting print jobs anonymously that would be processed with SYSTEM-level privileges in the spooler. All legitimate print submissions in enterprise environments originate from authenticated user accounts.",
                     Tags = ["print-ticket", "authentication", "session", "security", "anonymous"],
@@ -7559,7 +7559,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-enable-protected-print-mode",
                     Label = "Enable Windows Protected Print Mode",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Enables Windows Protected Print (WPP) mode, which restricts printing to only Windows-protected printer drivers that are signed and certified by Microsoft. Prevents malicious print drivers.",
                     Tags = ["wpp", "printing", "protected-print", "driver-security", "windows-11"],
@@ -7579,7 +7579,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-block-legacy-print-drivers",
                     Label = "Block Legacy (Non-WPP) Print Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Prevents Windows from loading or using non-WPP print drivers. Only drivers explicitly certified under the Windows Protected Print certification program are permitted to run.",
                     Tags = ["wpp", "printing", "driver-block", "legacy-driver", "security"],
@@ -7599,7 +7599,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-require-driver-signature",
                     Label = "Require Driver Signature Verification for Print Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Enforces cryptographic signature verification for all print drivers prior to loading. Drivers without a valid Microsoft-issued signature are rejected, even in a non-WPP environment.",
                     Tags = ["wpp", "printing", "driver-signing", "code-integrity", "security"],
@@ -7618,7 +7618,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-disable-driver-installation-from-user",
                     Label = "Prevent Users from Installing Print Drivers",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Restricts print driver installation to administrators only. Standard users cannot add printers with non-WPP drivers via the Windows print management UI or mapped drives.",
                     Tags = ["wpp", "printing", "driver-install", "user-restriction", "security"],
@@ -7638,7 +7638,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-audit-driver-load-events",
                     Label = "Audit Print Driver Load Events",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Enables audit logging for all print driver load operations. Events include driver name, installer identity, and whether the load was permitted or denied by WPP policy.",
                     Tags = ["wpp", "printing", "driver-audit", "event-log", "compliance"],
@@ -7657,7 +7657,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-block-raw-printing",
                     Label = "Block RAW Format Print Job Submission",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Prevents applications from submitting RAW-format print jobs, which bypass the Windows print rendering pipeline and can embed arbitrary data. WPP requires rendering through the IPP stack.",
                     Tags = ["wpp", "printing", "raw-print", "ipp", "security"],
@@ -7677,7 +7677,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-restrict-remote-print-driver-install",
                     Label = "Block Remote Print Driver Installation via RPC",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Prevents print drivers from being remotely installed via the Print Spooler RPC interface. Remote driver installation was exploited by PrintNightmare (CVE-2021-1675); WPP mode disables this endpoint.",
                     Tags = ["wpp", "printing", "rpc", "print-spooler", "printnightmare", "cve"],
@@ -7697,7 +7697,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-require-ipp-protocol-only",
                     Label = "Restrict Print Communication to IPP Protocol Only",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Configures the Windows print stack to communicate with printers using Internet Printing Protocol (IPP) only, blocking legacy LPR and SMB-based print protocols that WPP does not support.",
                     Tags = ["wpp", "printing", "ipp", "protocol", "security"],
@@ -7717,7 +7717,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-disable-printer-redirection-rdp",
                     Label = "Disable Client-Side Print Redirection in Remote Desktop",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Prevents local printers from being redirected and made available in Remote Desktop sessions. Eliminates the risk of untrusted WPP-non-compliant client drivers being exposed to an RDS server.",
                     Tags = ["wpp", "printing", "rdp", "print-redirection", "remote-desktop"],
@@ -7737,7 +7737,7 @@ internal static class PolicyPrint
                 {
                     Id = "wpp-enable-spooler-process-isolation",
                     Label = "Enable Print Spooler Process Isolation",
-                    Category = "Maintenance",
+                    Category = "Maintenance — Print Queue",
                     Description =
                         "Configures the Windows Print Spooler to run third-party print processors and drivers in isolated job-scoped processes rather than within the main spooler process. Limits the blast radius of a compromised driver.",
                     Tags = ["wpp", "printing", "process-isolation", "spooler", "security"],

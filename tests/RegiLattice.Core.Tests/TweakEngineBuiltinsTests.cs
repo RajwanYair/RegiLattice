@@ -88,22 +88,26 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Security")] // was Hardening + Firewall → Security
-    [InlineData("Developer")] // was Developer + Package Management + Java + PowerShell
-    [InlineData("System")] // was Performance + Memory + Startup + Services
-    [InlineData("Maintenance")] // was Disk Cleanup + Event Logging + Scheduled Tasks + Printing
-    [InlineData("Windows 11")] // was Debloat + App Compatibility + Widgets + Notifications + Taskbar + Search
-    [InlineData("Network")] // was Network + Network Optimization + Proxy & VPN
-    [InlineData("Performance")] // was Power → Performance (renamed v6.12)
-    [InlineData("Storage")] // was SSD Optimization + Backup & Recovery + System Restore
+    [InlineData("Security")] // base category + subcategories (v6.13 split)
+    [InlineData("Developer")] // base category + subcategories
+    [InlineData("System")] // split into numbered subcategories
+    [InlineData("Performance")]
+    [InlineData("Storage")]
     [InlineData("User Account")]
-    [InlineData("Browser")] // was Browser Common + Chrome + Firefox + Edge
     [InlineData("Privacy")]
-    [InlineData("Display")] // was Display + Desktop Customization + GPU / Graphics
-    [InlineData("Peripherals")] // was USB & Peripherals + Bluetooth
-    [InlineData("AI / Copilot")]
+    [InlineData("Display")] // split into numbered subcategories
+    [InlineData("Peripherals")]
+    [InlineData("Cloud Storage")]
+    [InlineData("Encryption")]
+    [InlineData("Communication")]
+    [InlineData("Remote Desktop")]
+    [InlineData("Virtualization")]
+    [InlineData("Office")]
+    [InlineData("Input")]
     public void RegisterBuiltins_CategoryExists(string category)
     {
+        // After v6.13 category split, some base categories still exist; others were split into subcategories.
+        // This test verifies that at least the listed base categories are present.
         Assert.Contains(category, _engine.Categories());
     }
 
@@ -206,11 +210,12 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     public void RegisterBuiltins_HasDisplayCategory() => Assert.Contains("Display", _engine.Categories());
 
     [Fact]
-    public void RegisterBuiltins_Display_HasAtLeast40Tweaks()
+    public void RegisterBuiltins_Display_HasAtLeast20Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
+        // After v6.13 category split, base "Display" retains ~28 tweaks; subcategories have the rest.
         Assert.True(byCat.ContainsKey("Display"));
-        Assert.True(byCat["Display"].Count >= 40, $"Expected ≥40 Display tweaks, got {byCat["Display"].Count}");
+        Assert.True(byCat["Display"].Count >= 20, $"Expected ≥20 Display tweaks, got {byCat["Display"].Count}");
     }
 
     // System Optimization → Performance → System (v6.1.0 consolidation)
@@ -218,11 +223,12 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     public void RegisterBuiltins_HasSystemCategory() => Assert.Contains("System", _engine.Categories());
 
     [Fact]
-    public void RegisterBuiltins_System_HasAtLeast28Tweaks()
+    public void RegisterBuiltins_System_HasAtLeast10Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
+        // After v6.13 category split, base "System" retains ~21 tweaks; subcategories have the rest.
         Assert.True(byCat.ContainsKey("System"));
-        Assert.True(byCat["System"].Count >= 28, $"Expected ≥28 System tweaks, got {byCat["System"].Count}");
+        Assert.True(byCat["System"].Count >= 10, $"Expected ≥10 System tweaks, got {byCat["System"].Count}");
     }
 
     // ── Performance ─────────────────────────────────────────────────────
@@ -1014,11 +1020,11 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     // ── Categories are registered (appear in engine.Categories()) ────────
 
     [Theory]
-    [InlineData("Gaming")] // was "Xbox / Game Bar" — merged into Gaming
+    [InlineData("Gaming 1")] // was "Gaming" — split into Gaming 1/2
     [InlineData("User Account")] // was "Windows Hello" — merged into User Account
     [InlineData("Security")] // was "Smart App Control" — merged into Security
     [InlineData("Performance")] // was "Energy Saver" — merged into Performance (renamed v6.12)
-    [InlineData("AI / Copilot")] // was "Copilot+ Features" — merged into AI / Copilot
+    [InlineData("AI / Copilot 1")] // was "AI / Copilot" — split into AI / Copilot 1/2
     public void Module_CategoryIsRegisteredInEngine(string categoryName)
     {
         var engine = BuildEngine();
@@ -1256,7 +1262,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Browser")] // was "Browser Policy" — merged into Browser
+    [InlineData("Browser 1")] // was "Browser" — split into Browser 1/2
     public void EdgePolicyGroupA_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
@@ -1417,7 +1423,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Browser")] // was "Browser Policy" — merged into Browser
+    [InlineData("Browser 1")] // was "Browser" — split into Browser 1/2
     public void EdgePolicyGroupB_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -1256,7 +1256,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-no-burning-machine",
                 Label = "Disable CD/DVD Burning (Machine-Wide)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets NoBurning=1 in the Windows CDBurning policy key for all users on this machine. "
                     + "Removes the 'Burn to Disc' option from Explorer and prevents the built-in burning wizard from launching. "
@@ -1275,7 +1275,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-no-burning-user",
                 Label = "Disable CD/DVD Burning (Current User)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets NoCDBurning=1 in the per-user Explorer policy key. "
                     + "Removes the disc-burning shell extension for the current user without machine-wide enforcement. "
@@ -1294,7 +1294,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-no-burning-explorer-lm",
                 Label = "Hide CD Burning in Explorer (Machine Policy)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets NoCDBurning=1 in the machine-scoped Explorer policy key. "
                     + "Suppresses the burn-to-disc task pane and context menu item in Explorer for all users. "
@@ -1313,7 +1313,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-block-cdrom-execute",
                 Label = "Block CD-ROM Execute (AutoRun)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets Deny_Execute=1 in the CD-ROM device class policy. "
                     + "Prevents direct execution of content from CD-ROM drives via the removable storage access layer. "
@@ -1332,7 +1332,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-block-dvd-read",
                 Label = "Block DVD Read Access",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets Deny_Read=1 in the DVD/BD removable storage device class policy (GUID {53f56307}). "
                     + "Prevents all read access to DVD and Blu-ray drives. "
@@ -1351,7 +1351,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-block-dvd-execute",
                 Label = "Block DVD Execute (AutoRun)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets Deny_Execute=1 in the DVD device class policy. "
                     + "Prevents the system from auto-executing content directly from DVD drives via the removable storage access layer. "
@@ -1370,7 +1370,7 @@ internal static class PolicyStorage
             {
                 Id = "cdbp-no-autoplay-nonvolume",
                 Label = "Suppress AutoPlay for Non-Volume Optical Media",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets NoAutoplayfornonVolume=1 in the machine Explorer policy. "
                     + "Prevents Windows from automatically opening or showing the AutoPlay dialog when non-volume media "
@@ -1400,7 +1400,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-enable-quota-policy",
                     Label = "Enable NTFS Disk Quota via Windows NT Policy Tree",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables NTFS disk quota tracking via the Windows NT policy registry path, activating per-user storage monitoring on all NTFS volumes in support of managed quota enforcement.",
                     Tags = ["disk-quota", "ntfs", "storage", "quota-policy", "policy"],
@@ -1417,7 +1417,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-enforce-hard-limit-policy",
                     Label = "Enforce Disk Quota Hard Limit via Policy",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enforces disk quota limits as hard caps via the NT policy registry path, so that users exceeding their quota limit receive disk-full errors and cannot write additional data.",
                     Tags = ["disk-quota", "enforce", "hard-limit", "ntfs", "policy"],
@@ -1434,7 +1434,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-log-exceed-policy",
                     Label = "Log Event on Quota Limit Exceeded via NT Policy",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables event log generation when a user exceeds their disk quota limit, via the NT policy registry path, creating an audit record under the System event log.",
                     Tags = ["disk-quota", "event-log", "exceed", "audit", "policy"],
@@ -1451,7 +1451,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-log-threshold-policy",
                     Label = "Log Event on Quota Warning Threshold Reached via NT Policy",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables event log generation when a user reaches the disk quota warning threshold via the NT policy registry path, providing advance notice before hard quota is reached.",
                     Tags = ["disk-quota", "event-log", "warning", "threshold", "policy"],
@@ -1468,7 +1468,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-suppress-balloon-notify",
                     Label = "Suppress Disk Quota Balloon Notification to Users",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents the Windows balloon notification from appearing in the notification area when a user approaches or exceeds their disk quota, suppressing end-user prompts that cannot be action-ably resolved without IT involvement.",
                     Tags = ["disk-quota", "balloon", "notification", "ux", "policy"],
@@ -1485,7 +1485,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-disable-quota-properties-tab",
                     Label = "Remove Quota Properties Tab from Drive Properties",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Removes the Quota tab from the drive Properties dialog for non-administrator users, preventing visibility or modification of quota settings outside of Group Policy managed configuration.",
                     Tags = ["disk-quota", "properties-tab", "ui", "standard-user", "policy"],
@@ -1502,7 +1502,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-block-per-volume-override",
                     Label = "Block Per-Volume Quota Setting Override by Administrators",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents local administrators from modifying disk quota settings on individual volumes, ensuring that the centrally configured quota policy via Group Policy cannot be overridden at the local machine level.",
                     Tags = ["disk-quota", "per-volume", "lockdown", "gpo", "policy"],
@@ -1519,7 +1519,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-display-quota-in-free-space",
                     Label = "Display Quota Remaining as Free Space in Explorer",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Configures Explorer to show a user's remaining quota allowance as the reported free disk space, preventing confusion where a user sees 100 GB free on a 500 GB drive but is personally limited to 5 GB.",
                     Tags = ["disk-quota", "free-space", "explorer", "ux", "policy"],
@@ -1536,7 +1536,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-apply-to-mapped-drives",
                     Label = "Apply Disk Quota Tracking to Mapped Network Drives",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Extends disk quota tracking to mapped network drives (drive letter shares), so that per-user storage limits are also enforced when users write to network-mapped drives.",
                     Tags = ["disk-quota", "mapped-drives", "network", "storage", "policy"],
@@ -1553,7 +1553,7 @@ internal static class PolicyStorage
                 {
                     Id = "dquota-restrict-quota-report-export",
                     Label = "Restrict Disk Quota Report Export to Administrators Only",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents standard users from exporting or printing disk quota reports that contain per-user storage consumption data, protecting user privacy and preventing disclosure of storage usage patterns.",
                     Tags = ["disk-quota", "report", "export", "privacy", "policy"],
@@ -1580,7 +1580,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-enable-quota",
                     Label = "Enable NTFS Disk Quotas",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Activates disk quota tracking on all NTFS volumes. Without quotas enabled, individual users can consume an unlimited amount of disk space. Enabling quotas allows enforcement of per-user storage limits. Default: disk quotas disabled. Recommended: 1 on shared machines and file servers.",
                     Tags = ["disk", "quota", "ntfs", "storage", "policy"],
@@ -1597,7 +1597,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-enforce-quota-limit",
                     Label = "Enforce Disk Quota Limit (Deny Disk Space Beyond Limit)",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "When quotas are enabled, this setting denies additional disk writes once a user reaches their quota limit — rather than merely logging a warning. Without enforcement, quotas are advisory only. Default: not enforced (log-only). Recommended: 1 if quotas are enabled.",
                     Tags = ["disk", "quota", "enforce", "ntfs", "storage", "policy"],
@@ -1614,7 +1614,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-log-quota-exceeded",
                     Label = "Log Events When Quota Limit Is Exceeded",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Records an event in the Application log whenever a user exceeds their disk quota limit. Provides visibility over storage exhaustion incidents without requiring enforcement mode. Default: not logged. Recommended: 1 for compliance and monitoring.",
                     Tags = ["disk", "quota", "audit", "logging", "storage", "policy"],
@@ -1631,7 +1631,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-log-quota-warning",
                     Label = "Log Events When Quota Warning Threshold Is Reached",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Records an Application log event when a user's disk usage reaches the warning level (set below the hard quota limit). Gives early warning before the limit is hit. Default: not logged. Recommended: 1 for proactive storage management.",
                     Tags = ["disk", "quota", "warning", "audit", "logging", "policy"],
@@ -1648,7 +1648,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-apply-subdirectories",
                     Label = "Apply Quota to All Subdirectories",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Extends quota tracking so that disk space used by files in every subdirectory is counted against the owner's total quota. Without this, only root-level file writes are counted. Default: subdirectory counting depends on volume settings. Recommended: 1.",
                     Tags = ["disk", "quota", "subdirectory", "ntfs", "storage", "policy"],
@@ -1665,7 +1665,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-set-default-limit-1gb",
                     Label = "Set Default Per-User Quota Limit to 1 GB",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets the default disk quota limit applied to new user accounts to 1 073 741 824 bytes (1 GiB). New users automatically receive this limit without admin intervention. The value is stored as a QWORD count of bytes. Default: no limit (-1 / unlimited). Recommended: set as appropriate for available storage.",
                     Tags = ["disk", "quota", "limit", "default", "storage", "policy"],
@@ -1682,7 +1682,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-set-default-warning-800mb",
                     Label = "Set Default Per-User Warning Threshold to 800 MB",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets the warning threshold for new user accounts to 838 860 800 bytes (800 MiB). When a user reaches 80% of the 1 GiB default limit an event is logged before hitting the hard quota. Default: no warning threshold. Recommended: ~80% of the default quota limit.",
                     Tags = ["disk", "quota", "warning", "threshold", "storage", "policy"],
@@ -1699,7 +1699,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-block-user-override",
                     Label = "Prevent Users from Changing Quota Settings",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Hides disk quota settings from the volume Properties dialog so standard users cannot view or modify their own quota limits. Works in conjunction with Enforce to prevent circumvention. Default: users can view their own quota from Properties. Recommended: 1.",
                     Tags = ["disk", "quota", "user-restriction", "settings", "policy"],
@@ -1716,7 +1716,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-disable-removable-volumes",
                     Label = "Do Not Apply Quotas to Removable Volumes",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Exempts removable NTFS volumes (USB drives formatted as NTFS) from quota management. Useful when quota enforcement should apply to fixed disks only and not to portable storage that may be shared. Default: quotas apply to all NTFS volumes including removable. Recommended: 0 to include removable.",
                     Tags = ["disk", "quota", "removable", "usb", "ntfs", "policy"],
@@ -1733,7 +1733,7 @@ internal static class PolicyStorage
                 {
                     Id = "diskquota-exempt-admins",
                     Label = "Exempt Administrators from Disk Quota Limits",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Members of the local Administrators group are not subject to per-user disk quota enforcement even when the volume is quota-managed. Allows admins to perform maintenance (driver updates, log writes, backups) without hitting storage walls. Default: admins are also subject to quotas when Enforce=1. Recommended: 1.",
                     Tags = ["disk", "quota", "admin", "exemption", "ntfs", "policy"],
@@ -1761,7 +1761,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-lock-onoff-switch",
                 Label = "Lock File History On/Off Switch",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets OnOffSwitchLocked=1 in the File History policy key. "
                     + "Prevents users from enabling or disabling File History via the Control Panel or Settings. "
@@ -1781,7 +1781,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-backup-interval-daily",
                 Label = "Set File History Backup Interval to Daily",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets BackupInterval=86400 (24 hours in seconds) in the File History policy key. "
                     + "Controls how frequently File History backs up changed files. "
@@ -1800,7 +1800,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-retention-one-month",
                 Label = "File History: Keep Versions for 1 Month",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets RetentionPolicy=2 and RetentionTime=1 in the File History policy key. "
                     + "Configures File History to keep only backup copies made within the past month; older versions are purged automatically. "
@@ -1819,7 +1819,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-prevent-data-degradation",
                 Label = "Prevent File History Data Degradation",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DataDegradationPolicy=1 in the File History policy key. "
                     + "Causes File History to stop backing up if the protection level would fall due to cache issues, "
@@ -1839,7 +1839,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-disable-file-backup",
                 Label = "Disable Windows Backup File Backup",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableFileBackup=1 in the Windows Backup client policy key. "
                     + "Prevents users from performing file-level backups using the Windows Backup client. "
@@ -1859,7 +1859,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-disable-system-backup",
                 Label = "Disable Windows Backup System (Image) Backup",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableSystemBackup=1 in the Windows Backup client policy key. "
                     + "Prevents users from creating system image backups using the Windows Backup client. "
@@ -1878,7 +1878,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-disable-restore-ui",
                 Label = "Disable Windows Backup Restore UI",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableRestoreUI=1 in the Windows Backup client policy key. "
                     + "Hides the 'Restore my files' and related controls from the Backup and Restore Control Panel applet. "
@@ -1897,7 +1897,7 @@ internal static class PolicyStorage
             {
                 Id = "fhp-disable-restored-ui",
                 Label = "Disable Windows Backup 'Restore to Previous PC' UI",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableRestoredUI=1 in the Windows Backup client policy key. "
                     + "Hides the Windows Easy Transfer / 'Restore files from a previous PC' experience "
@@ -1927,7 +1927,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-require-secure-dialect",
                 Label = "Set Minimum SMB Server Dialect",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1944,7 +1944,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-set-max-concurrent-sessions",
                 Label = "Limit Maximum Concurrent SMB Sessions",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1961,7 +1961,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-enable-server-encryption",
                 Label = "Enable SMB Encryption on File Server",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1978,7 +1978,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-reject-unencrypted-access",
                 Label = "Reject Unencrypted Client Connections",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1995,7 +1995,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-restrict-null-session-shares",
                 Label = "Restrict Shares Accessible via Null Sessions",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2012,7 +2012,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-log-unauthorized-access",
                 Label = "Enable Unauthorized File Share Access Logging",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2029,7 +2029,7 @@ internal static class PolicyStorage
             {
                 Id = "filshare-disable-oplocks",
                 Label = "Configure Opportunistic Locking for Sensitive Shares",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2058,7 +2058,7 @@ internal static class PolicyStorage
                 {
                     Id = "fswitness-disable-smb1-server",
                     Label = "File Share Witness: Disable SMB1 Protocol on Server",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets SMB1=0 in LanmanServer policy. Disables the SMBv1 protocol on the server component. SMBv1 is a 1980s-era protocol with no encryption, no pre-authentication integrity, no signing by default, and numerous unfixed vulnerabilities including EternalBlue (CVE-2017-0144) which was exploited by WannaCry and NotPetya ransomware. Microsoft deprecated SMBv1 in 2014. Any operating system newer than Windows XP/Server 2003 supports SMBv2+. Disabling SMBv1 on the server prevents legacy client connections but eliminates the most dangerous attack surface in Windows networking.",
                     Tags = ["smb1", "smb", "eternalblue", "ransomware", "protocol"],
@@ -2076,7 +2076,7 @@ internal static class PolicyStorage
                 {
                     Id = "fswitness-set-smb-max-connections",
                     Label = "File Share Witness: Set Maximum SMB Simultaneous Open Files Limit",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets MaxWorkItems=16384 in LanmanServer policy. Sets the maximum number of SMB work items (pending I/O operations per connection) the server will process simultaneously. The default value (64 on some configurations) can cause server-side SMB queuing under heavy load from many concurrent clients (e.g., login storms or VDI deployments). Increasing to 16384 allows more concurrent file operations without queuing delay. This setting must be balanced against available memory — each work item consumes non-paged pool memory.",
                     Tags = ["smb", "performance", "work-items", "concurrency", "file-server"],
@@ -2094,7 +2094,7 @@ internal static class PolicyStorage
                 {
                     Id = "fswitness-enable-smb-hardened-unc",
                     Label = "File Share Witness: Enable Hardened UNC Path Requirements",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets HardenedUNCPathsEnabled=1 in LanmanWorkstation policy. Enables hardened UNC path processing, which requires mutual authentication and integrity for connections to UNC paths matching patterns registered in the HardenedUNCPaths registry list (\\\\*\\NETLOGON, \\\\*\\SYSVOL, etc). Without hardened UNC paths, a man-in-the-middle attacker can serve a rogue SYSVOL or NETLOGON share to deliver malicious Group Policy objects or logon scripts. Hardened UNC paths were introduced as the main mitigation for MS15-011 (JASBUG).",
                     Tags = ["smb", "unc", "hardening", "gpo", "ms15-011"],
@@ -2122,7 +2122,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-last-access",
                 Label = "Disable NTFS Last Access Time Update",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2139,7 +2139,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-enable-compression",
                 Label = "Disable NTFS Compression on System Volume",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2156,7 +2156,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-8dot3-names",
                 Label = "Disable NTFS 8.3 Short Name Generation",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2173,7 +2173,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-self-healing",
                 Label = "Disable NTFS Self-Healing (Force Chkdsk)",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2190,7 +2190,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-encryption-default",
                 Label = "Prevent Default NTFS Encryption of New Files",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2207,7 +2207,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-delete-notify",
                 Label = "Disable NTFS Delete Notify to SSD Controller",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2224,7 +2224,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-alternate-data-streams-block",
                 Label = "Block Alternate Data Stream Creation by Untrusted Code",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2241,7 +2241,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-tunnel-cache",
                 Label = "Disable NTFS Filename Tunnel Cache",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2258,7 +2258,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-quota-tracking",
                 Label = "Disable NTFS Disk Quota Tracking",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2275,7 +2275,7 @@ internal static class PolicyStorage
             {
                 Id = "ntfspol-disable-opportunistic-locks",
                 Label = "Disable NTFS Opportunistic Locking",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2303,7 +2303,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-no-make-available-offline",
                 Label = "Prevent Making Files Available Offline",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets NoMakeAvailableOffline=1 in NetCache policy. Blocks users from right-clicking shared files and selecting 'Always Available Offline'. Prevents uncontrolled growth of the offline cache on laptops and ensures only IT-assigned offline content is cached.",
                 Tags = ["offline", "sync", "files", "policy", "gpo"],
@@ -2317,7 +2317,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-purge-at-logoff",
                 Label = "Purge Offline Cache at Logoff",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets PurgeAtLogoff=1 in NetCache policy. Causes all locally cached offline files to be deleted when the user logs off. Ensures sensitive documents synced from file servers are not retained on shared or kiosk machines between sessions.",
                 Tags = ["offline", "sync", "files", "policy", "security"],
@@ -2331,7 +2331,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-disable-background-sync",
                 Label = "Disable Automatic Background Sync",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets BackgroundSyncEnabled=0 in NetCache policy. Stops the Offline Files CSC service from performing background synchronisation of the offline cache. Prevents unexpected I/O bursts and network traffic from silent sync operations, without disabling offline access entirely.",
                 Tags = ["offline", "sync", "background", "policy", "performance"],
@@ -2345,7 +2345,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-cache-disk-limit-5pct",
                 Label = "Limit Offline Cache to 5% of Disk",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DefaultCacheSize=5 in NetCache policy (percentage of disk). Restricts the maximum space the Offline Files cache may consume to 5% of the volume. Prevents the CSC cache from silently consuming large amounts of disk space on smaller system drives.",
                 Tags = ["offline", "sync", "disk", "policy", "performance"],
@@ -2359,7 +2359,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-go-offline-manual",
                 Label = "Set Go-Offline Action to Manual",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets GoOfflineAction=0 (manual) in NetCache policy. Controls what happens when a network connection to a file server is lost: 0=work offline silently, 1=notify and ask. Setting 0 prevents disruptive dialogs on unstable connections while relying on manual sync on reconnect.",
                 Tags = ["offline", "sync", "notification", "policy", "gpo"],
@@ -2373,7 +2373,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-minimal-event-logging",
                 Label = "Reduce Offline Files Event Log Verbosity",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets EventLoggingLevel=1 in NetCache policy. Reduces the Offline Files event log from informational (2) to warnings-only (1). Eliminates high-frequency informational events from the CSC service in the System event log on machines with many network shares.",
                 Tags = ["offline", "sync", "eventlog", "policy", "performance"],
@@ -2387,7 +2387,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-disable-sync-activity-display",
                 Label = "Disable Sync Center Activity Display",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableSyncActivity=1 in SyncMgr policy. Prevents the Sync Center from displaying sync progress and activity in the notification area and the Sync Center dialog. Reduces UI clutter from background sync operations on shared desktops.",
                 Tags = ["synccenter", "offline", "sync", "policy", "gpo"],
@@ -2401,7 +2401,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-disable-metered-sync",
                 Label = "Disable Sync on Metered Connections",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets TurnOffSyncOnCostedNetwork=1 in SyncMgr policy. Prevents Sync Center from initiating any synchronisation when the active network connection is marked as metered (mobile hotspot, LTE, or manually flagged as metered). Prevents unexpected data charges.",
                 Tags = ["synccenter", "offline", "sync", "metered", "policy"],
@@ -2415,7 +2415,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-disable-file-sync-client",
                 Label = "Disable Sync Center File Sync Client",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets DisableFileSyncClient=1 in SyncMgr policy. Fully disables the Sync Center file synchronisation client component. This stops the CSC service from registering as a sync provider in the Sync Center UI, effectively turning off user-initiated and scheduled offline sync.",
                 Tags = ["synccenter", "offline", "sync", "policy", "disable"],
@@ -2429,7 +2429,7 @@ internal static class PolicyStorage
             {
                 Id = "offsync-hide-in-sync-ui",
                 Label = "Hide Offline Files from Sync Center UI",
-                Category = "Storage",
+                Category = "Storage — Cd Burning",
                 Description =
                     "Sets HideOptionsForSyncProvider=1 in SyncMgr policy. Removes the options and settings icon for the Offline Files sync provider from the Sync Center window, preventing users from modifying sync provider configuration while still allowing the provider to run.",
                 Tags = ["synccenter", "offline", "sync", "policy", "gpo"],
@@ -2455,7 +2455,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-block-opentype-kernel-parsing",
                     Label = "Block OpenType Font Parsing in the Windows Kernel",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Moves OpenType font parsing out of the Windows kernel (win32k.sys) and into a user-mode font parsing process, eliminating kernel-level font parsing vulnerabilities exploitable via specially-crafted font files in web content.",
                     Tags = ["opentype", "font-parsing", "kernel", "security", "policy"],
@@ -2472,7 +2472,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-disable-legacy-font-drivers",
                     Label = "Disable Loading of Legacy TrueType Font Drivers",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents legacy third-party TrueType font drivers from loading in the Windows font subsystem, reducing attack surface from unmaintained or vulnerable font drivers that may contain known CVEs.",
                     Tags = ["truetype", "font-driver", "legacy", "security", "policy"],
@@ -2489,7 +2489,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-restrict-embedded-font-trusted",
                     Label = "Restrict Embedded Fonts to Trusted Documents Only",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Sets the Windows font embedding policy so that embedded fonts in Office and PDF documents are only rendered when the document originates from a trusted location, blocking remote exploitation via malicious embedded fonts in untrusted files.",
                     Tags = ["fonts", "embedded-font", "trusted", "office", "security", "policy"],
@@ -2506,7 +2506,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-disable-variable-font-web",
                     Label = "Disable Variable Font Loading from Web Content",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents loading of OpenType Variable Fonts (OTF/TTF with variation axes) referenced in web content via browser font stacks, reducing the parsing attack surface from variable font table complexity in browser rendering engines.",
                     Tags = ["opentype", "variable-font", "web", "browser", "security", "policy"],
@@ -2523,7 +2523,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-enable-font-integrity-check",
                     Label = "Enable Font File Integrity Check Before Loading",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables a Windows Security Health check that verifies the integrity of installed system fonts against known-good checksums before loading, detecting tampering with font files used in critical UI rendering.",
                     Tags = ["fonts", "integrity-check", "security", "policy"],
@@ -2540,7 +2540,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-block-remote-font-download-edge",
                     Label = "Block Remote Font Downloads in Microsoft Edge",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents Microsoft Edge from downloading and rendering fonts referenced by web page CSS from remote URLs, eliminating an attack vector where crafted web fonts hosted externally could exploit the browser font parser.",
                     Tags = ["fonts", "edge", "remote-font", "css", "browser-security", "policy"],
@@ -2557,7 +2557,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-enable-gdi-font-sandbox",
                     Label = "Enable GDI Font Sandbox in AppContainer Sessions",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables the GDI+ font rendering sandbox in AppContainer (browser sandboxed renderer) sessions, ensuring that font parsing for sandbox processes occurs in a restricted context rather than directly in win32k.sys.",
                     Tags = ["fonts", "gdi", "sandbox", "appcontainer", "security", "policy"],
@@ -2574,7 +2574,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-disable-type1-fonts",
                     Label = "Disable Loading of Legacy Type1 Fonts",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Disables support for loading Adobe Type 1 (PostScript) legacy fonts in GDI/GDI+, an aging format with limited security patching, reducing exposure to Type1 font parsing CVEs in the PostScript interpreter.",
                     Tags = ["fonts", "type1", "postscript", "legacy", "security", "policy"],
@@ -2591,7 +2591,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-log-font-parse-failures",
                     Label = "Log Font File Parse Failures for Security Monitoring",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Enables event log entries when a font file fails parsing validation (malformed tables, invalid checksums), providing visibility into attempts to load crafted malicious fonts on the endpoint.",
                     Tags = ["fonts", "parse-failure", "event-log", "audit", "security", "policy"],
@@ -2608,7 +2608,7 @@ internal static class PolicyStorage
                 {
                     Id = "otfpol-disable-font-driver-telemetry",
                     Label = "Disable Font Driver Telemetry Reporting to Microsoft",
-                    Category = "Storage",
+                    Category = "Storage — Cd Burning",
                     Description =
                         "Prevents the Windows font subsystem from sending font usage, load failure, and driver interaction telemetry to Microsoft, protecting information about installed and loaded fonts from cloud disclosure.",
                     Tags = ["fonts", "driver", "telemetry", "privacy", "microsoft", "policy"],
@@ -2635,7 +2635,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-disable-scrubbing",
                     Label = "Disable ReFS Background Data Scrubbing",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables the background data scrubbing job that periodically reads and validates all ReFS blocks against their stored checksums, eliminating the I/O overhead but preventing proactive corruption detection.",
                     Tags = ["refs", "scrubbing", "background", "file-system", "policy"],
@@ -2652,7 +2652,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-enable-salvage-mode",
                     Label = "Enable ReFS Corruption Salvage Mode",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables ReFS salvage mode which continues to mount and access uncorrupted portions of a volume when corruption is detected, avoiding complete volume unavailability due to isolated data corruption.",
                     Tags = ["refs", "salvage", "corruption", "availability", "policy"],
@@ -2669,7 +2669,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-set-cluster-size-64k",
                     Label = "Set Default ReFS Cluster Size to 64 KB",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets the default ReFS cluster size to 64 KB, improving large-sequential-I/O throughput and reducing metadata overhead for workloads that store many large files (virtual machines, databases, backups).",
                     Tags = ["refs", "cluster-size", "performance", "file-system", "policy"],
@@ -2686,7 +2686,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-block-refs-caching-metadata",
                     Label = "Block ReFS Metadata in System File Cache",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Prevents ReFS metadata (B-tree nodes, directory structures) from consuming the system file cache, dedicating file cache to application data and preventing metadata cache pressure on systems with large ReFS trees.",
                     Tags = ["refs", "metadata", "file-cache", "memory", "policy"],
@@ -2703,7 +2703,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-disable-refs-on-boot-volume",
                     Label = "Prevent ReFS Formatting of System Boot Volumes",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Blocks ReFS from being selected as the file system for the system or boot volume during installation, ensuring Windows boot volumes always use NTFS which has full boot-time driver support.",
                     Tags = ["refs", "boot-volume", "ntfs", "formatting", "policy"],
@@ -2720,7 +2720,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-enable-corruption-audit-log",
                     Label = "Enable ReFS Corruption Detection Audit Logging",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables detailed event log entries for every ReFS corruption detection event including the file path, cluster address, and recovery action taken.",
                     Tags = ["refs", "corruption", "audit-log", "event-log", "policy"],
@@ -2737,7 +2737,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-disable-refs-dedup",
                     Label = "Disable ReFS Block-Level Deduplication",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables block-level deduplication on ReFS volumes, stopping background dedup processing that can interfere with real-time workloads and consume I/O bandwidth on storage-intensive systems.",
                     Tags = ["refs", "deduplication", "storage", "performance", "policy"],
@@ -2754,7 +2754,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-set-mirror-write-threshold-3",
                     Label = "Set ReFS Mirror-Write Log Threshold to 3 Entries",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets the ReFS B+ tree write-log threshold that triggers a checkpoint flush to 3 entries, ensuring faster persistence of write logs at the cost of slightly more frequent I/O checkpoints.",
                     Tags = ["refs", "write-log", "checkpoint", "performance", "policy"],
@@ -2771,7 +2771,7 @@ internal static class PolicyStorage
                 {
                     Id = "refspol-disable-refs-compression",
                     Label = "Disable ReFS Transparent Compression",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables ReFS transparent compression, preventing the file system from automatically compressing cold data blocks, and eliminating the CPU overhead of compression/decompression on access.",
                     Tags = ["refs", "compression", "cpu", "storage", "policy"],
@@ -2798,7 +2798,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-integrity-checking",
                 Label = "Disable ReFS Integrity Checking",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2820,7 +2820,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-integrity-streams",
                 Label = "Disable ReFS Integrity Streams",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2842,7 +2842,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-auto-repair",
                 Label = "Disable ReFS Automatic Repair",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2864,7 +2864,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-short-name-creation",
                 Label = "Disable ReFS Short Name Creation",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2886,7 +2886,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-last-access-update",
                 Label = "Disable ReFS Last-Access Timestamp Update",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2908,7 +2908,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-parity-logging",
                 Label = "Disable ReFS Parity Write Logging",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2930,7 +2930,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-metadata-checksum",
                 Label = "Disable ReFS Metadata Checksum",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2952,7 +2952,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-large-mft",
                 Label = "Disable ReFS Large MFT Zone Reservation",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2974,7 +2974,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-delete-notify",
                 Label = "Disable ReFS Delete Notification (TRIM)",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2996,7 +2996,7 @@ internal static class PolicyStorage
             {
                 Id = "refs-disable-compression",
                 Label = "Disable ReFS Data Compression",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3032,7 +3032,7 @@ internal static class PolicyStorage
             {
                 Id = "vss-increase-writer-timeout",
                 Label = "VSS: Increase Writer Timeout to 120 Seconds",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -3053,7 +3053,7 @@ internal static class PolicyStorage
             {
                 Id = "vss-enable-unbuffered-writes",
                 Label = "VSS: Enable Unbuffered Writes for Faster Shadow-Copy Creation",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -3074,7 +3074,7 @@ internal static class PolicyStorage
             {
                 Id = "vss-disable-snapvol-for-fixed-drives",
                 Label = "VSS: Disable VolSnap Auto-Snapshot on Fixed Drives",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -3095,7 +3095,7 @@ internal static class PolicyStorage
             {
                 Id = "vss-set-min-restore-point-space-300mb",
                 Label = "VSS: Set Minimum Shadow-Copy Reservation to 300 MB",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -3116,7 +3116,7 @@ internal static class PolicyStorage
             {
                 Id = "vss-disable-rp-before-critical-updates",
                 Label = "VSS: Skip Automatic Restore Points Before Windows Updates",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -3147,7 +3147,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-ahci-link-power",
                     Label = "Disable AHCI SATA Link Power Management (HIPM/DIPM)",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables Host-Initiated (HIPM) and Device-Initiated (DIPM) power management on SATA AHCI links, preventing drives from entering partial or slumber power states that increase seek latency when awoken.",
                     Tags = ["sata", "ahci", "power-management", "storage", "latency", "policy"],
@@ -3164,7 +3164,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-nvme-auto-power-state",
                     Label = "Disable NVMe Autonomous Power State Transitions",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables NVMe Autonomous Power State Transitions (APST) which allow NVMe drives to enter lower power states automatically, preventing latency spikes when the drive transitions back to full performance mode.",
                     Tags = ["nvme", "power-state", "apst", "storage", "latency", "policy"],
@@ -3181,7 +3181,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-usb-selective-suspend",
                     Label = "Disable USB Selective Suspend for Storage Devices",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables USB selective suspend specifically for USB-connected storage devices, preventing USB drives and SSDs from entering low-power suspended state and causing reconnect delays.",
                     Tags = ["usb", "selective-suspend", "storage", "latency", "policy"],
@@ -3198,7 +3198,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-write-cache-buffer-flush",
                     Label = "Disable Write Cache Buffer Flushing on Disk",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables write-cache buffer flush on supported storage devices, allowing the drive's write cache to hold data longer for better write throughput at the cost of potential data loss on unexpected power loss.",
                     Tags = ["disk", "write-cache", "performance", "storage", "policy"],
@@ -3215,7 +3215,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-set-io-scheduler-none",
                     Label = "Set I/O Scheduler to None (Passthrough) for NVMe",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Configures the storage I/O scheduler to passthrough mode for NVMe drives, removing queue depth reordering overhead and allowing the NVMe controller's own internal queue to handle command ordering.",
                     Tags = ["nvme", "io-scheduler", "performance", "storage", "policy"],
@@ -3232,7 +3232,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-sata-hot-plug",
                     Label = "Disable SATA Hot-Plug Detection",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables SATA hot-plug detection on AHCI ports, preventing the OS from polling for newly inserted drives and reducing periodic interrupt overhead on systems with no hot-swappable SATA drives.",
                     Tags = ["sata", "hot-plug", "performance", "interrupt", "policy"],
@@ -3249,7 +3249,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-increase-nvme-queue-depth-32",
                     Label = "Increase Default NVMe Queue Depth to 32",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets the default NVMe submission queue depth to 32 entries, increasing I/O parallelism for high-throughput workloads that can saturate the default smaller queue depth.",
                     Tags = ["nvme", "queue-depth", "performance", "storage", "policy"],
@@ -3266,7 +3266,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-disable-sata-aggressive-link-power",
                     Label = "Disable Aggressive SATA Link Power Management",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables aggressive SATA link power management (ALPM) that transitions the SATA PHY into slumber state after very short idle periods, preventing the deep slumber latency that affects interactive random I/O workloads.",
                     Tags = ["sata", "alpm", "power-management", "latency", "policy"],
@@ -3283,7 +3283,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-block-error-recovery-control",
                     Label = "Disable Storage Error Recovery Control Timeout",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Disables the storage bus Error Recovery Control (ERC) that forces commands to fail after a short timeout, allowing drives to take longer to recover from errors rather than being immediately flagged as failed.",
                     Tags = ["storage", "erc", "error-recovery", "reliability", "policy"],
@@ -3300,7 +3300,7 @@ internal static class PolicyStorage
                 {
                     Id = "stobus-enable-storage-bus-health-log",
                     Label = "Enable Storage Bus Controller Health Event Logging",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables event log entries for storage bus controller health events including AHCI/NVMe errors, command timeouts, and bus reset events for proactive storage failure monitoring.",
                     Tags = ["storage", "event-log", "health", "controller", "policy"],
@@ -3327,7 +3327,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-smart-monitoring",
                     Label = "Enable S.M.A.R.T. Drive Health Monitoring",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables Windows Storage Health monitoring of S.M.A.R.T. attributes on physical drives. Predictive failure alerts are surfaced in Action Center before a drive fails. Default: enabled on consumer; verify on server. Recommended: 1.",
                     Tags = ["storage", "smart", "health", "monitoring", "predictive-failure", "policy"],
@@ -3344,7 +3344,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-failure-prediction-warnings",
                     Label = "Enable Drive Failure Prediction Warnings",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Configures Windows to display user-visible warnings when predictive S.M.A.R.T. analysis indicates an imminent drive failure. Prompts users to back up data before catastrophic loss. Default: warning shown. Recommended: 1.",
                     Tags = ["storage", "smart", "warning", "failure", "alert", "policy"],
@@ -3361,7 +3361,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-wmi-health-events",
                     Label = "Enable Storage Health WMI Event Notifications",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables Windows Storage Health to emit WMI MSFT_StorageAlert events when drive health degrades. Allows monitoring tools, SIEM agents, and scripts to receive drive health change events. Default: not configured. Recommended: 1 for managed environments.",
                     Tags = ["storage", "wmi", "events", "monitoring", "health", "policy"],
@@ -3378,7 +3378,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-set-polling-interval-24h",
                     Label = "Set Storage Health Polling Interval to 24 Hours",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets the S.M.A.R.T. polling interval to 24 hours. Balances monitoring coverage against unnecessary disk spin-up on sleeping drives. Default: varies. Recommended: 86400 seconds (24 h) for desktops.",
                     Tags = ["storage", "polling", "smart", "interval", "health", "policy"],
@@ -3395,7 +3395,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-ssd-health-check",
                     Label = "Enable SSD Wear Levelling Health Check",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables dedicated wear-levelling and write endurance health checks for NVMe and SATA SSD storage devices. Surfaces SSD lifespan metrics in the Windows Storage Health API. Default: enabled. Recommended: 1 for SSD-centric deployments.",
                     Tags = ["storage", "ssd", "nvme", "wear-levelling", "health", "policy"],
@@ -3412,7 +3412,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-disable-health-telemetry-upload",
                     Label = "Block Storage Health Telemetry Upload to Microsoft",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Prevents Windows from uploading storage health telemetry (drive model, firmware, S.M.A.R.T. attributes) to Microsoft's cloud analytics. Keeps drive hardware details on-premises. Default: upload enabled. Recommended: 1.",
                     Tags = ["storage", "telemetry", "privacy", "upload", "health", "policy"],
@@ -3429,7 +3429,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-volume-health-check",
                     Label = "Enable File System Volume Health Scan",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Enables periodic scan of NTFS/ReFS volume health (metadata integrity, bad clusters, USN change journal). Detects file system corruption before it becomes unrecoverable. Default: not enforced via policy. Recommended: 1.",
                     Tags = ["storage", "ntfs", "volume", "integrity", "health", "policy"],
@@ -3446,7 +3446,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-enable-spaces-health-monitoring",
                     Label = "Enable Storage Spaces Health Monitoring",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Activates continuous health monitoring for Storage Spaces pools, virtual disks, and storage tiers. Surfaces degraded, warning, and failed component status to the Storage API. Default: enabled. Recommended: 1 on Storage Spaces deployments.",
                     Tags = ["storage", "spaces", "pool", "raid", "health", "policy"],
@@ -3463,7 +3463,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-log-health-events",
                     Label = "Write Storage Health Events to System Event Log",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Directs Windows Storage Health alerts and state transitions to the System event log. Enables IT operations and SIEM tools to centrally collect drive health history. Default: event log writing not enforced. Recommended: 1.",
                     Tags = ["storage", "event-log", "audit", "health", "monitoring", "policy"],
@@ -3480,7 +3480,7 @@ internal static class PolicyStorage
                 {
                     Id = "strhlt-alert-threshold-10pct-spare",
                     Label = "Alert When SSD Available Spare Falls Below 10%",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Configures the SSD available spare capacity alert threshold at 10%. An Action Center notification is shown when an NVMe drive's available spare cells drop below this level, indicating approaching end-of-write-life. Default: not configured. Recommended: 10.",
                     Tags = ["storage", "ssd", "spare", "threshold", "alert", "health", "policy"],
@@ -3507,7 +3507,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-storage-spaces-ui",
                 Label = "Disable Storage Spaces Configuration UI",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3530,7 +3530,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-storage-tiering",
                 Label = "Disable Storage Tiering Policy",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3553,7 +3553,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-vs-notification",
                 Label = "Disable Volume Shadow Copy Low-Disk Notifications",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3575,7 +3575,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-disk-cleanup-prompt",
                 Label = "Disable Disk Cleanup Low-Space Prompt",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3597,7 +3597,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-ntfs-tunneling",
                 Label = "Disable NTFS File Name Tunneling",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3620,7 +3620,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-storage-diagnostics",
                 Label = "Disable Storage Diagnostic Data Collection",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3642,7 +3642,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-hot-spare-alert",
                 Label = "Disable Storage Spaces Hot Spare Alert",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3664,7 +3664,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-data-deduplication",
                 Label = "Disable Data Deduplication Policy",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3686,7 +3686,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-disk-management-snap",
                 Label = "Restrict Disk Management Snap-In",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3708,7 +3708,7 @@ internal static class PolicyStorage
             {
                 Id = "stormgmt-disable-low-disk-warning",
                 Label = "Disable Persistent Low-Disk-Space Warning",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3741,7 +3741,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-restrict-pool-creation",
                 Label = "Restrict Storage Pool Creation to Administrators",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3758,7 +3758,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-enable-pool-encryption",
                 Label = "Require Encryption for New Storage Pools",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3775,7 +3775,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-restrict-disk-addition",
                 Label = "Restrict Disk Addition to Storage Pools",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3792,7 +3792,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-disable-thin-provisioning",
                 Label = "Disable Thin Provisioning for Storage Pools",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3809,7 +3809,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-enable-integrity-streams",
                 Label = "Enable Storage Pool Integrity Streams",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3826,7 +3826,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-require-mirroring",
                 Label = "Require Mirroring for Storage Pool Virtual Disks",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3843,7 +3843,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-enable-pool-health-monitoring",
                 Label = "Enable Storage Pool Health Event Monitoring",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3860,7 +3860,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-restrict-pool-deletion",
                 Label = "Restrict Storage Pool Deletion to Administrators",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3877,7 +3877,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-disable-deduplication-auto",
                 Label = "Disable Automatic Data Deduplication on Storage Pools",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3894,7 +3894,7 @@ internal static class PolicyStorage
             {
                 Id = "stpool-audit-pool-changes",
                 Label = "Enable Storage Pool Configuration Change Auditing",
-                Category = "Storage",
+                Category = "Storage — Refs Fs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3921,7 +3921,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-set-replication-mode-async",
                     Label = "Storage Replica: Set Default Replication Mode to Asynchronous",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets ReplicationMode=1 in StorageReplica policy (1 = Asynchronous). Sets the default Storage Replica replication mode to asynchronous. In asynchronous mode, the source volume acknowledges writes to the application without waiting for the destination to confirm it has received and written the data — the replication lags behind the source (RPO > 0). Synchronous mode (the default for same-site replica pairs) forces writes to complete on both source and destination before acknowledgment — zero RPO but application write latency is increased by the round-trip to the destination. For WAN-linked DR sites, synchronous replication is impractical; asynchronous mode is required to avoid write latency spikes.",
                     Tags = ["storage-replica", "async", "replication-mode", "rpo", "dr"],
@@ -3939,7 +3939,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-set-log-volume-size-8gb",
                     Label = "Storage Replica: Set Minimum Log Volume Size to 8 GB",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets MinLogSize=8192 in StorageReplica policy (MB). Sets the minimum log volume size for new Storage Replica partnerships to 8 GB. The SR log volume holds a circular write buffer that tracks changes that have been committed on the source but not yet replicated to the destination. If the log volume is too small, it can overflow during bursts of write activity — forcing Storage Replica to perform a full resync of the entire replicated volume. For volumes with heavy write workloads (SQL Server transaction logs, VMs with active guest IO), 8 GB provides headroom during network outages of several hours.",
                     Tags = ["storage-replica", "log", "circular-buffer", "resync", "sizing"],
@@ -3957,7 +3957,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-set-bandwidth-limit-100mbps",
                     Label = "Storage Replica: Set Replication Bandwidth Limit to 100 Mbps",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets BandwidthLimit=100 in StorageReplica policy (Mbps). Limits Storage Replica replication bandwidth to 100 Mbps. Without a bandwidth limit, Storage Replica can saturate available network links — particularly during initial sync of large volumes (1 TB+) which can overwhelm a 1 Gbps uplink if allowed to run unconstrained. 100 Mbps allows a 1 TB volume to be initially synced in approximately 22 hours while leaving 900 Mbps of uplink capacity for other traffic. This limit applies to both initial sync and ongoing delta replication.",
                     Tags = ["storage-replica", "bandwidth", "throttle", "network", "wan"],
@@ -3975,7 +3975,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-enable-consistent-replica-read",
                     Label = "Storage Replica: Enable Read Access on Destination Replica",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets AllowReplicaRead=1 in StorageReplica policy. Enables read-only access to the destination volume in a Storage Replica pair. By default, the destination volume is mounted offline (no read access) to ensure consistency — the SR log is continuously writing to it. With AllowReplicaRead enabled, SR temporarily snapshots the destination volume to provide a read-only mount point that users and applications can query — useful for offloading backup operations, reporting queries, or compliance snapshots to the replica without impacting the source production volume.",
                     Tags = ["storage-replica", "read-replica", "backup", "reporting", "snapshot"],
@@ -3993,7 +3993,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-enable-encrypted-replication",
                     Label = "Storage Replica: Enable Encrypted Replication Traffic",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets EncryptionEnabled=1 in StorageReplica policy. Enables SMB3 encryption for all Storage Replica replication traffic between source and destination servers. Replication channels carry live production data (potentially including sensitive PII, financial records, health information) traversing internal networks or WAN links. Without encryption, a packet capture on any network segment in the replication path reveals the data content. AES-256-GCM encryption wraps all replication traffic, ensuring the data payload is unreadable to network observers.",
                     Tags = ["storage-replica", "encryption", "smb3", "aes", "data-protection"],
@@ -4011,7 +4011,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-set-io-buffer-size-32mb",
                     Label = "Storage Replica: Set Replication IO Buffer Size to 32 MB",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets IOBufferSize=32 in StorageReplica policy (MB). Sets the IO write buffer size used by Storage Replica for batching writes to the replication log. Larger IO buffers reduce the number of individual write operations to the SR log disk — improving throughput at the cost of increased memory usage. 32 MB is a practical default for most environments. Very small IO buffers cause excessive fragmented log writes, reducing sustained replication throughput to the available log disk IOps. For environments with NVMe log drives, increasing to 64 MB or more may improve throughput further.",
                     Tags = ["storage-replica", "io-buffer", "performance", "throughput", "log"],
@@ -4029,7 +4029,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-enable-replication-health-audit",
                     Label = "Storage Replica: Enable Replication Health Audit Logging",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets HealthAuditEnabled=1 in StorageReplica policy. Enables periodic health audit logging for Storage Replica partnerships. Health audit events record the current replication state, lag (delta between source and destination), log utilisation percentage, and any fault conditions for each SR group. Without health auditing, the current state of disaster recovery capability is only available by querying WMI — it is not proactively logged. Health audit events enable SIEM correlation to track RPO compliance: if replication lag exceeds the target RPO, an alert fires before a disaster is declared.",
                     Tags = ["storage-replica", "health", "audit", "monitoring", "rpo"],
@@ -4047,7 +4047,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-disable-auto-failover",
                     Label = "Storage Replica: Disable Automatic Failover",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets AutoFailover=0 in StorageReplica policy. Prevents Storage Replica from automatically promoting the destination volume when it detects that the source server is unavailable. Automatic failover can cause split-brain scenarios: if the source server is temporarily unreachable due to network issues (rather than truly offline), both source and destination may become active producers — writing data that diverges and cannot be automatically reconciled. In all DR scenarios, manual failover + human validation of data consistency is recommended before promoting the replica.",
                     Tags = ["storage-replica", "failover", "split-brain", "dr", "control"],
@@ -4065,7 +4065,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-enable-log-compression",
                     Label = "Storage Replica: Enable Replication Log Compression",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets LogCompression=1 in StorageReplica policy. Enables transparent compression of Storage Replica log data before writing to the log volume. Compression reduces the amount of physically written data to the log disk, which is especially valuable when the log volume is an SSD with limited write endurance (TBW rating). For workloads with compressible data patterns (text files, compressed XML, Hyper-V VHD zero pages), log compression can reduce log write volume by 40-60%, extending SSD log drive lifetime. Decompression occurs before entries are sent to the destination.",
                     Tags = ["storage-replica", "compression", "log", "ssd-endurance", "performance"],
@@ -4083,7 +4083,7 @@ internal static class PolicyStorage
                 {
                     Id = "srep-set-replication-port-5445",
                     Label = "Storage Replica: Set Replication Network Port to 5445",
-                    Category = "Storage",
+                    Category = "Storage — Refs Fs",
                     Description =
                         "Sets ReplicationPort=5445 in StorageReplica policy. Configures Storage Replica to use TCP port 5445 for replication traffic. The well-known Storage Replica port (5445) must be open in firewalls between source and destination servers. By explicitly setting the port via policy (rather than relying on the default), firewall rules can be precisely targeted and audited. Port 5445 is the standard SR port — SMB-based SR partners also require port 445 for SMB3 transport; this policy governs the SR control channel. Firewall rules for SR replication should permit TCP 5445 bidirectionally between SR members.",
                     Tags = ["storage-replica", "port", "firewall", "network", "configuration"],
@@ -4111,7 +4111,7 @@ internal static class PolicyStorage
                 {
                     Id = "storsense-disable-temp-file-cleanup",
                     Label = "Disable Storage Sense Temporary File Cleanup",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents Storage Sense from deleting temporary files, ensuring applications that rely on temp files across sessions are not disrupted by automatic cleanup.",
                     Tags = ["storage sense", "temp files", "cleanup", "policy"],
@@ -4129,7 +4129,7 @@ internal static class PolicyStorage
                 {
                     Id = "storsense-disable-downloads-cleanup",
                     Label = "Disable Storage Sense Downloads Folder Cleanup",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents Storage Sense from deleting files in the Downloads folder, protecting user-downloaded content from automatic removal based on age thresholds.",
                     Tags = ["storage sense", "downloads", "cleanup", "policy"],
@@ -4147,7 +4147,7 @@ internal static class PolicyStorage
                 {
                     Id = "storsense-disable-cloud-dehydration",
                     Label = "Disable Storage Sense OneDrive Cloud File Dehydration",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents Storage Sense from automatically dehydrating (moving to cloud-only) OneDrive files that have not been opened recently, keeping local copies always accessible.",
                     Tags = ["storage sense", "onedrive", "cloud", "dehydration", "policy"],
@@ -4165,7 +4165,7 @@ internal static class PolicyStorage
                 {
                     Id = "storsense-set-run-cadence-monthly",
                     Label = "Set Storage Sense Run Cadence to Monthly",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Configures Storage Sense to run automatically once per month rather than on a per-user-defined schedule, standardizing cleanup frequency across managed devices.",
                     Tags = ["storage sense", "cadence", "schedule", "policy"],
@@ -4183,7 +4183,7 @@ internal static class PolicyStorage
                 {
                     Id = "storsense-enforce-storage-policies",
                     Label = "Enforce Storage Sense Policies on All Users",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Enables enforcement of machine-wide Storage Sense policies, ensuring policy-configured thresholds and cadence settings take precedence over individual user preferences.",
                     Tags = ["storage sense", "enforce", "policy", "users"],
@@ -4213,7 +4213,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-require-storage-encryption",
                     Label = "Storage Spaces Migration: Require Encryption on All Storage Pools",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets RequireEncryption=1 in StorageSpaces policy. Requires all Storage Spaces pools managed by Group Policy to be encrypted with BitLocker Drive Encryption. When a new pool is created or an existing pool is brought online, the policy mandates that its volumes are protected by BitLocker. Storage pools without encryption are flagged and can be quarantined by this policy. Protects against direct disk extraction attacks where physical drives removed from a Storage Spaces mirror could be read on another system.",
                     Tags = ["storage-spaces", "encryption", "bitlocker", "data-protection", "pool"],
@@ -4231,7 +4231,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-enable-auto-tiering",
                     Label = "Storage Spaces Migration: Enable Automatic Tiering (SSD+HDD)",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets AutoTiering=1 in StorageSpaces policy. Enables automatic storage tiering in tiered Storage Spaces pools. Storage Spaces Direct and standard tiered pools can place hot (frequently accessed) data on NVMe or SSD tiers and cold data on HDD tiers automatically. Without this policy, tiering must be explicitly configured per-volume. Automatic tiering monitors access patterns over a 24-hour window and promotes/demotes data blocks accordingly. For mixed SSD+HDD pools, this significantly improves read performance for hot data without requiring manual optimisation.",
                     Tags = ["storage-spaces", "tiering", "ssd", "hdd", "performance"],
@@ -4249,7 +4249,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-enable-proactive-drive-retirement",
                     Label = "Storage Spaces Migration: Enable Proactive Drive Retirement on SMART Failure",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets ProactiveDriveRetirement=1 in StorageSpaces policy. Enables Storage Spaces to automatically retire (mark as unavailable) a member drive when it reports SMART (Self-Monitoring, Analysis and Reporting Technology) drive health warnings indicating impending failure. When a drive is retired, Storage Spaces redistributes its data to healthy pool members if the pool has sufficient redundancy. Without proactive retirement, a failing drive stays in the pool until it actually fails — at which point data reconstruction is urgent and failure of a second drive during rebuild can cause data loss.",
                     Tags = ["storage-spaces", "smart", "drive-failure", "resilience", "retirement"],
@@ -4267,7 +4267,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-disable-sms-auto-credential-store",
                     Label = "Storage Spaces Migration: Disable SMS Automatic Credential Storage",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets DisableCredentialStorage=1 in StorageMigrationService policy. Prevents the Storage Migration Service orchestrator from storing source server credentials in Windows Credential Manager. SMS requires credentials to access source servers for inventory and file transfer. By default these credentials are cached in Credential Manager for subsequent runs. Persistent credential storage creates a risk: an attacker who compromises the orchestrator server gains stored credentials to all migrated source servers. Disabling storage forces IT to supply credentials explicitly for each migration job.",
                     Tags = ["storage-migration", "credentials", "security", "credential-manager", "sms"],
@@ -4285,7 +4285,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-enable-pool-fault-domains",
                     Label = "Storage Spaces Migration: Enable Fault Domain Awareness in Pools",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets EnableFaultDomains=1 in StorageSpaces policy. Enables fault domain awareness when placing data in Storage Spaces pools. When fault domains are configured (chassis, rack, site), Storage Spaces places mirror data copies and parity stripes in separate fault domains. Without fault domain placement, a three-way mirror might place all three copies on drives in the same chassis — losing the chassis loses all copies. With fault domain placement, each mirror copy resides in a different chassis/rack/site, surviving physical failures that take out an entire enclosure.",
                     Tags = ["storage-spaces", "fault-domain", "resilience", "ssd", "mirror"],
@@ -4303,7 +4303,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-require-sms-encrypted-transfer",
                     Label = "Storage Spaces Migration: Require Encrypted File Transfer",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets RequireEncryptedTransfer=1 in StorageMigrationService policy. Requires the Storage Migration Service to use encrypted SMB3 connections when transferring files from source to destination servers. File migration traffic often traverses internal networks that may have insufficient network-level controls. Without encrypted transfer, an attacker with network capture capability on the migration network can read file contents as they are transferred. SMB3 encryption wraps all transfer traffic in AES-CCM, preventing interception during potentially hours-long migration windows.",
                     Tags = ["storage-migration", "encryption", "smb3", "data-protection", "transfer"],
@@ -4321,7 +4321,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-disable-pool-write-without-cache",
                     Label = "Storage Spaces Migration: Disable Pool Writes Without Cache Drive",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets RequireCacheDrive=1 in StorageSpaces policy. Prevents Storage Spaces pools from accepting writes unless a cache drive (NVMe or SSD) is available and healthy. Without a write cache, Storage Spaces Direct clusters accept writes directly to spinning disk — dramatically increasing write latency and reducing IOps. In environments where performance targets depend on the write cache, silently running without a cache (e.g., after a cache drive fails and is removed) can cause application-level performance degradation that is difficult to diagnose. This policy makes the cache absence immediately apparent.",
                     Tags = ["storage-spaces", "cache", "write-cache", "performance", "s2d"],
@@ -4339,7 +4339,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-enable-sms-audit-log",
                     Label = "Storage Spaces Migration: Enable Storage Migration Service Audit Log",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets AuditLogEnabled=1 in StorageMigrationService policy. Enables audit logging for both the Storage Migration Service orchestrator and proxy agents. Audit log entries record: who initiated a migration job, what source servers were inventoried, which files were transferred, when cutover was performed, and which security groups were migrated. Without an audit trail, compliance requirements (SOC 2, ISO 27001) for data migration events cannot be satisfied. Log entries are written to the SMS event channel and optionally forwarded to a SIEM.",
                     Tags = ["storage-migration", "audit", "logging", "compliance", "sms"],
@@ -4357,7 +4357,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-set-rebuild-priority-high",
                     Label = "Storage Spaces Migration: Set Pool Rebuild IO Priority to High",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets RebuildPriority=2 in StorageSpaces policy (2 = High). Sets the IO priority for Storage Spaces pool rebuild operations (resync after drive replacement) to High. By default, rebuild runs at Low priority to minimise impact on running workloads — but on a pool that has lost a drive, remaining data is exposed until rebuild completes. A two-drive failure during a slow Low-priority rebuild can cause data loss. Setting rebuild to High completes resync faster at the cost of higher IO contention, reducing the window of double-failure vulnerability.",
                     Tags = ["storage-spaces", "rebuild", "resync", "priority", "resilience"],
@@ -4375,7 +4375,7 @@ internal static class PolicyStorage
                 {
                     Id = "ssmig-disable-pool-repair-notification",
                     Label = "Storage Spaces Migration: Disable Suppression of Pool Repair Notifications",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Sets SuppressRepairNotifications=0 in StorageSpaces policy. Ensures Action Center and Event Log notifications are generated when Storage Spaces repairs (resyncs) are running. By default, Storage Spaces emits user-visible notifications during repair operations. Some deployments suppress these notifications to avoid confusion for non-technical users. However, suppressing notifications also hides critical storage health events from IT administrators who monitor Action Center or event aggregators. This setting preserves notification delivery to ensure pool repair events are visible.",
                     Tags = ["storage-spaces", "notifications", "repair", "monitoring", "health"],
@@ -4403,7 +4403,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-disable-storage-spaces-ui",
                     Label = "Disable Storage Spaces User Interface in Settings",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Removes the Storage Spaces page from Windows Settings, preventing non-administrator users from creating or modifying storage pools and virtual disks on the system.",
                     Tags = ["storage-spaces", "storage", "settings", "ui", "policy"],
@@ -4420,7 +4420,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-block-pool-creation",
                     Label = "Block Non-Admin Storage Pool Creation",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents non-administrator accounts from creating new Storage Spaces pools, ensuring that RAID-like virtual disk configurations can only be created by administrators.",
                     Tags = ["storage-spaces", "storage-pool", "admin", "policy"],
@@ -4437,7 +4437,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-disable-tiered-storage",
                     Label = "Disable Storage Spaces Automatic Tiering",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Disables automatic data movement between storage tiers (SSD vs HDD) in tiered Storage Spaces configurations, preventing the background tiering engine from consuming I/O bandwidth.",
                     Tags = ["storage-spaces", "tiering", "ssd", "hdd", "policy"],
@@ -4454,7 +4454,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-disable-pool-retirement-notification",
                     Label = "Disable Storage Pool Retirement Drive Notifications",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Suppresses the system tray notification that appears when a drive in a storage pool nears retirement threshold, preventing non-technical users from acting on storage health warnings they cannot address.",
                     Tags = ["storage-spaces", "notifications", "drive-health", "policy"],
@@ -4471,7 +4471,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-require-admin-for-pool-deletion",
                     Label = "Require Admin Rights to Delete Storage Pools",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Requires administrator privileges to delete a Storage Spaces pool or remove virtual disks, preventing accidental or malicious destruction of RAID-protected storage.",
                     Tags = ["storage-spaces", "admin", "pool-deletion", "destructive", "policy"],
@@ -4488,7 +4488,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-disable-storage-sense-dedup",
                     Label = "Disable Storage Sense Storage Spaces Deduplication",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Disables deduplication passes run by Storage Sense on Storage Spaces volumes, halting background dedup processing that can spike I/O during business hours.",
                     Tags = ["storage-spaces", "storage-sense", "deduplication", "policy"],
@@ -4505,7 +4505,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-block-spaces-over-usb",
                     Label = "Block Storage Spaces Pool Creation over USB Drives",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents USB-connected drives from being included in a Storage Spaces pool, restricting Storage Spaces to internally connected drives (SATA, NVMe, SAS) where connectivity is more reliable.",
                     Tags = ["storage-spaces", "usb", "pool", "reliability", "policy"],
@@ -4522,7 +4522,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-enable-pool-health-audit",
                     Label = "Enable Storage Pool Health Event Logging",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Enables detailed event logging for storage pool health changes including drive failures, degraded parity, and rebuild completions, providing audit trail for storage infrastructure.",
                     Tags = ["storage-spaces", "health", "audit-log", "event-log", "policy"],
@@ -4539,7 +4539,7 @@ internal static class PolicyStorage
                 {
                     Id = "sspol-disable-spaces-auto-rebuild",
                     Label = "Disable Storage Spaces Automatic Rebuild on Drive Detection",
-                    Category = "Storage",
+                    Category = "Storage — Storage Sense",
                     Description =
                         "Prevents Storage Spaces from automatically beginning a pool rebuild when a replacement drive is detected, requiring an administrator to initiate the rebuild manually for controlled recovery.",
                     Tags = ["storage-spaces", "rebuild", "auto-detect", "admin-control", "policy"],
@@ -4567,7 +4567,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-sync-center",
                 Label = "Disable Sync Center",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents users from using Windows Sync Center to synchronize files with network share partnerships.",
                 Tags = ["sync-center", "offline-files", "network", "policy"],
                 NeedsAdmin = true,
@@ -4583,7 +4583,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-setup-wizard",
                 Label = "Disable Sync Center Setup Wizard",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents the Offline Files setup wizard from running, blocking new sync partnership creation.",
                 Tags = ["sync-center", "wizard", "offline-files", "policy"],
                 NeedsAdmin = true,
@@ -4599,7 +4599,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-offline-files",
                 Label = "Disable Offline Files Feature",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Turns off the Offline Files feature entirely; files cannot be made available offline.",
                 Tags = ["offline-files", "sync-center", "network", "policy"],
                 NeedsAdmin = true,
@@ -4615,7 +4615,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-user-configuration",
                 Label = "Prevent Users from Configuring Offline Files",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Removes the ability for users to change Offline Files settings through the Control Panel.",
                 Tags = ["offline-files", "user-config", "policy", "lockdown"],
                 NeedsAdmin = true,
@@ -4631,7 +4631,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-remove-folder-from-offline",
                 Label = "Disable 'Make Available Offline' Context Menu Option",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Hides the 'Make Available Offline' option from the right-click context menu for network files.",
                 Tags = ["offline-files", "context-menu", "ui", "policy"],
                 NeedsAdmin = true,
@@ -4647,7 +4647,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-slow-link-mode",
                 Label = "Disable Slow-Link Mode for Offline Files",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents Windows from automatically switching to offline mode on slow network connections.",
                 Tags = ["offline-files", "slow-link", "network", "policy"],
                 NeedsAdmin = true,
@@ -4663,7 +4663,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-background-sync",
                 Label = "Disable Background Synchronisation of Offline Files",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents Offline Files from running background sync jobs when the user is logged on.",
                 Tags = ["offline-files", "background-sync", "performance", "policy"],
                 NeedsAdmin = true,
@@ -4679,7 +4679,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-logon-sync",
                 Label = "Disable Logon Synchronisation of Offline Files",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents Offline Files from performing a sync when the user logs on.",
                 Tags = ["offline-files", "logon", "sync", "policy"],
                 NeedsAdmin = true,
@@ -4695,7 +4695,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-logoff-sync",
                 Label = "Disable Logoff Synchronisation of Offline Files",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Prevents Offline Files from performing a sync when the user logs off.",
                 Tags = ["offline-files", "logoff", "sync", "policy"],
                 NeedsAdmin = true,
@@ -4711,7 +4711,7 @@ internal static class PolicyStorage
             {
                 Id = "syncctr-disable-reminders",
                 Label = "Disable Offline Files Sync Reminder Notifications",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 Description = "Suppresses balloon-tip reminders about Offline Files synchronisation status.",
                 Tags = ["offline-files", "notifications", "reminders", "policy"],
                 NeedsAdmin = true,
@@ -4737,7 +4737,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-vss",
                 Label = "Disable Volume Shadow Copy Service",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4754,7 +4754,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-zero-max-shadow-copies",
                 Label = "Set Maximum Shadow Copies to Zero",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4771,7 +4771,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-notifications",
                 Label = "Disable Shadow Copy Notifications",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -4788,7 +4788,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-on-network-shares",
                 Label = "Disable Shadow Copy on Network Shares",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4805,7 +4805,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-diffarea-growth",
                 Label = "Disable Shadow Copy Diff Area Growth",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4822,7 +4822,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-schedule",
                 Label = "Disable Shadow Copy Schedule",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4839,7 +4839,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-telemetry",
                 Label = "Disable Shadow Copy Telemetry",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -4856,7 +4856,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-previous-versions",
                 Label = "Disable Previous Versions Feature",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4873,7 +4873,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-system-protection",
                 Label = "Disable System Protection Shadow Copies",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4890,7 +4890,7 @@ internal static class PolicyStorage
             {
                 Id = "vscpol-disable-on-removable",
                 Label = "Disable Shadow Copy on Removable Drives",
-                Category = "Storage",
+                Category = "Storage — Storage Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4918,7 +4918,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-disable-work-folders",
                 Label = "Disable Work Folders Sync (Machine)",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets SyncDisabled=1 in the machine-side Work Folders policy key. "
                     + "Prevents Work Folders sync from running for all users on this machine, "
@@ -4938,7 +4938,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-disable-work-folders-user",
                 Label = "Disable Work Folders Sync (Current User)",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets SyncDisabled=1 in the per-user Work Folders policy key. "
                     + "Prevents Work Folders sync for the current user account without a machine-wide restriction. "
@@ -4957,7 +4957,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-force-automatic-setup",
                 Label = "Force Work Folders Setup Automatically",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets AutoProvision=1 in the machine Work Folders policy key. "
                     + "Forces Work Folders to be set up automatically using a server URL configured via MDM or GP, "
@@ -4977,7 +4977,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-block-server-url-change",
                 Label = "Prevent Users Changing Work Folders Server URL",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets UserServerAddrLocked=1 in the machine Work Folders policy key. "
                     + "Locks the Work Folders server address, preventing users from reconfiguring or redirecting "
@@ -4997,7 +4997,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-require-encryption",
                 Label = "Require Work Folders Content Encryption",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets LocalFolderEncryptionEnabled=1 in the machine Work Folders policy key. "
                     + "Requires that all locally synced Work Folders content be encrypted at rest "
@@ -5017,7 +5017,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-disable-work-folders-ui",
                 Label = "Hide Work Folders from Navigation Pane",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets ExplorerNavigationPaneHideWorkFolders=1 in the machine Work Folders policy key. "
                     + "Removes Work Folders entry from the File Explorer navigation pane, "
@@ -5037,7 +5037,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-prevent-use-work-folders",
                 Label = "Prevent Users from Configuring Work Folders",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets PreventWorkFolderFromUse=1 in the machine Work Folders policy key. "
                     + "Blocks users from setting up or enrolling in Work Folders from PC Settings or Explorer. "
@@ -5057,7 +5057,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-prevent-change-sync-settings",
                 Label = "Prevent Users Changing Work Folders Sync Settings",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets SyncSettingsLocked=1 in the per-user Work Folders policy key. "
                     + "Locks Work Folders sync settings for the current user, preventing changes to "
@@ -5077,7 +5077,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-disable-background-sync",
                 Label = "Disable Work Folders Background Sync",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets BackgroundSyncDisabled=1 in the machine Work Folders policy key. "
                     + "Prevents Work Folders from syncing in the background while the user is away, "
@@ -5097,7 +5097,7 @@ internal static class PolicyStorage
             {
                 Id = "wf-set-sync-interval",
                 Label = "Set Work Folders Minimum Sync Interval to 15 Minutes",
-                Category = "Storage",
+                Category = "Storage — Work Folders",
                 Description =
                     "Sets MinSyncInterval=15 in the machine Work Folders policy key. "
                     + "Configures the minimum time between automatic sync cycles to 15 minutes, "
@@ -5125,7 +5125,7 @@ internal static class Backup
         {
             Id = "backup-disable-file-history",
             Label = "Disable File History",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows File History backup feature via Group Policy. Useful when you use a third-party backup solution instead.",
@@ -5139,7 +5139,7 @@ internal static class Backup
         {
             Id = "backup-disable-system-restore",
             Label = "Disable System Restore",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5162,7 +5162,7 @@ internal static class Backup
         {
             Id = "backup-vss-manual",
             Label = "Set Volume Shadow Copy to Manual",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Sets the VSS service to Manual start. Reduces background I/O if you don't use System Restore or Previous Versions.",
@@ -5176,7 +5176,7 @@ internal static class Backup
         {
             Id = "backup-disable-backup-ui",
             Label = "Disable Windows Backup Settings Page",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5191,7 +5191,7 @@ internal static class Backup
         {
             Id = "backup-disable-previous-versions",
             Label = "Disable Previous Versions Tab",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Previous Versions' tab from file/folder properties. Cleans up the context menu when VSS is not in use.",
@@ -5205,7 +5205,7 @@ internal static class Backup
         {
             Id = "backup-disable-reliability-monitor",
             Label = "Disable Reliability Monitoring",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Reliability Monitor data collection by setting TimeStampInterval to 0. Reduces background I/O.",
@@ -5219,7 +5219,7 @@ internal static class Backup
         {
             Id = "backup-bak-increase-shadow-storage",
             Label = "Increase Shadow Copy Storage Limit",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5234,7 +5234,7 @@ internal static class Backup
         {
             Id = "backup-bak-disable-restore-low-disk",
             Label = "Disable System Restore on Low Disk",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5249,7 +5249,7 @@ internal static class Backup
         {
             Id = "backup-bak-set-backup-interval",
             Label = "Set Backup Schedule Interval to 24 Hours",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5264,7 +5264,7 @@ internal static class Backup
         {
             Id = "backup-sr-frequency-unlimited",
             Label = "Allow Frequent System Restore Points",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5292,7 +5292,7 @@ internal static class Backup
         {
             Id = "backup-wer-reduce-queue",
             Label = "Limit Windows Error Reporting Queue to 1",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5307,7 +5307,7 @@ internal static class Backup
         {
             Id = "backup-disable-backup-schedule-nag",
             Label = "Suppress Backup Schedule Balloon Notification",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5325,7 +5325,7 @@ internal static class Backup
         {
             Id = "backup-disable-aedebug-auto",
             Label = "Disable Auto-Attach of JIT Debugger on Crash",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5340,7 +5340,7 @@ internal static class Backup
         {
             Id = "backup-disable-system-image",
             Label = "Disable System Image Backup",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5355,7 +5355,7 @@ internal static class Backup
         {
             Id = "backup-disable-cloud-backup-settings",
             Label = "Disable Cloud Backup of Settings",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from backing up settings and preferences to the cloud. Default: enabled with Microsoft account.",
@@ -5369,7 +5369,7 @@ internal static class Backup
         {
             Id = "backup-disable-auto-backup-scheduling",
             Label = "Disable Automatic Backup Scheduling",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5384,7 +5384,7 @@ internal static class Backup
         {
             Id = "backup-set-restore-point-frequency-1440",
             Label = "Set Restore Point Frequency to Daily",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5419,7 +5419,7 @@ internal static class Backup
         {
             Id = "backup-disable-previous-versions-ui",
             Label = "Disable Previous Versions Tab",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides the Previous Versions tab in file properties. Declutters the UI when VSS is not used. Default: visible.",
@@ -5433,7 +5433,7 @@ internal static class Backup
         {
             Id = "backup-disable-notifications",
             Label = "Disable Windows Backup Notifications",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Backup reminder notifications. Prevents periodic prompts to set up backup. Default: enabled.",
@@ -5454,7 +5454,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-auto-repair-prompt",
             Label = "Disable Automatic Repair at Boot",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5469,7 +5469,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-winre-partition",
             Label = "Disable Windows Recovery Environment",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5493,7 +5493,7 @@ internal static class Recovery
         {
             Id = "recovery-enable-last-known-good",
             Label = "Enable Last Known Good Configuration",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5517,7 +5517,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-recovery-ui",
             Label = "Disable Windows Recovery UI",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5532,7 +5532,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-crash-auto-reboot-timeout",
             Label = "Set Crash Reboot Timeout to 30s",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5547,7 +5547,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-automatic-managed-page-file",
             Label = "Disable Auto-Managed Page File",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5567,7 +5567,7 @@ internal static class Recovery
         {
             Id = "recovery-enable-boot-logging",
             Label = "Enable Boot Logging (ntbtlog.txt)",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5582,7 +5582,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-winre-auto-repair",
             Label = "Disable Automatic Repair (Windows RE)",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5597,7 +5597,7 @@ internal static class Recovery
         {
             Id = "recovery-set-dump-folder-path",
             Label = "Set Minidump Folder to C:\\Minidumps",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Redirects minidump files to C:\\Minidumps for easier collection and analysis. Default: %SystemRoot%\\Minidump.",
@@ -5614,7 +5614,7 @@ internal static class Recovery
         {
             Id = "recovery-disable-startup-repair-prompt",
             Label = "Disable Startup Repair Recommendation Prompt",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5641,7 +5641,7 @@ internal static class SystemRestore
         {
             Id = "restore-enable-scheduled-points",
             Label = "Enable Scheduled Restore Points",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables the scheduled restore point creation task that creates weekly restore points.",
@@ -5655,7 +5655,7 @@ internal static class SystemRestore
         {
             Id = "restore-disable-wer-queue",
             Label = "Disable Windows Error Reporting Queue",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the WER report queue that stores crash reports. Saves disk space and reduces I/O.",
@@ -5669,7 +5669,7 @@ internal static class SystemRestore
         {
             Id = "restore-set-wer-max-archive-5",
             Label = "Limit WER Archive to 5 Reports",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Limits the WER archive to 5 stored reports. Older reports are automatically purged.",
@@ -5683,7 +5683,7 @@ internal static class SystemRestore
         {
             Id = "restore-disable-auto-recovery-boot",
             Label = "Disable Automatic Recovery on Boot Failure",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the automatic boot repair that triggers after consecutive boot failures. Prevents unwanted repair loops.",
@@ -5698,7 +5698,7 @@ internal static class SystemRestore
         {
             Id = "restore-disable-shadow-copy-optimisation",
             Label = "Disable VSS Disk Space Optimisation",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Volume Shadow Copy optimization that runs during idle periods. Reduces background I/O.",
@@ -5712,7 +5712,7 @@ internal static class SystemRestore
         {
             Id = "restore-disable-hiberfil",
             Label = "Disable Hibernate File (Reclaim Disk Space)",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows hibernation support to reclaim the hiberfil.sys disk space (typically 5–10 GB).",
@@ -5726,7 +5726,7 @@ internal static class SystemRestore
         {
             Id = "restore-suppress-wer-second-level-data",
             Label = "Suppress WER Second-Level Data Collection",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Error Reporting from uploading additional heap/module diagnostic data on crashes.",
@@ -5740,7 +5740,7 @@ internal static class SystemRestore
         {
             Id = "restore-limit-wer-report-queue",
             Label = "Limit WER Report Queue to 2",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Limits the number of pending crash reports queued for upload to 2, saving disk space.",
@@ -5754,7 +5754,7 @@ internal static class SystemRestore
         {
             Id = "restore-limit-wer-archive-size",
             Label = "Limit WER Archive to 5 Files",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Caps the number of archived crash reports retained locally to 5 files.",
@@ -5768,7 +5768,7 @@ internal static class SystemRestore
         {
             Id = "restore-disable-wer-throttle-bypass",
             Label = "Disable WER Network Throttle Bypass",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents WER from bypassing network cost throttling when uploading reports on metered connections.",
@@ -5782,7 +5782,7 @@ internal static class SystemRestore
         {
             Id = "restore-set-wer-response-timeout",
             Label = "Set WER Server Response Timeout (20 s)",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets a 20-second timeout for the WER crash report server to reduce startup delays on slow networks.",
@@ -5810,7 +5810,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-compressed-folders",
             Label = "Disable ZIP Compressed Folder Support in Explorer",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableCompressedFolders=1 in the CompressedFolders Group Policy key. "
                 + "Removes the native ZIP/compressed folder handler from File Explorer. "
@@ -5830,7 +5830,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-extract-all",
             Label = "Remove 'Extract All' Context-Menu Option",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableExtractAll=1 in the CompressedFolders Group Policy key. "
                 + "Hides the 'Extract All' entry from the right-click context menu on ZIP files. "
@@ -5849,7 +5849,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-compress-selected-files",
             Label = "Remove 'Compress to ZIP' Context-Menu Option",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableNewCompressedFolder=1 in the CompressedFolders Group Policy key. "
                 + "Removes the 'Compress to ZIP file' entry from the File Explorer shell context menu. "
@@ -5868,7 +5868,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-block-network-archive-open",
             Label = "Block Opening Remote ZIP Files as Virtual Folders",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableNetworkCompressedFolders=1 in the CompressedFolders Group Policy key. "
                 + "Prevents users from browsing ZIP archives located on network shares as virtual folders. "
@@ -5888,7 +5888,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-cab-browsing",
             Label = "Disable CAB File Browsing in Explorer",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableCabFolders=1 in the CompressedFolders Group Policy key. "
                 + "Prevents File Explorer from opening Microsoft Cabinet (.cab) files as virtual folders. "
@@ -5908,7 +5908,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-restrict-autorun-in-archive",
             Label = "Block AutoRun Execution Inside Archive Folders",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets BlockArchiveAutoRun=1 in the CompressedFolders Group Policy key. "
                 + "Prevents autorun.inf scripts embedded in ZIP/CAB archives from executing when the archive "
@@ -5928,7 +5928,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-zip-sendto",
             Label = "Remove 'Send To Compressed Folder' from Right-Click",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableSendToCompressed=1 in the CompressedFolders Group Policy key. "
                 + "Removes the 'Compressed (zipped) folder' destination from the Send To context menu entry. "
@@ -5947,7 +5947,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-restrict-archive-max-size",
             Label = "Enforce Maximum Archive Size Limit",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets MaxArchiveSizeMB=512 in the CompressedFolders Group Policy key. "
                 + "Limits the maximum size of archives that Explorer will open as virtual folders to 512 MB. "
@@ -5967,7 +5967,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-disable-archive-preview-handler",
             Label = "Disable Archive Preview Handler in Reading Pane",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets DisableArchivePreviewHandler=1 in the CompressedFolders Group Policy key. "
                 + "Prevents the Explorer Reading Pane from rendering a ZIP/CAB file preview when it is selected. "
@@ -5987,7 +5987,7 @@ internal static class PolicyCompressedFolders
         {
             Id = "zipfld-enforce-archive-scan-on-open",
             Label = "Enforce Antivirus Scan Before Opening Archive Content",
-            Category = "Storage",
+            Category = "Storage — Work Folders",
             Description =
                 "Sets RequireScanBeforeArchiveOpen=1 in the CompressedFolders Group Policy key. "
                 + "Forces Windows Defender or the registered antivirus to scan archive contents before "

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -599,7 +599,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-printer-redirection",
                     Label = "Disable Printer Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets fDisableCpm=1 to prevent local printers from being redirected into RDP sessions, blocking potentially sensitive print jobs from reaching the remote host.",
                     Tags = ["rdp", "printer", "redirection", "hardening", "policy"],
@@ -616,7 +616,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-com-port-redirection",
                     Label = "Disable COM Port Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description = "Sets fDisableCcm=1 to prevent local COM (serial) ports from being redirected into RDP sessions.",
                     Tags = ["rdp", "com-port", "redirection", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -632,7 +632,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-lpt-redirection",
                     Label = "Disable LPT Port Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description = "Sets fDisableLPT=1 to prevent local parallel (LPT) ports from being redirected into the remote session.",
                     Tags = ["rdp", "lpt", "redirection", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -648,7 +648,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-smart-card-redirection",
                     Label = "Disable Smart Card Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets fDisableSCard=1 to prevent local smart cards from being redirected into the remote session, mitigating remote authentication using locally inserted smart cards.",
                     Tags = ["rdp", "smart-card", "redirection", "hardening", "policy"],
@@ -665,7 +665,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-clipboard-file-copy",
                     Label = "Disable Clipboard File Copy from RDP Session",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables the ability to copy files via clipboard between the remote session and the local desktop, supplementing fDisableClip for file-drag exfiltration prevention.",
                     Tags = ["rdp", "clipboard", "file-copy", "hardening", "policy"],
@@ -682,7 +682,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "cliprdp-disable-usb-redirection",
                     Label = "Disable USB Device Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description = "Disables USB device redirection so that locally connected USB devices are not forwarded into the remote session.",
                     Tags = ["rdp", "usb", "redirection", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -710,7 +710,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rdpclt-require-nla",
                 Label = "RDP Client: Require Network Level Authentication (NLA)",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -732,7 +732,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rdpclt-deny-on-auth-fail",
                 Label = "RDP Client: Block Connection When Server Authentication Fails",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -753,7 +753,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rdpclt-force-encryption-high",
                 Label = "RDP Client: Enforce High (128-Bit) RDP Encryption",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -774,7 +774,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rdpclt-disable-password-save",
                 Label = "RDP Client: Prevent Saving Passwords in Remote Desktop Client",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -795,7 +795,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rdpclt-enable-audit-logging",
                 Label = "RDP Client: Enable RDP Session Audit Logging",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -828,7 +828,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-disable-solicited-gpo",
                 Label = "Remote Assistance: Block Solicited RA via GPO",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaPolicy],
@@ -845,7 +845,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-view-only-gpo",
                 Label = "Remote Assistance: Restrict to View-Only via GPO",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaPolicy],
@@ -862,7 +862,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-limit-ticket-6hr-gpo",
                 Label = "Remote Assistance: Limit Invitation Lifetime to 6 Hours (GPO)",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaPolicy],
@@ -879,7 +879,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-disable-offer-gpo",
                 Label = "Remote Assistance: Block Unsolicited (Offer) RA via GPO",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaOffered],
@@ -896,7 +896,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-limit-offer-ticket-1hr",
                 Label = "Remote Assistance: Limit Offer RA Token Expiry to 1 Hour",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaOffered],
@@ -913,7 +913,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-disable-runtime",
                 Label = "Remote Assistance: Disable via Runtime Control Key",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [RaRuntime],
@@ -930,7 +930,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-view-only-runtime",
                 Label = "Remote Assistance: Restrict to View-Only (Runtime)",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [RaRuntime],
@@ -947,7 +947,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-limit-ticket-1hr-runtime",
                 Label = "Remote Assistance: Limit Invitation Lifetime to 1 Hour (Runtime)",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [RaRuntime],
@@ -964,7 +964,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-disable-chat",
                 Label = "Remote Assistance: Disable Chat Window",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [RaRuntime],
@@ -981,7 +981,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rast-deny-ts-connections-gpo",
                 Label = "Remote Assistance: Block All Remote Desktop/RA Connections via GPO",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RaPolicy],
@@ -1008,7 +1008,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-enable-remote-credential-guard",
                 Label = "Enable Remote Credential Guard for Remote Desktop Connections",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1025,7 +1025,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-enforce-strict-kerberos-delegation",
                 Label = "Enforce Strict Kerberos Delegation Constraints for RCG Sessions",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1042,7 +1042,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-restrict-ntlm-in-rcg-sessions",
                 Label = "Restrict NTLM Authentication in Remote Credential Guard Sessions",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1059,7 +1059,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-audit-rcg-session-events",
                 Label = "Enable Audit Logging for Remote Credential Guard Session Events",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1076,7 +1076,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-enable-rcg-for-admin-sessions",
                 Label = "Enforce Remote Credential Guard for All Administrator Remote Desktop Sessions",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1093,7 +1093,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-block-credential-delegation-to-untrusted",
                 Label = "Block Credential Delegation to Untrusted Remote Desktop Hosts",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1110,7 +1110,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-require-nla-for-rcg-sessions",
                 Label = "Require Network Level Authentication for Remote Credential Guard Sessions",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1127,7 +1127,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-restrict-rcg-to-domain-joined-hosts",
                 Label = "Restrict Remote Credential Guard to Domain-Joined Remote Hosts",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1144,7 +1144,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-enable-rcg-session-encryption",
                 Label = "Enforce Strong Encryption for Remote Credential Guard Session Traffic",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1161,7 +1161,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rcgrd-monitor-rcg-connection-anomalies",
                 Label = "Enable Monitoring for Remote Credential Guard Connection Anomalies",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1188,7 +1188,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-enable-rpc-authentication",
                 Label = "Enable RPC Endpoint Mapper Authentication",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1205,7 +1205,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-enable-rpc-message-integrity",
                 Label = "Enable RPC Connection Message Integrity",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1222,7 +1222,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-disable-rpc-over-http",
                 Label = "Disable RPC over HTTP Proxy",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1239,7 +1239,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-enforce-rpc-security-callback",
                 Label = "Enforce RPC Security Callback Verification",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1256,7 +1256,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-disable-rpc-logging",
                 Label = "Enable RPC Connection Logging",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1273,7 +1273,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-set-rpc-call-timeout",
                 Label = "Set RPC Call Timeout Limit",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1290,7 +1290,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-disable-rpc-ncalrpc-transport",
                 Label = "Restrict RPC NCALRPC Local Transport",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1307,7 +1307,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-disable-rpc-anon-auth",
                 Label = "Disable Anonymous RPC Authentication Level",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1324,7 +1324,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "rpcpol-disable-rpc-portrange-override",
                 Label = "Disable RPC Dynamic Port Range Override",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1352,7 +1352,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-winrm-service",
                     Label = "Disable WinRM Service Auto-Start via Policy",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables the WinRM service from starting automatically via Group Policy, preventing incoming PowerShell remoting and WMI-over-WinRM connections unless explicitly activated.",
                     Tags = ["winrm", "remoting", "jea", "hardening", "policy"],
@@ -1369,7 +1369,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-block-unencrypted-winrm",
                     Label = "Block Unencrypted WinRM Traffic",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disallows unencrypted WinRM communication, requiring all WinRM traffic to use HTTPS or Kerberos/TLS encryption to protect credentials and data in transit.",
                     Tags = ["winrm", "encryption", "hardening", "policy"],
@@ -1386,7 +1386,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-basic-auth-server",
                     Label = "Disable WinRM Basic Authentication (Server Side)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables Basic authentication on the WinRM server side, preventing password transmission in clear text (Base64) over WinRM connections.",
                     Tags = ["winrm", "basic-auth", "hardening", "policy"],
@@ -1403,7 +1403,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-basic-auth-client",
                     Label = "Disable WinRM Basic Authentication (Client Side)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables Basic authentication for the WinRM client, preventing the client from offering or accepting Basic auth credentials when connecting to remote endpoints.",
                     Tags = ["winrm", "basic-auth", "client", "hardening", "policy"],
@@ -1420,7 +1420,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-digest-auth",
                     Label = "Disable WinRM Digest Authentication",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables the Digest authentication scheme on the WinRM client, preventing weak credential hashing schemes from being used in remote management connections.",
                     Tags = ["winrm", "digest-auth", "hardening", "policy"],
@@ -1437,7 +1437,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-require-kerberos",
                     Label = "Require Kerberos for WinRM Authentication",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Configures the WinRM client to require Kerberos-based authentication for remote management connections, ensuring only domain-authenticated sessions are established.",
                     Tags = ["winrm", "kerberos", "authentication", "hardening", "policy"],
@@ -1454,7 +1454,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-set-idle-timeout",
                     Label = "Set WinRM Session Idle Timeout to 900 Seconds",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets the WinRM service idle timeout to 900 seconds (15 minutes) to automatically terminate abandoned PowerShell remoting sessions, reducing attack window for session hijacking.",
                     Tags = ["winrm", "timeout", "jea", "hardening", "policy"],
@@ -1471,7 +1471,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-runasinteractive",
                     Label = "Disable RunAs Interactive in WinRM Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Prevents users on WinRM sessions from using RunAs to elevate to interactive logon tokens, limiting privilege escalation paths within remote management sessions.",
                     Tags = ["winrm", "runas", "jea", "hardening", "policy"],
@@ -1488,7 +1488,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-block-client-unencrypted",
                     Label = "Block Unencrypted WinRM on Client Side",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disallows the WinRM client from sending or accepting unencrypted messages, ensuring all outgoing remote management traffic is protected.",
                     Tags = ["winrm", "encryption", "client", "hardening", "policy"],
@@ -1505,7 +1505,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "psjea-disable-credssp",
                     Label = "Disable CredSSP Authentication for WinRM",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Disables CredSSP (Credential Security Support Provider) in WinRM, preventing credential delegation attacks where full network credentials are passed through to remote hosts.",
                     Tags = ["winrm", "credssp", "delegation", "hardening", "policy"],
@@ -1532,7 +1532,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "tssvcadv-disable-session-shadowing",
                     Label = "TS Adv: Disable RDP Session Shadowing to Prevent Covert Observation",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets Shadow=4 in Terminal Services policy (4 = No remote control — shadowing disabled). Disables the RDP session shadowing feature that allows administrators to view or interact with another user's Remote Desktop session. While useful for helpdesk support, session shadowing creates a backdoor for privileged observation without the target user's knowledge on systems configured with Shadow=2 (Full control without user permission). "
                         + "Session shadowing (Remote Control in older RDP documentation) with Shadow=2 allows domain administrators to take full control of any active user session without generating a visible prompt to the session user. From a data privacy perspective, this means an administrator can silently observe and control everything a user types, views, or sends — including personal passwords entered in non-SSO login forms, confidential documents open in the session, or personal communications. Setting Shadow=4 eliminates shadowing capability even for administrators; helpdesk support must use alternative methods (Teams screenshare, Intune remote assist).",
@@ -1551,7 +1551,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "tssvcadv-enable-rpc-traffic-encryption",
                     Label = "TS Adv: Enable RPC Traffic Encryption for Terminal Services Channel",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets fEncryptRPCTraffic=1 in Terminal Services policy. Enables encryption of all RPC (Remote Procedure Call) traffic on the Terminal Services management channel — the control plane channel used for session brokering, licensing, and management operations separate from the RDP data channel. "
                         + "The Terminal Services RPC management channel is used for session reconnection brokering, RD Gateway authentication, RD Connection Broker negotiation, and licensing validation between RDS components. Without RPC traffic encryption on this channel, an attacker with network access to internal RDS infrastructure can intercept session broker negotiations, connection authorisation data, and licensing state exchanges. These are lower-frequency channels than the RDP data stream but contain session routing and authentication decisions that could be manipulated to redirect sessions or suppress licensing enforcement.",
@@ -1569,7 +1569,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "tssvcadv-enable-keepalive-connection",
                     Label = "TS Adv: Enable RDP Keep-Alive to Detect and Clean Up Stale Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets KeepAliveEnable=1 and KeepAliveInterval=1 in Terminal Services policy. Enables the RDP keep-alive mechanism to send periodic keep-alive probes (every 1 minute) to detect stale or dead RDP sessions. When a client disappears abruptly without a graceful disconnect (network failure, power outage, crash), the server-side session remains in a connected/active state consuming resources until the TCP timeout expires — which can be hours on some network stacks. "
                         + "Stale sessions occupying Connected status are undetectable via casual inspection (they appear active) but are abandoned by their client. On RDSH (Remote Desktop Session Host) deployments that license per-concurrent-session, stale sessions consume RDS CALs. More critically, a stale session with an open command prompt or elevated shell is an exploitable privileged session — if an attacker can send RST packets to the genuine client's TCP stream and then replay the session token, they may be able to inherit the session state.",
@@ -1598,7 +1598,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "tspol-session-timeout-disconnect",
                 Label = "RDS: Terminate Disconnected Sessions After 1 Hour",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1617,7 +1617,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "tspol-enable-automatic-reconnect",
                 Label = "RDS: Enable Session Reconnect on Network Drop",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1648,7 +1648,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-block-print-from-container",
                     Label = "WDAG: Block Printing from the WDAG Container",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSIPrintBlockSettings=0 in AppHVSI policy (all printing blocked). Disables printing from within the WDAG container. WDAG printing is a potential exfiltration vector: a compromised website within the container could automatically trigger printing sensitive data from the host-provided print queue. While this is a low-probability attack (requiring significant user interaction), blocking printing from the container eliminates the risk while having minimal impact — users who need to print document in an isolated session can download the document to an approved location first.",
                     Tags = ["wdag", "print-block", "exfiltration", "container", "network-printer"],
@@ -1666,7 +1666,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-disable-camera-mic-in-container",
                     Label = "WDAG: Disable Camera and Microphone Access in WDAG Container",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSICameraAndMicrophoneSettings=0 in AppHVSI policy (both disabled). Prevents websites running inside the WDAG container from accessing the host's camera and microphone. Camera and microphone access from an isolated container is a potential privacy and exfiltration risk — a malicious site in the container could silently activate the camera or microphone to capture the user's environment. Since WDAG is intended for untrusted websites, granting media device access undermines the isolation model. The default is blocked; this policy explicitly enforces it.",
                     Tags = ["wdag", "camera", "microphone", "privacy", "media-access"],
@@ -1684,7 +1684,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-define-enterprise-network-domain-list",
                     Label = "WDAG: Enable Enterprise Network Isolation (Route Untrusted Sites to Container)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSIAllowedDomains policy enabled flag=1. Activates the WDAG enterprise network domain isolation feature. Enterprise domains (configured via the Network Isolation policy) are considered trusted and open in the standard Edge host browser. All other domains are considered untrusted and are automatically redirected to the WDAG container. This network isolation approach ensures that users are protected by default without needing to consciously open WDAG — the browser automatically routes untrusted traffic to the container.",
                     Tags = ["wdag", "network-isolation", "domain-routing", "automatic", "enterprise-trusted"],
@@ -1702,7 +1702,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-enable-wdag-audit-logging",
                     Label = "WDAG: Enable WDAG Container Event Logging",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSIAuditMode=1 in AppHVSI policy. Enables event logging for WDAG container lifecycle and security events: container start, container stop, isolation boundary violations, clipboard policy enforcement, network domain routing decisions, and container crashes. WDAG events are logged to the Microsoft-Windows-Windows-Defender-ApplicationGuard/Operational channel. These events enable IT to track WDAG usage patterns, detect frequent container crashes (indicating exploit attempts), and audit clipboard and print policy enforcement.",
                     Tags = ["wdag", "audit-logging", "container-events", "event-log", "security-monitoring"],
@@ -1720,7 +1720,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-restrict-wdag-to-edge-only",
                     Label = "WDAG: Restrict WDAG Isolation to Microsoft Edge Only",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSIBrowserOptions=1 in AppHVSI policy. Restricts WDAG container usage to Microsoft Edge. Prevents other application types from launching their own WDAG containers. If enabled for standalone WDAG (value 2), arbitrary applications can request WDAG isolation. Restricting to Edge-only (value 1) ensures the WDAG container surface is limited to the browser scenario, reducing the attack surface of the WDAG subsystem itself.",
                     Tags = ["wdag", "edge-only", "app-isolation", "restriction", "container-surface"],
@@ -1738,7 +1738,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "wdagfc-enable-wdag-telemetry",
                     Label = "WDAG: Enable WDAG Diagnostic Telemetry for Threat Intelligence",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Sets AppHVSITelemetry=1 in AppHVSI policy. Enables WDAG to send diagnostic telemetry data to Microsoft when a threat is detected or a container security boundary violation is attempted. WDAG telemetry covers container anomaly detection: unexpected kernel calls from the container, attempts to access host memory, and container process crashes consistent with exploit activity. This telemetry feeds Microsoft's Windows Defender threat intelligence, improving detection of novel browser exploits. In regulated environments, telemetry policy should be reviewed against data handling requirements.",
                     Tags = ["wdag", "telemetry", "threat-intelligence", "diagnostics", "microsoft"],
@@ -1766,7 +1766,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "wdagpol-configure-network-isolation",
                 Label = "WDAG: Enable Network Isolation for Container",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1797,7 +1797,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-client-no-unencrypted",
                 Label = "Disable Unencrypted WinRM Client Traffic",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1816,7 +1816,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-client-no-negotiate",
                 Label = "Disable WinRM Client NTLM (Negotiate) Authentication",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1835,7 +1835,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-client-no-credssp",
                 Label = "Disable WinRM Client CredSSP Authentication",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1854,7 +1854,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-service-no-unencrypted",
                 Label = "Disable Unencrypted WinRM Service Traffic",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1872,7 +1872,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-service-no-negotiate",
                 Label = "Disable WinRM Service NTLM (Negotiate) Authentication",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1891,7 +1891,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-service-disable-runas",
                 Label = "Disable WinRM Service RunAs Feature",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1908,7 +1908,7 @@ internal static class PolicyRemoteAccess
             {
                 Id = "winrm-service-allow-kerberos",
                 Label = "Explicitly Allow Kerberos for WinRM Service",
-                Category = "Remote Desktop",
+                Category = "Remote Desktop — Clipboard Rdp Redirection",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1938,7 +1938,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmpol-disable-winrm-service",
                     Label = "Disable WinRM Service Autostart",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Prevents the Windows Remote Management service from starting automatically. On endpoints that do not require remote management (most workstations), disabling WinRM removes the remote PowerShell attack surface entirely. Default: WinRM may be enabled on domain machines via Group Policy. Recommended: 1 on non-managed or non-admin workstations.",
                     Tags = ["winrm", "remoting", "service", "disabled", "attack-surface", "policy"],
@@ -1956,7 +1956,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmpol-enable-audit-logging",
                     Label = "Enable WinRM Session Audit Logging",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Clipboard Rdp Redirection",
                     Description =
                         "Records successful and failed WinRM authentication attempts, session creation, and session teardown events in the Windows event log (Microsoft-Windows-WinRM/Operational). Provides forensic visibility into remote management activity. Default: WinRM operational log not always enabled. Recommended: 1 on all endpoints.",
                     Tags = ["winrm", "remoting", "audit", "logging", "forensics", "policy"],
@@ -1983,7 +1983,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-disable-remote-shell",
                     Label = "Disable WinRM Remote Shell Access",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets AllowRemoteShellAccess=0 to disable remote shell access over WinRM entirely. Blocks winrs.exe connections and PowerShell remoting sessions initiated from remote machines, limiting interactive shell exposure.",
                     Tags = ["winrm", "remote-shell", "access", "policy", "hardening"],
@@ -2000,7 +2000,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-limit-shells-per-user",
                     Label = "Limit WinRM Shells per User",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets MaxShellsPerUser=2 in the RemoteShell policy. Caps the number of concurrent WinRM remote shells a single user can open, mitigating resource exhaustion from shell flooding attacks.",
                     Tags = ["winrm", "shell", "quota", "limit", "policy"],
@@ -2017,7 +2017,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-limit-concurrent-users",
                     Label = "Limit Concurrent WinRM Shell Users",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets MaxConcurrentUsers=5 in the RemoteShell policy. Restricts the total number of users who can run simultaneous WinRM remote shells on this endpoint, bounding server load from large-scale remoting campaigns.",
                     Tags = ["winrm", "concurrent", "users", "quota", "policy"],
@@ -2034,7 +2034,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-set-idle-timeout",
                     Label = "Set WinRM Shell Idle Timeout (1 min)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets IdleTimeoutms=60000 (1 minute) in the RemoteShell policy. Disconnects remote shell sessions that have been idle beyond the threshold, reclaiming server resources and reducing the attack window of orphaned sessions.",
                     Tags = ["winrm", "timeout", "idle", "session", "policy"],
@@ -2051,7 +2051,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-set-shell-run-time",
                     Label = "Limit WinRM Shell Maximum Run Time",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets MaxShellRunTime=900000 (15 minutes) in the RemoteShell policy. Forces termination of remote shells running longer than the threshold, preventing long-running background processes from persisting through WinRM sessions.",
                     Tags = ["winrm", "runtime", "timeout", "shell", "policy"],
@@ -2068,7 +2068,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-limit-processes-per-shell",
                     Label = "Limit WinRM Processes per Shell",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets MaxProcessesPerShell=5 in the RemoteShell policy. Caps the number of child processes a single WinRM shell session can spawn, limiting post-exploitation process trees from remote shell access.",
                     Tags = ["winrm", "processes", "quota", "limit", "policy"],
@@ -2085,7 +2085,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-limit-memory-per-shell",
                     Label = "Limit WinRM Shell Memory (150 MB)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets MaxMemoryPerShellMB=150 in the RemoteShell policy. Restricts total RAM available to a single WinRM remote shell session, preventing memory exhaustion attacks from intensive remote operations.",
                     Tags = ["winrm", "memory", "quota", "limit", "policy"],
@@ -2102,7 +2102,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-block-env-variables",
                     Label = "Block Environment Variable Modification in WinRM Shells",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets AllowEnvironmentVariables=0 in the RemoteShell policy. Prevents remote WinRM shells from setting or overriding environment variables, reducing the risk of PATH hijacking or credential injection via env variable manipulation.",
                     Tags = ["winrm", "environment", "variables", "security", "policy"],
@@ -2119,7 +2119,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-block-interactive-shell",
                     Label = "Block Interactive WinRM Shell Sessions",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets AllowInteractiveShell=0 in the RemoteShell policy. Blocks the creation of interactive WinRM shell sessions (winrs -r:<server> cmd) while still allowing non-interactive command execution, limiting attacker-controlled shell access.",
                     Tags = ["winrm", "interactive", "shell", "access", "policy"],
@@ -2136,7 +2136,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "rshpol-disable-remote-shell-inbound",
                     Label = "Disable WinRM Inbound Remote Shell",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets AllowRemoteShellInbound=0 in the RemoteShell policy. Prevents this machine from accepting inbound WinRM remote shell connections while still permitting outbound WinRM sessions to remote targets.",
                     Tags = ["winrm", "inbound", "shell", "hardening", "policy"],
@@ -2165,7 +2165,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmadv-set-max-connections",
                     Label = "Limit Maximum Concurrent WinRM Management Connections",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Sets the maximum number of concurrent WinRM management sessions to 25, preventing resource exhaustion from session flooding attacks against the WinRM listener.",
                     Tags = ["winrm", "max-connections", "dos-prevention", "security", "policy"],
@@ -2182,7 +2182,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmadv-restrict-trusted-hosts-empty",
                     Label = "Clear WinRM Trusted Hosts (Require Kerberos Domain Auth)",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Clears the WinRM TrustedHosts list, preventing workgroup/NTLM authentication to arbitrary hosts and requiring all WinRM connections to use Kerberos domain authentication.",
                     Tags = ["winrm", "trusted-hosts", "kerberos", "ntlm", "policy"],
@@ -2199,7 +2199,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmadv-disable-credssp-service",
                     Label = "Disable CredSSP Authentication on WinRM Service",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Prevents the WinRM service from accepting CredSSP (Credential Security Support Provider) authentication, which delegates full NTLM/Kerberos credentials to the remote host and is the credential delegation method most exploited in pass-the-credential attacks.",
                     Tags = ["winrm", "credssp", "credential-delegation", "security", "policy"],
@@ -2216,7 +2216,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmadv-disable-winrm-telemetry",
                     Label = "Disable WinRM / WSMAN Telemetry to Microsoft",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Prevents WinRM / WSMAN from sending authentication event, session usage, and protocol negotiation telemetry to Microsoft.",
                     Tags = ["winrm", "telemetry", "privacy", "microsoft", "policy"],
@@ -2233,7 +2233,7 @@ internal static class PolicyRemoteAccess
                 {
                     Id = "winrmadv-log-authentication-failures",
                     Label = "Log WinRM Authentication Failure Events in Security Log",
-                    Category = "Remote Desktop",
+                    Category = "Remote Desktop — Win Rm Remote Shell",
                     Description =
                         "Enables Security event log entries for all failed WinRM authentication attempts, providing visibility into brute-force and credential stuffing attacks against the remote management endpoint.",
                     Tags = ["winrm", "auth-failure", "event-log", "security-audit", "policy"],
@@ -2261,7 +2261,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-disable-offer-ra",
             Label = "Disable Offer Remote Assistance",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets fAllowUnsolicited=0 under the Terminal Services Group Policy key. "
                 + "Prevents helpers from offering unsolicited Remote Assistance sessions. "
@@ -2280,7 +2280,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-require-explicit-prompt",
             Label = "Require Explicit User Consent for RA Control",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets fEnableFullControl=0 under the Terminal Services Group Policy key. "
                 + "Restricts incoming Remote Assistance sessions to view-only mode; the user must grant explicit "
@@ -2300,7 +2300,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-max-ticket-expiry-hours",
             Label = "Limit Remote Assistance Ticket Validity to 1 Hour",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets MaxTicketExpiryUnits=1 and MaxTicketExpiry=1 under the RemoteAssistance Policy key. "
                 + "Limits invitation ticket validity to 1 hour. "
@@ -2319,7 +2319,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-require-bandwidth-limit",
             Label = "Set Remote Assistance Bandwidth Limit",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets MaxAllowedBandwidth=2 under the RemoteAssistance Policy key. "
                 + "Caps bandwidth consumed by a Remote Assistance session (value 2 = 2 Mbps maximum). "
@@ -2338,7 +2338,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-disable-email-tickets",
             Label = "Disable Email Invitation Tickets for RA",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets fAllowEmailInvitations=0 under the Terminal Services Group Policy key. "
                 + "Prevents users from creating Remote Assistance invitation tickets delivered by email. "
@@ -2357,7 +2357,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-disable-easy-connect",
             Label = "Disable Easy Connect Remote Assistance",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets fAllowEasyConnect=0 under the RemoteAssistance Policy key. "
                 + "Disables the 'Easy Connect' Remote Assistance method which uses the Peer Name Resolution Protocol "
@@ -2377,7 +2377,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-log-sessions",
             Label = "Enable Remote Assistance Session Logging",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets EnableRASSessionAudit=1 under the RemoteAssistance Policy key. "
                 + "Enables audit logging of Remote Assistance connection events. "
@@ -2396,7 +2396,7 @@ internal static class PolicyRemoteAssistance
         {
             Id = "remassist-policy-disable-file-transfer",
             Label = "Disable File Transfer During RA Sessions",
-            Category = "Remote Desktop",
+            Category = "Remote Desktop — Win Rm Remote Shell",
             Description =
                 "Sets fDisableExclamation=1 under the Terminal Services Group Policy key. "
                 + "Disables the file-transfer feature in Remote Assistance sessions. "

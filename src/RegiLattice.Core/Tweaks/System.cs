@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-search-history",
             Label = "Disable Search History",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from storing device search history.",
@@ -33,7 +33,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-gallery",
             Label = "Disable Gallery in Nav Pane",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the Gallery entry from Explorer navigation pane (23H2+).",
@@ -67,7 +67,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-auto-folder-type",
             Label = "Disable Auto Folder Type Detection",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Explorer from auto-detecting folder content type (e.g. 'Pictures', 'Music') which causes slow loading.",
@@ -101,7 +101,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-recent-docs",
             Label = "Disable Recent Documents History",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -119,7 +119,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-thumb-cache-cleanup",
             Label = "Disable Thumbnail Cache Auto-Cleanup",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -143,7 +143,7 @@ internal static class Explorer
         {
             Id = "explorer-folder-size-tips",
             Label = "Show File Size in Folder Tooltips",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -164,7 +164,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-new-app-alert",
             Label = "Disable 'New App' Notifications",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -179,7 +179,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-sync-ads",
             Label = "Disable Sync Provider Ads",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -207,7 +207,7 @@ internal static class Explorer
         {
             Id = "explorer-always-show-menus",
             Label = "Always Show Classic Menu Bar",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -222,7 +222,7 @@ internal static class Explorer
         {
             Id = "explorer-separate-process",
             Label = "Launch Folders in Separate Process",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -237,7 +237,7 @@ internal static class Explorer
         {
             Id = "explorer-show-drive-letters-first",
             Label = "Show Drive Letters Before Drive Names",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -258,7 +258,7 @@ internal static class Explorer
         {
             Id = "explorer-show-encrypted-color",
             Label = "Show Encrypted/Compressed Files in Color",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -282,7 +282,7 @@ internal static class Explorer
         {
             Id = "explorer-always-show-icons",
             Label = "Always Show File Icons (Disable Live Thumbnails)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -297,7 +297,7 @@ internal static class Explorer
         {
             Id = "explorer-show-empty-drives",
             Label = "Show Empty Removable Drives in This PC",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -320,7 +320,7 @@ internal static class Explorer
         {
             Id = "explorer-ai-thumbnail",
             Label = "Register AI Image PerceivedType",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image for .aimodel files so Explorer treats them as image assets for thumbnail generation.",
@@ -342,7 +342,7 @@ internal static class Explorer
         {
             Id = "explorer-avif-thumbnail",
             Label = "Register AVIF as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .avif so Explorer generates thumbnails.",
@@ -364,7 +364,7 @@ internal static class Explorer
         {
             Id = "explorer-eps-thumbnail",
             Label = "Register EPS as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .eps so Explorer treats it as an image type.",
@@ -386,7 +386,7 @@ internal static class Explorer
         {
             Id = "explorer-font-thumbnail",
             Label = "Register Font PerceivedType",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=document for .ttf/.otf so Explorer can show font previews.",
@@ -408,7 +408,7 @@ internal static class Explorer
         {
             Id = "explorer-heic-thumbnail",
             Label = "Register HEIC as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .heic/.heif so Explorer generates thumbnails.",
@@ -434,7 +434,7 @@ internal static class Explorer
         {
             Id = "explorer-launch-to-this-pc",
             Label = "Open Explorer to This PC (Policy)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Forces Explorer to open to 'This PC' via machine-level policy. Complements the per-user LaunchTo setting.",
@@ -448,7 +448,7 @@ internal static class Explorer
         {
             Id = "explorer-pdf-thumbnail",
             Label = "Register PDF as Document Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=document and ContentType for .pdf to enable thumbnail generation.",
@@ -470,7 +470,7 @@ internal static class Explorer
         {
             Id = "explorer-ps-here",
             Label = "Open PowerShell Here Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open PowerShell Here' to the folder background context menu.",
@@ -496,7 +496,7 @@ internal static class Explorer
         {
             Id = "explorer-psd-thumbnail",
             Label = "Register PSD as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .psd (Photoshop) files.",
@@ -518,7 +518,7 @@ internal static class Explorer
         {
             Id = "explorer-raw-thumbnail",
             Label = "Register RAW Camera Files as Image",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image for common RAW camera formats (.cr2, .nef, .arw, .dng).",
@@ -550,7 +550,7 @@ internal static class Explorer
         {
             Id = "explorer-stl-thumbnail",
             Label = "Register STL as 3D Model Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType and ContentType for .stl (3D printing) files.",
@@ -572,7 +572,7 @@ internal static class Explorer
         {
             Id = "explorer-svg-thumbnail",
             Label = "Register SVG as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .svg so Explorer treats it as an image.",
@@ -594,7 +594,7 @@ internal static class Explorer
         {
             Id = "explorer-webp-thumbnail",
             Label = "Register WebP as Image Type",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .webp so Explorer generates thumbnails.",
@@ -624,7 +624,7 @@ internal static class Clipboard
         {
             Id = "clip-increase-drag-threshold",
             Label = "Increase Drag-Drop Threshold (10 px)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -647,7 +647,7 @@ internal static class Clipboard
         {
             Id = "clip-instant-drag-delay",
             Label = "Set Instant Drag Delay (0 ms)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -662,7 +662,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-suggested-actions",
             Label = "Disable Clipboard Suggested Actions",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -677,7 +677,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-roaming",
             Label = "Disable Clipboard Roaming (Policy)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -692,7 +692,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-drag-full-windows",
             Label = "Disable Full Window Drag",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -707,7 +707,7 @@ internal static class Clipboard
         {
             Id = "clip-max-history-items",
             Label = "Increase Clipboard History Limit",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -722,7 +722,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-history",
             Label = "Disable Clipboard History",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows clipboard history via Group Policy. Only the last copied item is kept. Default: user setting.",
@@ -736,7 +736,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-drop-target-hovering",
             Label = "Disable Drop Target Window Activation",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents windows from coming to the foreground when hovering a drag item over a taskbar button. Default: enabled.",
@@ -750,7 +750,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-experience",
             Label = "Disable Clipboard Experience UI",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -765,7 +765,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-suggestions",
             Label = "Disable Clipboard Suggestions",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -780,7 +780,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-text-suggestions",
             Label = "Disable Text Suggestions (Input)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables text suggestions and autocomplete for hardware keyboard input. Reduces background processing. Default: enabled.",
@@ -794,7 +794,7 @@ internal static class Clipboard
         {
             Id = "clip-enable-history-user",
             Label = "Enable Clipboard History (User)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the Clipboard History feature at the user level. Allows Win+V to show clipboard history. Default: off.",
@@ -808,7 +808,7 @@ internal static class Clipboard
         {
             Id = "clip-enable-smart-paste",
             Label = "Enable Smart Paste",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the Smart Paste feature that intelligently reformats pasted content. Default: off.",
@@ -823,7 +823,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-emoji-panel",
             Label = "Disable Emoji Panel",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the emoji panel that appears when pressing Windows+. (period).",
@@ -837,7 +837,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-sync-across-devices",
             Label = "Disable Clipboard Sync Across Devices",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from syncing clipboard data to other signed-in devices via Microsoft account.",
@@ -851,7 +851,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-paste-preview",
             Label = "Disable Clipboard Paste Preview Suggestions",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the paste format suggestion tooltip that appears after pasting content.",
@@ -865,7 +865,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-snip-sketch-clipboard-auto",
             Label = "Disable Snip & Sketch Auto-Copy to Clipboard",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Snipping Tool / Snip & Sketch from automatically copying screenshots to the clipboard.",
@@ -888,7 +888,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-gif-panel",
             Label = "Disable GIF Panel",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the GIF search pane that appears in the emoji picker (Windows+. panel).",
@@ -902,7 +902,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-notifications",
             Label = "Disable Clipboard Copy Notifications",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Suppresses the toast notification that appears after saving a screenshot with Print Screen.",
@@ -916,7 +916,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-sticker-panel",
             Label = "Disable Sticker / Meme Panel",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the sticker and meme categories from the emoji picker panel.",
@@ -930,7 +930,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-cloud-clipboard-prompt",
             Label = "Disable Cloud Clipboard Activation Prompt",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from asking you to enable cloud clipboard (cross-device sync) in Windows 10/11.",
@@ -944,7 +944,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-typing-insights",
             Label = "Disable Typing Insights Collection",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Windows collecting typing and touch keyboard usage patterns for improvement feedback.",
@@ -959,7 +959,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-powershell-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -981,7 +981,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-wt-here",
             Label = "Add 'Open Windows Terminal Here' to Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1000,7 +1000,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-cmd-here",
             Label = "Add 'Open Command Prompt Here' to Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1019,7 +1019,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-copy-path",
             Label = "Add 'Copy Path' to File Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1034,7 +1034,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-open-cmd-here",
             Label = "Add Open Command Prompt Here",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds an 'Open Command Prompt Here' option to the folder context menu. Default: removed in Win11.",
@@ -1056,7 +1056,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-share-context-menu",
             Label = "Remove Share Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' option from the right-click context menu. Default: visible.",
@@ -1090,7 +1090,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-give-access-to",
             Label = "Remove Give Access To Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing option from the context menu. Default: visible.",
@@ -1124,7 +1124,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-troubleshoot-compatibility",
             Label = "Remove 'Troubleshoot Compatibility' from Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' option from file context menus. Default: shown.",
@@ -1158,7 +1158,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-cast-to-device",
             Label = "Remove 'Cast to Device' from Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Cast to device' (Play To) option from the context menu. Default: shown.",
@@ -1192,7 +1192,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-edit-with-paint3d",
             Label = "Remove 'Edit with Paint 3D' from Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes 'Edit with Paint 3D' from the right-click menu for image files. Default: shown.",
@@ -1226,7 +1226,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-include-in-library",
             Label = "Remove 'Include in Library' from Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' option from folder context menus. Default: shown.",
@@ -1260,7 +1260,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-previous-versions",
             Label = "Remove 'Restore Previous Versions' from Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Restore previous versions' tab from file/folder properties. Default: shown.",
@@ -1294,7 +1294,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -1334,7 +1334,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-open-with-notepad",
             Label = "Add 'Open with Notepad' to Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds 'Open with Notepad' to the right-click menu for all files. Quick way to view file contents. Default: not present.",
@@ -1359,7 +1359,7 @@ internal static class Clipboard
         {
             Id = "ctx-classic-context-menu",
             Label = "Force Classic Context Menu (User)",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Restores the Windows 10 full context menu by overriding the Windows 11 compact menu CLSID.",
@@ -1376,7 +1376,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-defender-scan",
             Label = "Remove 'Scan with Defender' Context",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Removes the 'Scan with Microsoft Defender' entry from the right-click context menu.",
@@ -1393,7 +1393,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-give-access",
             Label = "Remove 'Give Access To' Context",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing menu from the right-click context menu.",
@@ -1414,7 +1414,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-include-library",
             Label = "Remove 'Include in Library' Context",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' entry from the folder context menu.",
@@ -1435,7 +1435,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-paint3d-edit",
             Label = "Remove 'Edit with Paint 3D' Context",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Paint 3D' option from image file context menus.",
@@ -1467,7 +1467,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-photos-edit",
             Label = "Remove 'Edit with Photos' Context",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Photos' option from image file context menus.",
@@ -1501,7 +1501,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-pin-to-start",
             Label = "Remove 'Pin to Start' Context Entry",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Pin to Start' context menu option from files and folders.",
@@ -1522,7 +1522,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-print",
             Label = "Remove 'Print' Context Menu Entry",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Print' entry from the right-click context menu for supported file types.",
@@ -1545,7 +1545,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-send-to",
             Label = "Remove 'Send To' Context Menu",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Send to' cascading menu from the right-click context menu.",
@@ -1566,7 +1566,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-share",
             Label = "Remove 'Share' Context Menu Entry",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' modern sharing entry from the right-click context menu.",
@@ -1580,7 +1580,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-troubleshoot-compat",
             Label = "Remove 'Troubleshoot Compatibility'",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' entry from the context menu for executables.",
@@ -1601,7 +1601,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-wmp-context",
             Label = "Remove Windows Media Context Entries",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes Windows Media Player context menu entries (Play, Add to playlist, etc.).",
@@ -1639,7 +1639,7 @@ internal static class Shell
         {
             Id = "shell-set-console-buffer-9999",
             Label = "Set Console Screen Buffer to 9999 Lines",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the console screen buffer size to 9999 lines. More scrollback history. Default: 300.",
@@ -1653,7 +1653,7 @@ internal static class Shell
         {
             Id = "shell-disable-cmd-autorun",
             Label = "Disable CMD AutoRun Commands",
-            Category = "System",
+            Category = "System 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Clears the CMD AutoRun registry value. Prevents potentially malicious auto-execution. Default: not set.",
@@ -1667,7 +1667,7 @@ internal static class Shell
         {
             Id = "shell-set-powershell-execution-remotesigned",
             Label = "Set PowerShell Execution Policy to RemoteSigned",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1699,7 +1699,7 @@ internal static class Shell
         {
             Id = "shell-add-python-to-path",
             Label = "Add Python App Installer to PATH",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1718,7 +1718,7 @@ internal static class Shell
         {
             Id = "shell-classic-context-menu",
             Label = "Restore Classic Context Menu (Shell)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1736,7 +1736,7 @@ internal static class Shell
         {
             Id = "shell-cmd-autocomplete",
             Label = "Enable Command Prompt AutoComplete",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1759,7 +1759,7 @@ internal static class Shell
         {
             Id = "shell-disable-python-store-alias",
             Label = "Disable Python Store Redirect Alias",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1803,7 +1803,7 @@ internal static class Shell
         {
             Id = "shell-file-hash-context",
             Label = "Add File Hash to Context Menu",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1827,7 +1827,7 @@ internal static class Shell
         {
             Id = "shell-open-cmd-here",
             Label = "Add 'Open CMD Here' to Context Menu",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open Command Prompt Here' to the directory background context menu. Default: not available.",
@@ -1853,7 +1853,7 @@ internal static class Shell
         {
             Id = "shell-open-ps-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open PowerShell Here' to the directory background context menu. Default: not available.",
@@ -1876,7 +1876,7 @@ internal static class Shell
         {
             Id = "shell-open-wt-here",
             Label = "Add 'Open Windows Terminal Here'",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1899,7 +1899,7 @@ internal static class Shell
         {
             Id = "shell-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1924,7 +1924,7 @@ internal static class Shell
         {
             Id = "shell-enable-numlock-startup",
             Label = "Enable Num Lock on Startup",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1939,7 +1939,7 @@ internal static class Shell
         {
             Id = "shell-restore-previous-folders",
             Label = "Reopen Previous Folder Windows on Login",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1954,7 +1954,7 @@ internal static class Shell
         {
             Id = "shell-disable-recent-docs-policy",
             Label = "Disable Recent Documents Tracking (Policy)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1979,7 +1979,7 @@ internal static class Performance
         {
             Id = "perf-disable-search-protocol-host",
             Label = "Disable SearchProtocolHost Priority Boost",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables SearchProtocolHost priority boost to reduce background CPU usage from Windows Search indexing.",
@@ -1993,7 +1993,7 @@ internal static class Performance
         {
             Id = "perf-optimize-processor-scheduling",
             Label = "Optimize for Programs (Not Services)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 5,
@@ -2011,7 +2011,7 @@ internal static class Performance
         {
             Id = "perf-disable-ntfs-encryption",
             Label = "Disable NTFS Encryption (EFS) Service",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables NTFS Encrypting File System to reduce filesystem overhead. Not recommended if EFS encryption is in use.",
@@ -2025,7 +2025,7 @@ internal static class Performance
         {
             Id = "perf-unpark-cpu-cores",
             Label = "Unpark All CPU Cores",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2072,7 +2072,7 @@ internal static class Performance
         {
             Id = "perf-disable-modern-standby",
             Label = "Disable Modern Standby (S0)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2087,7 +2087,7 @@ internal static class Performance
         {
             Id = "perf-disable-memory-compression",
             Label = "Disable Memory Page Combining",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2111,7 +2111,7 @@ internal static class Performance
         {
             Id = "perf-always-unload-dll",
             Label = "Always Unload DLLs on Process Exit",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2126,7 +2126,7 @@ internal static class Performance
         {
             Id = "perf-increase-icon-cache",
             Label = "Increase Explorer Icon Cache Size",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2141,7 +2141,7 @@ internal static class Performance
         {
             Id = "perf-disable-thumbnails-network",
             Label = "Disable Thumbnails on Network Folders",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2176,7 +2176,7 @@ internal static class Performance
         {
             Id = "perf-large-page-minimum",
             Label = "Set Large Page Minimum to 128MB",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2208,7 +2208,7 @@ internal static class Performance
         {
             Id = "perf-menu-show-delay",
             Label = "Set Menu Show Delay to 0ms",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the menu show delay to 0 milliseconds. Makes menus appear instantly without animation delay. Default: 400ms.",
@@ -2222,7 +2222,7 @@ internal static class Performance
         {
             Id = "perf-performance",
             Label = "Set Visual Effects to Best Performance",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2240,7 +2240,7 @@ internal static class Performance
         {
             Id = "perf-svchost-split",
             Label = "Reduce SvcHost Splitting Threshold",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2255,7 +2255,7 @@ internal static class Performance
         {
             Id = "perf-disable-low-disk-warning",
             Label = "Disable Low Disk Space Warning",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the low disk space check and warning balloon notification. Prevents Explorer from scanning drives periodically.",
@@ -2272,7 +2272,7 @@ internal static class Performance
         {
             Id = "perf-disable-power-throttling",
             Label = "Disable Power Throttling",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2287,7 +2287,7 @@ internal static class Performance
         {
             Id = "perf-disable-aero-peek",
             Label = "Disable Aero Peek",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2302,7 +2302,7 @@ internal static class Performance
         {
             Id = "perf-increase-smb-max-cmds",
             Label = "Increase SMB Client Maximum Command Queue",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2317,7 +2317,7 @@ internal static class Performance
         {
             Id = "perf-disable-listview-shadow",
             Label = "Disable ListView Item Drop Shadows",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2332,7 +2332,7 @@ internal static class Performance
         {
             Id = "perf-crash-log-event-off",
             Label = "Disable BSOD Event-Log Entry",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2347,7 +2347,7 @@ internal static class Performance
         {
             Id = "perf-set-app-kill-timeout",
             Label = "Reduce Application Shutdown Wait to 5 s",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2362,7 +2362,7 @@ internal static class Performance
         {
             Id = "perf-disable-listview-alpha-select",
             Label = "Disable ListView Alpha-Select Highlight",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2411,7 +2411,7 @@ internal static class SystemOptimization
         {
             Id = "sysopt-auto-logon-last-user",
             Label = "Auto-Logon Last User (Skip Lock Screen)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Automatically logs in the last user at boot, skipping the lock screen (not for shared PCs).",
@@ -2443,7 +2443,7 @@ internal static class SystemTweaks
         {
             Id = "sys-detailed-bsod",
             Label = "Enable Detailed Blue Screen Info",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2458,7 +2458,7 @@ internal static class SystemTweaks
         {
             Id = "sys-disable-wpbt",
             Label = "Disable WPBT (Vendor Bloatware Injection)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2473,7 +2473,7 @@ internal static class SystemTweaks
         {
             Id = "sys-enable-utc-hardware-clock",
             Label = "Set Hardware Clock to UTC",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2488,7 +2488,7 @@ internal static class SystemTweaks
         {
             Id = "sys-memory-limit-none",
             Label = "Remove System Memory Limit",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2518,7 +2518,7 @@ internal static class SystemTweaks
         {
             Id = "sys-io-priority-boost",
             Label = "Enable I/O Priority Boost for Foreground",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2533,7 +2533,7 @@ internal static class SystemTweaks
         {
             Id = "sys-gdi-batch-limit",
             Label = "Set GDI Batch Limit to 256",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2548,7 +2548,7 @@ internal static class SystemTweaks
         {
             Id = "sys-vm-write-watch-off",
             Label = "Disable VM Write Watch",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2563,7 +2563,7 @@ internal static class SystemTweaks
         {
             Id = "sys-idle-task-priority",
             Label = "Set Idle Task CPU Priority to Low",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2587,7 +2587,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-set-hive-checkpoint-60s",
             Label = "Set Registry Hive Checkpoint Interval to 60s",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2602,7 +2602,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-set-max-log-files",
             Label = "Set Max Registry Log Files to 20",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Limits the maximum number of registry transaction log files retained. Default: system-defined (unlimited).",
@@ -2616,7 +2616,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-enable-hive-autorepair",
             Label = "Enable Registry Hive Auto-Repair",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2631,7 +2631,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-set-hive-size-hint",
             Label = "Set Registry Hive Pre-Allocated Size to 2048 KB",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2646,7 +2646,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-enable-reg-journal",
             Label = "Enable Registry Transaction Journal",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2661,7 +2661,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-set-idle-time-limit",
             Label = "Set Registry Idle Flush Delay to 300s",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2676,7 +2676,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-enable-reg-shadow-mount",
             Label = "Enable Registry Shadow Mount for Offline Systems",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables shadow-mount mode for registry hives accessed by offline servicing tools. Useful for WinPE/deployment scenarios.",
@@ -2690,7 +2690,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-disable-notify-overflow",
             Label = "Disable Registry Notification Overflow Dropping",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2705,7 +2705,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-set-hive-prealloc",
             Label = "Set Registry Hive Pre-Allocation Block to 64 KB",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2720,7 +2720,7 @@ internal static class RegistryTweaks
         {
             Id = "reg-disable-log-overflow",
             Label = "Disable Registry Log Overflow Truncation",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2742,7 +2742,7 @@ internal static class Startup
         {
             Id = "startup-disable-startup-delay",
             Label = "Disable Startup Delay",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the artificial startup delay for Run-key programs, allowing them to launch immediately at login.",
@@ -2759,7 +2759,7 @@ internal static class Startup
         {
             Id = "startup-disable-cortana-startup",
             Label = "Disable Cortana Startup",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes Cortana from the HKCU Run key to prevent auto-start at login.",
@@ -2776,7 +2776,7 @@ internal static class Startup
         {
             Id = "startup-disable-login-background",
             Label = "Use Solid Color Login Background",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Replaces the Windows Spotlight / hero image on the login screen with a plain solid color background.",
@@ -2790,7 +2790,7 @@ internal static class Startup
         {
             Id = "startup-disable-first-logon-animation",
             Label = "Disable First Login Animation",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the 'Hi / We're getting things ready' first-logon animation shown after a new user profile is created.",
@@ -2813,7 +2813,7 @@ internal static class Startup
         {
             Id = "startup-start-boot-numlock-on",
             Label = "Set Boot-Up Num Lock to On",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables Num Lock at the Windows login screen by default. Default: Off. Recommended: On for desktop keyboards.",
@@ -2827,7 +2827,7 @@ internal static class Startup
         {
             Id = "startup-start-disable-app-restart",
             Label = "Disable Automatic App Restart on Login",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2842,7 +2842,7 @@ internal static class Startup
         {
             Id = "startup-set-boot-timeout-3s",
             Label = "Set Boot Menu Timeout to 3 Seconds",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the multi-boot OS selection timeout to 3 seconds instead of the default 30. Faster boot on single-OS machines.",
@@ -2858,7 +2858,7 @@ internal static class Startup
         {
             Id = "startup-disable-boot-logo",
             Label = "Disable Boot Logo Display",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Suppresses the Windows boot logo animation for faster POST-to-desktop times.",
@@ -2872,7 +2872,7 @@ internal static class Startup
         {
             Id = "startup-disable-narrator-at-login",
             Label = "Disable Narrator at Login Screen",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Narrator auto-start at the Windows login screen.",
@@ -2906,7 +2906,7 @@ internal static class Startup
         {
             Id = "startup-disable-fast-user-switching",
             Label = "Disable Fast User Switching",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables fast user switching at login. Simplifies the login screen and slightly reduces memory usage on shared PCs.",
@@ -2923,7 +2923,7 @@ internal static class Startup
         {
             Id = "startup-disable-edge-prelaunch",
             Label = "Disable Edge Pre-Launch at Login",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Microsoft Edge from pre-launching in the background at login. Reduces startup memory and CPU usage.",
@@ -2937,7 +2937,7 @@ internal static class Startup
         {
             Id = "startup-disable-compatibility-assistant",
             Label = "Disable Program Compatibility Assistant",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Program Compatibility Assistant that checks applications for compatibility issues at launch.",
@@ -2958,7 +2958,7 @@ internal static class Boot
         {
             Id = "boot-disable-secboot-check",
             Label = "Suppress Secure Boot Status Check",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Suppresses the Secure Boot status notification in Windows by setting UEFISecureBootEnabled to 0 in the registry.",
@@ -2972,7 +2972,7 @@ internal static class Boot
         {
             Id = "boot-disable-boot-anim",
             Label = "Disable Boot Animation/Spinner",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2987,7 +2987,7 @@ internal static class Boot
         {
             Id = "boot-enable-fast-startup",
             Label = "Enable Fast Startup (Hiberboot)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3002,7 +3002,7 @@ internal static class Boot
         {
             Id = "boot-prefetch-optimized",
             Label = "Set Prefetch to Optimized Mode",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3038,7 +3038,7 @@ internal static class Boot
         {
             Id = "boot-clear-pagefile",
             Label = "Clear Pagefile at Shutdown",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3074,7 +3074,7 @@ internal static class Boot
         {
             Id = "boot-disable-boot-ux",
             Label = "Disable Boot UI Animation",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows boot animation (spinning dots). Shows a simple progress bar instead. Default: animated.",
@@ -3088,7 +3088,7 @@ internal static class Boot
         {
             Id = "boot-set-timeout-5s",
             Label = "Set Boot Menu Timeout to 5 Seconds",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the boot manager menu timeout to 5 seconds for dual-boot systems. Default: 30 seconds.",
@@ -3111,7 +3111,7 @@ internal static class Boot
         {
             Id = "boot-verbose-status-messages",
             Label = "Enable Verbose Boot Status Messages",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Shows detailed status messages during boot, shutdown, logon, and logoff. Default: hidden.",
@@ -3126,7 +3126,7 @@ internal static class Boot
         {
             Id = "boot-bcd-quiet-boot",
             Label = "Enable Quiet Boot (bcdedit)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables Windows quiet boot mode via bcdedit — suppresses the boot logo and status messages for faster boot appearance.",
@@ -3152,7 +3152,7 @@ internal static class Boot
         {
             Id = "boot-bcd-timeout-3s",
             Label = "Set Boot Menu Timeout to 3 Seconds (bcdedit)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the boot manager timeout to 3 seconds via bcdedit. Speeds up boot when multi-boot options exist.",
@@ -3178,7 +3178,7 @@ internal static class Boot
         {
             Id = "boot-bcd-disable-recovery",
             Label = "Disable Automatic Recovery (bcdedit)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3207,7 +3207,7 @@ internal static class Boot
         {
             Id = "boot-driver-verifier-reset",
             Label = "Reset Driver Verifier (verifier)",
-            Category = "System",
+            Category = "System 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Resets Driver Verifier settings to none. Useful after debugging driver issues when verifier was left enabled.",
@@ -3234,7 +3234,7 @@ internal static class Boot
         {
             Id = "boot-disable-auto-repair",
             Label = "Disable Automatic Startup Repair",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Windows from launching Automatic Repair after consecutive boot failures. Use with caution.",
@@ -3262,7 +3262,7 @@ internal static class Boot
         {
             Id = "boot-disable-boot-logo",
             Label = "Disable Boot Logo (bcdedit)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Windows boot logo via bcdedit for a minimalist boot screen.",
@@ -3288,7 +3288,7 @@ internal static class Boot
         {
             Id = "boot-disable-driver-verifier",
             Label = "Disable Driver Verifier Flags",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Clears Driver Verifier flags in the registry. Useful after debugging when verifier causes boot loops.",
@@ -3311,7 +3311,7 @@ internal static class Boot
         {
             Id = "boot-disable-logo",
             Label = "Disable OEM Boot Logo",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the OEM manufacturer logo during boot via bcdedit nologo option.",
@@ -3337,7 +3337,7 @@ internal static class Boot
         {
             Id = "boot-disable-winre",
             Label = "Disable WinRE Partition",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Windows Recovery Environment. Frees recovery partition but removes repair tools.",
@@ -3364,7 +3364,7 @@ internal static class Boot
         {
             Id = "boot-fast-boot-timeout",
             Label = "Set Boot Timeout to 0 Seconds",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Sets BCD boot menu timeout to 0 seconds for instant boot-through. No OS selection screen shown.",
@@ -3390,7 +3390,7 @@ internal static class Boot
         {
             Id = "boot-log",
             Label = "Enable Boot Logging (ntbtlog.txt)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables boot logging via bcdedit. Writes driver load info to %%SystemRoot%%\\ntbtlog.txt.",
@@ -3416,7 +3416,7 @@ internal static class Boot
         {
             Id = "boot-max-proc-count",
             Label = "Use All CPU Cores at Boot",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Configures msconfig-equivalent setting to use all processor cores during boot.",
@@ -3437,7 +3437,7 @@ internal static class Boot
         {
             Id = "boot-menu-timeout",
             Label = "Set Boot Menu Timeout to 10s",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the boot menu display timeout to 10 seconds. Useful for dual-boot systems.",
@@ -3463,7 +3463,7 @@ internal static class Boot
         {
             Id = "boot-verbose-boot",
             Label = "Enable Verbose Boot Messages",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Shows detailed status messages during boot instead of the logo. Useful for debugging slow boot.",
@@ -3489,7 +3489,7 @@ internal static class Boot
         {
             Id = "boot-fast-startup-gpo",
             Label = "Enable Fast Startup via Group Policy",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3504,7 +3504,7 @@ internal static class Boot
         {
             Id = "boot-global-wait-timeout",
             Label = "Set Global Shutdown Wait Timeout to 5s",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3519,7 +3519,7 @@ internal static class Boot
         {
             Id = "boot-menu-timeout-policy",
             Label = "Set Boot Menu Display Timeout Policy to 10s",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3534,7 +3534,7 @@ internal static class Boot
         {
             Id = "boot-hyperv-launch-off",
             Label = "Disable Hyper-V Hypervisor Launch",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3562,7 +3562,7 @@ internal static class Boot
         {
             Id = "boot-test-signing-off",
             Label = "Disable Test Signing Mode",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3590,7 +3590,7 @@ internal static class Boot
         {
             Id = "boot-report-ok",
             Label = "Enable Boot-OK Reporting to Winlogon",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3605,7 +3605,7 @@ internal static class Boot
         {
             Id = "boot-kernel-debug-filter",
             Label = "Suppress Kernel Debug Print Filter",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3620,7 +3620,7 @@ internal static class Boot
         {
             Id = "boot-winre-policy-allow",
             Label = "Allow Windows Recovery Environment Policy",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3635,7 +3635,7 @@ internal static class Boot
         {
             Id = "boot-legacy-f8-menu",
             Label = "Enable Legacy F8 Boot Menu",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3663,7 +3663,7 @@ internal static class Boot
         {
             Id = "boot-bcd-nx-optin",
             Label = "Set Data Execution Prevention to OptIn",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3690,7 +3690,7 @@ internal static class Boot
         {
             Id = "boot-disable-startup-app-delay",
             Label = "Disable Startup App Launch Delay",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3708,7 +3708,7 @@ internal static class Boot
         {
             Id = "boot-disable-livedump",
             Label = "Disable Kernel Live Dump Collection",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3723,7 +3723,7 @@ internal static class Boot
         {
             Id = "boot-enable-nmi-crash-dump",
             Label = "Enable NMI-Triggered Crash Dump",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3738,7 +3738,7 @@ internal static class Boot
         {
             Id = "boot-disable-bsod-beep",
             Label = "Disable System Beep on BSOD",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3753,7 +3753,7 @@ internal static class Boot
         {
             Id = "boot-disable-always-keep-dump",
             Label = "Do Not Permanently Keep Memory Dump",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3768,7 +3768,7 @@ internal static class Boot
         {
             Id = "boot-set-system-eventlog-size",
             Label = "Increase System Event Log Size to 50 MB",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3783,7 +3783,7 @@ internal static class Boot
         {
             Id = "boot-disable-boot-status-display",
             Label = "Disable Boot Status / Spinner Display",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3799,7 +3799,7 @@ internal static class Boot
         {
             Id = "svc-disable-sysmain-service",
             Label = "Disable SysMain (Superfetch)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the SysMain (Superfetch) service — beneficial on SSD systems.",
@@ -3813,7 +3813,7 @@ internal static class Boot
         {
             Id = "svc-disable-diagsvc",
             Label = "Disable Diagnostic Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Diagnostic Service (DiagSvc) that runs troubleshooters.",
@@ -3827,7 +3827,7 @@ internal static class Boot
         {
             Id = "svc-disable-wbiosrvc",
             Label = "Disable Biometric Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Biometric Service (WbioSrvc). Useful if fingerprint/face login is not used.",
@@ -3841,7 +3841,7 @@ internal static class Boot
         {
             Id = "svc-disable-remote-registry",
             Label = "Disable Remote Registry",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Remote Registry service which allows remote access to the Windows registry. Security hardening measure.",
@@ -3855,7 +3855,7 @@ internal static class Boot
         {
             Id = "svc-disable-geolocation-service",
             Label = "Disable Geolocation Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows Geolocation Service for privacy.",
@@ -3869,7 +3869,7 @@ internal static class Boot
         {
             Id = "svc-disable-delivery-optimization-svc",
             Label = "Disable Delivery Optimization",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Delivery Optimization service which shares Windows Update data with other PCs on LAN and internet.",
@@ -3883,7 +3883,7 @@ internal static class Boot
         {
             Id = "svc-disable-fax",
             Label = "Disable Fax Service (Cleanup)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the legacy Fax service to free resources. Default: Manual. Recommended: Disabled.",
@@ -3897,7 +3897,7 @@ internal static class Boot
         {
             Id = "svc-disable-smartcard",
             Label = "Disable Smart Card Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3912,7 +3912,7 @@ internal static class Boot
         {
             Id = "svc-disable-link-tracking",
             Label = "Disable Distributed Link Tracking Client",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3927,7 +3927,7 @@ internal static class Boot
         {
             Id = "svc-disable-wallet",
             Label = "Disable Wallet Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3942,7 +3942,7 @@ internal static class Boot
         {
             Id = "svc-disable-secondary-logon",
             Label = "Disable Secondary Logon Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Secondary Logon (RunAs) service. Reduces privilege escalation surface. Default: manual.",
@@ -3956,7 +3956,7 @@ internal static class Boot
         {
             Id = "svc-disable-xbox-live-networking",
             Label = "Disable Xbox Live Networking Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Xbox Live Networking service. Not needed if you don't use Xbox features. Default: manual.",
@@ -3970,7 +3970,7 @@ internal static class Boot
         {
             Id = "svc-disable-webclient",
             Label = "Disable WebClient (WebDAV) Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the WebClient service (WebDAV). Reduces attack surface for NTLM relay. Default: manual.",
@@ -3985,7 +3985,7 @@ internal static class Boot
         {
             Id = "svc-stop-xbox-services",
             Label = "Stop & Disable All Xbox Services (sc)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Stops and disables all Xbox-related services (XblAuthManager, XblGameSave, XboxGipSvc, XboxNetApiSvc) to free resources.",
@@ -4018,7 +4018,7 @@ internal static class Boot
         {
             Id = "svc-stop-connected-devices",
             Label = "Stop & Disable Connected Devices Platform Service (sc)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Connected Devices Platform (CDP) service used for cross-device experiences, Timeline, and nearby sharing.",
@@ -4046,7 +4046,7 @@ internal static class Boot
         {
             Id = "svc-disable-upnphost",
             Label = "Disable UPnP Device Host Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4061,7 +4061,7 @@ internal static class Boot
         {
             Id = "svc-disable-fdphost",
             Label = "Disable Function Discovery Provider Host",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4076,7 +4076,7 @@ internal static class Boot
         {
             Id = "svc-disable-fdrespub",
             Label = "Disable Function Discovery Resource Publication Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4091,7 +4091,7 @@ internal static class Boot
         {
             Id = "svc-disable-icssvc",
             Label = "Disable Internet Connection Sharing (ICS)",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4106,7 +4106,7 @@ internal static class Boot
         {
             Id = "svc-disable-mapbroker",
             Label = "Disable Downloaded Maps Manager Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the MapsBroker service. Stops Windows from periodically downloading offline map data updates in the background.",
@@ -4120,7 +4120,7 @@ internal static class Boot
         {
             Id = "svc-disable-remoteaccess",
             Label = "Disable Routing and Remote Access (RRAS) Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4135,7 +4135,7 @@ internal static class Boot
         {
             Id = "svc-disable-wisvc",
             Label = "Disable Windows Insider Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4150,7 +4150,7 @@ internal static class Boot
         {
             Id = "svc-disable-autotimesvc",
             Label = "Disable Cellular Time Synchronisation Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4165,7 +4165,7 @@ internal static class Boot
         {
             Id = "svc-disable-napagent",
             Label = "Disable Network Access Protection (NAP) Agent",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4180,7 +4180,7 @@ internal static class Boot
         {
             Id = "svc-disable-tzautoupdate",
             Label = "Disable Automatic Time Zone Updater Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4195,7 +4195,7 @@ internal static class Boot
         {
             Id = "svc-disable-diagnosticshub",
             Label = "Disable Diagnostics Hub Standard Collector Service",
-            Category = "System",
+            Category = "System 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

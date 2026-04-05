@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Win11
         {
             Id = "w11-win11-disable-suggested-actions",
             Label = "Disable Suggested Actions",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -34,7 +34,7 @@ internal static class Win11
         {
             Id = "w11-disable-rounded-corners",
             Label = "Disable Rounded Window Corners",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -49,7 +49,7 @@ internal static class Win11
         {
             Id = "w11-classic-taskbar-context",
             Label = "Restore Classic Taskbar Context Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -64,7 +64,7 @@ internal static class Win11
         {
             Id = "w11-disable-start-account-notif",
             Label = "Disable Start Menu Account Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -88,7 +88,7 @@ internal static class Win11
         {
             Id = "w11-disable-dynamic-lighting",
             Label = "Disable Dynamic Lighting",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -103,7 +103,7 @@ internal static class Win11
         {
             Id = "w11-disable-spotlight-tips",
             Label = "Disable Windows Spotlight Tips & Suggestions",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -131,7 +131,7 @@ internal static class Win11
         {
             Id = "w11-restore-classic-context-menu",
             Label = "Restore Classic Context Menu (Win11)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Restores the classic full right-click context menu in Windows 11, removing the simplified modern menu. Default: modern.",
@@ -148,7 +148,7 @@ internal static class Win11
         {
             Id = "w11-disable-recommended-section",
             Label = "Disable Recommended Section in Start Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Recommended section in the Windows 11 Start menu. Default: shown.",
@@ -162,7 +162,7 @@ internal static class Win11
         {
             Id = "w11-enable-end-task-taskbar",
             Label = "Enable End Task in Taskbar Right-Click",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds an 'End Task' option to the taskbar right-click menu in Windows 11. Default: hidden.",
@@ -197,7 +197,7 @@ internal static class Win11
         {
             Id = "w11-disable-snap-bar",
             Label = "Disable Snap Bar When Dragging Windows",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the snap layout bar that appears at the top of the screen when dragging a window. Default: enabled.",
@@ -211,7 +211,7 @@ internal static class Win11
         {
             Id = "w11-disable-voice-access-autostart",
             Label = "Disable Voice Access Auto-Start",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Voice Access from starting automatically on sign-in. Default: off.",
@@ -247,7 +247,7 @@ internal static class Win11
         {
             Id = "w11-classic-context-menu",
             Label = "Classic Context Menu (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Restores the classic full context menu via machine-level policy. Complements the per-user CLSID approach.",
@@ -261,7 +261,7 @@ internal static class Win11
         {
             Id = "w11-disable-notifications",
             Label = "Disable All Toast Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables all toast/banner notifications from apps and system.",
@@ -275,7 +275,7 @@ internal static class Win11
         {
             Id = "w11-hide-settings-home",
             Label = "Hide Settings Home Page",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             MinBuild = 22631,
@@ -307,7 +307,7 @@ internal static class Win11
         {
             Id = "w11-restore-right-click",
             Label = "Restore Full Right-Click (User)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Restores the Windows 10 full context menu by registering a shell extension override for the current user.",
@@ -324,7 +324,7 @@ internal static class Win11
         {
             Id = "w11-show-this-pc-on-desktop",
             Label = "Show 'This PC' on Desktop",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Shows the 'This PC' icon on the desktop. Default: hidden in Windows 11.",
@@ -358,7 +358,7 @@ internal static class Win11
         {
             Id = "w11-start-more-pins",
             Label = "Start Menu — More Pins Layout",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22621,
@@ -373,7 +373,7 @@ internal static class Win11
         {
             Id = "w11-taskbar-never-combine",
             Label = "Never Combine Taskbar (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents taskbar button grouping via Group Policy. Applies to all users on the machine.",
@@ -387,7 +387,7 @@ internal static class Win11
         {
             Id = "w11-start-app-list-off",
             Label = "Hide All Apps List in Start Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
@@ -409,7 +409,7 @@ internal static class Win11
         {
             Id = "w11-disable-notification-center",
             Label = "Disable Notification Center (Action Center)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -424,7 +424,7 @@ internal static class Win11
         {
             Id = "w11-disable-balloon-tips",
             Label = "Disable Taskbar Balloon Tips / Toast Hints",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -439,7 +439,7 @@ internal static class Win11
         {
             Id = "w11-disable-shutdown-tracking",
             Label = "Disable Shutdown Reason Tracker Dialog",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -463,7 +463,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-cortana-lockscreen",
             Label = "Disable Cortana on Lock Screen",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Cortana voice assistant on the lock screen.",
@@ -477,7 +477,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-web-search-start",
             Label = "Disable Web Search in Start Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Bing web results in Start menu search via CurrentUser registry keys.",
@@ -499,7 +499,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-highlights-policy",
             Label = "Disable Search Highlights",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the Bing-curated 'Search Highlights' content from the Windows search box.",
@@ -513,7 +513,7 @@ internal static class Cortana
         {
             Id = "cortana-hide-search-box",
             Label = "Hide Taskbar Search Box",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides the search box / icon from the taskbar.",
@@ -530,7 +530,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-cloud-search-aadmsa",
             Label = "Disable AAD/MSA Cloud Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables AAD and MSA cloud search content in Windows Search results.",
@@ -552,7 +552,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-find-my-files",
             Label = "Disable Enhanced Search (Find My Files)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets search mode to classic, disabling enhanced Find My Files indexing.",
@@ -566,7 +566,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-metered",
             Label = "Disable Search Over Metered Connections",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -601,7 +601,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-voice-activation",
             Label = "Disable Voice Activation",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -616,7 +616,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-indexing-battery",
             Label = "Disable Search Indexing on Battery",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents the search indexer from running on battery power. Saves battery on laptops. Default: continue on battery.",
@@ -630,7 +630,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-safe-search",
             Label = "Disable Safe Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Safe Search content filtering in Windows Search results. Default: moderate filtering.",
@@ -644,7 +644,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-indexing-outlook",
             Label = "Disable Search Indexing of Outlook",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Search from indexing Microsoft Outlook data. Reduces CPU and disk usage. Default: indexed.",
@@ -658,7 +658,7 @@ internal static class Cortana
         {
             Id = "cortana-block-bing-in-start",
             Label = "Block Bing Results in Start Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -673,7 +673,7 @@ internal static class Cortana
         {
             Id = "cortana-block-web-results-policy",
             Label = "Block Web Search via Group Policy",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -690,7 +690,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-in-store",
             Label = "Disable Search the Microsoft Store",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the 'Search the Microsoft Store' link in Windows Search results. Removes promotional app suggestions.",
@@ -704,7 +704,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-windows-copilot",
             Label = "Disable Windows Copilot in Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Copilot integration in Windows Search. Prevents AI-powered suggestions and Bing Chat results from appearing.",
@@ -718,7 +718,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-transparency",
             Label = "Disable Search Box Transparency",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables transparency effects in the Windows Search flyout. Improves rendering performance on integrated GPUs.",
@@ -732,7 +732,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-indexing-removable",
             Label = "Disable Search Indexing on Removable Drives",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Search from indexing removable drives (USB sticks, external HDDs). Reduces I/O on external media.",
@@ -752,7 +752,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-indexing-encrypted",
             Label = "Disable Indexing of Encrypted Files",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -776,7 +776,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-search-preview-pane",
             Label = "Disable Search Preview Pane",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the preview pane in Windows Search that shows file contents and web results. Speeds up search UI rendering.",
@@ -790,7 +790,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-can-enable",
             Label = "Prevent Cortana from Being Enabled (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -805,7 +805,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-lock-screen-search",
             Label = "Disable Search Box on Lock Screen",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -829,7 +829,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-personalized-search",
             Label = "Disable Personalised Search Results",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -847,7 +847,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-copilot-in-search",
             Label = "Disable Copilot / AI Assistant in Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets IsAssistantEnabled=0 in SearchSettings. Removes the Bing Copilot AI answer panel from Windows Search results.",
@@ -861,7 +861,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-spelling-in-search",
             Label = "Disable Spelling Correction in Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -882,7 +882,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-online-tips-search",
             Label = "Disable Online Tips in Search Results",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -897,7 +897,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-office-indexing",
             Label = "Disable Search Indexing of Microsoft Office Files (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -921,7 +921,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-unc-indexing",
             Label = "Disable Search Indexing of UNC / Network Paths",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -945,7 +945,7 @@ internal static class Cortana
         {
             Id = "cortana-disable-public-folder-indexing",
             Label = "Disable Search Indexing of Public Folders",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -963,7 +963,7 @@ internal static class Cortana
         {
             Id = "cortana-gpo-block-bing-answers",
             Label = "Disable Bing Answers in Windows Search (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -987,7 +987,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-search-indexer",
             Label = "Disable Windows Search Indexer",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disable Windows Search indexer service entirely. Saves CPU/disk but disables fast search. Default: enabled.",
@@ -1001,7 +1001,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-indexer-backoff",
             Label = "Disable Indexer Low-Disk Backoff",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevent search indexer from pausing when disk space is low. Default: backs off.",
@@ -1021,7 +1021,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-search-suggestions",
             Label = "Disable Search Suggestions",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disable dynamic search suggestions. Default: enabled.",
@@ -1044,7 +1044,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-search-location",
             Label = "Disable Location for Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevent search from using device location. Default: enabled. Recommended: disabled for privacy.",
@@ -1058,7 +1058,7 @@ internal static class IndexingSearch
         {
             Id = "idx-reduce-indexer-io",
             Label = "Reduce Indexer Disk I/O",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1079,7 +1079,7 @@ internal static class IndexingSearch
         {
             Id = "idx-limit-indexer-threads",
             Label = "Limit Indexer CPU Threads",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1103,7 +1103,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-safe-search",
             Label = "Disable SafeSearch Filter",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1118,7 +1118,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-network-index",
             Label = "Disable Indexing of Network Locations",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1142,7 +1142,7 @@ internal static class IndexingSearch
         {
             Id = "idx-disable-msa-cloud-search",
             Label = "Disable Microsoft Account Cloud Search",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1168,7 +1168,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-compatibility-telemetry",
             Label = "Disable Application Compatibility Telemetry",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Application Experience telemetry component (CompatTelRunner.exe) that collects app usage data.",
@@ -1182,7 +1182,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-program-compatibility-assistant",
             Label = "Disable Program Compatibility Assistant",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables PCA which monitors programs and offers to apply compatibility fixes. Can slow down program launches.",
@@ -1196,7 +1196,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-steps-recorder",
             Label = "Disable Steps Recorder (PSR)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1211,7 +1211,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-inventory-collector",
             Label = "Disable Application Inventory Collector",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1226,7 +1226,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-engine",
             Label = "Disable Compatibility Engine",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Completely disables the Application Compatibility Engine. Programs will run without any compatibility shims applied.",
@@ -1241,7 +1241,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-switchback",
             Label = "Disable SwitchBack Compatibility",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1256,7 +1256,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-web-search-in-run",
             Label = "Disable Web Search in Run Dialog",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents the Run dialog from searching the web when a command is not found locally.",
@@ -1270,7 +1270,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-fault-tolerant-heap",
             Label = "Disable Fault Tolerant Heap",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Fault Tolerant Heap (FTH) which Windows enables for apps that crash frequently. FTH adds overhead.",
@@ -1284,7 +1284,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-customer-experience",
             Label = "Disable Customer Experience Improvement Program",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows CEIP which collects hardware and software usage data for quality improvement.",
@@ -1298,7 +1298,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-smart-screen-apps",
             Label = "Disable SmartScreen for Downloaded Apps",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Disables SmartScreen checking for apps downloaded from the Internet. Speeds up app launches.",
@@ -1313,7 +1313,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-app-launch-tracking",
             Label = "Disable App Launch Tracking",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables tracking of application launches used for Start menu personalisation and telemetry.",
@@ -1327,7 +1327,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-autoplay-devices",
             Label = "Disable AutoPlay for Non-Volume Devices",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables AutoPlay for non-volume devices like cameras and phones. Prevents automatic import prompts.",
@@ -1341,7 +1341,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-maintenance-wakeup",
             Label = "Disable Automatic Maintenance Wake-Up",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows automatic maintenance from waking the computer from sleep.",
@@ -1355,7 +1355,7 @@ internal static class AppCompatibility
         {
             Id = "compat-force-classic-shutdown",
             Label = "Force Classic Shutdown Dialog",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces the classic shutdown dialog (Alt+F4 on desktop) instead of the modern one.",
@@ -1369,7 +1369,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-background-apps",
             Label = "Disable Background Apps (Global)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents UWP/Store apps from running in the background. Reduces CPU and memory usage from idle apps.",
@@ -1386,7 +1386,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-tips-suggestions",
             Label = "Disable Tips and Suggestions Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Windows tips, tricks, and suggestion notifications that appear in the Action Center.",
@@ -1408,7 +1408,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-shim-database",
             Label = "Disable Application Shim Database (SDB)",
-            Category = "Windows 11",
+            Category = "Windows 11 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the application compatibility shim database that applies runtime fixes for older software.",
@@ -1423,7 +1423,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-wer-server-connection",
             Label = "Disable WER Server Connection",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Error Reporting from connecting to Microsoft servers to upload crash dumps and diagnostic data.",
@@ -1437,7 +1437,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-compat-telemetry-runner",
             Label = "Disable CompatTelRunner Scheduled Tasks",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Microsoft Compatibility Appraiser and CompatTelRunner tasks that upload telemetry during idle time.",
@@ -1477,7 +1477,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-user-choice-protection",
             Label = "Disable User Choice Protection Driver (UCPD)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1493,7 +1493,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-vdm-allowed",
             Label = "Disable 16-bit DOS Application Support (VDM)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Virtual DOS Machine (NTVDM/VDM) that allows 16-bit legacy applications to run on 64-bit Windows.",
@@ -1507,7 +1507,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-app-repkg-service",
             Label = "Disable App Repackaging Service",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Application Repackage Service used for automatic compatibility assessment, reducing background CPU usage.",
@@ -1521,7 +1521,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-install-service",
             Label = "Disable Application Identity Service",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Application Identity service (AppIDSvc) used by AppLocker for code integrity checks.",
@@ -1536,7 +1536,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-just-in-time-debugging",
             Label = "Disable Just-In-Time (JIT) Debugger",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the JIT debugger entry so that application crashes don't prompt 'Would you like to debug?' dialog boxes.",
@@ -1553,7 +1553,7 @@ internal static class AppCompatibility
         {
             Id = "compat-enable-dep-always-on",
             Label = "Enable DEP Always-On (All Programs)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1580,7 +1580,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-error-reporting-ui",
             Label = "Disable Error Reporting UI Dialog",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Suppresses the 'Report problem to Microsoft?' dialog box shown after application crashes.",
@@ -1594,7 +1594,7 @@ internal static class AppCompatibility
         {
             Id = "compat-disable-ie-compat-view",
             Label = "Disable IE Compatibility View List Updates",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic updates to the IE Compatibility View List from Microsoft, preventing background internet checks.",
@@ -1621,7 +1621,7 @@ internal static class Debloat
         {
             Id = "debloat-remove-preinstalled-apps",
             Label = "Remove All Pre-installed Store Apps",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -1651,7 +1651,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-xbox-game-bar",
             Label = "Disable Xbox Game Bar Overlay",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Xbox Game Bar overlay (Win+G). Reduces background resource usage.",
@@ -1675,7 +1675,7 @@ internal static class Debloat
         {
             Id = "debloat-remove-optional-features",
             Label = "Remove Optional Features (IE, Media Player, etc.)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -1706,7 +1706,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-windows-ink",
             Label = "Disable Windows Ink Workspace",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows Ink Workspace. Frees taskbar space and background processes.",
@@ -1720,7 +1720,7 @@ internal static class Debloat
         {
             Id = "debloat-unpin-all-start-tiles",
             Label = "Unpin All Start Menu Tiles (Win10)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -1738,7 +1738,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-app-suggestions",
             Label = "Disable App Suggestions (Finish Setup)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the 'Let's finish setting up your device' nag screen and app suggestions on login.",
@@ -1758,7 +1758,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-tailored-experiences",
             Label = "Disable Tailored Experiences",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from using diagnostic data to show personalized ads and recommendations.",
@@ -1781,7 +1781,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-feedback-notifications",
             Label = "Disable Feedback Hub Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows Feedback Hub from sending survey requests and notifications.",
@@ -1803,7 +1803,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-windows-hello-prompt",
             Label = "Disable Windows Hello Setup Prompt",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from nagging users to set up Windows Hello biometrics.",
@@ -1817,7 +1817,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-people-bar",
             Label = "Disable People Bar on Taskbar",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the People icon and contact integration from the taskbar.",
@@ -1831,7 +1831,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-getting-started-app",
             Label = "Disable Getting Started App",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents the 'Get Started' tips app from launching after updates or on first login.",
@@ -1845,7 +1845,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-find-my-device",
             Label = "Disable Find My Device",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Find My Device feature which periodically tracks the device location.",
@@ -1859,7 +1859,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-inking-typing-personalization",
             Label = "Disable Inking & Typing Personalization",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from collecting inking and typing data for input personalization.",
@@ -1881,7 +1881,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-nearby-sharing",
             Label = "Disable Nearby Sharing",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Cross Device Experience (Nearby Sharing) used for Bluetooth phone-to-PC file transfer.",
@@ -1895,7 +1895,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-mixed-reality-portal",
             Label = "Disable Mixed Reality Portal Prompt",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents the Mixed Reality Portal from showing setup prompts on non-VR hardware.",
@@ -1909,7 +1909,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-steps-recorder",
             Label = "Disable Steps Recorder (PSR)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Problem Steps Recorder tool, which can capture screenshots of screen activity.",
@@ -1923,7 +1923,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-wireless-display-projection",
             Label = "Disable Wireless Display Projection",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the ability for other devices to project content to this PC wirelessly via Miracast.",
@@ -1937,7 +1937,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-oobe-post-update",
             Label = "Disable Post-Update OOBE Privacy Screen",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Suppresses the privacy experience screen shown after major Windows updates via Group Policy.",
@@ -1951,7 +1951,7 @@ internal static class Debloat
         {
             Id = "debloat-disable-tablet-mode-auto-switch",
             Label = "Disable Auto Tablet Mode Switch",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from automatically switching to tablet mode when the keyboard is detached.",
@@ -1972,7 +1972,7 @@ internal static class MsStore
         {
             Id = "msstore-store-disable-video-autoplay",
             Label = "Disable Store Video Autoplay",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables video autoplay in the Microsoft Store app. Default: enabled. Recommended: disabled.",
@@ -1986,7 +1986,7 @@ internal static class MsStore
         {
             Id = "msstore-feature-mgmt-disable",
             Label = "Disable Store Feature Management Experiments",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2014,7 +2014,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-post-upgrade-apps",
             Label = "Disable Post-Upgrade App Restoration",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2042,7 +2042,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-start-tips",
             Label = "Disable Cortana/Bing Tips in Start Menu",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2077,7 +2077,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-push-notifications",
             Label = "Disable Store Push Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables push notifications from the Microsoft Store. Default: enabled.",
@@ -2091,7 +2091,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-private-store-only",
             Label = "Restrict to Private Store Only",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Restricts Microsoft Store to only show private store apps (enterprise). Default: all apps visible.",
@@ -2105,7 +2105,7 @@ internal static class MsStore
         {
             Id = "msstore-video-autoplay-off",
             Label = "Disable Store video autoplay",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "video", "autoplay"],
             NeedsAdmin = false,
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay", 0)],
@@ -2116,7 +2116,7 @@ internal static class MsStore
         {
             Id = "msstore-require-purchase-auth",
             Label = "Require admin authorization for Microsoft Store purchases",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "purchase", "authorization", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -2128,7 +2128,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-store-apps-policy",
             Label = "Disable Microsoft Store application access via GPO",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "disable", "gpo", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -2140,7 +2140,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-welcome-app",
             Label = "Disable Windows welcome experience / app suggestion notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "welcome", "notification", "cdm"],
             NeedsAdmin = false,
             CorpSafe = true,
@@ -2161,7 +2161,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-subscribed-338380",
             Label = "Disable SubscribedContent-338380 (Start menu app suggestions)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "subscribed-content", "suggestions", "privacy"],
             NeedsAdmin = false,
             CorpSafe = true,
@@ -2193,7 +2193,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-subscribed-310091",
             Label = "Disable SubscribedContent-310091 (Windows welcome experience highlights)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "subscribed-content", "welcome", "privacy"],
             NeedsAdmin = false,
             CorpSafe = true,
@@ -2225,7 +2225,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-enterprise-cloud-store",
             Label = "Disable Windows Store for Business / Enterprise cloud integration",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "enterprise", "business", "cloud", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -2237,7 +2237,7 @@ internal static class MsStore
         {
             Id = "msstore-disable-adinfo",
             Label = "Disable Windows personalized advertising ID",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             Tags = ["msstore", "ads", "advertising", "privacy"],
             NeedsAdmin = false,
             CorpSafe = true,
@@ -2257,7 +2257,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-snap-assist",
             Label = "Disable Snap Assist",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disable showing suggestions when snapping windows. Default: enabled. Recommended: personal preference.",
@@ -2271,7 +2271,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-snap-groups",
             Label = "Disable Snap Groups in Alt+Tab",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disable grouping Snap windows in Alt+Tab and taskbar. Default: enabled.",
@@ -2285,7 +2285,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-alttab-windows-only",
             Label = "Alt+Tab: Open Windows Only",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Show only open windows in Alt+Tab, not browser tabs. Default: includes Edge tabs.",
@@ -2308,7 +2308,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-vd-all-monitors",
             Label = "Show Desktops on All Monitors",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Show virtual desktop windows on all monitors in taskbar. Default: current monitor only.",
@@ -2331,7 +2331,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-auto-arrange",
             Label = "Disable Auto-Arrange on Dock",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disable automatic window rearrangement when docking/undocking. Default: enabled.",
@@ -2345,7 +2345,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-snap-fill",
             Label = "Disable Snap Fill Available Space",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disable automatically filling available space when snapping a window. Default: enabled.",
@@ -2359,7 +2359,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-dwm-anim-policy",
             Label = "Disable DWM Animations (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Machine-wide policy to disable Desktop Window Manager animations. Default: enabled.",
@@ -2373,7 +2373,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-edge-snapping",
             Label = "Disable Window Edge Snap (Aero Snap)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Aero Snap (dragging windows to screen edges). Default: enabled.",
@@ -2387,7 +2387,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-alt-tab-edge-tabs",
             Label = "Disable Edge Tabs in Alt+Tab",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Microsoft Edge tabs from appearing in the Alt+Tab switcher. Shows only open windows. Default: recent 5 tabs.",
@@ -2410,7 +2410,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-desktop-peek",
             Label = "Disable Desktop Peek",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2431,7 +2431,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-vd-edge-swipe",
             Label = "Disable Virtual Desktop Edge Swipe",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2446,7 +2446,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-vd-switch-anim-speed",
             Label = "Speed Up Virtual Desktop Switch Animation",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2467,7 +2467,7 @@ internal static class SnapMultitasking
         {
             Id = "snap-disable-snap-across-monitors",
             Label = "Disable Snap Across Monitors",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             Description = "Prevents windows from snapping across monitor boundaries in multi-monitor setups. Default: enabled.",
             Tags = ["snap", "monitor", "multi-display"],
@@ -2499,7 +2499,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-show-all-windows-in-alt-tab",
             Label = "Show All VD Windows in Alt+Tab",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 3,
@@ -2517,7 +2517,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-disable-task-view-system",
             Label = "Disable Task View Feature via Policy",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 2,
@@ -2535,7 +2535,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-disable-snap-assist-flyout",
             Label = "Disable Snap Assist Desktop Flyout on Switch",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 2,
@@ -2553,7 +2553,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-disable-desktops-on-taskbar",
             Label = "Disable Virtual Desktop Previews on Taskbar Hover",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 2,
@@ -2571,7 +2571,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-set-taskbar-multimonitor-all",
             Label = "Show All Desktop Windows on All Monitor Taskbars",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 2,
@@ -2589,7 +2589,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-disable-snap-revert",
             Label = "Disable Snap Revert (Don't Move Partner Window When Moving Dragged Window)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 2,
@@ -2607,7 +2607,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-enable-background-per-desktop",
             Label = "Enable Unique Wallpaper Per Virtual Desktop",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -2625,7 +2625,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-show-taskbar-on-secondary-monitors",
             Label = "Show Taskbar on All Monitors (Multi-Monitor)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 2,
@@ -2643,7 +2643,7 @@ internal static class VirtualDesktops
         {
             Id = "vd-disable-taskbar-end-task-button",
             Label = "Disable End Task Button on Taskbar (Windows 11 23H2+)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -2669,7 +2669,7 @@ internal static class Notifications
         {
             Id = "notif-disable-toast",
             Label = "Disable Toast Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pop-up toast notifications from all applications. Default: enabled. Recommended: disabled.",
@@ -2703,7 +2703,7 @@ internal static class Notifications
         {
             Id = "notif-disable-lock-screen",
             Label = "Disable Lock Screen Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents notifications from appearing on the lock screen. Default: enabled. Recommended: disabled.",
@@ -2738,7 +2738,7 @@ internal static class Notifications
         {
             Id = "notif-disable-startup-app-notif",
             Label = "Disable Background App Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables 'apps are running in the background' system toast notifications. Default: enabled. Recommended: disabled.",
@@ -2775,7 +2775,7 @@ internal static class Notifications
         {
             Id = "notif-quiet-hours",
             Label = "Disable Push Toast Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables all push toast notifications globally. Default: Enabled. Recommended: Disabled for focus.",
@@ -2810,7 +2810,7 @@ internal static class Notifications
         {
             Id = "notif-display-time-3s",
             Label = "Set Notification Display Time to 3 Seconds",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2825,7 +2825,7 @@ internal static class Notifications
         {
             Id = "notif-disable-security-center",
             Label = "Disable Windows Security Center Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -2863,7 +2863,7 @@ internal static class Notifications
         {
             Id = "notif-disable-autoconnect",
             Label = "Disable Auto Connect Network Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2898,7 +2898,7 @@ internal static class Notifications
         {
             Id = "notif-disable-account-notif",
             Label = "Disable Microsoft Account Connected Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2936,7 +2936,7 @@ internal static class Notifications
         {
             Id = "notif-disable-defender-user-notif",
             Label = "Suppress Windows Defender Notifications",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Suppresses Windows Defender security notifications that appear during scans and threat detections.",
@@ -2950,7 +2950,7 @@ internal static class Notifications
         {
             Id = "notif-disable-reboot-required",
             Label = "Disable Windows Update Reboot Required Notification",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Windows Update from nagging users to reboot when an update is pending installation.",
@@ -2973,7 +2973,7 @@ internal static class Notifications
         {
             Id = "notif-disable-smartscreen-user",
             Label = "Disable SmartScreen Evaluation Notifications (User)",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Disables per-user SmartScreen web content evaluation, suppressing SmartScreen block and warning notifications.",
@@ -2987,7 +2987,7 @@ internal static class Notifications
         {
             Id = "notif-disable-taskbar-suggestions",
             Label = "Disable Taskbar & Start Suggestions",
-            Category = "Windows 11",
+            Category = "Windows 11 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3011,7 +3011,7 @@ internal static class Notifications
         {
             Id = "notif-disable-oem-preinstall-suggestions",
             Label = "Disable OEM Preinstalled App Suggestions",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from suggesting OEM preinstalled applications and cloud app links via notification banners.",
@@ -3034,7 +3034,7 @@ internal static class Notifications
         {
             Id = "notif-disable-no-logged-users-reboot",
             Label = "Allow Reboot with Logged-On Users (Windows Update)",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Windows Update from rebooting while a user is logged on. Eliminates surprise forced-reboot notifications.",
@@ -3060,7 +3060,7 @@ internal static class Widgets
         {
             Id = "widgets-disable-third-party-suggestions",
             Label = "Disable Third-Party App Suggestions",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3095,7 +3095,7 @@ internal static class Widgets
         {
             Id = "widgets-disable-spotlight",
             Label = "Disable Windows Spotlight on Lock Screen",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Spotlight images and tips on the lock screen. Default: enabled.",
@@ -3118,7 +3118,7 @@ internal static class Widgets
         {
             Id = "widgets-disable-spotlight-in-settings-gpo",
             Label = "Disable Windows Spotlight in Settings App (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3142,7 +3142,7 @@ internal static class Widgets
         {
             Id = "widgets-disable-taskbar-meet-now",
             Label = "Hide Teams Meet Now Button from Taskbar",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets TaskbarMn=0 in Explorer settings. Removes the Teams \"Meet Now\" button from the Windows 10/11 system tray area.",
@@ -3156,7 +3156,7 @@ internal static class Widgets
         {
             Id = "widgets-disable-spotlight-in-search-gpo",
             Label = "Disable Windows Spotlight in Search Interface (Policy)",
-            Category = "Windows 11",
+            Category = "Windows 11 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

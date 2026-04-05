@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Network
         {
             Id = "net-increase-irpstack",
             Label = "Increase IRPStackSize",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the I/O Request Packet stack size to 32 for better network/file-sharing throughput.",
@@ -24,7 +24,7 @@ internal static class Network
         {
             Id = "net-enable-rdp",
             Label = "Enable Remote Desktop",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables Remote Desktop with Network Level Authentication (NLA).",
@@ -46,7 +46,7 @@ internal static class Network
         {
             Id = "net-disable-wifi-sense",
             Label = "Disable Wi-Fi Sense",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Wi-Fi Sense auto-connect to suggested open hotspots.",
@@ -60,7 +60,7 @@ internal static class Network
         {
             Id = "net-disable-wpad",
             Label = "Disable WPAD Auto-Proxy",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Web Proxy Auto-Discovery (WPAD). Prevents rogue WPAD attacks on untrusted networks.",
@@ -74,7 +74,7 @@ internal static class Network
         {
             Id = "net-enable-ecn",
             Label = "Enable TCP ECN",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables Explicit Congestion Notification for smarter TCP congestion control without packet loss.",
@@ -88,7 +88,7 @@ internal static class Network
         {
             Id = "net-disable-smbv1",
             Label = "Disable SMBv1 Client",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the legacy and insecure SMBv1 protocol. Protects against EternalBlue and similar exploits.",
@@ -106,7 +106,7 @@ internal static class Network
         {
             Id = "net-increase-arp-cache",
             Label = "Increase ARP Cache Size",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -129,7 +129,7 @@ internal static class Network
         {
             Id = "net-rss-enable",
             Label = "Enable Receive Side Scaling (RSS)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -156,7 +156,7 @@ internal static class Network
         {
             Id = "net-disable-nagle",
             Label = "Disable Nagle's Algorithm",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -179,7 +179,7 @@ internal static class Network
         {
             Id = "net-disable-teredo",
             Label = "Disable Teredo Tunneling",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Teredo IPv6 tunneling which is rarely used and can be a security risk. Default: enabled. Recommended: disabled.",
@@ -193,7 +193,7 @@ internal static class Network
         {
             Id = "net-disable-isatap",
             Label = "Disable ISATAP",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -208,7 +208,7 @@ internal static class Network
         {
             Id = "net-tcp-autotune-restricted",
             Label = "Set TCP Auto-Tuning to Restricted",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -223,7 +223,7 @@ internal static class Network
         {
             Id = "net-enable-smb-signing",
             Label = "Require SMB Packet Signing",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -249,7 +249,7 @@ internal static class Network
         {
             Id = "net-disable-network-wizard",
             Label = "Suppress Network Location Wizard",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -264,7 +264,7 @@ internal static class Network
         {
             Id = "net-tcp-timestamps",
             Label = "Enable TCP Timestamps and Window Scaling",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -279,7 +279,7 @@ internal static class Network
         {
             Id = "net-disable-pnrp",
             Label = "Disable Peer Name Resolution Protocol",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -294,7 +294,7 @@ internal static class Network
         {
             Id = "net-disable-wcn",
             Label = "Disable Windows Connect Now (WCN)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -317,7 +317,7 @@ internal static class Network
         {
             Id = "net-disable-task-offload",
             Label = "Disable TCP/IP Task Offload",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -333,7 +333,7 @@ internal static class Network
         {
             Id = "net-disable-network-location-wizard",
             Label = "Disable Network Location Wizard",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the 'Set Network Location' wizard when connecting to new networks. Default: enabled.",
@@ -347,7 +347,7 @@ internal static class Network
         {
             Id = "net-increase-tcp-connections",
             Label = "Increase Max TCP Connections per Server",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the maximum number of concurrent TCP connections per server from 2 to 16. Improves download speeds. Default: 2.",
@@ -381,7 +381,7 @@ internal static class Network
         {
             Id = "net-block-non-domain-wifi",
             Label = "Block Non-Domain WiFi Networks",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -396,7 +396,7 @@ internal static class Network
         {
             Id = "net-disable-network-throttle",
             Label = "Disable QoS Bandwidth Throttle",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the QoS reservable bandwidth limit to 0%. Prevents Windows from reserving bandwidth for QoS traffic. Default: 20%.",
@@ -410,7 +410,7 @@ internal static class Network
         {
             Id = "net-tcp-initial-rtt",
             Label = "Set TCP Initial RTT to 300ms",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -425,7 +425,7 @@ internal static class Network
         {
             Id = "net-tcp-keepalive-5min",
             Label = "Set TCP Keepalive to 5 Minutes",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -440,7 +440,7 @@ internal static class Network
         {
             Id = "net-tcp-syn-attack-protection",
             Label = "Enable TCP SYN Attack Protection",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -455,7 +455,7 @@ internal static class Network
         {
             Id = "net-disable-icmp-redirects",
             Label = "Disable ICMP Redirect Acceptance",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -470,7 +470,7 @@ internal static class Network
         {
             Id = "net-disable-router-discovery",
             Label = "Disable ICMP Router Discovery",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -485,7 +485,7 @@ internal static class Network
         {
             Id = "net-set-tcp-max-data-retransmit",
             Label = "Reduce TCP Data Retransmission Limit",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Lowers TcpMaxDataRetransmissions from 5 to 3. Dead connections are detected and closed more quickly.",
@@ -499,7 +499,7 @@ internal static class Network
         {
             Id = "net-disable-dead-gateway-detect",
             Label = "Disable Dead Gateway Detection",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -514,7 +514,7 @@ internal static class Network
         {
             Id = "net-disable-ip-source-routing",
             Label = "Disable IP Source Routing",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -529,7 +529,7 @@ internal static class Network
         {
             Id = "net-set-tcp-fin-wait-delay",
             Label = "Reduce TCP FIN_WAIT_2 Delay",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Reduces the FIN_WAIT_2 timeout from 240 s to 30 s. Sockets waiting for a remote FIN are recycled faster.",
@@ -543,7 +543,7 @@ internal static class Network
         {
             Id = "net-enable-selective-ack",
             Label = "Enable TCP Selective Acknowledgements (SACK)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -558,7 +558,7 @@ internal static class Network
         {
             Id = "net-disable-dhcp-media-sense",
             Label = "Disable DHCP Media Sense",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -573,7 +573,7 @@ internal static class Network
         {
             Id = "net-set-tcp-max-connect-retransmit",
             Label = "Reduce TCP Connect Retransmission Limit",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -591,7 +591,7 @@ internal static class Network
         {
             Id = "net-disable-ip-forwarding",
             Label = "Disable IP Packet Forwarding",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -618,7 +618,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-increase-tcp-window-size",
             Label = "Increase TCP Window Size (High Throughput)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets TCP global receive window to 16 MB. Improves throughput on high-bandwidth connections.",
@@ -632,7 +632,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-increase-max-connections",
             Label = "Increase Max TCP Connections per Server",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases max simultaneous TCP connections beyond the default. Improves download managers and web scraping.",
@@ -666,7 +666,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-dns-cloudflare",
             Label = "Set DNS to Cloudflare (1.1.1.1 + DoH)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -696,7 +696,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-dns-google",
             Label = "Set DNS to Google (8.8.8.8 + DoH)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -724,7 +724,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-ipv6",
             Label = "Disable IPv6 on All Adapters",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -753,7 +753,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-adapter-power-save",
             Label = "Disable Network Adapter Power Saving",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -780,7 +780,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-flush-arp-cache",
             Label = "Flush ARP Cache",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -794,7 +794,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-reset-winsock",
             Label = "Reset Winsock Catalog (Network Fix)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -809,7 +809,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-large-send-offload",
             Label = "Optimise NIC Offload Settings",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -831,7 +831,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-tcp-fast-open",
             Label = "Enable TCP Fast Open (TFO)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables TCP Fast Open to reduce connection latency by sending data in the SYN packet.",
@@ -845,7 +845,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-tcp-slow-start",
             Label = "Disable TCP Slow Start After Idle",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -862,7 +862,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-rsc",
             Label = "Enable Receive Segment Coalescing (RSC)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -876,7 +876,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-direct-cache-access",
             Label = "Enable Direct Cache Access (DCA)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables Direct Cache Access so NIC data is placed directly into CPU cache, reducing memory latency.",
@@ -890,7 +890,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-increase-tcp-max-connections",
             Label = "Increase Maximum TCP Connections Per Server",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the maximum allowed half-open TCP connections from default 10 to 65534 for high-throughput workloads.",
@@ -904,7 +904,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-flow-control",
             Label = "Enable NIC Flow Control",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -924,7 +924,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-power-management-nic",
             Label = "Disable NIC Power Management (Prevent Sleep)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -944,7 +944,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-netbios-over-tcpip",
             Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables NetBIOS over TCP/IP. Reduces network attack surface and broadcast traffic. May break legacy file sharing.",
@@ -958,7 +958,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-wpad",
             Label = "Disable Web Proxy Auto-Discovery (WPAD)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -973,7 +973,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-smb-bandwidth-throttling",
             Label = "Disable SMB Bandwidth Throttling",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes large-file SMB bandwidth throttling. Allows file copies over network shares to use full bandwidth.",
@@ -990,7 +990,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-default-ttl",
             Label = "Set Default IPv4 TTL to 64",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1005,7 +1005,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-enable-pmtu-discovery",
             Label = "Enable Path MTU Discovery",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1020,7 +1020,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-disable-pmtu-blackhole-detect",
             Label = "Disable Path MTU Blackhole Detection",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1035,7 +1035,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-max-half-open-retried",
             Label = "Limit Maximum Retried Half-Open TCP Connections",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1050,7 +1050,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-tcp-max-send-free",
             Label = "Increase TCP Send Window Free Space",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1065,7 +1065,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-delayed-ack-ticks",
             Label = "Reduce TCP Delayed-ACK Tick Count",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1080,7 +1080,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-dynamic-port-start",
             Label = "Set Dynamic Port Allocation Start to 49152",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1095,7 +1095,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-tcp-listen-backlog",
             Label = "Increase TCP Listen Backlog",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1110,7 +1110,7 @@ internal static class NetworkOptimization
         {
             Id = "netopt-set-default-mss",
             Label = "Set Default TCP Maximum Segment Size to 1460",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1134,7 +1134,7 @@ internal static class DnsNetworking
         {
             Id = "dns-force-doh-policy",
             Label = "Force DNS-over-HTTPS (Policy)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1149,7 +1149,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-mdns",
             Label = "Disable Multicast DNS (mDNS)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1164,7 +1164,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-smart-name-resolution",
             Label = "Disable Smart Multi-Homed Name Resolution",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1179,7 +1179,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-devolution",
             Label = "Disable DNS Devolution",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1194,7 +1194,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-lmhosts",
             Label = "Disable LMHOSTS Lookup",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1209,7 +1209,7 @@ internal static class DnsNetworking
         {
             Id = "dns-increase-socket-buffers",
             Label = "Increase Socket Buffer Sizes (256 KB)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1232,7 +1232,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-ncsi-probes",
             Label = "Disable NCSI Active Probing",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1256,7 +1256,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-llmnr",
             Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1271,7 +1271,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-netbios",
             Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1286,7 +1286,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-wpad",
             Label = "Disable WPAD Auto-Discovery",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1301,7 +1301,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-negative-cache-ttl",
             Label = "Reduce Negative DNS Cache TTL",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Reduces the time negative DNS responses (NXDOMAIN) are cached to 5 seconds. Useful for DNS failover. Default: 5 minutes.",
@@ -1315,7 +1315,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-ipv6-transition",
             Label = "Disable IPv6 Transition Technologies",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1330,7 +1330,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-negative-cache",
             Label = "Disable DNS Negative Cache",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1345,7 +1345,7 @@ internal static class DnsNetworking
         {
             Id = "dns-reduce-query-timeout",
             Label = "Reduce DNS Query Timeout",
-            Category = "Network",
+            Category = "Network 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Reduces DNS query timeout to 2 seconds. Faster fallback to alternate DNS servers on poor connectivity. Default: varies.",
@@ -1359,7 +1359,7 @@ internal static class DnsNetworking
         {
             Id = "dns-enable-doh-require",
             Label = "Require DNS over HTTPS (DoH)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             Description = "Requires all DNS queries to use DNS over HTTPS. Falls back to no resolution if DoH is unavailable. Default: disabled.",
             Tags = ["dns", "doh", "https", "privacy", "encryption"],
@@ -1372,7 +1372,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-parallel-queries",
             Label = "Disable Parallel DNS Queries",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             Description =
                 "Prevents DNS resolver from sending parallel queries across all network adapters. Reduces DNS leakage on VPN. Default: enabled.",
@@ -1386,7 +1386,7 @@ internal static class DnsNetworking
         {
             Id = "dns-enable-dns-cache-locking",
             Label = "Enable DNS Cache Locking at 100%",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Locks cached DNS records for 100% of their TTL, preventing cache poisoning via premature overwrites. Default: 100.",
@@ -1409,7 +1409,7 @@ internal static class DnsNetworking
         {
             Id = "dns-enable-dnssec-validation",
             Label = "Enable DNSSEC Validation",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables DNSSEC validation in the Windows DNS client. Verifies DNS response authenticity. Default: disabled.",
@@ -1424,7 +1424,7 @@ internal static class DnsNetworking
         {
             Id = "dns-enable-dns-filtering-platform",
             Label = "Enable DNS Client Diagnostic Logging",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables analytic logging in the DNS client for troubleshooting resolution issues. Default: disabled.",
@@ -1438,7 +1438,7 @@ internal static class DnsNetworking
         {
             Id = "dns-force-fqdn-only",
             Label = "Require Fully Qualified Domain Names",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1453,7 +1453,7 @@ internal static class DnsNetworking
         {
             Id = "dns-enable-query-logging",
             Label = "Enable DNS Query ETW Logging",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables ETW-based DNS query logging for security monitoring and forensics. Default: disabled.",
@@ -1467,7 +1467,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-parallel-adapter-queries",
             Label = "Disable Parallel DNS Queries Across Adapters",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1482,7 +1482,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-socket-pool-size",
             Label = "Increase DNS Socket Pool Size",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1497,7 +1497,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-ptr-registration",
             Label = "Disable Reverse-Address (PTR) Registration",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1525,7 +1525,7 @@ internal static class DnsNetworking
         {
             Id = "dns-gpo-disable-dynamic-registration",
             Label = "Disable DNS Dynamic Update Registration (Policy)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1540,7 +1540,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-max-udp-datagram",
             Label = "Increase Max DNS UDP Datagram Size",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1558,7 +1558,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-server-priority-limit",
             Label = "Reduce DNS Server Priority Timeout",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1576,7 +1576,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-cache-hash-table-size",
             Label = "Increase DNS Cache Hash Table Size",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1591,7 +1591,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-max-hostname-ttl",
             Label = "Cap Hostname Cache TTL at 1 Hour",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1606,7 +1606,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-address-query-timeout",
             Label = "Cap DNS Address Query Timeout",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets MaxAddressQueryTimeout to 30 000 ms. Prevents the resolver from waiting indefinitely for an address record response.",
@@ -1623,7 +1623,7 @@ internal static class DnsNetworking
         {
             Id = "dns-disable-adapter-name-reg",
             Label = "Disable Per-Adapter Name DNS Registration",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1638,7 +1638,7 @@ internal static class DnsNetworking
         {
             Id = "dns-gpo-disable-ptr-update",
             Label = "Disable PTR Record Registration (Policy)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1662,7 +1662,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-update-security-level",
             Label = "Require Secure DNS Dynamic Updates",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1677,7 +1677,7 @@ internal static class DnsNetworking
         {
             Id = "dns-set-max-dynamic-backoff",
             Label = "Cap DNS Dynamic Update Backoff Interval",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1713,7 +1713,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-auto-detect",
             Label = "Disable Proxy Auto-Detect (WPAD)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Disables WPAD (Web Proxy Auto-Discovery Protocol). Speeds up network connections but may break corporate proxy.",
@@ -1727,7 +1727,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-proxy-server",
             Label = "Disable Manual Proxy Server",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Disables the manual proxy server setting, ensuring direct internet connections.",
@@ -1741,7 +1741,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-winhttp-timeout",
             Label = "Set WinHTTP Connection Timeout (30s)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets WinHTTP connection timeout to 30 seconds. Reduces delay when proxy is unavailable.",
@@ -1755,7 +1755,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-web-proxy-auto-config",
             Label = "Disable PAC File Auto-Configuration",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Removes automatic proxy configuration script (PAC) URL. Prevents proxy hijacking.",
@@ -1769,7 +1769,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-hotspot-2",
             Label = "Disable Hotspot 2.0 / Passpoint",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Hotspot 2.0 (Passpoint) which auto-connects to carrier hotspots.",
@@ -1783,7 +1783,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-network-location-wizard",
             Label = "Disable Network Location Wizard",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents the network location identification wizard from appearing on new networks.",
@@ -1797,7 +1797,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-winhttp-autoproxy",
             Label = "Disable WinHTTP Auto-Proxy Discovery",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1812,7 +1812,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-ie-proxy-bypass",
             Label = "Disable IE/WinINet Proxy Bypass for Local Addresses",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1827,7 +1827,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-vpn-split-tunneling",
             Label = "Disable VPN Split Tunneling (RAS)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Forces all traffic through the VPN interface by disabling split tunneling in RAS default settings.",
@@ -1841,7 +1841,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-ras-autodial",
             Label = "Disable RAS AutoDial Manager",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1856,7 +1856,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-ip-tunnel-adapter",
             Label = "Disable IP-HTTPS Tunneling Adapter",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the IPHTTPS tunneling adapter (ISATAP successor). Not needed on most consumer networks.",
@@ -1870,7 +1870,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-max-conn-per-1-0",
             Label = "Increase Max Connections Per HTTP/1.0 Server (WinINet)",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases MaxConnectionsPer1_0Server to 128. Applies to legacy HTTP/1.0 servers accessed via WinINet.",
@@ -1887,7 +1887,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-enable-https-downgrade-warn",
             Label = "Warn on HTTPS-to-HTTP Downgrade",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1902,7 +1902,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-ie-first-run",
             Label = "Disable Internet Explorer First-Run Wizard",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1920,7 +1920,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-enable-ie-dnt",
             Label = "Enable Do-Not-Track Header in Internet Explorer",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets DoNotTrack=1 (HKCU) in IE/Main so Internet Explorer sends the DNT: 1 request header.",
@@ -1934,7 +1934,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-enable-ie-zone-change-warning",
             Label = "Warn When Changing Internet Security Zones",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1949,7 +1949,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-ie-receive-timeout",
             Label = "Set Internet Explorer Receive Timeout to 30 s",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1964,7 +1964,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-ie-send-timeout",
             Label = "Set Internet Explorer Send Timeout to 30 s",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets SendTimeout to 30 000 ms in WinINet. HTTP request sends that take longer than 30 seconds are aborted.",
@@ -1978,7 +1978,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-ie-connect-timeout",
             Label = "Set Internet Explorer Connect Timeout to 30 s",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets ConnectTimeout to 30 000 ms in WinINet. Connection attempts to unreachable servers are abandoned after 30 seconds.",
@@ -1992,7 +1992,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-ie-keepalive-timeout",
             Label = "Set Internet Explorer Keep-Alive Timeout to 30 s",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets KeepAliveTimeout to 30 000 ms in WinINet. Idle HTTP keep-alive connections are recycled after 30 seconds.",
@@ -2006,7 +2006,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-disable-ie-run-once",
             Label = "Disable Internet Explorer Run-Once First-Use Prompt",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2021,7 +2021,7 @@ internal static class ProxyVpn
         {
             Id = "proxy-set-winhttp-receive-timeout",
             Label = "Set HKLM WinINet Default Receive Timeout to 30 s",
-            Category = "Network",
+            Category = "Network 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Display
         {
             Id = "display-force-96dpi",
             Label = "Force 96 DPI (100% Scaling)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces the display to use 96 DPI (100% scaling), disabling any high-DPI scaling that Windows may apply.",
@@ -24,7 +24,7 @@ internal static class Display
         {
             Id = "display-disable-transparency",
             Label = "Disable Transparency Effects",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the acrylic/blur transparency effects on the taskbar, Start menu, and window backgrounds.",
@@ -41,7 +41,7 @@ internal static class Display
         {
             Id = "display-disable-animations",
             Label = "Disable Window Animations",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables minimize and maximize window animations for snappier window management.",
@@ -55,7 +55,7 @@ internal static class Display
         {
             Id = "display-accent-title-bars",
             Label = "Accent Color on Title Bars",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Shows the Windows accent colour on title bars and window borders.",
@@ -69,7 +69,7 @@ internal static class Display
         {
             Id = "display-disable-edge-swipe",
             Label = "Disable Screen Edge Swipe",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the screen edge swipe gesture that opens the Charms bar or Action Center on touch devices.",
@@ -83,7 +83,7 @@ internal static class Display
         {
             Id = "display-disable-adaptive-brightness",
             Label = "Disable Adaptive Brightness",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -98,7 +98,7 @@ internal static class Display
         {
             Id = "display-hardware-cursor",
             Label = "Force Hardware Cursor",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -113,7 +113,7 @@ internal static class Display
         {
             Id = "display-disable-auto-color-mgmt",
             Label = "Disable Auto Color Management",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -128,7 +128,7 @@ internal static class Display
         {
             Id = "display-reduce-blur-intensity",
             Label = "Reduce DWM Blur Intensity (50%)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -143,7 +143,7 @@ internal static class Display
         {
             Id = "display-force-aero-composition",
             Label = "Force Desktop Composition (Aero)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -158,7 +158,7 @@ internal static class Display
         {
             Id = "display-disable-hdr-streaming",
             Label = "Disable HDR Streaming",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables HDR video streaming. Prevents auto-HDR tone mapping for streaming content. Default: enabled if HDR supported.",
@@ -172,7 +172,7 @@ internal static class Display
         {
             Id = "display-disable-auto-color-management",
             Label = "Disable Auto Color Management",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -187,7 +187,7 @@ internal static class Display
         {
             Id = "display-set-dpi-scaling-override",
             Label = "Force Per-Monitor DPI Awareness",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Forces per-monitor DPI awareness for legacy applications system-wide. Reduces blurry scaling. Default: system-aware.",
@@ -201,7 +201,7 @@ internal static class Display
         {
             Id = "display-disable-screensaver-policy",
             Label = "Disable Screen Saver via Policy",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -216,7 +216,7 @@ internal static class Display
         {
             Id = "display-set-font-smoothing-gamma",
             Label = "Set Font Smoothing Gamma",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -231,7 +231,7 @@ internal static class Display
         {
             Id = "display-increase-icon-spacing-horizontal",
             Label = "Increase Horizontal Icon Spacing",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -246,7 +246,7 @@ internal static class Display
         {
             Id = "display-increase-icon-spacing-vertical",
             Label = "Increase Vertical Icon Spacing",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -261,7 +261,7 @@ internal static class Display
         {
             Id = "display-set-scrollbar-width",
             Label = "Set Narrow Scrollbar Width",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -276,7 +276,7 @@ internal static class Display
         {
             Id = "display-set-scrollbar-height",
             Label = "Set Narrow Scrollbar Height",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the horizontal scrollbar height from the default -255 to -200 twips. More compact UI. Requires logoff.",
@@ -290,7 +290,7 @@ internal static class Display
         {
             Id = "display-set-border-width",
             Label = "Set Thin Window Border",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the window border width from the default -15 to -1 twips for a thinner, modern look. Requires logoff.",
@@ -304,7 +304,7 @@ internal static class Display
         {
             Id = "display-disable-window-shake",
             Label = "Disable Aero Shake (Minimize All)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -319,7 +319,7 @@ internal static class Display
         {
             Id = "display-enable-text-cursor-indicator",
             Label = "Enable Text Cursor Indicator",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables a coloured visual indicator at the text cursor position. Improves cursor visibility in dense text.",
@@ -333,7 +333,7 @@ internal static class Display
         {
             Id = "display-set-tooltip-initial-delay",
             Label = "Reduce Tooltip Initial Delay",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the initial tooltip popup delay from 400ms to 100ms. Shows hover info faster.",
@@ -348,7 +348,7 @@ internal static class Display
         {
             Id = "display-set-color-depth-32bit",
             Label = "Force 32-bit Color Depth",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the desktop color depth to 32-bit (True Color). Ensures maximum color quality. Default: 32-bit on most systems.",
@@ -362,7 +362,7 @@ internal static class Display
         {
             Id = "display-disable-auto-rotation",
             Label = "Disable Auto-Rotation",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic screen rotation on tablets and convertible laptops. Default: enabled on tablets.",
@@ -376,7 +376,7 @@ internal static class Display
         {
             Id = "display-set-caption-button-height",
             Label = "Increase Title Bar Button Height",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Increases the height of window title bar caption buttons (minimize/maximize/close) for easier targeting. Default: -270.",
@@ -390,7 +390,7 @@ internal static class Display
         {
             Id = "display-disable-mouse-hover-select",
             Label = "Disable Mouse Hover Window Activation",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents windows from activating when the mouse hovers over them (X-Mouse behaviour). Default: disabled.",
@@ -404,7 +404,7 @@ internal static class Display
         {
             Id = "display-force-full-screen-optimize",
             Label = "Disable Fullscreen Optimizations Globally",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows fullscreen optimizations system-wide. Can improve performance in legacy games. Default: enabled.",
@@ -418,7 +418,7 @@ internal static class Display
         {
             Id = "display-set-menu-animation-fade",
             Label = "Set Menu Animation to Fade",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets menu animation style to fade instead of scroll. Feels smoother on modern hardware. Default: scroll.",
@@ -432,7 +432,7 @@ internal static class Display
         {
             Id = "display-disable-peek-desktop",
             Label = "Disable Aero Peek at Desktop",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Aero Peek feature that shows the desktop when hovering over the Show Desktop button. Default: enabled.",
@@ -455,7 +455,7 @@ internal static class NightLight
         {
             Id = "night-enable-hdr",
             Label = "Enable HDR Video Playback",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables HDR video playback on HDR-capable displays. Requires hardware support. Default: Disabled.",
@@ -469,7 +469,7 @@ internal static class NightLight
         {
             Id = "night-hdr-auto-brightness",
             Label = "Enable Auto HDR Brightness",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables automatic brightness adjustment for HDR content. Optimises SDR-to-HDR content mapping.",
@@ -483,7 +483,7 @@ internal static class NightLight
         {
             Id = "night-disable-cabc",
             Label = "Disable Content Adaptive Brightness",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -498,7 +498,7 @@ internal static class NightLight
         {
             Id = "night-disable-adaptive-colour",
             Label = "Disable Adaptive Colour",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -513,7 +513,7 @@ internal static class NightLight
         {
             Id = "night-enable-wcg",
             Label = "Enable Wide Colour Gamut (WCG)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables Wide Colour Gamut support for richer colours on compatible displays. Default: Disabled.",
@@ -527,7 +527,7 @@ internal static class NightLight
         {
             Id = "night-disable-hdr-streaming",
             Label = "Disable HDR for Streaming Video",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables HDR playback for streaming video apps. Saves bandwidth and prevents colour issues on unsupported displays.",
@@ -550,7 +550,7 @@ internal static class NightLight
         {
             Id = "night-disable-display-gp",
             Label = "Lock Display Settings (Policy)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents users from changing display settings via Group Policy. Useful for kiosk/shared machines.",
@@ -564,7 +564,7 @@ internal static class NightLight
         {
             Id = "night-srgb-default",
             Label = "Set Default Colour Profile to sRGB",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the default colour profile to standard sRGB IEC61966-2.1. Ensures consistent colour across applications.",
@@ -578,7 +578,7 @@ internal static class NightLight
         {
             Id = "night-disable-dwm-hdr",
             Label = "Disable DWM HDR Compositor (Policy)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Desktop Window Manager HDR compositor via policy. Force SDR mode even on HDR displays.",
@@ -592,7 +592,7 @@ internal static class NightLight
         {
             Id = "night-enable-vivid-colour",
             Label = "Enable Vivid Display Colour Mode",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -607,7 +607,7 @@ internal static class NightLight
         {
             Id = "night-disable-icc-auto",
             Label = "Disable Auto ICC Colour Profile",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -622,7 +622,7 @@ internal static class NightLight
         {
             Id = "night-disable-color-filters",
             Label = "Disable Color Filters",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Windows color filter overlay (grayscale, inverted, etc.). Default: disabled.",
@@ -636,7 +636,7 @@ internal static class NightLight
         {
             Id = "night-disable-schedule",
             Label = "Disable Night Light Schedule",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -674,7 +674,7 @@ internal static class NightLight
         {
             Id = "night-enable-night-light",
             Label = "Enable Night Light",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the Windows Night Light blue light filter. Reduces blue light emission to reduce eye strain. Default: disabled.",
@@ -711,7 +711,7 @@ internal static class NightLight
         {
             Id = "night-keep-hdr-battery",
             Label = "Keep HDR On Battery",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -734,7 +734,7 @@ internal static class Fonts
         {
             Id = "font-enable-cleartype",
             Label = "Enable ClearType Font Rendering",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables ClearType sub-pixel rendering for sharper text on LCD displays (sets FontSmoothingType to 2).",
@@ -748,7 +748,7 @@ internal static class Fonts
         {
             Id = "font-set-segoe-ui",
             Label = "Set Default System Font to Segoe UI",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Registers Segoe UI and its variants as the per-user default font, overriding any previous user-level font substitution.",
@@ -785,7 +785,7 @@ internal static class Fonts
         {
             Id = "font-disable-fontcache-service",
             Label = "Disable Font Cache Service",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Windows Font Cache Service (FontCache). May reduce memory usage but can slow down font loading.",
@@ -799,7 +799,7 @@ internal static class Fonts
         {
             Id = "font-cleartype-tuning",
             Label = "Set ClearType Tuning to Maximum",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the ClearType rendering level to 100 (maximum) for WPF and Avalon-based applications on the primary display.",
@@ -813,7 +813,7 @@ internal static class Fonts
         {
             Id = "font-natural-cleartype-contrast",
             Label = "Enable Natural ClearType Contrast",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the WPF text contrast level to 1 for a more natural, softer ClearType appearance on the primary display.",
@@ -827,7 +827,7 @@ internal static class Fonts
         {
             Id = "font-wpf-hw-text-rendering",
             Label = "Enable WPF Hardware Text Rendering",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Ensures WPF applications use GPU-accelerated text rendering by explicitly setting DisableHWAcceleration to 0.",
@@ -841,7 +841,7 @@ internal static class Fonts
         {
             Id = "font-fonts-disable-font-fallback",
             Label = "Disable Font Fallback",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -871,7 +871,7 @@ internal static class Fonts
         {
             Id = "font-increase-glyph-cache",
             Label = "Increase GDI Glyph Cache Size",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -889,7 +889,7 @@ internal static class Fonts
         {
             Id = "font-disable-font-streaming",
             Label = "Disable Font Streaming",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows font streaming (downloading fonts on demand from Microsoft). Reduces network calls. Default: enabled.",
@@ -903,7 +903,7 @@ internal static class Fonts
         {
             Id = "font-block-untrusted-fonts",
             Label = "Block Untrusted Fonts",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Blocks untrusted fonts from loading in processes. Mitigates font parsing vulnerabilities. Default: off.",
@@ -920,7 +920,7 @@ internal static class Fonts
         {
             Id = "font-disable-font-installation-user",
             Label = "Disable Per-User Font Installation",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents users from installing fonts per-user. Requires admin font installation. Default: allowed.",
@@ -934,7 +934,7 @@ internal static class Fonts
         {
             Id = "font-block-ie-zone-download",
             Label = "Block Font Downloads in IE Zones",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -958,7 +958,7 @@ internal static class Fonts
         {
             Id = "font-disable-download-edge",
             Label = "Disable Font Download in Edge",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -974,7 +974,7 @@ internal static class Fonts
         {
             Id = "font-set-dpi-aware-font-scaling",
             Label = "Set DPI-Aware Font Scaling",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables per-monitor DPI-aware font scaling for sharper text on high-DPI displays. Default: system-level scaling.",
@@ -988,7 +988,7 @@ internal static class Fonts
         {
             Id = "font-set-icon-title-font-cascadia",
             Label = "Set Icon Title Font to Cascadia Mono",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Changes the icon title font to Cascadia Mono for a modern developer-friendly look. Default: Segoe UI.",
@@ -1002,7 +1002,7 @@ internal static class Fonts
         {
             Id = "font-disable-font-hinting",
             Label = "Disable Font Hinting",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables font hinting for smoother-looking text on high-DPI displays. May reduce sharpness on low-DPI. Default: enabled.",
@@ -1016,7 +1016,7 @@ internal static class Fonts
         {
             Id = "font-enable-directwrite",
             Label = "Force DirectWrite Rendering",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces DirectWrite text rendering for improved subpixel anti-aliasing and colour accuracy. Default: auto.",
@@ -1030,7 +1030,7 @@ internal static class Fonts
         {
             Id = "font-disable-font-providers",
             Label = "Disable Cloud Font Providers",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Blocks Windows from contacting cloud font providers, preventing font downloads over the network. Default: enabled.",
@@ -1044,7 +1044,7 @@ internal static class Fonts
         {
             Id = "font-set-caption-font-weight",
             Label = "Set Bold Caption Font",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the window caption (title bar) font weight to bold for improved readability. Default: normal weight.",
@@ -1058,7 +1058,7 @@ internal static class Fonts
         {
             Id = "font-set-message-font-default",
             Label = "Reset Message Box Font",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Resets the message box font to the default Segoe UI 9pt. Fixes applications displaying incorrect dialog fonts.",
@@ -1098,7 +1098,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-hidden-files",
             Label = "Show Hidden Files and Folders",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Makes hidden files and folders visible in File Explorer.",
@@ -1112,7 +1112,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-super-hidden",
             Label = "Show Protected OS Files",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Shows protected operating system files in Explorer (e.g., desktop.ini, thumbs.db).",
@@ -1126,7 +1126,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-full-path-title",
             Label = "Show Full Path in Explorer Title Bar",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Displays the complete folder path in the Explorer title bar instead of just the folder name.",
@@ -1140,7 +1140,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-full-path-address",
             Label = "Show Full Path in Explorer Address Bar",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Uses the full file system path in Explorer's address bar instead of breadcrumb navigation.",
@@ -1154,7 +1154,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-status-bar",
             Label = "Show Explorer Status Bar",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Always displays the status bar at the bottom of Explorer windows showing item info.",
@@ -1168,7 +1168,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-launch-to-this-pc",
             Label = "Open Explorer to 'This PC' (Not Quick Access)",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Opens File Explorer to This PC view instead of Quick Access on launch.",
@@ -1182,7 +1182,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-quick-access-recent",
             Label = "Disable Recent Files in Quick Access",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Stops Quick Access from showing recently opened files.",
@@ -1196,7 +1196,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-quick-access-frequent",
             Label = "Disable Frequent Folders in Quick Access",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Stops Quick Access from showing frequently accessed folders.",
@@ -1210,7 +1210,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-file-extensions",
             Label = "Always Show File Name Extensions",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Displays file extensions (.txt, .exe, .pdf) for all files in Explorer.",
@@ -1224,7 +1224,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-merge-conflicts",
             Label = "Show Folder Merge Conflicts",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prompts for merge conflicts when copying folders with overlapping file names.",
@@ -1240,7 +1240,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-compact-view",
             Label = "Use Compact View in Explorer",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces spacing between items in Explorer for a denser file view (Win11 inflated spacing).",
@@ -1254,7 +1254,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-checkbox-selection",
             Label = "Use Checkboxes to Select Items",
-            Category = "Display",
+            Category = "Display 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds checkboxes next to files and folders for easy multi-selection.",
@@ -1268,7 +1268,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-expand-to-current-folder",
             Label = "Expand Navigation Pane to Current Folder",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Automatically expands the navigation pane to highlight the current folder location.",
@@ -1282,7 +1282,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-all-folders-nav",
             Label = "Show All Folders in Navigation Pane",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Displays all folders (including Control Panel, Recycle Bin) in the navigation pane.",
@@ -1298,7 +1298,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-minimize-ribbon",
             Label = "Minimise Explorer Ribbon by Default",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Collapses the ribbon toolbar in Explorer by default, giving more space to file content.",
@@ -1314,7 +1314,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-show-seconds-clock",
             Label = "Show Seconds in Taskbar Clock",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Displays seconds (HH:MM:SS) in the taskbar system clock.",
@@ -1328,7 +1328,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-small-taskbar-icons",
             Label = "Use Small Taskbar Icons",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Uses smaller icons on the taskbar, reducing its height (Win10 style, may not work on Win11).",
@@ -1342,7 +1342,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-hide-taskbar-search",
             Label = "Hide Taskbar Search Box",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Completely hides the search box/icon from the taskbar.",
@@ -1356,7 +1356,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-hide-task-view-button",
             Label = "Hide Task View Button",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the Task View (virtual desktops) button from the taskbar.",
@@ -1370,7 +1370,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-hide-widgets-button",
             Label = "Hide Widgets Button from Taskbar",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the Widgets button/panel from the taskbar on Windows 11.",
@@ -1384,7 +1384,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-hide-chat-button",
             Label = "Hide Chat (Teams) Button from Taskbar",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the Chat (Microsoft Teams) button from the Windows 11 taskbar.",
@@ -1398,7 +1398,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-taskbar-never-combine",
             Label = "Never Combine Taskbar Buttons",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Shows separate taskbar buttons for each window instead of grouping by application.",
@@ -1416,7 +1416,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-action-center",
             Label = "Disable Action Centre (Notification Panel)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides the notification/action centre panel from the taskbar.",
@@ -1430,7 +1430,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-news-feed",
             Label = "Disable News and Interests Feed",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the news and interests widget/feed from the taskbar.",
@@ -1446,7 +1446,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-pen-workspace",
             Label = "Disable Windows Ink Workspace",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the Windows Ink Workspace button and functionality from the taskbar.",
@@ -1462,7 +1462,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-always-show-transfer-details",
             Label = "Always Show File Transfer Details",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Automatically expands the details section in file copy/move dialogs.",
@@ -1485,7 +1485,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-sharing-wizard",
             Label = "Disable Sharing Wizard",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Uses the classic security tab instead of the simplified sharing wizard for file/folder sharing.",
@@ -1501,7 +1501,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-skip-recycle-bin",
             Label = "Skip Recycle Bin (Delete Directly)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = false,
             Description = "Deletes files directly without sending to Recycle Bin. Use with caution.",
@@ -1515,7 +1515,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-delete-confirmation",
             Label = "Disable Delete Confirmation Dialog",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sends files to Recycle Bin without the 'Are you sure?' prompt.",
@@ -1529,7 +1529,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-disable-thumbnail-cache",
             Label = "Disable Thumbnail Cache",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Explorer from creating thumbs.db thumbnail cache files.",
@@ -1543,7 +1543,7 @@ internal static class DesktopCustomization
         {
             Id = "dtcust-always-show-icons-never-thumbnails",
             Label = "Always Show Icons, Never Thumbnails",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Shows file type icons instead of image/video thumbnails in Explorer for faster browsing.",
@@ -1578,7 +1578,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-titlebar-color-inactive",
             Label = "Show Accent Color on Inactive Title Bars",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Extends the accent colour to inactive window title bars for a uniform look.",
@@ -1592,7 +1592,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-start-taskbar-accent",
             Label = "Show Accent Color on Start and Taskbar",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Applies the system accent colour to the Start menu and taskbar background.",
@@ -1606,7 +1606,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-title-bar-flashing",
             Label = "Disable Title Bar Flashing",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents applications from flashing their title bar to attract attention.",
@@ -1622,7 +1622,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-padded-border-zero",
             Label = "Remove Window Padding Border",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the extra padded border around windows (-60 = 4px default, 0 = none). Requires sign-out.",
@@ -1641,7 +1641,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-menu-animations",
             Label = "Disable Menu Fade/Slide Animations",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables fade and slide effects on menus for instant display.",
@@ -1655,7 +1655,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-window-animation",
             Label = "Disable Window Min/Max Animations",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the animation when minimising or maximising windows.",
@@ -1673,7 +1673,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-alt-tab-classic",
             Label = "Classic Alt+Tab (No Thumbnails)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Switches Alt+Tab to the classic icon-only style without window thumbnails.",
@@ -1691,7 +1691,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-cursor-shadow",
             Label = "Enable Cursor Shadow",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds a shadow under the mouse cursor for better visibility on light backgrounds.",
@@ -1705,7 +1705,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-cursor-size-large",
             Label = "Large Mouse Cursor (48px)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Increases the mouse cursor size to large (48px) for better visibility.",
@@ -1721,7 +1721,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-dark-mode-apps",
             Label = "Dark Mode for Apps",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces dark mode for modern UWP/WinUI applications only.",
@@ -1735,7 +1735,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-dark-mode-system",
             Label = "Dark Mode for System UI",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces dark mode for system UI elements (Start, taskbar, action centre).",
@@ -1751,7 +1751,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-menu-font-size-small",
             Label = "Small Menu Font (14px)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the system menu font height to 14 pixels for compact menus. Requires sign-out.",
@@ -1766,7 +1766,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-small-caption-font",
             Label = "Small Caption Font for Toolbars",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the small caption font height used by floating toolbars and palettes. Requires sign-out.",
@@ -1783,7 +1783,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-desktop-icons",
             Label = "Hide All Desktop Icons",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides all desktop icons for a clean workspace look.",
@@ -1799,7 +1799,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-solid-color-background",
             Label = "Use Solid Color Desktop Background",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Switches the desktop background to a solid colour (no wallpaper) for a minimal look.",
@@ -1813,7 +1813,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-wallpaper-slideshow",
             Label = "Disable Desktop Slideshow",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents the desktop wallpaper from cycling through images at timed intervals.",
@@ -1829,7 +1829,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-focus-follows-mouse",
             Label = "Focus Follows Mouse (X-Mouse)",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Activates windows simply by hovering the mouse, without clicking (X11-style focus).",
@@ -1843,7 +1843,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-auto-raise-on-hover",
             Label = "Auto-Raise Window on Hover",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Automatically brings the hovered window to the front (requires Focus Follows Mouse).",
@@ -1857,7 +1857,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-foreground-lock-timeout",
             Label = "Reduce Foreground Lock Timeout",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the timeout that prevents apps from stealing focus to 0ms (instant focus switch).",
@@ -1873,7 +1873,7 @@ internal static class WindowAppearance
         {
             Id = "winapp-disable-font-smoothing",
             Label = "Disable Font Smoothing",
-            Category = "Display",
+            Category = "Display 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables all font smoothing for a crisp pixel-perfect text look on high-DPI displays.",
