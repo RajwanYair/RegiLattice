@@ -2034,4 +2034,3 @@ internal static class ProxyVpn
         },
     ];
 }
-

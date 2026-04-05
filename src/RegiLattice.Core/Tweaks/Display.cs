@@ -2150,4 +2150,3 @@ internal static class WindowAppearance
         },
     ];
 }
-
