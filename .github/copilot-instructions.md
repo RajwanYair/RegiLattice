@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-05-03 (v6.8.0, ~8,847 tweaks, 26 categories, 3,051 tests).
+> Last verified: 2026-05-03 (v6.9.0, ~8,847 tweaks, 26 categories, 3,051 tests).
 
 ## Companion Instruction Files
 

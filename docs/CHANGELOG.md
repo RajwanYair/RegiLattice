@@ -4,6 +4,20 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.9.0] — 2026-04-05
+
+### Changed
+
+- **Document & config consolidation** — all stale metric references updated to post-consolidation state:
+  - `docs/Architecture.md`: Tweaks/ box updated — "83 modules · 9190 tweaks" → "30 modules · 8,847 tweaks"
+  - `docs/Development.md`: test counts updated — Core 2,288→2,315, CLI 362→379, GUI 339→357
+  - `README.md`: Tweak Categories section updated — "101 categories" → "26 categories"; description updated
+  - `.github/instructions/git-workflow.instructions.md`: version bump checklist now explicitly requires SVG/graphics update on every version bump
+
+### Stats
+
+- Tweaks: **8,847** (unchanged) | Categories: **26** (unchanged) | Modules: **30** (unchanged) | Tests: **3,051** (0 failures)
+
 ## [6.8.0] — 2026-05-03
 
 ### Changed

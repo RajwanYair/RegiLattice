@@ -1,4 +1,4 @@
-<!-- SEO / GitHub search keywords
+﻿<!-- SEO / GitHub search keywords
      windows registry tweaks windows 11 debloat privacy hardening performance optimizer
      disable telemetry windows optimizer system hardening group policy alternative
      registry editor winforms gui cli dotnet csharp tweak engine
@@ -147,9 +147,9 @@ graph LR
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (101)
+## Tweak Categories (26)
 
-101 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
+26 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, cloud storage, remote desktop, virtualization, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
