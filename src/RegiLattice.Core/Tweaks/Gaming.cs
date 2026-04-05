@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -10,7 +10,7 @@ internal static class Gaming
         {
             Id = "game-disable-xbox-services",
             Label = "Disable Xbox Background Services",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -37,7 +37,7 @@ internal static class Gaming
         {
             Id = "game-disable-game-input-redirect",
             Label = "Disable Game Input Redirection",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the GameInput service to prevent input redirection overhead.",
@@ -51,7 +51,7 @@ internal static class Gaming
         {
             Id = "game-disable-xbox-game-monitoring",
             Label = "Disable Xbox Game Monitoring Service",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Xbox Game Monitoring (xbgm) background service.",
@@ -65,7 +65,7 @@ internal static class Gaming
         {
             Id = "game-disable-nagles-algorithm",
             Label = "Disable Nagle's Algorithm (Low Latency)",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Nagle's algorithm via TCPNoDelay for lower network latency in multiplayer games.",
@@ -79,7 +79,7 @@ internal static class Gaming
         {
             Id = "game-disable-game-bar-tips",
             Label = "Disable Game Bar Tips",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -94,7 +94,7 @@ internal static class Gaming
         {
             Id = "game-disable-auto-hdr",
             Label = "Disable Auto HDR",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -109,7 +109,7 @@ internal static class Gaming
         {
             Id = "game-disable-game-bar-presence-writer",
             Label = "Disable Game Bar Presence Writer",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -124,7 +124,7 @@ internal static class Gaming
         {
             Id = "game-disable-game-input-redirection",
             Label = "Disable Game Input Redirection",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Game Input Redirection service that intercepts gamepad input. Reduces input latency. Default: enabled.",
@@ -138,7 +138,7 @@ internal static class Gaming
         {
             Id = "game-disable-diagtrack-keyword",
             Label = "Disable DiagTrack ETW Session",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -153,7 +153,7 @@ internal static class Gaming
         {
             Id = "game-gaming-mode-priority",
             Label = "Set Gaming Task CPU Priority",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -199,7 +199,7 @@ internal static class Gaming
         {
             Id = "game-honor-fse-compat",
             Label = "Honor Fullscreen Exclusive Compatibility",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -214,7 +214,7 @@ internal static class Gaming
         {
             Id = "game-irq8-realtime",
             Label = "Set IRQ8 to High Priority",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets IRQ8 (real-time clock) to high priority. Improves timer precision for gaming. Default: not set.",
@@ -228,7 +228,7 @@ internal static class Gaming
         {
             Id = "game-disable-ndu-service",
             Label = "Disable Network Data Usage Monitor (NDU)",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Network Data Usage (NDU) monitoring service, which can cause latency spikes in network-intensive games.",
@@ -242,7 +242,7 @@ internal static class Gaming
         {
             Id = "game-set-gpu-priority-8",
             Label = "Set High GPU Priority for Games",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -278,7 +278,7 @@ internal static class Gaming
         {
             Id = "game-set-latency-sensitivity-high",
             Label = "Set High Latency Sensitivity for Games",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -314,7 +314,7 @@ internal static class Gaming
         {
             Id = "game-increase-max-user-port",
             Label = "Increase Max UDP/TCP Port Range for Gaming",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -329,7 +329,7 @@ internal static class Gaming
         {
             Id = "game-disable-msmq-service",
             Label = "Disable MSMQ Service for Gaming",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -344,7 +344,7 @@ internal static class Gaming
         {
             Id = "game-set-dxgi-flip-model",
             Label = "Prefer Flip Presentation Model for DirectX",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -373,7 +373,7 @@ internal static class Gaming
         {
             Id = "game-set-games-sfio-priority-high",
             Label = "Set Games SFIO Priority to High",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -408,7 +408,7 @@ internal static class Gaming
         {
             Id = "game-set-games-affinity-all-cpus",
             Label = "Set Game Scheduler to Use All CPUs",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -452,7 +452,7 @@ internal static class Gaming
         {
             Id = "game-dvr-allow-capture-off",
             Label = "Disable DVR App Capture AllowAppCapture",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -467,7 +467,7 @@ internal static class Gaming
         {
             Id = "game-bar-gamepad-hotkey-off",
             Label = "Disable Xbox Game Bar Gamepad Hotkey",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -482,7 +482,7 @@ internal static class Gaming
         {
             Id = "game-input-hooks-fast",
             Label = "Reduce LowLevel Input Hook Timeout",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -497,7 +497,7 @@ internal static class Gaming
         {
             Id = "game-hpet-disable-reg",
             Label = "Disable HPET via Registry Kernel Flag",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -521,7 +521,7 @@ internal static class Gaming
         {
             Id = "game-no-lazy-mode-timeout",
             Label = "Disable Multimedia SystemProfile Lazy Mode Timeout",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -545,7 +545,7 @@ internal static class Gaming
         {
             Id = "game-psched-svc-disable",
             Label = "Disable Packet Scheduler (Psched) Service",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -560,7 +560,7 @@ internal static class Gaming
         {
             Id = "game-audio-latency-1ms",
             Label = "Set Multimedia Audio Latency to 1ms",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -584,7 +584,7 @@ internal static class Gaming
         {
             Id = "game-profile-tasks-bg-off",
             Label = "Set Games Profile BackgroundOnly to False",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -619,7 +619,7 @@ internal static class Gaming
         {
             Id = "game-disable-game-dvr-shadow",
             Label = "Disable Game DVR Shadow Recording",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -634,7 +634,7 @@ internal static class Gaming
         {
             Id = "game-disable-bcast-dvr-svc",
             Label = "Disable Broadcast DVR User Service",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -649,7 +649,7 @@ internal static class Gaming
         {
             Id = "game-set-mmcss-scheduling-high",
             Label = "Set MMCSS Games Scheduling Category to High",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -685,7 +685,7 @@ internal static class Gaming
         {
             Id = "game-set-mmcss-latency-sensitive",
             Label = "Set MMCSS Games Task as Latency Sensitive",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -721,7 +721,7 @@ internal static class Gaming
         {
             Id = "game-disable-uwp-bg-access",
             Label = "Block All UWP Apps from Running in Background (GPO)",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -754,7 +754,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-captures-folder-indexing",
             Label = "Disable Game Bar Captures Folder Indexing",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "game bar", "performance"],
@@ -767,7 +767,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-capture-audio",
             Label = "Disable Game Bar Audio Capture",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "audio", "performance"],
@@ -780,7 +780,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-achievement-notifications",
             Label = "Disable Xbox Achievement Notifications",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "notifications"],
@@ -793,7 +793,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-game-bar-tips",
             Label = "Disable Game Bar First-Run Tips",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "notifications", "tips"],
@@ -806,7 +806,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-full-scene-optimizations",
             Label = "Disable Full-Scene Optimizations Globally",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "game bar", "performance", "fps"],
@@ -819,7 +819,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-social-features",
             Label = "Disable Xbox Social Integration",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "privacy", "social"],
@@ -832,7 +832,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-premium-badges",
             Label = "Disable Game Bar Premium Feature Badges",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "game bar"],
@@ -845,7 +845,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-enable-exclusive-fullscreen",
             Label = "Force Exclusive Fullscreen (Disable Optimised FSE Override)",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "performance", "fps", "fullscreen"],
@@ -861,7 +861,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-app-capture",
             Label = "Disable Game DVR App Capture",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "capture", "privacy", "performance"],
@@ -877,7 +877,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-cursor-in-capture",
             Label = "Exclude Cursor from Game Captures",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "capture", "cursor"],
@@ -891,7 +891,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-mic-in-capture",
             Label = "Disable Microphone in Game DVR Captures",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "capture", "microphone", "audio", "privacy"],
@@ -905,7 +905,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-audio-capture",
             Label = "Disable Audio Capture in Game DVR Recordings",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "capture", "audio"],
@@ -920,7 +920,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-dxgi-fse-compat",
             Label = "Disable Game DVR DXGI Fullscreen Compatibility Mode",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "fullscreen", "dxgi", "performance"],
@@ -936,7 +936,7 @@ internal static class XboxGameBar
         {
             Id = "xbgb-disable-efs-feature-hooks",
             Label = "Disable Game DVR Extended FSE Feature Flags",
-            Category = "Gaming",
+            Category = "Gaming 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["gaming", "xbox", "fse", "fullscreen", "performance"],
@@ -983,7 +983,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-game-bar",
                 Label = "Game Bar Policy: Disable Game Bar Overlay",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the Game Bar overlay (Win+G shortcut) via Group Policy. Game Bar can cause focus issues in enterprise applications when activated unexpectedly by keyboard shortcuts.",
                 Tags = ["gamebar", "overlay", "disable", "gaming", "policy"],
@@ -1001,7 +1001,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-auto-game-mode",
                 Label = "Game Bar Policy: Disable Automatic Game Mode",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prevents Windows from automatically switching to Game Mode for detected full-screen applications. Game Mode reprioritizes GPU and CPU resources, which can cause performance degradation in non-game enterprise workloads.",
                 Tags = ["gamebar", "game-mode", "auto", "cpu", "gpu", "policy"],
@@ -1019,7 +1019,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-nexus",
                 Label = "Game Bar Policy: Disable Nova Game Bar Experience (Nexus)",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the Nexus (Nova) Game Bar experience via GPO. The Nexus interface provides an enhanced overlay for gaming stats, Xbox integration, and achievement notifications which are unnecessary on managed enterprise devices.",
                 Tags = ["gamebar", "nexus", "nova", "xbox", "overlay", "policy"],
@@ -1037,7 +1037,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-presence-writer",
                 Label = "Game Bar Policy: Disable Game Bar Presence Writer",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the GameBarPresenceWriter process which monitors running games and reports activity to Xbox services. Reduces background telemetry and removes the Xbox social presence feature on managed devices.",
                 Tags = ["gamebar", "presence", "telemetry", "xbox", "background", "policy"],
@@ -1055,7 +1055,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-broadcast",
                 Label = "Game Bar Policy: Disable Game Broadcasting",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the Game Bar broadcasting feature (Mixer/Beam/Xbox Live streaming) via Group Policy. Prevents users from live-streaming their screen via the overlay, eliminating a potential data leakage channel.",
                 Tags = ["gamebar", "broadcast", "streaming", "xbox", "policy"],
@@ -1073,7 +1073,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-startup-panel",
                 Label = "Game Bar Policy: Hide Game Bar Startup Panel",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prevents the Game Bar startup tips panel from appearing when a game or full-screen application is launched. Eliminates the 'Did you know the GameBar exists?' tip that appears on first game launch.",
                 Tags = ["gamebar", "startup", "tips", "panel", "policy"],
@@ -1091,7 +1091,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-game-mode-global",
                 Label = "Game Bar Policy: Disable Game Mode System-Wide",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables Game Mode globally via the GameMode policy key. Game Mode allocates additional GPU and CPU resources to games, which can reduce determinism and throughput for productivity and CAD workloads on high-end machines.",
                 Tags = ["gamebar", "game-mode", "global", "cpu", "gpu", "policy"],
@@ -1109,7 +1109,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-clip-cursor",
                 Label = "Game Bar Policy: Disable Cursor Clip in Game Bar",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prevents the Game Bar from clipping the cursor to the game window while the overlay is active. This avoids mouse pointer getting trapped inside a full-screen application when toggling the overlay.",
                 Tags = ["gamebar", "cursor", "clip", "overlay", "policy"],
@@ -1127,7 +1127,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-achievements-overlay",
                 Label = "Game Bar Policy: Disable Achievement Notifications Overlay",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the in-game achievement / award notification overlay that appears via Xbox Game Bar when unlocking Steam, Epic Games, or Xbox achievements. Prevents distraction during enterprise workloads running in fullscreen mode.",
                 Tags = ["gamebar", "achievements", "notifications", "xbox", "overlay", "policy"],
@@ -1145,7 +1145,7 @@ internal static class PolicyGaming
             {
                 Id = "gamebarpol-disable-xbox-integration",
                 Label = "Game Bar Policy: Disable Xbox Network Integration in Game Bar",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prevents Game Bar from connecting to Xbox Network services (friend status, party chat, activity feed). Disables the social layer that reports gaming activity to Microsoft and Xbox friends.",
                 Tags = ["gamebar", "xbox", "network", "social", "policy"],
@@ -1175,7 +1175,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-gamebar-tips",
                     Label = "Disable Game Bar First-Run Tips and Overlay Prompts",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Prevents the Game Bar from displaying first-run tips and overlay prompt notifications in full-screen applications, eliminating interruptions during gaming or full-screen media playback.",
                     Tags = ["gamebar", "tips", "overlay", "notifications", "policy"],
@@ -1192,7 +1192,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-gamemode",
                     Label = "Disable Windows Game Mode Globally",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Disables Windows Game Mode which dynamically adjusts CPU/GPU scheduling when a game is in focus. On systems running background services or VMs, Game Mode can disrupt non-game workloads; disabling it provides more predictable scheduling.",
                     Tags = ["gamemode", "scheduler", "cpu", "gpu", "policy"],
@@ -1209,7 +1209,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-xbox-network-check",
                     Label = "Disable Xbox Network Connectivity Check at Game Launch",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Prevents the Game Bar from performing Xbox Live / Microsoft network connectivity checks at game launch, eliminating network latency at game start and avoiding telemetry associated with Xbox network status probes.",
                     Tags = ["gamebar", "xbox", "network-check", "telemetry", "policy"],
@@ -1226,7 +1226,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-broadcast-streaming",
                     Label = "Disable Game Bar Broadcast Streaming to Twitch/Mixer",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Prevents the Game Bar from offering game broadcast streaming functionality to third-party streaming services, disabling the broadcast API and ensuring game streams cannot be initiated without explicit user action outside the Game Bar.",
                     Tags = ["gamebar", "broadcast", "streaming", "twitch", "policy"],
@@ -1243,7 +1243,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-screenshot-shortcut",
                     Label = "Disable Game Bar Screenshot Keyboard Shortcut",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Disables the Win+Alt+PrtSc keyboard shortcut that captures game screenshots via Game Bar, preventing accidental screenshot capture and avoiding screenshots being stored in the GameCapture screenshots folder.",
                     Tags = ["gamebar", "screenshot", "keyboard-shortcut", "policy"],
@@ -1260,7 +1260,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-gameclips-upload",
                     Label = "Disable Automatic Game Clip Upload to Xbox Cloud",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Prevents automatically uploading captured game clips and screenshots to Xbox cloud storage, ensuring game captures remain local and are not synchronized to Microsoft cloud accounts without explicit user action.",
                     Tags = ["gamebar", "clips", "cloud-upload", "xbox", "privacy", "policy"],
@@ -1277,7 +1277,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-disable-gamebar-telemetry",
                     Label = "Disable Game Bar and GameDVR Telemetry to Microsoft",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Prevents Game Bar and GameDVR from sending gaming session duration, game title names, capture statistics, and hardware performance data to Microsoft.",
                     Tags = ["gamebar", "gamedvr", "telemetry", "privacy", "microsoft", "policy"],
@@ -1294,7 +1294,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-set-capture-folder-policy",
                     Label = "Set Game Capture Storage Folder via Policy",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Configures the Game Bar capture storage location to the local Videos\\GameCaptures path via policy, overriding per-user settings to ensure game recordings are stored to a known, auditable location and not redirected elsewhere.",
                     Tags = ["gamebar", "capture-folder", "storage", "policy"],
@@ -1311,7 +1311,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamebar-log-capture-events",
                     Label = "Log Game Bar Capture Start/Stop Events",
-                    Category = "Gaming",
+                    Category = "Gaming 1",
                     Description =
                         "Enables event log entries when Game Bar starts or stops a recording or screenshot capture session, providing visibility into screen capture activity for compliance auditing.",
                     Tags = ["gamebar", "event-log", "capture", "audit", "policy"],
@@ -1338,7 +1338,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-game-bar",
                 Label = "Game DVR Policy: Disable Xbox Game Bar",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the Xbox Game Bar overlay via Group Policy, preventing it from launching via Win+G or game launch hooks. "
                     + "Game Bar is a WinRT overlay that injects into render pipelines and can cause micro-stutters and frame drops in some titles. "
@@ -1359,7 +1359,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-background-recording",
                 Label = "Game DVR Policy: Disable Background Video Recording",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables Game DVR's background clip recording feature that captures the last N minutes of gameplay continuously. "
                     + "This feature allocates a rolling video buffer on disk and in RAM at all times, degrading performance of high-load applications. "
@@ -1380,7 +1380,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-broadcast",
                 Label = "Game DVR Policy: Disable Game Broadcasting",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prohibits live broadcasting of gameplay via services such as Mixer (retired) or any future broadcasting back-end. "
                     + "Broadcasting continually encodes and streams video, consuming significant bandwidth and GPU encoder capacity. "
@@ -1401,7 +1401,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-game-mode",
                 Label = "Game DVR Policy: Disable Automatic Game Mode",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Prevents Windows from automatically activating Game Mode when a game is detected. "
                     + "Game Mode reprioritises threads and may cause stutter in other processes sharing the CPU, including audio and network services. "
@@ -1422,7 +1422,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-feedback-button",
                 Label = "Game DVR Policy: Disable Game Bar Feedback Button",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Removes the feedback button from the Game Bar overlay that prompts users to submit feedback about gaming performance to Microsoft. "
                     + "On managed systems, direct feedback telemetry paths should be controlled centrally rather than through individual user submissions. "
@@ -1443,7 +1443,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-coach-tips",
                 Label = "Game DVR Policy: Disable Game Bar Coach Tips",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Suppresses the 'coach' overlay tips that appear over games when Game Bar is active, prompting users to use recording and features. "
                     + "Coach tips are intrusive and distract from productive workflows when applications are mistakenly classified as games. "
@@ -1463,7 +1463,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-game-overlay",
                 Label = "Game DVR Policy: Disable Game Bar On-Screen Overlay",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables the Game Bar on-screen performance and stats overlay that can appear in full-screen applications. "
                     + "The overlay periodically injects into the application's render surface and can introduce frame time spikes. "
@@ -1484,7 +1484,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-handheld",
                 Label = "Game DVR Policy: Disable Handheld Console DVR Support",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables Game DVR recording support for Windows handheld gaming devices via the AllowHandheld policy flag. "
                     + "On desktop and laptop enterprise machines this capability is irrelevant and its associated services consume memory at startup. "
@@ -1505,7 +1505,7 @@ internal static class PolicyGaming
             {
                 Id = "gamedvr-disable-social-features",
                 Label = "Game DVR Policy: Disable Game Social Features",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 Description =
                     "Disables Xbox social features integration in the Game Bar that show friends, activity feeds, and achievements. "
                     + "Social features require persistent background network connections to Xbox Live services, adding ongoing network traffic and CPU wake events. "
@@ -1536,7 +1536,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-disable-all-games",
                 Label = "Disable Game Explorer for All Users",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1557,7 +1557,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-block-game-downloads",
                 Label = "Block Downloading Game Ratings",
-                Category = "Gaming",
+                Category = "Gaming 1",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1578,7 +1578,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-hide-recommended-games",
                 Label = "Hide Recommended Games in Game Explorer",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1599,7 +1599,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-block-game-launching",
                 Label = "Prevent Launching Games from Game Explorer",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1620,7 +1620,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-disable-online-games",
                 Label = "Hide Online Games Section",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1641,7 +1641,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-disable-parental-controls",
                 Label = "Disable Game Parental Controls",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1663,7 +1663,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-block-game-updates",
                 Label = "Block Automatic Game Updates",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1685,7 +1685,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-disable-game-notifications",
                 Label = "Disable Game Explorer Notifications",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1706,7 +1706,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-block-game-install",
                 Label = "Block Game Installation via Game Explorer",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1727,7 +1727,7 @@ internal static class PolicyGaming
             {
                 Id = "gex-disable-game-activity-log",
                 Label = "Disable Game Activity Logging",
-                Category = "Gaming",
+                Category = "Gaming 2",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1759,7 +1759,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-block-xbox-remote-play",
                     Label = "Game Stream: Block Xbox Remote Play From This Device",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowXboxRemotePlay=0 in GameDVR policy. Prevents users from streaming their Xbox console games to this Windows PC via the Xbox Remote Play feature. "
                         + "Xbox Remote Play creates a persistent streaming session between the PC and an Xbox console over the internet. On enterprise devices, this introduces an unmanaged high-bandwidth consumer service into the corporate network and may allow the Xbox console (outside the corporate network perimeter) to stream audio/video captured by the device's microphone and camera back to it.",
@@ -1777,7 +1777,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-block-game-streaming-from-pc",
                     Label = "Game Stream: Block Streaming PC Games to Other Devices",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowGameStreamingFromPC=0 in GameDVR policy. Prevents games running on this PC from being streamed to another device (e.g., to a browser, mobile device, or other PC) via Xbox-based or Miracast streaming. "
                         + "PC game streaming renders GPU frames and encodes video of potentially sensitive content visible on the desktop, which is then transmitted across the network. Blocking streaming prevents screen content from being sent to uncontrolled endpoint devices.",
@@ -1795,7 +1795,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-block-game-streaming-upload",
                     Label = "Game Stream: Block Streaming Video Upload to Xbox Network",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowGameStreamingUpload=0 in GameDVR policy. Prevents captured game footage and streaming session recordings from being uploaded to Xbox Live's video hosting service. "
                         + "Captured game clips that are uploaded to Xbox Live become publicly accessible (or accessible to the user's Xbox friends list). On managed devices, preventing video content capture and upload stops potential accidental disclosure of sensitive information visible on the screen (corporate applications, documents, chat windows) that appear in the game capture frame.",
@@ -1813,7 +1813,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-block-game-input-service-telemetry",
                     Label = "Game Stream: Block GameInput Service Telemetry Upload",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets DisableTelemetry=1 in GameInput machine policy. Prevents the GameInput API service from sending telemetry about controller, keyboard, and mouse input events to Microsoft. "
                         + "The GameInput service collects keystroke timing, button press frequency, and peripheral usage patterns from connected game input devices. On corporate workstations, this input telemetry includes potentially sensitive information about productivity application usage patterns that happen to be captured via the same keyboard or mouse.",
@@ -1831,7 +1831,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-block-game-input-cloud-config",
                     Label = "Game Stream: Block GameInput Cloud Configuration Sync",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets DisableCloudConfig=1 in GameInput machine policy. Prevents the GameInput service from downloading controller mapping configurations, button remapping profiles, and vibration settings from Microsoft's cloud game-input configuration service. "
                         + "Cloud config sync for GameInput connects to an external endpoint at startup to check for updated controller profiles. This is an outbound network call to a Microsoft-controlled cloud endpoint that occurs automatically. On locked-down or air-gapped environments, any automatic cloud-sync mechanism should be disabled.",
@@ -1849,7 +1849,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-disable-streaming-microphone-access",
                     Label = "Game Stream: Disable Microphone Access for Game Streaming",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowMicrophoneAccess=0 in GameDVR policy. Prevents game streaming sessions and game capture from accessing the device's microphone. "
                         + "Game streaming with microphone access enables audio capture of the room environment, which is a significant privacy and security concern on corporate devices. Disabling mic access for game streaming ensures that voice communication via Xbox streaming channels cannot intercept ambient conversations regardless of whether the user intentionally activates party chat.",
@@ -1867,7 +1867,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-disable-streaming-camera-access",
                     Label = "Game Stream: Disable Camera Access for Game Streaming",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowCameraAccess=0 in GameDVR policy. Prevents game streaming sessions from accessing the device's webcam or front-facing camera. "
                         + "Game streaming with camera access enables live video capture of the user's physical environment. This creates a serious privacy risk on enterprise devices, where the room visible to the camera may contain whiteboards with sensitive information, other screens, or colleagues who have not consented to being recorded.",
@@ -1885,7 +1885,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-limit-streaming-resolution-1080p",
                     Label = "Game Stream: Limit Outbound Game Streaming Resolution to 1080p",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets MaxStreamingResolution=2 in GameDVR policy. Caps outbound game streaming resolution at 1080p (1920×1080), preventing 4K or higher resolution game stream encoding. "
                         + "4K game streaming at 60 fps can consume 40–80 Mbps of bandwidth, which severely degrades other users on shared corporate network links. Capping at 1080p limits peak streaming bandwidth to ~15–20 Mbps, reducing network impact for the rare scenario where streaming is permitted within a managed environment's acceptable-use policy.",
@@ -1903,7 +1903,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-disable-stream-session-auto-reconnect",
                     Label = "Game Stream: Disable Automatic Reconnection for Streaming Sessions",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowAutoReconnect=0 in GameDVR policy. Prevents game streaming sessions from automatically and silently reconnecting after a network interruption. "
                         + "Auto-reconnect for streaming sessions can cause the device to establish a new streaming connection in the background (potentially after hours, if a session was left active) without the user's knowledge. This background reconnect may re-activate microphone and camera capture unexpectedly. Requiring manual reconnection ensures the user is aware of and actively initiating each streaming session.",
@@ -1921,7 +1921,7 @@ internal static class PolicyGaming
                 {
                     Id = "gstream-disable-game-input-accessibility-overlay",
                     Label = "Game Stream: Disable GameInput Accessibility Overlay in Streaming",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets DisableAccessibilityOverlay=1 in GameInput machine policy. Prevents the GameInput accessibility overlay (on-screen virtual controller, input visualiser) from appearing during game streaming sessions. "
                         + "The GameInput accessibility overlay injects screen content via a system-level overlay that is captured by game recording and streaming functions. On streaming sessions, this overlay appears in the video feed received by all viewers. On corporate devices, ensuring that no system-level overlays inject unexpected UI into game-streamed frames is part of content control.",
@@ -1950,7 +1950,7 @@ internal static class PolicyGaming
                 {
                     Id = "gamperf-enable-multimedia-gaming-class-scheduler",
                     Label = "Gaming Perf: Enable Multimedia Class Scheduler for Gaming Tasks",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets Enabled=1 in Multimedia SystemProfile. Ensures the Windows Multimedia Class Scheduler Service (MMCSS) is active and applies scheduling boosts for registered audio, gaming, and multimedia tasks. "
                         + "MMCSS is the system service that applies all Games and Audio scheduling profiles described in the SystemProfile Tasks registry. If MMCSS is disabled or its settings are cleared during OS hardening, the GPU priority, CPU thread priority, and timer clock rate settings have no effect. Explicitly enabling MMCSS as a policy ensures all the other gaming performance settings in this module are active.",
@@ -1978,7 +1978,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-disable-cloud-gaming-access",
                     Label = "Xbox Cloud: Block Xbox Cloud Gaming (xCloud) Access",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowCloudGaming=0 in XboxLive machine policy. Prevents users on this device from accessing Xbox Cloud Gaming (Project xCloud). "
                         + "Xbox Cloud Gaming streams game compute from Azure data-centres and requires persistent high-bandwidth internet. On corporate or managed devices, cloud gaming represents an unsanctioned cloud service, a bandwidth-exhaustion risk during business hours, and a potential data-exfiltration vector if game streaming sessions can capture screen content. "
@@ -1997,7 +1997,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-disable-xbox-cloud-save-sync",
                     Label = "Xbox Cloud: Disable Xbox Live Cloud Save Synchronisation",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowCloudSaveSync=0 in XboxLive machine policy. Prevents Xbox game save data from being synchronised to and from Xbox Live cloud storage. "
                         + "Cloud save sync transfers game state, progress, and personal gaming data to Microsoft's Xbox Live servers. In regulated industries or GDPR-compliant environments, this data transfer requires legal basis and may conflict with data residency requirements. "
@@ -2016,7 +2016,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-block-xbox-multiplayer-social-features",
                     Label = "Xbox Cloud: Block Xbox Live Multiplayer and Social Features",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowXboxLiveMultiplayer=0 in XboxLive machine policy. Disables Xbox Live multiplayer matchmaking, party chat, and social gaming features. "
                         + "Xbox Live multiplayer requires open communication channels to Xbox Live services and to other players, which can be misused for social engineering, off-channel communication in corporate environments, or unmonitored voice chat. "
@@ -2035,7 +2035,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-block-xbox-in-game-purchases",
                     Label = "Xbox Cloud: Block Xbox Live In-Game Purchases",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowInGamePurchases=0 in XboxLive machine policy. Prevents users from making in-game or in-app purchases through the Xbox Live storefront. "
                         + "In-game purchases (microtransactions) using corporate-provisioned accounts or linked payment methods create financial exposure. Blocking this setting on managed devices prevents unauthorised financial transactions and ensures the device cannot be used as a purchase gateway for Xbox content.",
@@ -2053,7 +2053,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-block-xbox-achievement-sharing",
                     Label = "Xbox Cloud: Block Xbox Achievement and Activity Sharing",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowAchievementSharing=0 in XboxLive machine policy. Blocks Xbox achievement notifications and activity sharing from being posted to the Xbox Live social feed. "
                         + "Achievement sharing publishes play activity to the public Xbox social graph, which may disclose information about the user's presence, games played, and gaming schedule. On managed devices, any outbound social activity not authorised by IT policy should be suppressed.",
@@ -2071,7 +2071,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-restrict-xbox-content-rating-e",
                     Label = "Xbox Cloud: Restrict Xbox Content to Everyone (E) Rated Only",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets ContentRatingMaxLevel=1 in XboxLive machine policy. Restricts the maximum content rating that can be played or purchased through Xbox to Everyone (E) — suitable for all ages. "
                         + "Content rating enforcement is critical on shared devices, lab workstations, kiosk PCs, or any device where unexpected mature content could appear on-screen in a professional or educational setting. An E-rating cap prevents the Xbox service from displaying or launching Mature/M-rated, Teen/T-rated, or Adults Only content.",
@@ -2089,7 +2089,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-disable-xbox-live-friend-requests",
                     Label = "Xbox Cloud: Disable Xbox Live Friend Requests",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowFriendRequests=0 in XboxLive machine policy. Prevents users from sending or receiving Xbox Live friend requests from this device. "
                         + "Friends on Xbox Live gain access to the user's gaming status, presence information, and can initiate voice/party invitations. On corporate or supervised devices, building a social gaming network using company credentials or contact details is an oversharing risk. Blocking friend requests prevents social graph expansion from managed endpoints.",
@@ -2107,7 +2107,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-block-user-generated-content-access",
                     Label = "Xbox Cloud: Block User-Generated Content Access",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowUserGeneratedContent=0 in XboxLive machine policy. Prevents browsing and downloading of user-generated content (UGC) from Xbox Live — including user-created game maps, mods, character skins, and downloadable content created by the community. "
                         + "UGC from Xbox Live is unvetted third-party content that could contain inappropriate material, modified game executables, or content that violates organisational acceptable-use policies. Blocking UGC access reduces the attack surface for content-moderation bypass exploits in Xbox-connected games.",
@@ -2125,7 +2125,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-disable-xbox-live-voice-messaging",
                     Label = "Xbox Cloud: Disable Xbox Live Voice and Text Messaging",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowVoiceMessaging=0 in XboxLive machine policy. Disables the Xbox Live voice message and text message features that allow users to send audio clips and text messages to other Xbox Live users. "
                         + "Xbox Live messaging creates a communication channel that bypasses corporate email/instant-messaging policies and monitoring. On managed devices, any off-channel communication tool should be blocked to ensure all communications go through monitored, policy-compliant channels.",
@@ -2143,7 +2143,7 @@ internal static class PolicyGaming
                 {
                     Id = "xbcloud-block-xbox-cross-play-with-consoles",
                     Label = "Xbox Cloud: Block Xbox Cross-Play with Console Players",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Sets AllowCrossPlay=0 in XboxLive machine policy. Prevents games running on this Windows PC from engaging in crossplay sessions with Xbox console players via Xbox Live. "
                         + "Cross-play requires the Windows machine to be reachable by console-based connection requests through Xbox Live's relay infrastructure. Blocking cross-play reduces the device's exposure to Xbox Live's multi-platform multiplayer network and prevents unexpected inbound connection attempts from console players who may have different content settings.",
@@ -2173,7 +2173,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-live-access",
                     Label = "Disable Xbox Live Network Access for Win32 Apps",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents Win32 (non-Store) applications from accessing Xbox Live services and the Xbox Identity Provider API, blocking non-Store games from connecting to Xbox Live authentication and social services.",
                     Tags = ["xbox", "xbox-live", "win32", "network", "policy"],
@@ -2190,7 +2190,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-live-signin",
                     Label = "Disable Xbox Live Automatic Sign-In at Windows Logon",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents the Xbox Identity Provider service from automatically signing in the user to Xbox Live when they log on to Windows, reducing outbound authentication traffic and Xbox identity disclosure.",
                     Tags = ["xbox", "xbox-live", "auto-signin", "privacy", "policy"],
@@ -2207,7 +2207,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-gameinput-service",
                     Label = "Disable GameInput Service Auto-Start",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents the GameInput host service from starting automatically at boot, reducing background service overhead on non-gaming devices. GameInput is required only for Xbox controller input handling in games.",
                     Tags = ["gameinput", "service", "auto-start", "performance", "policy"],
@@ -2224,7 +2224,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-block-xbox-identity-provider",
                     Label = "Block Xbox Identity Provider from Network Access",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Restricts the Xbox Identity Provider (XIP) from making outbound network requests, effectively preventing Xbox authentication tokens from being obtained via the network and Xbox Live connectivity.",
                     Tags = ["xbox", "identity-provider", "network-block", "privacy", "policy"],
@@ -2241,7 +2241,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-presence",
                     Label = "Disable Xbox Presence and Social Notifications",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Disables Xbox presence reporting and social notifications (friends online, friend activity, achievement alerts) from appearing on the Windows desktop, preventing Xbox social platform notifications from interrupting work.",
                     Tags = ["xbox", "presence", "social", "notifications", "policy"],
@@ -2258,7 +2258,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-tcui",
                     Label = "Disable Xbox Title-Callable UI Overlay",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents Xbox Title-Callable UI (TCUI) — the Xbox social overlay triggered by games — from rendering on top of applications, eliminating the in-game Xbox social layer that shows friend lists and achievement progress.",
                     Tags = ["xbox", "tcui", "overlay", "social", "policy"],
@@ -2275,7 +2275,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-gaming-services-update",
                     Label = "Disable Automatic Gaming Services Component Updates",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents the Gaming Services package (GamingServices.exe) and Xbox Gaming Overlay from automatically updating via the Microsoft Store in the background, ensuring controlled update cycles for gaming components.",
                     Tags = ["gaming-services", "auto-update", "store", "gaming", "policy"],
@@ -2292,7 +2292,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-app-launch-on-connect",
                     Label = "Disable Xbox App Auto-Launch on Xbox Controller Connect",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents the Xbox application from automatically launching when an Xbox One or Series controller is connected via USB or Bluetooth, eliminating unwanted UI interruptions when using controllers with non-Xbox applications.",
                     Tags = ["xbox-app", "controller", "auto-launch", "usb", "policy"],
@@ -2309,7 +2309,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-disable-xbox-networking-telemetry",
                     Label = "Disable Xbox Networking and Gaming Service Telemetry",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Prevents Xbox networking services, Gaming Services, and GameInput from sending usage, connectivity, and diagnostic telemetry to Microsoft.",
                     Tags = ["xbox", "gaming-services", "telemetry", "privacy", "microsoft", "policy"],
@@ -2326,7 +2326,7 @@ internal static class PolicyGaming
                 {
                     Id = "xboxnet-log-gaming-service-events",
                     Label = "Log Gaming Services Start/Stop Events in System Log",
-                    Category = "Gaming",
+                    Category = "Gaming 2",
                     Description =
                         "Enables System event log entries for Gaming Services (GamingServices.exe) start, stop, crash, and recovery events, providing audit visibility into Xbox/gaming component lifecycle on corporate endpoints.",
                     Tags = ["gaming-services", "event-log", "audit", "xbox", "policy"],

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -1154,7 +1154,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ise-launch",
                     Label = "Block PowerShell ISE Launch",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Blocks launch of the Windows PowerShell ISE (Integrated Scripting Environment), which is end-of-life and lacks modern security controls like AMSI integration.",
                     Tags = ["powershell", "ise", "deprecation", "security", "policy"],
@@ -1171,7 +1171,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-remoting-allsigned",
                     Label = "Block Unsigned Scripts via PS Remoting",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Sets the remoting script execution policy to AllSigned, so scripts delivered via WinRM PowerShell remoting sessions must be digitally signed.",
                     Tags = ["powershell", "remoting", "signing", "security", "policy"],
@@ -1188,7 +1188,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-v2-engine",
                     Label = "Disable PowerShell v2 Engine",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables the Windows PowerShell version 2 engine (powershell.exe -version 2) which bypasses modern security controls such as AMSI, ETW, and Constrained Language Mode.",
                     Tags = ["powershell", "v2", "downgrade", "security", "policy"],
@@ -1205,7 +1205,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-enable-protected-event-logging",
                     Label = "Enable Protected Event Logging",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables Protected Event Logging (PEL) for PowerShell, which encrypts sensitive PowerShell script block log entries at rest using a certificate, protecting them from unauthorized access.",
                     Tags = ["powershell", "event-logging", "encryption", "security", "policy"],
@@ -1222,7 +1222,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-credential-prompt",
                     Label = "Disable Credential Prompt in PowerShell Sessions",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables interactive credential prompts within PowerShell sessions, forcing scripts to use pre-provisioned credentials or fail instead of prompting the user.",
                     Tags = ["powershell", "credentials", "prompt", "security", "policy"],
@@ -1239,7 +1239,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-script-download",
                     Label = "Disable Script Download from Internet in PowerShell",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Blocks PowerShell from downloading and executing scripts from internet URIs using Invoke-Expression (IEX) with web requests, a common living-off-the-land attack technique.",
                     Tags = ["powershell", "download-cradle", "iex", "security", "policy"],
@@ -1256,7 +1256,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ps-dev-mode",
                     Label = "Block PowerShell Developer Mode",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables the PowerShell developer mode flag that bypasses certain security policies, ensuring that production machines do not inadvertently run in a relaxed-security development mode.",
                     Tags = ["powershell", "developer-mode", "security", "policy"],
@@ -1273,7 +1273,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-ps-telemetry",
                     Label = "Disable Windows PowerShell 5 Telemetry",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables usage telemetry collection in Windows PowerShell 5.1, preventing execution metadata and error statistics from being sent to Microsoft.",
                     Tags = ["powershell", "ps5", "telemetry", "privacy", "policy"],
@@ -1290,7 +1290,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-network-restricted-sessions",
                     Label = "Force Network-Restricted PowerShell Remoting Sessions",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Forces all incoming PowerShell remoting sessions to run as NetworkRestricted, preventing remotely established sessions from making outbound network connections.",
                     Tags = ["powershell", "remoting", "network-restricted", "hardening", "policy"],
@@ -1321,7 +1321,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-transcription-output-path",
                 Label = "Set PowerShell Transcript Output Directory",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1340,7 +1340,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-disable-ps2-engine",
                 Label = "Disable PowerShell 2.0 Engine",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1370,7 +1370,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-constrained-language",
                     Label = "Enable Constrained Language Mode in PowerShell 7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables Constrained Language Mode (CLM) for PowerShell 7 (pwsh), restricting the .NET types and COM objects that scripts can use and mitigating fileless malware execution.",
                     Tags = ["powershell", "ps7", "constrained-language", "security", "policy"],
@@ -1387,7 +1387,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-set-allsigned-policy",
                     Label = "Enforce AllSigned Execution Policy in PowerShell 7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Sets the PowerShell 7 execution policy to AllSigned, requiring all scripts (including local scripts) to be digitally signed by a trusted publisher before execution.",
                     Tags = ["powershell", "ps7", "execution-policy", "signing", "security", "policy"],
@@ -1404,7 +1404,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-remoting",
                     Label = "Disable PowerShell 7 Remoting",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables PowerShell 7 remoting (WinRM/SSH transport) via policy, preventing pwsh from being used as a remote administration target.",
                     Tags = ["powershell", "ps7", "remoting", "security", "policy"],
@@ -1421,7 +1421,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-implicit-remoting",
                     Label = "Disable PS7 Implicit Remoting Module Import",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables implicit remoting module imports in PowerShell 7, preventing a script from automatically importing and executing remote commands from untrusted sources.",
                     Tags = ["powershell", "ps7", "implicit-remoting", "security", "policy"],
@@ -1438,7 +1438,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-require-signed-modules",
                     Label = "Require Signed Module Manifests in PowerShell 7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Requires all PowerShell 7 module manifests (.psd1) to be signed by a trusted publisher before the module can be loaded, blocking unsigned third-party modules.",
                     Tags = ["powershell", "ps7", "modules", "signing", "security", "policy"],
@@ -1455,7 +1455,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-block-ps-gallery",
                     Label = "Block PowerShell Gallery Repository in PS7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables access to the default PowerShell Gallery online repository in PowerShell 7, forcing module and script installation through an approved internal repository.",
                     Tags = ["powershell", "ps7", "gallery", "policy"],
@@ -1472,7 +1472,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-script-block-logging",
                     Label = "Enable Script Block Logging in PowerShell 7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables script block logging in PowerShell 7 to record all script blocks executed to the event log (Microsoft-Windows-PowerShell/Operational), supporting forensic analysis.",
                     Tags = ["powershell", "ps7", "script-block-logging", "audit", "policy"],
@@ -1489,7 +1489,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-invocation-logging",
                     Label = "Enable Script Block Invocation Logging in PS7",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables verbose script block invocation logging in PowerShell 7, capturing start and stop events for each script block execution for detailed forensic trails.",
                     Tags = ["powershell", "ps7", "invocation-logging", "audit", "policy"],
@@ -1506,7 +1506,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-telemetry",
                     Label = "Disable PowerShell 7 Telemetry",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Disables the PowerShell 7 telemetry feature that sends usage statistics (command names, error categories, OS info) to Microsoft via opt-out environment variable enforcement at policy level.",
                     Tags = ["powershell", "ps7", "telemetry", "privacy", "policy"],
@@ -1523,7 +1523,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-update-notif",
                     Label = "Disable PowerShell 7 Update Notifications",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Suppresses in-session PowerShell 7 update available notifications that prompt users to download newer versions, deferring updates to a managed patching process.",
                     Tags = ["powershell", "ps7", "update", "notifications", "policy"],
@@ -1551,7 +1551,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-log-encoded-commands",
                     Label = "Log Encoded PowerShell Command Executions",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables script block logging specifically targeting Base64-encoded commands (-EncodedCommand), which are commonly used by malware to obfuscate payloads.",
                     Tags = ["powershell", "encoded-commands", "obfuscation", "security", "policy"],
@@ -1568,7 +1568,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-log-dynamic-code",
                     Label = "Log Dynamically Generated PowerShell Code",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Enables logging of dynamically generated PowerShell code (e.g., from Invoke-Expression or Add-Type), capturing obfuscated payloads that are assembled at runtime.",
                     Tags = ["powershell", "dynamic-code", "invoke-expression", "security", "policy"],
@@ -1585,7 +1585,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-set-max-log-size",
                     Label = "Set PowerShell Operational Log Max Size to 512 MB",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Increases the Microsoft-Windows-PowerShell/Operational event log maximum size to 512 MB to prevent log overwriting (circular buffer) during high-volume script block logging.",
                     Tags = ["powershell", "event-log", "size", "audit", "policy"],
@@ -1611,7 +1611,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-retain-on-clear",
                     Label = "Retain PowerShell Log Archive on Clear",
-                    Category = "Developer",
+                    Category = "Developer — Ise Deprecation",
                     Description =
                         "Configures the PowerShell operational event log to archive before clearing when the log becomes full, preventing permanent log loss during log maintenance.",
                     Tags = ["powershell", "event-log", "archive", "audit", "policy"],
@@ -1649,7 +1649,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scripted-diagnostics",
                 Label = "Disable Scripted Diagnostics Execution",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets ExecutionPolicy=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from executing scripted diagnostic packages (.diagpkg, .diag files), "
@@ -1670,7 +1670,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-online-troubleshooters",
                 Label = "Disable Online Troubleshooting Recommendations",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets EnabledPolicy=0 in the ScriptedDiagnosticsProvider Policy key. "
                     + "Prevents Windows from downloading and applying troubleshooting recommendations from Microsoft's "
@@ -1690,7 +1690,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-recommended-troubleshooting",
                 Label = "Disable Windows Recommended Troubleshooting",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets TurnOffWindowsErrorReportingServer=1 in the AllowRecommendations "
                     + "Troubleshooting policy key. Disables the 'Recommended troubleshooting' feature "
@@ -1711,7 +1711,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-automatic-maintenance-diagnostics",
                 Label = "Disable Automatic Maintenance Diagnostics",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets EnableAutomatedTroubleshooting=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows Automatic Maintenance from running scripted diagnostic jobs "
@@ -1732,7 +1732,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-elevated-troubleshooter",
                 Label = "Disable Elevated Scripted Troubleshooter Execution",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets RunAsHighestAvailablePrivilege=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from automatically requesting elevation to "
@@ -1753,7 +1753,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-results-upload",
                 Label = "Disable Diagnostic Results Upload",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets AllowDiagnosticDataUpload=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from uploading their results logs, "
@@ -1773,7 +1773,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-user-initiated-troubleshooter",
                 Label = "Block User-Initiated Troubleshooters",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets DisableUserDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents non-administrator users from launching troubleshooters from Settings "
@@ -1794,7 +1794,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-third-party-diagnostics",
                 Label = "Block Third-Party Diagnostic Packages",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets AllowThirdPartyDiagnostics=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from running scripted diagnostic packages (.diagpkg) from publishers "
@@ -1814,7 +1814,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scheduled-diagnostics",
                 Label = "Disable Scheduled Diagnostic Tasks",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets DisableScheduledDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents the Scheduled Maintenance Diagnostics task scheduler jobs from creating "
@@ -1835,7 +1835,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-troubleshooting-history",
                 Label = "Disable Troubleshooting History Storage",
-                Category = "Developer",
+                Category = "Developer — Ise Deprecation",
                 Description =
                     "Sets DisableTroubleshootingHistory=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from writing troubleshooter run results and histories to the "
@@ -1867,7 +1867,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-auto-update",
                     Label = "Disable Windows Terminal Auto-Update",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Disables automatic update checks and downloads for Windows Terminal, ensuring the terminal version is managed by WSUS or package management rather than in-app updates.",
                     Tags = ["terminal", "update", "policy"],
@@ -1884,7 +1884,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-telemetry",
                     Label = "Disable Windows Terminal Telemetry",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Disables usage telemetry collection in Windows Terminal including keyboard shortcut usage, profile creation frequency, and renderer performance data.",
                     Tags = ["terminal", "telemetry", "privacy", "policy"],
@@ -1901,7 +1901,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-store-launch",
                     Label = "Disable Store Launch from Windows Terminal",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Prevents Windows Terminal from launching the Microsoft Store for extensions, themes, or profile suggestions, reducing MS Store telemetry exposure.",
                     Tags = ["terminal", "store", "policy"],
@@ -1918,7 +1918,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-startup-tasks",
                     Label = "Disable Windows Terminal Startup Tasks",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Disables Windows Terminal startup task registration that auto-starts terminal on user login, reducing unnecessary background process startup.",
                     Tags = ["terminal", "startup", "policy"],
@@ -1935,7 +1935,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-enforce-restricted-profile",
                     Label = "Enforce Restricted Profile in Windows Terminal",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Enables restricted profile enforcement in Windows Terminal, blocking users from modifying terminal profiles, settings JSON, or key bindings.",
                     Tags = ["terminal", "profile", "restriction", "policy"],
@@ -1952,7 +1952,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-extensions",
                     Label = "Disable Windows Terminal Extensions",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Disables the ability to install or run third-party extensions in Windows Terminal, reducing the attack surface from unvetted extension code execution.",
                     Tags = ["terminal", "extensions", "security", "policy"],
@@ -1969,7 +1969,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-ssh-agent",
                     Label = "Block SSH Agent Integration in Windows Terminal",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Disables the SSH agent forwarding integration in Windows Terminal, preventing terminal sessions from forwarding SSH keys to remote hosts.",
                     Tags = ["terminal", "ssh", "agent", "security", "policy"],
@@ -1986,7 +1986,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-preview-builds",
                     Label = "Disable Windows Terminal Preview Build Channel",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Forces Windows Terminal to the stable release channel, disabling the Preview and Canary build channels to ensure only stable, vetted versions are used.",
                     Tags = ["terminal", "preview", "channel", "policy"],
@@ -2003,7 +2003,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-update-notifications",
                     Label = "Disable Update Notifications in Windows Terminal",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Suppresses in-app update available notifications in Windows Terminal, which can distract users and prompt unauthorized manual updates.",
                     Tags = ["terminal", "update", "notifications", "policy"],
@@ -2020,7 +2020,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-manual-updates",
                     Label = "Block Manual Windows Terminal Updates by Users",
-                    Category = "Developer",
+                    Category = "Developer — Windows Terminal Advanced 1",
                     Description =
                         "Prevents standard users from triggering manual Windows Terminal update checks or downloads, ensuring that all terminal update operations require administrator rights.",
                     Tags = ["terminal", "update", "restriction", "policy"],
@@ -2045,7 +2045,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-winget-auto-update",
             Label = "Disable WinGet Auto-Update",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2060,7 +2060,7 @@ internal static class PackageManagement
         {
             Id = "pkg-choco-proxy",
             Label = "Set Chocolatey System Proxy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2075,7 +2075,7 @@ internal static class PackageManagement
         {
             Id = "pkg-source-validation",
             Label = "Enable Package Source Validation",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -2090,7 +2090,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-ms-store",
             Label = "Disable Microsoft Store via Policy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables access to the Microsoft Store via Group Policy. Default: enabled.",
@@ -2104,7 +2104,7 @@ internal static class PackageManagement
         {
             Id = "pkg-enable-developer-sideload",
             Label = "Enable Developer Mode Sideloading",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables developer mode to allow sideloading of apps without the Store. Default: disabled.",
@@ -2118,7 +2118,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-appinstaller-protocol",
             Label = "Disable ms-appinstaller Protocol",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the ms-appinstaller URI protocol. Prevents drive-by installs from web links. Default: enabled.",
@@ -2132,7 +2132,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-auto-repair-apps",
             Label = "Disable Auto-Repair of Windows Apps",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from automatically repairing broken UWP/MSIX apps. Default: enabled.",
@@ -2147,7 +2147,7 @@ internal static class PackageManagement
         {
             Id = "pkg-trust-psgallery",
             Label = "Trust PSGallery Repository",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the PowerShell Gallery as a trusted repository, eliminating installation prompts for modules.",
@@ -2171,7 +2171,7 @@ internal static class PackageManagement
         {
             Id = "pkg-install-scoop",
             Label = "Install Scoop Package Manager",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Installs Scoop — a CLI package manager for Windows. Scoop installs apps to ~/scoop by default and requires no admin.",
@@ -2193,7 +2193,7 @@ internal static class PackageManagement
         {
             Id = "pkg-update-powershellget",
             Label = "Update PowerShellGet to Latest",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Updates PowerShellGet module to the latest version for improved module management.",
@@ -2218,7 +2218,7 @@ internal static class PackageManagement
         {
             Id = "pkg-enable-winget",
             Label = "Enable WinGet App Installer",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2233,7 +2233,7 @@ internal static class PackageManagement
         {
             Id = "pkg-npm-prefer-offline",
             Label = "NPM Prefer Offline Cache",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2248,7 +2248,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-disable-version-check",
             Label = "Disable pip Version Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pip from checking for newer versions on every run. Speeds up pip operations. Default: checks on every run.",
@@ -2262,7 +2262,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-no-cache",
             Label = "Disable pip Cache",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pip download caching. Saves disk space at the cost of re-downloading packages. Default: caching enabled.",
@@ -2276,7 +2276,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-require-venv",
             Label = "Require Virtualenv for pip Install",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2291,7 +2291,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-index",
             Label = "Set System pip Index URL",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default PyPI index URL for all users at the system level. Useful for corporate mirrors. Default: pypi.org.",
@@ -2319,7 +2319,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-no-cache",
             Label = "Disable pip Cache (System)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables pip download caching at the system level for all users. Default: caching enabled.",
@@ -2336,7 +2336,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-require-venv",
             Label = "Require Virtualenv for pip (System)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Forces pip to only install inside virtual environments at the system level for all users. Default: allows global.",
@@ -2359,7 +2359,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-trusted-host",
             Label = "Set pip Trusted Hosts (System)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets trusted pip hosts at the system level to bypass SSL verification. Useful for corporate proxies. Default: none.",
@@ -2387,7 +2387,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-timeout",
             Label = "Set pip Network Timeout",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2402,7 +2402,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-trusted-host",
             Label = "Set pip Trusted Hosts",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets trusted pip hosts for the current user to bypass SSL verification. Useful for corporate proxies. Default: none.",
@@ -2416,7 +2416,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-user-default",
             Label = "pip Install to User Site by Default",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2431,7 +2431,7 @@ internal static class PackageManagement
         {
             Id = "pkg-ps-gallery-trust",
             Label = "Trust PowerShell Gallery",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -2449,7 +2449,7 @@ internal static class PackageManagement
         {
             Id = "pkg-ps-remotesigned",
             Label = "Set PowerShell ExecutionPolicy to RemoteSigned",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2478,7 +2478,7 @@ internal static class PackageManagement
         {
             Id = "pkg-scoop-setup",
             Label = "Install Scoop Package Manager",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -2497,7 +2497,7 @@ internal static class PackageManagement
         {
             Id = "pkg-winget-disable-auto-update",
             Label = "Disable WinGet Auto-Upgrade",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic package upgrades via WinGet auto-update policy. Prevents unattended app updates. Default: enabled.",
@@ -2511,7 +2511,7 @@ internal static class PackageManagement
         {
             Id = "pkg-winget-disable-msstore-source",
             Label = "Disable WinGet Microsoft Store Source",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Microsoft Store source in WinGet. Limits installs to winget community repository only. Default: enabled.",
@@ -2534,7 +2534,7 @@ internal static class ScoopTools
         {
             Id = "scoop-disable-autoupdate",
             Label = "Disable Scoop Auto-Update on Install",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2549,7 +2549,7 @@ internal static class ScoopTools
         {
             Id = "scoop-parallel-downloads",
             Label = "Enable Scoop Parallel Downloads (aria2)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2564,7 +2564,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-global-install-dir",
             Label = "Set Scoop Global Install Directory",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the global Scoop install directory to C:\\Scoop via environment variable. Default: C:\\ProgramData\\scoop.",
@@ -2578,7 +2578,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-cache-dir",
             Label = "Set Scoop Cache Directory",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets Scoop download cache to C:\\ScoopCache. Keeps downloads separate from installs. Default: ~\\scoop\\cache.",
@@ -2592,7 +2592,7 @@ internal static class ScoopTools
         {
             Id = "scoop-enable-debug-mode",
             Label = "Enable Scoop Debug Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables Scoop debug output for troubleshooting install failures. Default: disabled.",
@@ -2606,7 +2606,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-aria2-max-connections",
             Label = "Set Scoop Aria2 Max Connections to 16",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets Scoop Aria2 max connections per server to 16. Speeds up downloads. Default: not set (Aria2 default is 1).",
@@ -2620,7 +2620,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-virustotal-api-key",
             Label = "Set Scoop VirusTotal API Key Variable",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2635,7 +2635,7 @@ internal static class ScoopTools
         {
             Id = "scoop-disable-checkver",
             Label = "Disable Scoop Auto-Version Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets SCOOP_NO_CHECKVER=1 to skip automatic version checks. Speeds up 'scoop status'. Default: checks versions.",
@@ -2649,7 +2649,7 @@ internal static class ScoopTools
         {
             Id = "scoop-add-extras-bucket",
             Label = "Add Scoop Extras Bucket",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -2667,7 +2667,7 @@ internal static class ScoopTools
         {
             Id = "scoop-cleanup-all",
             Label = "Clean Up All Scoop Caches",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -2692,7 +2692,7 @@ internal static class Java
         {
             Id = "java-security-high",
             Label = "Java: Set Security Level to Very High",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Raises the Java security level to VERY_HIGH, blocking unsigned applets.",
@@ -2712,7 +2712,7 @@ internal static class Java
         {
             Id = "java-disable-java-tip-of-day",
             Label = "Disable Java Tip of the Day",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the 'Tip of the Day' pop-up dialog in Java Control Panel.",
@@ -2729,7 +2729,7 @@ internal static class Java
         {
             Id = "java-disable-update-check",
             Label = "Disable Java Auto-Update Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2754,7 +2754,7 @@ internal static class Java
         {
             Id = "java-high-perf-graphics",
             Label = "Java High Performance Graphics",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2769,7 +2769,7 @@ internal static class Java
         {
             Id = "java-disable-sponsor-offers",
             Label = "Disable Java Sponsor Offers",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables sponsor/adware offers bundled with Java updates. Default: Enabled. Recommended: Disabled.",
@@ -2791,7 +2791,7 @@ internal static class Java
         {
             Id = "java-disable-usage-tracking",
             Label = "Disable Java Usage Tracking",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Java usage tracker analytics. Default: Enabled. Recommended: Disabled for privacy.",
@@ -2805,7 +2805,7 @@ internal static class Java
         {
             Id = "java-set-high-security",
             Label = "Set Java Security Level to Very High",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets Java Web Start / applet security level to Very High. Only signed and trusted apps run. Default: High.",
@@ -2819,7 +2819,7 @@ internal static class Java
         {
             Id = "java-disable-web-plugin",
             Label = "Disable Java Browser Plugin",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Java browser plugin (applets). Reduces browser attack surface. Default: enabled.",
@@ -2833,7 +2833,7 @@ internal static class Java
         {
             Id = "java-disable-log-file",
             Label = "Disable Java Console Log File",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Java console log file creation. Reduces disk writes from Java applications. Default: enabled.",
@@ -2847,7 +2847,7 @@ internal static class Java
         {
             Id = "java-set-high-dpi-awareness",
             Label = "Enable Java High DPI Awareness",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables high-DPI awareness for Java applications. Prevents blurry rendering on HiDPI displays. Default: system-aware.",
@@ -2861,7 +2861,7 @@ internal static class Java
         {
             Id = "java-disable-usage-tracker",
             Label = "Disable Java Usage Tracker",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Java Usage Tracker that reports Java runtime usage data to Oracle. Default: enabled.",
@@ -2881,7 +2881,7 @@ internal static class Java
         {
             Id = "java-disable-java-cert-revoke",
             Label = "Disable Java Certificate Revocation Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Java certificate revocation list checking. Speeds up Java applet loading but reduces security. Default: enabled.",
@@ -2898,7 +2898,7 @@ internal static class Java
         {
             Id = "java-disable-java-error-reporting",
             Label = "Disable Java Error Reporting",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Java crash and error reporting to Oracle. Prevents error data from being sent externally. Default: enabled.",
@@ -2918,7 +2918,7 @@ internal static class Java
         {
             Id = "java-disable-java-tracking",
             Label = "Disable Java Analytics Tracking",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Java analytics and tracking features. Prevents collection of usage patterns by Oracle. Default: enabled.",
@@ -2932,7 +2932,7 @@ internal static class Java
         {
             Id = "java-high-dpi",
             Label = "Enable Java High DPI Scaling",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2961,7 +2961,7 @@ internal static class Java
         {
             Id = "java-disable-installer-sponsor",
             Label = "Disable Java Sponsor Offers",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Prevents Java installer from showing third-party sponsor offers (e.g., Ask Toolbar). Default: enabled.",
             Tags = ["java", "sponsor", "ads", "installer"],
@@ -2974,7 +2974,7 @@ internal static class Java
         {
             Id = "java-disable-tls-10",
             Label = "Disable TLS 1.0 in Java",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Disables TLS 1.0 in Java deployment properties. TLS 1.0 is deprecated. Default: enabled.",
             Tags = ["java", "tls", "security", "encryption"],
@@ -2990,7 +2990,7 @@ internal static class Java
         {
             Id = "java-disable-tls-11",
             Label = "Disable TLS 1.1 in Java",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Disables TLS 1.1 in Java deployment properties. TLS 1.1 is deprecated. Default: enabled.",
             Tags = ["java", "tls", "security", "encryption"],
@@ -3009,7 +3009,7 @@ internal static class Java
         {
             Id = "java-disable-browser-plugin",
             Label = "Disable Java Browser Plugin",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Disables the Java browser plugin. Java applets in browsers are obsolete and a security risk. Default: enabled.",
             Tags = ["java", "browser", "plugin", "security"],
@@ -3028,7 +3028,7 @@ internal static class Java
         {
             Id = "java-enable-certificate-revocation",
             Label = "Enable Certificate Revocation Checking",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Enables certificate revocation checking via CRL and OCSP in Java. Default: enabled.",
             Tags = ["java", "certificate", "revocation", "security"],
@@ -3054,7 +3054,7 @@ internal static class Java
         {
             Id = "java-enable-ocsp",
             Label = "Enable OCSP Certificate Checking",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Enables Online Certificate Status Protocol (OCSP) checking for Java certificates. Default: enabled.",
             Tags = ["java", "ocsp", "certificate", "security"],
@@ -3080,7 +3080,7 @@ internal static class Java
         {
             Id = "java-disable-jnlp-association",
             Label = "Disable JNLP File Association",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             Description = "Disables Java Web Start JNLP file association. Prevents accidental launch of Web Start apps. Default: enabled.",
             Tags = ["java", "jnlp", "web-start", "security"],
@@ -3099,7 +3099,7 @@ internal static class Java
         {
             Id = "java-set-proxy-direct",
             Label = "Set Java Proxy to Direct (No Proxy)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Configures Java to use a direct connection (no proxy). Default: uses browser proxy settings.",
@@ -3113,7 +3113,7 @@ internal static class Java
         {
             Id = "java-set-cache-max-100mb",
             Label = "Set Java Cache Max Size to 100 MB",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Limits the Java deployment cache to 100 MB. Prevents unbounded cache growth on developer systems. Default: unlimited.",
@@ -3136,7 +3136,7 @@ internal static class Java
         {
             Id = "java-disable-webstart-splash",
             Label = "Disable Java Web Start Splash Screen",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Suppresses the splash screen shown when launching Java Web Start applications. Default: splash screen shown.",
@@ -3159,7 +3159,7 @@ internal static class Java
         {
             Id = "java-set-connect-timeout-10s",
             Label = "Set Java Socket Connection Timeout to 10s",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3187,7 +3187,7 @@ internal static class Java
         {
             Id = "java-set-read-timeout-30s",
             Label = "Set Java Socket Read Timeout to 30s",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the Java socket read timeout to 30 seconds. Prevents indefinite hangs when reading from slow or hung resources.",
@@ -3207,7 +3207,7 @@ internal static class Java
         {
             Id = "java-disable-update-check-interval",
             Label = "Disable Java Update Check Interval",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3235,7 +3235,7 @@ internal static class Java
         {
             Id = "java-disable-eula-check",
             Label = "Disable Java EULA Check on First Run",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3253,7 +3253,7 @@ internal static class Java
         {
             Id = "java-disable-application-description",
             Label = "Disable Java Application Description Prompt",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Suppresses the application description tooltip shown when launching Java Web Start applications. Default: shown.",
@@ -3284,7 +3284,7 @@ internal static class Java
         {
             Id = "java-set-concurrent-downloads-3",
             Label = "Set Java Concurrent Downloads to 3",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3305,7 +3305,7 @@ internal static class Java
         {
             Id = "java-enable-strict-security",
             Label = "Enable Java Strict Security Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3326,7 +3326,7 @@ internal static class Java
         {
             Id = "java-lock-security-level",
             Label = "Lock Java Security Level (Prevent User Change)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3350,7 +3350,7 @@ internal static class Java
         {
             Id = "java-disable-console-autostart",
             Label = "Disable Java Console Auto-Start",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3371,7 +3371,7 @@ internal static class Java
         {
             Id = "java-set-revocation-all-certs",
             Label = "Enable Java Revocation Check for All Certificates",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3403,7 +3403,7 @@ internal static class Java
         {
             Id = "java-lock-update-check",
             Label = "Lock Java Update Check Setting",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3424,7 +3424,7 @@ internal static class Java
         {
             Id = "java-set-plugin-session-lifetime",
             Label = "Set Java Plugin Session Lifetime Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3445,7 +3445,7 @@ internal static class Java
         {
             Id = "java-disable-jre-auto-install",
             Label = "Disable Automatic JRE Installation",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3466,7 +3466,7 @@ internal static class Java
         {
             Id = "java-enable-blacklist-revocation",
             Label = "Enable Java Blacklist Revocation Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3494,7 +3494,7 @@ internal static class Java
         {
             Id = "java-disable-applet-caching",
             Label = "Disable Java Applet Cache",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3512,7 +3512,7 @@ internal static class Java
         {
             Id = "java-lock-expiration-check",
             Label = "Lock Java JRE Expiration Check",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -3547,7 +3547,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-console-v2",
             Label = "Enable Console V2 Host",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3562,7 +3562,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-quick-edit",
             Label = "Disable Quick Edit Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3577,7 +3577,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-insert-mode",
             Label = "Enable Insert Mode by Default",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets insert mode as the default typing mode in consoles. Default: 1 (insert). Recommended: 1.",
@@ -3591,7 +3591,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-line-wrap",
             Label = "Enable Line Wrapping",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables automatic line wrapping when resizing the console. Default: 1. Recommended: 1.",
@@ -3605,7 +3605,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-legacy-console",
             Label = "Disable Legacy Console Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3620,7 +3620,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-window-opacity",
             Label = "Set Console Window Opacity (95%)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets console window to 95% opacity for slight transparency. Default: 255 (opaque). Recommended: 242 (95%).",
@@ -3634,7 +3634,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-default-wt",
             Label = "Set Default Terminal to Windows Terminal (Win11)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3653,7 +3653,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-splash",
             Label = "Disable Terminal Splash Screen",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3668,7 +3668,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-acrylic-background",
             Label = "Enable Terminal Acrylic Background via Policy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables acrylic (translucent) background in Windows Terminal via machine policy. Default: disabled.",
@@ -3682,7 +3682,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-bell",
             Label = "Disable Terminal Bell Sound via Policy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the bell (beep) sound in Windows Terminal. Default: enabled.",
@@ -3696,7 +3696,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-default-profile-pwsh",
             Label = "Set Default Shell to PowerShell 7 via Policy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default shell profile in Windows Terminal to PowerShell 7 via machine policy. Default: Windows PowerShell 5.1.",
@@ -3724,7 +3724,7 @@ internal static class WindowsTerminal
         {
             Id = "term-campbell-color-scheme",
             Label = "Set Windows Terminal Campbell Theme",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3739,7 +3739,7 @@ internal static class WindowsTerminal
         {
             Id = "term-default-windows-terminal",
             Label = "Set Windows Terminal as Default Console",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3754,7 +3754,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-always-on-top",
             Label = "Enable Terminal Always On Top",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3769,7 +3769,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-cursor-block",
             Label = "Set Terminal Block Cursor",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the console cursor shape to a solid block. More visible than the default underscore cursor. Default: underscore.",
@@ -3783,7 +3783,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-font-weight-bold",
             Label = "Set Console Font Weight to Bold",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             Description = "Sets the console font weight to bold (700). Improves readability on high-DPI displays. Default: normal (400).",
             Tags = ["console", "font", "bold", "terminal"],
@@ -3796,7 +3796,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-scroll-forward",
             Label = "Disable Forward Scrolling",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             Description = "Disables the ability to scroll forward past the current output. Default: enabled.",
             Tags = ["console", "scroll", "terminal"],
@@ -3809,7 +3809,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-ctrl-key-shortcuts",
             Label = "Disable Ctrl Key Shortcuts",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             Description = "Disables Ctrl+C/Ctrl+V shortcuts in the legacy console host. Useful when Ctrl+C is needed for SIGINT. Default: enabled.",
             Tags = ["console", "ctrl", "shortcuts", "terminal"],
@@ -3822,7 +3822,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-trim-leading-zeros",
             Label = "Enable Trim Leading Zeros",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             Description = "Trims leading zeros when double-clicking to select numbers in the console. Default: disabled.",
             Tags = ["console", "selection", "terminal"],
@@ -3835,7 +3835,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-number-of-history-buffers",
             Label = "Set Number of History Buffers to 4",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             Description = "Sets the number of history buffers to 4 (one per console process). Default: 4.",
             Tags = ["console", "history", "buffer", "terminal"],
@@ -3862,7 +3862,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-print-spooler",
             Label = "Disable Print Spooler Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -3884,7 +3884,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-remote-registry",
             Label = "Disable Remote Registry Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -3905,7 +3905,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-fax-service",
             Label = "Disable Fax Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -3924,7 +3924,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-xbox-services",
             Label = "Disable Xbox Live Services",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -3949,7 +3949,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-clear-temp-files",
             Label = "Clear Temporary Files",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -3975,7 +3975,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-flush-dns-cache",
             Label = "Flush DNS Cache",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -3989,7 +3989,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-diagnostics-hub",
             Label = "Disable Diagnostics Hub Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -4016,7 +4016,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-wmp-network-sharing",
             Label = "Disable WMP Network Sharing Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -4038,7 +4038,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-geolocation-service",
             Label = "Disable Geolocation Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -4059,7 +4059,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-connected-user-experience",
             Label = "Disable Connected User Experience (DiagTrack)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -4083,7 +4083,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-dmwappush-service",
             Label = "Disable Device Management WAP Push Service",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -4105,7 +4105,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-optimize-network-adapter",
             Label = "Optimize Network Adapter Power Settings",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4127,7 +4127,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-execution-policy-restriction",
             Label = "Set PowerShell Execution Policy to RemoteSigned",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4148,7 +4148,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-remoting",
             Label = "Enable PowerShell Remoting",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -4166,7 +4166,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-telemetry",
             Label = "Disable PowerShell Telemetry",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4181,7 +4181,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-constrained-language-mode",
             Label = "Enable PowerShell Constrained Language Mode",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = false,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -4196,7 +4196,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-set-transcript-logging",
             Label = "Disable PowerShell Transcription Logging",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -4216,7 +4216,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-protected-event-logging",
             Label = "Enable Protected Event Logging",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4237,7 +4237,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-clipboard-history-via-ps",
             Label = "Disable Clipboard History via Policy",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -4257,7 +4257,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-optimize-page-file",
             Label = "Set Page File to System-Managed",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4272,7 +4272,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-tls12",
             Label = "Enable TLS 1.2 for .NET Applications",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4295,7 +4295,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-powershell-v2-engine",
             Label = "Disable PowerShell v2 Engine (Attack Surface Reduction)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4316,7 +4316,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-windows-sandbox",
             Label = "Enable Windows Sandbox (Disposable Isolated Environment)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4339,7 +4339,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-controlled-folder-access",
             Label = "Enable Controlled Folder Access (Ransomware Protection)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4358,7 +4358,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-network-protection",
             Label = "Enable Windows Defender Network Protection",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4377,7 +4377,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-set-defender-scan-cpu-limit",
             Label = "Limit Defender Scans to 50% CPU Average",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4396,7 +4396,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-signing-server",
             Label = "Require SMB Signing on This Server (via PowerShell)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4415,7 +4415,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-signing-client",
             Label = "Require SMB Signing on This Client (via PowerShell)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4434,7 +4434,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-smb-guest-fallback",
             Label = "Disable SMB Insecure Guest Logon Fallback",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4453,7 +4453,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-encryption-server",
             Label = "Enable SMB Encryption on This Server (via PowerShell)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4472,7 +4472,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-teredo",
             Label = "Disable Teredo IPv6 Tunnelling",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4491,7 +4491,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-6to4",
             Label = "Disable 6to4 IPv6 Transition Protocol",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4510,7 +4510,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-isatap",
             Label = "Disable ISATAP IPv6 Transition Interface",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4529,7 +4529,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-defender-realtime",
             Label = "Ensure Windows Defender Realtime Protection is On",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -4558,7 +4558,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-hyper-v-hypervisor",
             Label = "Disable Hyper-V Hypervisor (bcdedit)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4577,7 +4577,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-boot-log",
             Label = "Enable Boot Log (bcdedit)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4595,7 +4595,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-increase-tscsyncpolicy",
             Label = "Set TSC Sync Policy to Enhanced (bcdedit)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4613,7 +4613,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-dynamic-tick",
             Label = "Disable Dynamic Tick (bcdedit)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4632,7 +4632,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-platform-tick-high",
             Label = "Force Platform Clock to High Resolution (bcdedit)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4651,7 +4651,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-netbios-over-tcpip",
             Label = "Disable NetBIOS over TCP/IP (netsh)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4673,7 +4673,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-tcp-autotuning",
             Label = "Set TCP Auto-Tuning to Normal (netsh)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4692,7 +4692,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-rss",
             Label = "Enable Receive Side Scaling (netsh)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4711,7 +4711,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-tcp-timestamps",
             Label = "Disable TCP Timestamps (netsh)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4730,7 +4730,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-ecn",
             Label = "Enable ECN Capability (netsh)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4750,7 +4750,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-ultimate-perf-plan",
             Label = "Activate Ultimate Performance Power Plan (powercfg)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4777,7 +4777,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-usb-selective-suspend",
             Label = "Disable USB Selective Suspend (powercfg)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 2",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4820,7 +4820,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-ie-feature",
             Label = "Disable Internet Explorer (DISM)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4840,7 +4840,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-sandbox",
             Label = "Enable Windows Sandbox (DISM)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4861,7 +4861,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-net35",
             Label = "Enable .NET Framework 3.5",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -4880,7 +4880,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-ipv6-tunnel-adapters",
             Label = "Disable IPv6 Tunnel Adapters (6to4, ISATAP, Teredo)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -4904,7 +4904,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-ntp-high-freq",
             Label = "Set NTP Polling to High Frequency",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Configures the Windows Time service to poll NTP servers more frequently (every 256s instead of 3600s).",
@@ -4926,7 +4926,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-multi-plane-overlay",
             Label = "Enable Multi-Plane Overlay (MPO)",
-            Category = "Developer",
+            Category = "Developer — Windows Terminal Advanced 3",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Ensures Multi-Plane Overlay is enabled for GPU composition offloading, reducing CPU usage.",

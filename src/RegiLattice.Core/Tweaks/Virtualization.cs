@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -909,7 +909,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-disable-adb-access",
                     Label = "Disable ADB Access to WSA Android Container",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables Android Debug Bridge (ADB) access to the WSA container, preventing developer debug connections, app sideloading via ADB, and adb shell command execution.",
                     Tags = ["wsa", "android", "adb", "debugging", "policy"],
@@ -926,7 +926,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-disable-android-developer-options",
                     Label = "Disable Android Developer Options in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the Android Developer Options menu in WSA settings, blocking users from enabling USB debugging, mock location, or other developer settings within the Android container.",
                     Tags = ["wsa", "android", "developer-options", "policy"],
@@ -943,7 +943,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-block-sideloaded-apks",
                     Label = "Block Sideloaded APK Installation in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks the installation of APK files from outside the Amazon Appstore, preventing users from installing potentially malicious Android apps via direct APK transfer.",
                     Tags = ["wsa", "android", "sideloading", "apk", "policy"],
@@ -960,7 +960,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-disable-logcat-output",
                     Label = "Disable Android Logcat Access from Host OS",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents the Windows host OS processes from reading Android logcat output from the WSA container, reducing diagnostic data exposure from Android app crash logs.",
                     Tags = ["wsa", "android", "logcat", "debugging", "privacy", "policy"],
@@ -977,7 +977,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-disable-android-crash-reporting",
                     Label = "Disable Android App Crash Report Upload from WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the automatic upload of Android application crash reports from within the WSA container to app developers or Amazon, preventing personal or usage data from reaching third parties.",
                     Tags = ["wsa", "android", "crash-report", "privacy", "policy"],
@@ -994,7 +994,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-block-android-root-detection-bypass",
                     Label = "Block Android Root-Detection Bypass Tools in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Magisk-style root detection bypass frameworks from being installed or operating within the WSA container, preventing banking and DRM apps from being tricked into running on a 'rooted' environment.",
                     Tags = ["wsa", "android", "root-detection", "magisk", "policy"],
@@ -1011,7 +1011,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-require-apk-signature-verify",
                     Label = "Require APK Signature Verification Before Install",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Enforces APK v2/v3 signature verification for all Android packages installed in WSA, blocking install of APKs with tampered or missing signatures.",
                     Tags = ["wsa", "android", "apk-signature", "integrity", "policy"],
@@ -1028,7 +1028,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-block-android-profiling",
                     Label = "Block Android Performance Profiling from Host",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents host-side profiling tools (simpleperf, systrace, atrace) from attaching to Android processes in the WSA container, protecting Android app internals from host-side introspection.",
                     Tags = ["wsa", "android", "profiling", "security", "policy"],
@@ -1045,7 +1045,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-disable-android-mock-location",
                     Label = "Disable Mock Location in Android WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the Android mock location provider in WSA, preventing apps and developers from injecting fake GPS coordinates to spoof location-based services.",
                     Tags = ["wsa", "android", "mock-location", "gps", "policy"],
@@ -1062,7 +1062,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsadbg-block-wifi-password-sharing",
                     Label = "Block Android Wi-Fi Password Sharing from WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks the Android Wi-Fi password sharing feature in WSA that can export saved Wi-Fi credentials from the Android container as a QR code, preventing corporate Wi-Fi key leakage.",
                     Tags = ["wsa", "android", "wifi", "credential-sharing", "privacy", "policy"],
@@ -1089,7 +1089,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-accelerometer",
                     Label = "Block Accelerometer Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications in WSA from accessing the device accelerometer sensor, preventing motion-based fingerprinting and keystroke inference attacks via accelerometer data.",
                     Tags = ["wsa", "android", "accelerometer", "sensor", "privacy", "policy"],
@@ -1106,7 +1106,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-gyroscope",
                     Label = "Block Gyroscope Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications in WSA from accessing the gyroscope, preventing orientation and rotation tracking that can be used for covert activity inference.",
                     Tags = ["wsa", "android", "gyroscope", "sensor", "privacy", "policy"],
@@ -1123,7 +1123,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-proximity-sensor",
                     Label = "Block Proximity Sensor Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications in WSA from reading the proximity sensor, preventing apps from detecting physical presence near the device for surveillance or power-state manipulation.",
                     Tags = ["wsa", "android", "proximity", "sensor", "privacy", "policy"],
@@ -1140,7 +1140,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-light-sensor",
                     Label = "Block Ambient Light Sensor Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications from accessing the ambient light sensor in WSA, preventing light-level side-channel information from being used to infer room or user context.",
                     Tags = ["wsa", "android", "light-sensor", "sensor", "privacy", "policy"],
@@ -1157,7 +1157,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-barometer",
                     Label = "Block Barometer Sensor Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications in WSA from reading barometric pressure data, preventing apps from using pressure data for floor-level location inference.",
                     Tags = ["wsa", "android", "barometer", "sensor", "privacy", "policy"],
@@ -1174,7 +1174,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-fingerprint-sensor",
                     Label = "Block Fingerprint Sensor API for Android Apps in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Android apps in WSA from accessing the Windows Hello fingerprint hardware via the Android fingerprint API, stopping Android banking apps from using the Windows biometric sensor incorrectly.",
                     Tags = ["wsa", "android", "fingerprint", "biometric", "privacy", "policy"],
@@ -1191,7 +1191,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-magnetometer",
                     Label = "Block Magnetometer/Compass Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android apps in WSA from accessing the magnetometer/digital compass sensor, preventing directional tracking and compass-based location correlation.",
                     Tags = ["wsa", "android", "magnetometer", "compass", "sensor", "policy"],
@@ -1208,7 +1208,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-block-temperature-sensor",
                     Label = "Block Temperature Sensor Access for Android Apps",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android apps in WSA from reading CPU or board temperature sensors, preventing apps from using thermal data to infer workload patterns or detect sandboxed execution.",
                     Tags = ["wsa", "android", "temperature", "sensor", "privacy", "policy"],
@@ -1225,7 +1225,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-disable-sensor-fusion",
                     Label = "Disable Android Sensor Fusion in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the Android sensor fusion layer in WSA that aggregates multiple sensor streams into virtual sensors (rotation vector, gravity, linear acceleration), reducing composite tracking attack surface.",
                     Tags = ["wsa", "android", "sensor-fusion", "virtual-sensor", "privacy", "policy"],
@@ -1242,7 +1242,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsasnsr-disable-step-counter",
                     Label = "Disable Step Counter Sensor for Android Apps in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android fitness and health apps in WSA from accessing the step counter hardware sensor, preventing pedometer-based location tracking and activity inference.",
                     Tags = ["wsa", "android", "step-counter", "fitness", "privacy", "policy"],
@@ -1269,7 +1269,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-restrict-holographic-device-pairing",
                 Label = "Restrict Holographic Device Pairing to Authorized Devices Only",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1286,7 +1286,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-disable-developer-mode-hololens",
                 Label = "Disable Developer Mode on HoloLens Mixed Reality Devices",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1303,7 +1303,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-require-pin-for-holographic-access",
                 Label = "Require PIN or Iris Authentication for HoloLens Device Access",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1320,7 +1320,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-restrict-holographic-telemetry",
                 Label = "Restrict Holographic Device Telemetry and Diagnostic Data Transmission",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1337,7 +1337,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-block-unknown-app-installation",
                 Label = "Block Installation of Applications from Unknown Sources on HoloLens",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1354,7 +1354,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-restrict-camera-access-policy",
                 Label = "Restrict HoloLens Camera Access to Authorized Applications",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1371,7 +1371,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-enable-remote-management-policy",
                 Label = "Enable Remote Management and MDM Enrollment for HoloLens Devices",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1388,7 +1388,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-configure-holographic-update-policy",
                 Label = "Configure Update Deferral Policy for Holographic Device Operating System",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1405,7 +1405,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-restrict-cross-device-experiences",
                 Label = "Restrict Cross-Device Experience Sharing on Holographic Platforms",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1422,7 +1422,7 @@ internal static class PolicySubsystems
             {
                 Id = "holodv-enable-holographic-audit-events",
                 Label = "Enable Audit Event Logging for Holographic Device Operations",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1451,7 +1451,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-require-admin-vm-creation",
                     Label = "Require Administrator to Create Hyper-V Virtual Machines",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Restricts virtual machine creation in Hyper-V to administrator accounts only, preventing standard users from provisioning new VMs that could be used to bypass security policy controls on the host system.",
                     Tags = ["hyper-v", "vm-creation", "admin", "security", "policy"],
@@ -1468,7 +1468,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-disable-vm-network-passthrough",
                     Label = "Disable Network Passthrough (SR-IOV) for Hyper-V VMs",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Hyper-V virtual machines from using SR-IOV (Single Root I/O Virtualisation) network passthrough, ensuring all VM network traffic flows through the Hyper-V virtual switch for monitoring and filtering.",
                     Tags = ["hyper-v", "sriov", "network-passthrough", "security", "policy"],
@@ -1485,7 +1485,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-block-live-migration-plain",
                     Label = "Block Unencrypted Hyper-V Live Migration",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Hyper-V live migrations from using the unencrypted migration transport, requiring Kerberos authentication or SMB encryption for all live migration sessions to prevent VM memory interception during migration.",
                     Tags = ["hyper-v", "live-migration", "encryption", "security", "policy"],
@@ -1502,7 +1502,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-set-vm-memory-limit",
                     Label = "Set Maximum Hyper-V VM Memory to 64 GB Per VM",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Limits the maximum amount of RAM that any single Hyper-V virtual machine can be assigned to 65536 MB (64 GB), preventing individual VMs from monopolising all host memory and providing fair resource sharing.",
                     Tags = ["hyper-v", "memory-limit", "resources", "fairness", "policy"],
@@ -1519,7 +1519,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-enable-secure-boot-for-vms",
                     Label = "Enforce Secure Boot Enabled for All New Hyper-V VMs",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Requires that all new Hyper-V Generation 2 virtual machines are created with Secure Boot enabled, preventing VMs from being provisioned with Secure Boot disabled and booting unsigned guest operating systems.",
                     Tags = ["hyper-v", "secure-boot", "generation-2", "security", "policy"],
@@ -1536,7 +1536,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-disable-vm-clipboard",
                     Label = "Disable Clipboard Sharing Between Hyper-V VMs and Host",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents clipboard data from being passed between Hyper-V virtual machine sessions and the host desktop, eliminating the clipboard as a data exfiltration channel between VM and host environments.",
                     Tags = ["hyper-v", "clipboard", "isolation", "data-protection", "policy"],
@@ -1553,7 +1553,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-disable-vm-drives-mount",
                     Label = "Disable VM Drive Mounting from Guest to Host",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Hyper-V virtual machines from mounting host filesystem paths via VMBus drive sharing, ensuring guest VMs cannot read host files through the Hyper-V file share integration component.",
                     Tags = ["hyper-v", "drive-mounting", "integration", "isolation", "policy"],
@@ -1570,7 +1570,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-block-container-user-creation",
                     Label = "Block Standard Users from Creating Windows Containers",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Restricts Windows Container (Hyper-V isolation / process isolation) session creation to administrator accounts, preventing standard users from running containerised workloads that could bypass host security controls.",
                     Tags = ["containers", "windows-container", "standard-user", "isolation", "policy"],
@@ -1587,7 +1587,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-disable-hyper-v-telemetry",
                     Label = "Disable Hyper-V and Container Management Telemetry to Microsoft",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description = "Prevents Hyper-V and Windows Containers from sending VM usage, crash, and performance telemetry to Microsoft.",
                     Tags = ["hyper-v", "containers", "telemetry", "privacy", "microsoft", "policy"],
                     NeedsAdmin = true,
@@ -1603,7 +1603,7 @@ internal static class PolicySubsystems
                 {
                     Id = "hvcon-log-vm-lifecycle-events",
                     Label = "Log Hyper-V VM Lifecycle Events in System Event Log",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Enables System event log entries for Hyper-V virtual machine creation, deletion, start, stop, and live migration events, providing a complete audit trail of VM lifecycle changes for compliance.",
                     Tags = ["hyper-v", "event-log", "audit", "lifecycle", "policy"],
@@ -1630,7 +1630,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-container-network-access",
                 Label = "Disable Container Unrestricted Network Access",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1647,7 +1647,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-host-device-access",
                 Label = "Disable Container Host Device Access",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1664,7 +1664,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-enforce-isolation-level",
                 Label = "Enforce Minimum Container Isolation Level",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1681,7 +1681,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-container-image-pull-insecure",
                 Label = "Disable Container Image Pull from Insecure Registries",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1698,7 +1698,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-require-image-signing",
                 Label = "Require Signed Container Images",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1715,7 +1715,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-privileged-containers",
                 Label = "Disable Privileged Container Execution",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1732,7 +1732,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-container-mounts",
                 Label = "Restrict Container Host Volume Mounts",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1749,7 +1749,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-enable-container-audit-logging",
                 Label = "Enable Container Activity Audit Logging",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1766,7 +1766,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-restrict-registry-access",
                 Label = "Restrict Container Host Registry Access",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1783,7 +1783,7 @@ internal static class PolicySubsystems
             {
                 Id = "wincnt-disable-container-telemetry",
                 Label = "Disable Container Telemetry Collection",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1810,7 +1810,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-sandbox",
                 Label = "Disable Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowSandbox=0 in the Sandbox policy key. "
                     + "Disables Windows Sandbox entirely via Group Policy. Windows Sandbox is a "
@@ -1834,7 +1834,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-clipboard",
                 Label = "Disable Clipboard Sharing With Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowClipboardRedirection=0 in the Sandbox policy key. "
                     + "Blocks bi-directional clipboard sharing between the Windows Sandbox and the host OS. "
@@ -1857,7 +1857,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-printer-redirection",
                 Label = "Disable Printer Redirection Into Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowPrinterRedirection=0 in the Sandbox policy key. "
                     + "Prevents printers that are in scope on the host from being redirected and made "
@@ -1880,7 +1880,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-audio-input",
                 Label = "Disable Microphone (Audio Input) in Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowAudioInput=0 in the Sandbox policy key. "
                     + "Blocks the microphone and other audio capture devices from being accessible inside "
@@ -1903,7 +1903,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-video-input",
                 Label = "Disable Camera (Video Input) in Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowVideoInput=0 in the Sandbox policy key. "
                     + "Blocks webcams and other video capture devices from being visible inside the "
@@ -1926,7 +1926,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-mapped-folders",
                 Label = "Disable Host Folder Mapping Into Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowMappedFolders=0 in the Sandbox policy key. "
                     + "Prevents host filesystem folders from being mapped and shared into the Windows Sandbox "
@@ -1949,7 +1949,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-disable-mapped-folders-write",
                 Label = "Restrict Mapped Sandbox Folders to Read-Only",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowWritableSharedFolders=0 in the Sandbox policy key. "
                     + "Even when folder mapping is allowed (AllowMappedFolders=1), this policy ensures "
@@ -1972,7 +1972,7 @@ internal static class PolicySubsystems
             {
                 Id = "sbpol-restrict-logon-credentials",
                 Label = "Block Windows Logon Credential Exposure in Windows Sandbox",
-                Category = "Virtualization",
+                Category = "Virtualization — Android App Debugging",
                 Description =
                     "Sets AllowLogonCredentials=0 in the Sandbox policy key. "
                     + "Prevents Windows from passing or forwarding the user's login credentials (tokens, "
@@ -2005,7 +2005,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-disable-wsa",
                     Label = "Disable Windows Subsystem for Android",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the Windows Subsystem for Android (WSA) entirely, preventing Android app installation and the associated Amazon Appstore service from running.",
                     Tags = ["wsa", "android", "subsystem", "policy"],
@@ -2022,7 +2022,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-block-amazon-appstore",
                     Label = "Block Amazon Appstore Integration with WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks the Amazon Appstore integration in WSA, preventing users from browsing, installing, or updating Android apps via the Amazon storefront.",
                     Tags = ["wsa", "amazon-appstore", "android", "policy"],
@@ -2039,7 +2039,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-disable-android-diagnostics",
                     Label = "Disable WSA Diagnostic Data Upload",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables the upload of Android runtime diagnostic data (crash reports, performance telemetry) from WSA to Microsoft and Amazon servers.",
                     Tags = ["wsa", "android", "diagnostics", "telemetry", "privacy", "policy"],
@@ -2056,7 +2056,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-disable-wsa-autostart",
                     Label = "Disable WSA Auto-Start on Windows Startup",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents the WSA container virtual machine from starting automatically on Windows boot, reducing memory and CPU overhead on systems where Android apps are rarely used.",
                     Tags = ["wsa", "android", "autostart", "startup", "policy"],
@@ -2073,7 +2073,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-block-android-clipboard",
                     Label = "Block Android App Access to Windows Clipboard",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Android applications running in WSA from reading or writing the Windows clipboard, isolating Android app clipboard access from sensitive Windows application data.",
                     Tags = ["wsa", "android", "clipboard", "isolation", "privacy", "policy"],
@@ -2090,7 +2090,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-block-android-camera",
                     Label = "Block Android App Camera Access in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Android applications in WSA from accessing the Windows system camera, blocking Android apps from using the webcam or integrated camera hardware.",
                     Tags = ["wsa", "android", "camera", "privacy", "policy"],
@@ -2107,7 +2107,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-block-android-microphone",
                     Label = "Block Android App Microphone Access in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Prevents Android applications in WSA from accessing the system microphone, blocking audio recording by Android apps running in the Windows subsystem.",
                     Tags = ["wsa", "android", "microphone", "privacy", "policy"],
@@ -2124,7 +2124,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-disable-android-gpu",
                     Label = "Disable Android GPU Hardware Acceleration in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Disables hardware GPU acceleration for the WSA Android container, forcing software rendering, which reduces GPU load and prevents direct GPU driver access from Android apps.",
                     Tags = ["wsa", "android", "gpu", "acceleration", "policy"],
@@ -2141,7 +2141,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-restrict-android-location",
                     Label = "Restrict Android App Location Access in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Blocks Android applications in WSA from accessing the Windows location service, preventing Android apps from determining geolocation via GPS, Wi-Fi triangulation, or IP-based lookup.",
                     Tags = ["wsa", "android", "location", "privacy", "policy"],
@@ -2158,7 +2158,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsacore-limit-android-memory",
                     Label = "Limit WSA Container Memory to 4 GB",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Android App Debugging",
                     Description =
                         "Limits the maximum RAM allocation for the WSA Android container to 4 GB, preventing Android apps from consuming excessive system memory on devices with limited RAM.",
                     Tags = ["wsa", "android", "memory", "resource-limit", "policy"],
@@ -2185,7 +2185,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-block-android-internet-access",
                     Label = "Block Android Container Internet Access",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Blocks all outbound internet access from the WSA Android container, allowing Android apps to run offline-only without connecting to internet services.",
                     Tags = ["wsa", "android", "network", "isolation", "policy"],
@@ -2202,7 +2202,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-block-android-local-network",
                     Label = "Block Android Container Local Network Access",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents the WSA Android container from accessing the local area network, stopping Android apps from scanning or communicating with LAN resources and IoT devices.",
                     Tags = ["wsa", "android", "lan", "network", "isolation", "policy"],
@@ -2219,7 +2219,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-disable-android-vpn-client",
                     Label = "Disable Android VPN Client within WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables the Android VPN API within WSA, preventing Android VPN apps from creating VPN tunnels that could route all Windows traffic through an Android-configured tunnel.",
                     Tags = ["wsa", "android", "vpn", "network", "policy"],
@@ -2236,7 +2236,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-block-android-peer-to-peer",
                     Label = "Block Android P2P Wi-Fi Direct in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Blocks Android Wi-Fi Direct (P2P) in WSA, preventing Android apps from creating ad-hoc Wi-Fi connections to nearby devices that bypass enterprise network controls.",
                     Tags = ["wsa", "android", "wifi-direct", "p2p", "policy"],
@@ -2253,7 +2253,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-disable-android-hotspot",
                     Label = "Disable Android Mobile Hotspot via WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables the ability for Android apps in WSA to activate a Wi-Fi hotspot, preventing an Android app from sharing the Windows internet connection without authorisation.",
                     Tags = ["wsa", "android", "hotspot", "network", "policy"],
@@ -2270,7 +2270,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-restrict-android-dns",
                     Label = "Restrict Android Container to Enterprise DNS",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Forces the WSA Android container to use the enterprise DNS servers configured for the Windows host, preventing Android apps from using public or hardcoded DNS resolvers (DNS-over-HTTPS bypass).",
                     Tags = ["wsa", "android", "dns", "enterprise", "policy"],
@@ -2287,7 +2287,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-block-android-nfc",
                     Label = "Block NFC Access for Android Apps in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Blocks Android NFC APIs in WSA, preventing Android apps from accessing the Windows NFC stack if present, and stopping NFC-based contactless payment or data transfer by Android apps.",
                     Tags = ["wsa", "android", "nfc", "network", "policy"],
@@ -2304,7 +2304,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-disable-android-bluetooth",
                     Label = "Disable Bluetooth Access for Android Apps in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables Bluetooth access for Android applications in WSA, preventing Android apps from pairing with or communicating via Bluetooth peripherals using the Windows Bluetooth stack.",
                     Tags = ["wsa", "android", "bluetooth", "network", "policy"],
@@ -2321,7 +2321,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-block-android-background-data",
                     Label = "Block Android Background Data Usage in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Blocks Android apps in WSA from using network connectivity in the background (when the app screen is not visible), reducing data usage and preventing hidden data exfiltration.",
                     Tags = ["wsa", "android", "background-data", "privacy", "policy"],
@@ -2338,7 +2338,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsanet-log-android-network-activity",
                     Label = "Enable Audit Logging for Android Network Activity",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Enables event logging for all network connections initiated by Android applications in WSA, providing visibility into Android app network behaviour for security monitoring.",
                     Tags = ["wsa", "android", "network", "logging", "audit", "policy"],
@@ -2365,7 +2365,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-block-android-host-file-access",
                     Label = "Block Android Container Access to Windows File System",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents Android applications in WSA from accessing Windows host file system paths (outside the dedicated Android container storage), isolating Android apps from Windows user documents and system files.",
                     Tags = ["wsa", "android", "storage", "file-system", "isolation", "policy"],
@@ -2382,7 +2382,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-disable-android-sd-card",
                     Label = "Disable Android Virtual SD Card in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables the virtual SD card / removable storage emulation in WSA, preventing Android apps from accessing or exfiltrating data via the Android external storage API.",
                     Tags = ["wsa", "android", "sd-card", "storage", "policy"],
@@ -2399,7 +2399,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-restrict-android-download-folder",
                     Label = "Restrict Android Download Folder to Container Only",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Restricts the Android Downloads folder to within the WSA container, preventing downloaded files from automatically syncing to the Windows Downloads folder.",
                     Tags = ["wsa", "android", "download", "storage", "isolation", "policy"],
@@ -2416,7 +2416,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-limit-container-storage",
                     Label = "Limit WSA Container Storage to 16 GB",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Caps the WSA Android container image size at 16 GB, preventing Android apps from consuming excessive disk space on devices with limited storage.",
                     Tags = ["wsa", "android", "storage", "quota", "policy"],
@@ -2433,7 +2433,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-block-android-usb-transfer",
                     Label = "Block Android MTP/USB File Transfer from WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Blocks the Android Media Transfer Protocol (MTP) and USB file transfer APIs in WSA, preventing Android apps from transferring files to/from connected USB storage devices.",
                     Tags = ["wsa", "android", "mtp", "usb", "storage", "policy"],
@@ -2450,7 +2450,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-disable-android-photos-sync",
                     Label = "Disable Android Photos Auto-Sync with Windows Photos",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables automatic synchronisation between the Android container photo gallery and the Windows Photos app, preventing Android photo data from being accessible to Windows apps without explicit sharing.",
                     Tags = ["wsa", "android", "photos", "sync", "privacy", "policy"],
@@ -2467,7 +2467,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-block-android-contact-access",
                     Label = "Block Android App Access to Windows Contacts",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents Android applications in WSA from reading Windows People/Contacts data, isolating the Android contact database from the Windows contact store.",
                     Tags = ["wsa", "android", "contacts", "privacy", "policy"],
@@ -2484,7 +2484,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-disable-android-calendar-sync",
                     Label = "Disable Android Calendar Sync with Windows Calendar",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables calendar event synchronisation between Android apps in WSA and the Windows Calendar app, preventing calendar data from crossing the Android/Windows boundary.",
                     Tags = ["wsa", "android", "calendar", "sync", "privacy", "policy"],
@@ -2501,7 +2501,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-enable-android-storage-audit",
                     Label = "Enable Audit Logging for Android Storage Operations",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Enables event log entries for significant Android storage operations (large reads/writes, external storage access) to provide visibility into Android app file system behaviour.",
                     Tags = ["wsa", "android", "storage", "audit", "logging", "policy"],
@@ -2518,7 +2518,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsastor-block-android-screencapture",
                     Label = "Block Screenshot/Screen Recording by Android Apps in WSA",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents Android applications in WSA from capturing screenshots or recording the screen, ensuring Android apps cannot exfiltrate screen contents to their cloud services.",
                     Tags = ["wsa", "android", "screenshot", "screen-recording", "privacy", "policy"],
@@ -2548,7 +2548,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-disable-wsl2-entirely",
                     Label = "Disable WSL2 (Windows Subsystem for Linux 2) Entirely",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Completely disables WSL2 via policy, preventing installation of Linux distributions and blocking any WSL2 virtual machine from starting. Applied on endpoints where Linux environments are not permitted.",
                     Tags = ["wsl2", "linux", "subsystem", "disable", "policy"],
@@ -2565,7 +2565,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-block-network-access",
                     Label = "Block WSL2 Instances from Making Network Connections",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents WSL2 virtual machine network interfaces from making outbound connections, isolating Linux workloads from the network when running untrusted code inside WSL2 distros.",
                     Tags = ["wsl2", "network", "isolation", "security", "policy"],
@@ -2582,7 +2582,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-block-system-distro",
                     Label = "Block Installation of WSL2 System Distributions",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents the installation of Microsoft-managed system utility distributions (Docker Desktop backend, cloud-agent distros) from being registered in WSL2, limiting distros to user-managed ones.",
                     Tags = ["wsl2", "system-distro", "docker", "cloud-agent", "policy"],
@@ -2599,7 +2599,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-disable-wsl2-localhost-relay",
                     Label = "Disable WSL2 Localhost Port Relay to Windows Host",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents automatic port forwarding from WSL2 Linux network listeners to the Windows host network, stopping services running inside WSL2 from being reachable on Windows localhost without explicit configuration.",
                     Tags = ["wsl2", "localhost-relay", "port-forwarding", "security", "policy"],
@@ -2616,7 +2616,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-disable-wsl2-firewall-integration",
                     Label = "Disable WSL2 Windows Firewall Integration",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents WSL2 from applying Windows Firewall rules to the virtual machine network adapter, ensuring WSL2 network traffic is not filtered or monitored by Windows Defender Firewall rules created for WSL2.",
                     Tags = ["wsl2", "firewall", "network", "security", "policy"],
@@ -2633,7 +2633,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-disable-wsl2-dns-tunneling",
                     Label = "Disable WSL2 DNS Tunneling Mode",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Disables WSL2 DNS tunneling (introduced in Windows 11 22H2) which routes DNS queries from Linux through a Windows-side DNS proxy, reverting to the standard VM network DNS and preventing potential data disclosure via DNS-over-proxy.",
                     Tags = ["wsl2", "dns-tunneling", "dns", "privacy", "policy"],
@@ -2650,7 +2650,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-block-gui-apps",
                     Label = "Block WSL2 GUI (WSLg) Application Display on Windows Desktop",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents WSL2 Linux GUI applications from rendering their windows on the Windows host desktop via WSLg (Windows Subsystem for Linux GUI), limiting WSL2 usage to headless/terminal-only workloads.",
                     Tags = ["wsl2", "wslg", "gui-apps", "linux", "policy"],
@@ -2667,7 +2667,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-disable-wsl2-telemetry",
                     Label = "Disable WSL2 Telemetry Reporting to Microsoft",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description = "Prevents WSL2 from sending distro usage, feature adoption, crash, and diagnostics telemetry to Microsoft.",
                     Tags = ["wsl2", "telemetry", "privacy", "microsoft", "policy"],
                     NeedsAdmin = true,
@@ -2683,7 +2683,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-log-distro-lifecycle",
                     Label = "Log WSL2 Distro Registration and Start Events",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Enables Windows event log entries when a WSL2 Linux distribution is registered, unregistered, started, or terminated, providing audit visibility into Linux environment usage on corporate endpoints.",
                     Tags = ["wsl2", "event-log", "audit", "distro", "policy"],
@@ -2700,7 +2700,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsl2adv-require-admin-distro-install",
                     Label = "Require Administrator to Install WSL2 Distributions",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Prevents standard users from installing new Linux distributions into WSL2, ensuring distro installation is an administrative action subject to change management.",
                     Tags = ["wsl2", "distro-install", "admin", "security", "policy"],
@@ -2727,7 +2727,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-block-external-distro-sources",
                     Label = "WSL Distro: Block Installation of Unverified External Distros",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets AllowOnlyApprovedDistributions=1 in Lxss Distros policy. Restricts WSL distro installation to the set of distributions approved in this enterprise policy, blocking users from installing unverified third-party Linux distributions. "
                         + "Third-party WSL distros installed from .tar.gz archives or custom OCI images bypass the Microsoft Store signing process, are not subject to Windows Defender malware scanning during import, and may include custom kernel modules or services that establish network connections to external command-and-control infrastructure. Restricting to approved distributions ensures all WSL environments meet the organisation's security baseline.",
@@ -2745,7 +2745,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-export",
                     Label = "WSL Distro: Disable Distro Export to External Archive",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDistributionExport=1 in Lxss Distros policy. Prevents users from running 'wsl --export' to create .tar.gz archives of installed WSL distributions. "
                         + "Exporting a WSL distro creates a portable archive of the entire Linux file system — including any data, credentials, keys, or sensitive files stored within the Linux home directory. This archive can then be transferred to an unmanaged device. Blocking distro export prevents the Linux container's data from being extracted and exfiltrated outside the managed device.",
@@ -2763,7 +2763,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-import",
                     Label = "WSL Distro: Disable Distro Import from External Archive",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDistributionImport=1 in Lxss Distros policy. Prevents users from running 'wsl --import' to install a custom Linux distribution from a .tar.gz or OCI container archive. "
                         + "Importing a custom WSL distribution bypasses all Microsoft Store distribution vetting. An attacker who has compromised a development machine can create a custom Linux distro archive with embedded persistence mechanisms, additional network listeners, or credential theft tooling, then import it on other machines using only standard user 'wsl' CLI commands. Disabling import forces all WSL distro installations through the Store pipeline.",
@@ -2781,7 +2781,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-set-max-distros-allowed-2",
                     Label = "WSL Distro: Limit Maximum Installed Distros to 2",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets MaxDistributionsAllowed=2 in Lxss Distros policy. Caps the number of WSL distributions that a user can have installed simultaneously to 2. "
                         + "Each installed WSL distribution adds to the attack surface: an additional Linux kernel, an additional network-accessible file system, and an additional set of Linux packages that may have known CVEs. Limiting users to 2 simultaneous distros (e.g., one primary development environment and one for testing) reduces this footprint while still supporting legitimate multi-environment development workflows.",
@@ -2799,7 +2799,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-require-admin-for-distro-removal",
                     Label = "WSL Distro: Require Administrative Approval to Unregister Distros",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets RequireAdminForDistributionRemoval=1 in Lxss Distros policy. Requires administrator privileges to unregister or remove a WSL distribution via 'wsl --unregister'. "
                         + "If a WSL distro becomes compromised, malware running within the Linux environment may attempt to cover its tracks by unregistering the distro after data exfiltration, destroying forensic evidence. Requiring admin elevation to remove a distro ensures that Linux environment removal is a deliberate IT/admin action, not something malware inside the WSL container can trigger via WSL CLI commands.",
@@ -2817,7 +2817,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-version-downgrade",
                     Label = "WSL Distro: Block Downgrading Distros to WSL 1 Mode",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDistributionVersionDowngrade=1 in Lxss Distros policy. Prevents users from converting installed WSL 2 distributions back to WSL 1 mode via 'wsl --set-version'. "
                         + "WSL 1 uses a translation layer (instead of a real Linux kernel) that is significantly more permissive in its Windows-Linux boundary enforcement. WSL 2 uses a Hyper-V lightweight VM with stronger isolation. Downgrading to WSL 1 weakens the isolation model and re-enables file system access patterns that WSL 2's VM architecture blocks, potentially creating a security regression on machines where WSL 2 was specifically required for its isolation guarantees.",
@@ -2835,7 +2835,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-backup-creation",
                     Label = "WSL Distro: Disable Automatic Distro Backup Creation",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDistributionBackup=1 in Lxss Distros policy. Prevents automatic backup snapshots of WSL distribution state from being written to the Windows user profile directory. "
                         + "WSL distribution backups are compressed archives of the Linux VHD that can be several gigabytes in size. On managed devices with roaming profiles or OneDrive-synced user profiles, these large backup files are undesirably synchronised to cloud storage, consuming bandwidth and cloud quota. Additionally, backups may contain sensitive Linux-resident credentials.",
@@ -2853,7 +2853,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-enable-distro-audit-logging",
                     Label = "WSL Distro: Enable Audit Logging for Distro Install and Remove Events",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableDistributionAuditLogging=1 in Lxss Distros policy. Enables Security Event Log entries when WSL distributions are registered (installed), unregistered (removed), or converted between WSL 1/2 modes. "
                         + "Without distro lifecycle logging, there is no Security event log record of when Linux environments were created or deleted on a machine. If an attacker installs a WSL distro for lateral movement and then removes it to destroy evidence, the only forensic trace would be file system artefacts. Event log entries for distro lifecycle operations enable detection rules in SIEM systems.",
@@ -2871,7 +2871,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-rename",
                     Label = "WSL Distro: Disable User Renaming of Installed Distros",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDistributionRename=1 in Lxss Distros policy. Prevents users from renaming installed WSL distributions via 'wsl --rename' or through the Windows registry. "
                         + "Distribution names are used by monitoring tools, DLP agents, and endpoint security software to identify WSL environments and apply appropriate policies. If a user renames a restricted distribution (e.g., a distro named 'blocked-distro') to an unrestricted name, policy enforcement based on distribution identity may be bypassed. Locking distribution names preserves the integrity of name-based policy enforcement.",
@@ -2889,7 +2889,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wsldist-disable-distro-updates-without-approval",
                     Label = "WSL Distro: Require Admin Approval for Distro Auto-Updates",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets RequireAdminForDistributionUpdates=1 in Lxss Distros policy. Requires administrator approval before a WSL distribution is allowed to automatically update its base image to a newer version from the Microsoft Store. "
                         + "While updating a WSL base image is generally desirable for security patch coverage, uncontrolled automatic updates can change the Linux environment's toolchain version, breaking developer builds that depend on specific library or compiler versions. Requiring admin approval gates distribution updates through change management, ensuring updates are tested before deployment.",
@@ -2917,7 +2917,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-windows-drive-automount",
                     Label = "WSL Filesystem: Disable Auto-Mount of Windows Drives in WSL",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableWindowsDriveAutomount=1 in Lxss FileSystem policy. Prevents WSL from automatically mounting Windows drive letters (C:, D:, etc.) under /mnt/ when a terminal session starts. "
                         + "Auto-mounting of Windows drives gives every process within the WSL environment — including any Linux malware — unrestricted read/write access to the full Windows user profile, including OneDrive, Documents, and AppData. With auto-mount disabled, a compromised Linux process cannot traverse from /mnt/c to Windows system paths without an explicit user mount command.",
@@ -2935,7 +2935,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-network-drive-mount",
                     Label = "WSL Filesystem: Disable Mounting of Network UNC Paths in WSL",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableNetworkDriveMount=1 in Lxss FileSystem policy. Prevents WSL from mounting UNC paths (\\\\server\\share) or mapped network drives in the WSL file system. "
                         + "Allowing Linux processes to mount network shares expands the blast radius of WSL-based compromise to network-attached storage. Ransomware running in WSL with network drive access can encrypt network share contents with Linux-native encryption tools (openssl, gpg) that may not be detected by Windows-based endpoint protection monitoring network path writes.",
@@ -2953,7 +2953,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-wsl-host-mount",
                     Label = "WSL Filesystem: Disable WSL Host Physical Disk Mount (wsl --mount)",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableHostDiskMount=1 in Lxss FileSystem policy. Blocks the 'wsl --mount' command that allows a user to attach a physical disk or disk image directly into the WSL 2 VM, bypassing Windows file system filters. "
                         + "The 'wsl --mount' feature was designed for accessing Linux-native file systems (ext4, btrfs) on physical disks. However, it also allows attaching NTFS volumes directly into the WSL VM's kernel, bypassing Windows NTFS ACLs and file system minifilter drivers (including DLP, AV, and EDR file access monitors). Blocking this command eliminates a Windows security control bypass vector.",
@@ -2971,7 +2971,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-bind-mount",
                     Label = "WSL Filesystem: Disable Linux Bind Mounts Across Distro Boundaries",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableBindMount=1 in Lxss FileSystem policy. Prevents the use of Linux bind mounts within WSL that would map one distro's file system paths into another distro's namespace. "
                         + "In environments where multiple WSL distros coexist, allowing bind mounts between distros removes the isolation boundary between them. A compromised distro could bind-mount another distro's home directory or secret store, reading credentials that belong to a separate Linux identity/environment. Disabling cross-distro bind mounts preserves per-distro filesystem isolation.",
@@ -2989,7 +2989,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-enforce-drvfs-read-only",
                     Label = "WSL Filesystem: Enforce DrvFs Windows Drive Mounts as Read-Only",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnforceDrvFsReadOnly=1 in Lxss FileSystem policy. Forces all DrvFs mounts of Windows drives (e.g., /mnt/c) to be mounted read-only, preventing Linux processes from writing to the Windows file system through the DrvFs mount point. "
                         + "This is the strongest DrvFs hardening mode — Linux tools can read Windows files (e.g., build input files) but cannot write to Windows folders. Write-only WSL access to Windows paths is the most common vector for WSL-based file destruction: ransomware in WSL can encrypt /mnt/c/Users/... using Linux commands that bypass Windows AV real-time protection.",
@@ -3008,7 +3008,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-drvfs-metadata-mode",
                     Label = "WSL Filesystem: Disable DrvFs Metadata Mode (Linux Permission Emulation)",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableDrvFsMetadata=1 in Lxss FileSystem policy. Disables the DrvFs metadata extension that stores Linux file permissions, ownership (UID/GID), and extended attributes in NTFS extended attributes on Windows files. "
                         + "DrvFs metadata mode allows Linux processes to mark Windows files as setuid-root or setgid, creating files in Windows directories that, if subsequently executed by a Windows process, might behave unexpectedly due to permission metadata misinterpretation. While Windows ignores setuid bits, disabling metadata prevents Linux permission artefacts from being embedded in Windows file system objects.",
@@ -3026,7 +3026,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-plan9-mount-server",
                     Label = "WSL Filesystem: Disable Plan 9 File System Mount Server",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisablePlan9MountServer=1 in Lxss FileSystem policy. Disables the 9P (Plan 9 File System Protocol) server running inside the WSL 2 VM that provides the Windows←→Linux file sharing capability over a virtual Hyper-V vsock connection. "
                         + "The 9P file server in the WSL VM is the component that handles all cross-OS file access. If a vulnerability exists in the 9P server implementation, it could be exploited by a compromised Windows process to escalate into the WSL VM, or by a compromised Linux process to reach the Windows namespace. Disabling 9P eliminates this boundary component entirely.",
@@ -3044,7 +3044,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-set-vhd-disk-quota-20gb",
                     Label = "WSL Filesystem: Set VHD Disk Quota Maximum to 20 GB",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets VhdDiskQuotaGB=20 in Lxss FileSystem policy. Limits the maximum size that a WSL virtual hard disk (ext4.vhdx) can grow to 20 GB per distribution, preventing runaway Linux processes from filling the host disk. "
                         + "WSL 2 VHD files start small and dynamically expand on demand up to a default cap of 1 TB. Linux processes performing large operations (building Docker images, running large ML training jobs, downloading large datasets) can inadvertently — or intentionally — fill the host disk by consuming the VHD expansion headroom. A 20 GB cap ensures WSL disk usage remains bounded.",
@@ -3062,7 +3062,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-enable-filesystem-access-audit",
                     Label = "WSL Filesystem: Enable Cross-OS Filesystem Access Audit Logging",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableFileSystemAccessAudit=1 in Lxss FileSystem policy. Enables logging of all file access events that cross the Windows-Linux filesystem boundary via DrvFs, writing entries to the Security event log under the Windows Subsystem for Linux provider. "
                         + "Without DrvFs access auditing, there is no Windows Security event log record of which Linux processes accessed which Windows files through /mnt/. This makes it impossible to determine the scope of a WSL-based file access incident post-breach. Audit logging of DrvFs access enables forensic reconstruction and real-time SIEM alerting on unexpected Linux access to sensitive Windows paths.",
@@ -3081,7 +3081,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslfs-disable-tmpfs-overflow-to-host",
                     Label = "WSL Filesystem: Disable tmpfs Overflow Spilling to Windows Host Disk",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableTmpfsHostOverflow=1 in Lxss FileSystem policy. Prevents the WSL VM's in-memory tmpfs (/tmp, /run) from spilling overflow pages onto the Windows host disk when the VM's allocated RAM is exhausted. "
                         + "When WSL processes fill /tmp with large temporary files and the VM's RAM is exhausted, the kernel may begin swapping tmpfs pages to a backing swap store. Allowing this swap store to be on the host Windows disk effectively extends the VM's writable footprint onto the Windows NTFS volume in a way that bypasses the explicit DrvFs mount controls, since swap activity occurs at a lower abstraction layer.",
@@ -3109,7 +3109,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-pin-kernel-update-channel-stable",
                     Label = "WSL Kernel Update: Pin WSL Kernel Updates to Stable Channel",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets KernelUpdateChannel=0 in Lxss Updates policy. Locks the WSL kernel update distribution channel to the 'Stable' channel (0 = stable release), preventing the system from automatically switching to preview or developer channel kernel builds via Windows Update. "
                         + "Preview and developer channel WSL kernel builds may contain experimental features or recently introduced security changes that have not undergone the full Windows Update quality validation cycle. In enterprise environments, pinning to the stable channel ensures that WSL kernel updates receive the same update quality bar as production Windows kernel updates, reducing the risk of a kernel regression breaking production developer workflows.",
@@ -3127,7 +3127,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-enforce-kernel-signature-verification",
                     Label = "WSL Kernel Update: Require Digital Signature Verification on Kernel Updates",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnforceKernelSignatureVerification=1 in Lxss Updates policy. Requires that every WSL kernel update package delivered via Microsoft Update is verified against Microsoft's Authenticode certificate chain before being applied, blocking tampered or unsigned kernel update packages. "
                         + "Microsoft Update delivery of WSL kernel updates uses HTTPS transport, but a compromised Windows Update cache, WSUS proxy, or a threat actor with WSUS-level man-in-the-proxy access could substitute a malicious kernel package. Requiring explicit Authenticode signature verification ensures that even a package delivered through a compromised update pipeline is rejected if it is not signed by Microsoft's production signing keys.",
@@ -3146,7 +3146,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-block-manual-kernel-downgrade",
                     Label = "WSL Kernel Update: Block Manual WSL Kernel Version Downgrade",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableKernelVersionDowngrade=1 in Lxss Updates policy. Prevents users from manually reverting the WSL Linux kernel to an older version via 'wsl --update --rollback' or by directly replacing the kernel package files. "
                         + "A threat actor who knows of an unpatched kernel vulnerability in an older WSL kernel version may attempt to roll the kernel back to the vulnerable version after the enterprise has applied a security patch. Blocking downgrade ensures that once a security-relevant WSL kernel update has been applied, it cannot be reversed without administrative action, enforcing a one-way patch ratchet.",
@@ -3164,7 +3164,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-enable-urgent-kernel-security-updates",
                     Label = "WSL Kernel Update: Enable Urgent Security Updates via Windows Update",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets AllowUrgentKernelSecurityUpdates=1 in Lxss Updates policy. Allows the Windows Update service to automatically apply WSL kernel updates that are classified as 'Critical' or 'Security Update' severity without waiting for the standard Patch Tuesday deployment cycle. "
                         + "WSL kernel security vulnerabilities that are being actively exploited in the wild may be patched with emergency out-of-band updates. Without this policy, enterprises using slow deployment rings (e.g., broad ring with 14–30 day deferral) may leave systems vulnerable for weeks after Microsoft releases an emergency patch. Enabling urgent update delivery ensures critical WSL kernel fixes bypass deployment ring deferrals.",
@@ -3183,7 +3183,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-set-kernel-update-defer-days-0",
                     Label = "WSL Kernel Update: Disable WSL Kernel Update Deferral (Apply Immediately)",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets KernelUpdateDeferralDays=0 in Lxss Updates policy. Sets the WSL kernel update deferral period to zero days, ensuring that WSL kernel updates are applied as soon as they are delivered and approved in the Windows Update service, with no additional deferral delay. "
                         + "Unlike the Windows NT kernel which is updated on the monthly Patch Tuesday cadence, WSL kernel updates are typically small, targeted patches. Deferring them unnecessarily extends the window during which a known-patched WSL kernel vulnerability remains present. Setting deferral to zero ensures the enterprise's WSL kernel vulnerability exposure window matches the Windows Update delivery latency, not an additional IT-imposed delay.",
@@ -3201,7 +3201,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-enable-kernel-update-audit-log",
                     Label = "WSL Kernel Update: Enable Security Event Log Entry on Kernel Update or Rollback",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableKernelUpdateAuditLog=1 in Lxss Updates policy. Causes a Security event log entry to be written whenever the WSL Linux kernel is updated to a new version or rolled back to a previous version, recording the previous and new kernel version strings. "
                         + "Without audit logging of WSL kernel version changes, there is no Security event record of when WSL kernel updates were applied (or not applied) on a device. This makes it impossible to determine whether a managed device was running a vulnerable WSL kernel during a specific incident timeframe. Kernel version change events enable compliance managers to demonstrate patch deployment timelines and detect unexplained rollbacks.",
@@ -3219,7 +3219,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-block-user-manual-kernel-update",
                     Label = "WSL Kernel Update: Block Manual 'wsl --update' by Standard Users",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableUserManualKernelUpdate=1 in Lxss Updates policy. Removes the ability of standard (non-administrator) users to manually trigger WSL kernel updates via the 'wsl --update' command, restricting kernel update initiation to Windows Update and IT administrator action only. "
                         + "While 'wsl --update' legitimately downloads the latest stable kernel, standard users initiating manual updates bypass the enterprise's staged Windows Update ring deployment schedule. If a specific kernel version is deferred in slow deployment rings due to a regression, users running 'wsl --update' would receive the update immediately, bypassing change management controls. Restricting update initiation to Windows Update enforces the enterprise deployment schedule.",
@@ -3237,7 +3237,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-enable-kernel-integrity-verification-on-boot",
                     Label = "WSL Kernel Update: Verify WSL Kernel Image Integrity at VM Start",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets VerifyKernelIntegrityOnBoot=1 in Lxss Updates policy. Enables hash-based integrity verification of the WSL Linux kernel image file (vmlinux) against its stored signature each time a WSL session starts a new Hyper-V VM instance. "
                         + "Without startup integrity verification, a threat actor with write access to the WSL kernel image path on the Windows file system can replace the kernel with a modified version that installs kernel-level hooks for all subsequent WSL sessions. Verifying the kernel image hash at each VM start ensures that any tampering with the stored kernel image is detected before the compromised kernel is loaded into the Hyper-V VM.",
@@ -3255,7 +3255,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-block-preview-kernel-builds",
                     Label = "WSL Kernel Update: Block Preview and Insider WSL Kernel Preview Builds",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets BlockPreviewKernelBuilds=1 in Lxss Updates policy. Prevents Windows Insider Preview and Windows Update Preview channels from delivering pre-release WSL Linux kernel builds to managed devices that are enrolled in preview rings for Windows OS preview builds. "
                         + "Managed enterprise devices may be enrolled in Windows Insider rings for OS preview testing. However, preview WSL kernel builds may have known vulnerabilities, experimental security mitigations disabled, and debugging interfaces enabled that are inappropriate for production use. Blocking preview kernel builds ensures enterprise devices only receive production-quality WSL kernels regardless of their Windows Insider ring membership.",
@@ -3273,7 +3273,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslkupd-require-restart-to-apply-kernel-update",
                     Label = "WSL Kernel Update: Require Full WSL Session Termination to Activate Kernel Updates",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets RequireSessionRestartForKernelUpdate=1 in Lxss Updates policy. Requires that all running WSL distro sessions are fully terminated (wsl --shutdown) and a new Hyper-V VM is started before a delivered WSL kernel update becomes active. Prevents in-place kernel hot-patching that may skip the integrity verification startup checks. "
                         + "Hot-patching-style kernel activation (patching a running VM's kernel in-memory) bypasses the startup integrity verification performed when a new VM is instantiated. By requiring a full session shutdown and VM restart after each kernel update, this policy ensures that the newly applied kernel image goes through the full chain-of-trust verification (signature check → AppArmor load → seccomp policy activation) before any distro sessions run on it.",
@@ -3301,7 +3301,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-set-max-wsl-vm-memory-4gb",
                     Label = "WSL Memory: Cap WSL VM Maximum Memory Allocation to 4 GB",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets MaxVmMemoryMB=4096 in Lxss Memory policy. Limits the maximum amount of host RAM the WSL 2 Hyper-V virtual machine can allocate to 4 GB, preventing WSL workloads from consuming the majority of the host system's physical memory. "
                         + "By default, WSL 2 can claim up to 50% of host RAM (up to 8 GB total). On workstations with 16–32 GB RAM, a developer building a large project in WSL (e.g., a Linux kernel build, a large Rust project, or a Docker image layer operation) can cause the Windows desktop to become unresponsive due to memory pressure. A 4 GB cap ensures the host OS retains sufficient memory for responsive interactive use.",
@@ -3319,7 +3319,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-set-max-wsl-cpu-cores-4",
                     Label = "WSL Memory: Limit WSL VM to 4 Virtual CPU Cores",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets MaxVmProcessors=4 in Lxss Memory policy. Caps the number of virtual CPU cores visible to the WSL 2 VM to 4, limiting the maximum parallelism available to Linux workloads to prevent CPU starvation of host Windows processes. "
                         + "WSL 2 inherits all host CPU cores by default. On a 12-core/24-thread development workstation, a Linux build job running make -j24 can saturate all CPU cores, causing Windows UI, background services, and other processes to become CPU-starved. Capping WSL at 4 cores ensures the OS retains burst capacity for interactive workloads, antivirus scans, and system services.",
@@ -3337,7 +3337,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-set-swap-file-size-2gb",
                     Label = "WSL Memory: Set WSL VM Swap File Size to 2 GB",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets VmSwapFileSizeMB=2048 in Lxss Memory policy. Sets the WSL 2 VM's swap file (used when VM RAM is exhausted) to a fixed 2 GB size, preventing the swap file from growing unboundedly on the Windows host disk. "
                         + "The WSL 2 VM swap file is created dynamically on the Windows NTFS volume. Without a size cap, memory-intensive Linux workloads can cause the swap file to expand to match the available NTFS free space — effectively allowing WSL to consume the entire host disk as virtual memory. A 2 GB fixed swap cap provides a safety margin for legitimate memory overcommit while preventing disk exhaustion.",
@@ -3355,7 +3355,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-enable-wsl-memory-reclaim-gradual",
                     Label = "WSL Memory: Enable Gradual Memory Reclaim from VM to Host",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableGradualMemoryReclaim=1 in Lxss Memory policy. Instructs the WSL 2 hypervisor to periodically reclaim unused virtual machine memory pages back to the Windows host pool using the gradual reclaim algorithm, rather than holding memory until the VM terminates. "
                         + "Without memory reclaim enabled, WSL 2 acquires RAM as needed and holds it indefinitely, even after Linux processes that consumed the memory have exited. This means that after a large Linux build job completes, the RAM it consumed is not returned to the Windows pool, causing the host to appear low on memory. Gradual reclaim enables the WSL Hyper-V balloon driver to return idle pages to Windows.",
@@ -3373,7 +3373,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-disable-wsl-swap-file",
                     Label = "WSL Memory: Disable WSL VM Swap File Creation",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableVmSwapFile=1 in Lxss Memory policy. Prevents the WSL 2 virtual machine from creating a swap file on the Windows host disk. With no swap, the Linux VM operates in a pure in-memory mode and Linux processes that exhaust available VM memory will be OOM-killed rather than swap-paging. "
                         + "The WSL swap file is a write-capable artifact on the Windows NTFS volume. Data written to Linux virtual memory (including sensitive in-memory data structures like encryption keys that are paged out under memory pressure) is persisted in a cleartext swap file on Windows disk. Disabling swap eliminates this data-at-rest exposure channel, at the cost of Linux OOM-kill risk for memory-intensive workloads.",
@@ -3392,7 +3392,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-enable-vm-page-reporting",
                     Label = "WSL Memory: Enable VM Page Reporting for Efficient Host Memory Return",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableVmPageReporting=1 in Lxss Memory policy. Enables the Hyper-V VM page reporting guest protocol within the WSL 2 VM, allowing the Linux guest to proactively report free memory pages to the host hypervisor for immediate host memory pool reuse. "
                         + "Page reporting is a more aggressive memory return mechanism than the balloon driver; while balloon reclaim waits for host memory pressure, page reporting proactively marks guest-free pages as available to the host. This results in faster and more complete memory return after burst WSL workloads, improving host memory availability for concurrent Windows applications.",
@@ -3410,7 +3410,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-set-vm-memory-reclaim-idle-threshold-5min",
                     Label = "WSL Memory: Set VM Memory Reclaim Idle Threshold to 5 Minutes",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets VmMemoryReclaimIdleThresholdMin=5 in Lxss Memory policy. Sets the idle timeout after which the WSL 2 Hyper-V host will begin reclaiming memory pages from an idle WSL VM to 5 minutes. "
                         + "The default idle threshold before WSL memory reclaim begins is typically 10–15 minutes. In enterprise environments where developers run WSL sessions intermittently (editing code in Windows, compiling in WSL, back to editing), the 5-minute threshold ensures that memory allocated during compile jobs is returned to the host within 5 minutes of the WSL VM becoming idle, rather than holding the memory for the duration of the edit cycle.",
@@ -3428,7 +3428,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-disable-kernel-samepage-merging",
                     Label = "WSL Memory: Disable Kernel Same-Page Merging in WSL VM",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableKernelSamepageMerging=1 in Lxss Memory policy. Disables the Linux kernel's KSM (Kernel Same-page Merging) memory deduplication feature in the WSL 2 VM, which periodically scans VM memory for identical pages and merges them into copy-on-write shared pages. "
                         + "KSM is a known side-channel: the merge/de-merge timing of identical pages can be used to detect whether a particular secret value (e.g., a cryptographic key) exists in another process's memory. Research has demonstrated KSM-based cross-process memory probing exploits. Disabling KSM removes this timing side-channel within the WSL VM's memory subsystem.",
@@ -3446,7 +3446,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-enable-memory-pressure-notifications",
                     Label = "WSL Memory: Enable Host Memory Pressure Notifications to WSL VM",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets EnableMemoryPressureNotifications=1 in Lxss Memory policy. Enables the WSL 2 hypervisor to send memory pressure notifications into the Linux guest when the Windows host is experiencing memory pressure, allowing the Linux kernel to invoke its own memory pressure handlers (cgroup high/low events, transparent huge page compaction) proactively. "
                         + "Without pressure notifications, the Linux VM has no visibility into host memory pressure and will continue normal memory allocation, worsening host memory pressure. With notifications enabled, the guest can perform early memory reclaim before the hypervisor is forced to balloon-reclaim pages, resulting in more cooperative memory sharing between the WSL VM and Windows host processes.",
@@ -3464,7 +3464,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslmemlim-disable-large-page-allocation",
                     Label = "WSL Memory: Disable Huge Page Allocation in WSL VM",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsa Network Isolation",
                     Description =
                         "Sets DisableLargePageAllocation=1 in Lxss Memory policy. Disables transparent huge page (THP) allocation within the WSL 2 VM's Linux kernel, preventing the VM from allocating 2 MB memory pages instead of 4 KB pages. "
                         + "Transparent huge pages improve Linux application throughput for memory-intensive workloads but make host memory reclaim significantly less efficient. A 2 MB THP page cannot be reclaimed until all 512 sub-pages are free simultaneously, causing huge pages to become 'locked' memory that resists balloon and page-report reclaim. Disabling THP makes WSL VM memory more granularly reclaimable, improving host memory return latency.",
@@ -3493,7 +3493,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-disable-linux-privileged-container",
                     Label = "WSL Security: Block Privileged Linux Containers (--privileged)",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets DisablePrivilegedContainerMode=1 in Lxss Security policy. Prevents users from launching Linux containers in privileged mode within WSL, which would grant the container full access to the WSL kernel's device tree and capabilities. "
                         + "Privileged Linux containers bypass cgroup and namespace isolation — a privileged container escape is effectively a WSL hypervisor boundary bypass. Container image registries routinely contain malicious images that exploit the privileged mode to escape to the host. Blocking privileged container mode ensures all Docker and podman containers within WSL remain namespace-isolated.",
@@ -3511,7 +3511,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-require-secure-boot-for-wsl",
                     Label = "WSL Security: Require Secure Boot (UEFI) Validation Before WSL Launch",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets RequireSecureBootForWsl=1 in Lxss Security policy. Configures WSL to verify that the host system has Secure Boot enabled and that the WSL system distro image is digitally signed before allowing any WSL distribution to launch. "
                         + "A threat actor with physical access or bootkit privileges can replace the WSL system distro image (kernel/initramfs) with a malicious version that intercepts WSL sessions. Requiring Secure Boot validation means that only Microsoft-signed WSL kernel images will be accepted — any tampered or unsigned replacement will be rejected at launch, preventing persistent WSL-level rootkit installation.",
@@ -3529,7 +3529,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-enable-apparmor-enforcement",
                     Label = "WSL Security: Enable AppArmor Mandatory Access Control Enforcement",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets RequireAppArmorEnforcement=1 in Lxss Security policy. Requires that AppArmor (the Linux Mandatory Access Control framework) is active and in enforcing mode within WSL distributions before those distros are permitted to run Linux processes. "
                         + "AppArmor-enforcing mode means that every Linux process is subject to a per-executable MAC policy that limits the files, capabilities, and network resources it can access. Without AppArmor enforcement, a compromised Linux process within WSL can access any file the Linux user has permission to reach (including all DrvFs-mounted Windows files). AppArmor confines individual processes to their expected access patterns.",
@@ -3547,7 +3547,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-disable-wsl-sudo-escalation",
                     Label = "WSL Security: Block sudo Privilege Escalation in WSL Distributions",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets DisableSudoEscalation=1 in Lxss Security policy. Prevents the 'sudo' and 'su' commands from granting root privileges within WSL distributions launched in standard user sessions, enforcing that all WSL processes run under the Linux user identity only. "
                         + "sudo root access within WSL gives a Linux process full root capabilities within the WSL VM, including the ability to install kernel modules, bind to privileged ports, and reconfigure network namespaces. While the WSL VM boundary limits the blast radius, root access within WSL provides a much larger attack surface for container escape and VM privilege escalation research exploitation.",
@@ -3565,7 +3565,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-enable-seccomp-enforcement",
                     Label = "WSL Security: Enable Seccomp System Call Filtering Enforcement",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets RequireSeccompEnforcement=1 in Lxss Security policy. Requires the WSL Linux kernel to apply Seccomp-BPF (system call filtration) policies to all user-space processes, blocking access to dangerous system calls that are not needed for standard application workloads. "
                         + "Many Linux kernel privilege escalation vulnerabilities are triggered via obscure or rarely-used system calls (ptrace, perf_event_open, io_uring). Seccomp filtering blocks these system calls unless explicitly allowed by the process's policy, preventing exploitation of kernel vulnerabilities that require those call paths. This is particularly important because the WSL Linux kernel shares the root namespace with all distros.",
@@ -3584,7 +3584,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-disable-raw-socket-creation",
                     Label = "WSL Security: Block Raw Socket Creation by Non-Root Linux Processes",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets DisableRawSocketCreation=1 in Lxss Security policy. Prevents non-root Linux processes within WSL from creating AF_PACKET (raw) network sockets, which would allow them to perform low-level network packet capture and injection without Windows-side network monitoring visibility. "
                         + "Raw sockets enable Linux processes to capture all network traffic visible to the WSL VM's network namespace. In mirrored networking mode, this includes all traffic from the Windows host. A malicious tool running in WSL with raw socket access can perform ARP spoofing, DNS poisoning, and credential harvest from unencrypted protocol traffic, bypassing Windows network monitoring solutions.",
@@ -3602,7 +3602,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-disable-ptrace-between-distros",
                     Label = "WSL Security: Block ptrace Cross-Distro Process Attachment",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets DisableCrossDistrictPtrace=1 in Lxss Security policy. Prevents Linux processes in one WSL distribution from using ptrace() to attach to and debug processes running in another WSL distribution sharing the same Hyper-V VM. "
                         + "When multiple WSL distros run in the same Hyper-V partition (the typical configuration), they share a Linux kernel and a process namespace at the VM level. Without a ptrace policy, a process in distro A can attach to a process in distro B and read its memory, modify its execution, or extract credentials it holds. Restricting cross-distro ptrace enforces process isolation between co-located Linux environments.",
@@ -3620,7 +3620,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-enable-user-namespace-restrictions",
                     Label = "WSL Security: Restrict Unprivileged Linux User Namespace Creation",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets RestrictUnprivilegedUserNamespaces=1 in Lxss Security policy. Limits the ability of unprivileged Linux user-space processes to create new user namespaces within the WSL VM, which are frequently exploited as container escape stepping stones. "
                         + "User namespaces are the Linux kernel primitive that enables unprivileged container tools (rootless Docker, rootless podman). However, user namespaces have also been the root cause or enabling boundary for a significant fraction of Linux kernel privilege escalation CVEs (CVE-2023-4911, CVE-2022-0847 'Dirty Pipe', CVE-2022-25375). Restricting their creation prevents their use as an escalation primitive while still allowing root-managed container workflows.",
@@ -3639,7 +3639,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-enable-defender-scan-on-wsl-exec",
                     Label = "WSL Security: Enable Microsoft Defender Scanning on WSL Executable Launch",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets EnableDefenderScanOnWslExecution=1 in Lxss Security policy. Enables Microsoft Defender for Endpoint to scan Linux ELF executables and scripts when they are launched within the WSL environment, before process execution begins. "
                         + "By default, Defender's real-time file system protection monitors the Windows NTFS volume but may not scan Linux ELF binaries within the ext4 VHD. With WSL execution scanning enabled, Defender analyses Linux binaries using Linux threat intelligence signatures, detecting known Linux malware, coin miners, and reverse shells that reside within the WSL file system. This closes the gap between Windows AV coverage and Linux-resident threats.",
@@ -3657,7 +3657,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslsechrd-disable-wsl-kernel-module-load",
                     Label = "WSL Security: Block Loading of Unsigned Linux Kernel Modules in WSL",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Wsl Security Hardening",
                     Description =
                         "Sets DisableUnsignedKernelModuleLoad=1 in Lxss Security policy. Prevents the WSL Linux kernel from loading unsigned or third-party kernel modules (LKMs) that are not part of the Microsoft-signed WSL kernel image. "
                         + "Linux kernel modules run with ring-0 (kernel mode) privileges and have unrestricted access to all memory, devices, and kernel data structures within the VM. A malicious loadable kernel module loaded in WSL can install kernel-level hooks, intercept all WSL system calls, and exfiltrate data from other processes at the kernel level. Blocking unsigned module loading enforces that only the Microsoft-vetted WSL kernel components can extend the kernel's attack surface.",
@@ -3686,7 +3686,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-disable-wsl",
                     Label = "Disable Windows Subsystem for Linux",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets Enabled=0 in the Lxss policy key to disable WSL entirely. Prevents installation or launch of any Linux distributions. Use in high-security or compliance environments where Linux workloads on Windows are prohibited.",
                     Tags = ["wsl", "linux", "subsystem", "policy", "enterprise"],
@@ -3703,7 +3703,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-kernel-debugging",
                     Label = "Block WSL Kernel Debugging",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowKernelDebugging=0 in the WSL policy key. Prevents users from attaching kernel debuggers to the WSL2 virtual machine, reducing the attack surface from kernel exploits originating in Linux workloads.",
                     Tags = ["wsl", "kernel", "debug", "security", "policy"],
@@ -3720,7 +3720,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-dev-mode-install",
                     Label = "Block WSL Developer Mode Installs",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowDeveloperModeInstall=0 in the WSL policy key. Blocks installation of Linux distributions from developer mode sources outside the Microsoft Store, enforcing controlled distribution channels.",
                     Tags = ["wsl", "developer", "install", "policy", "security"],
@@ -3737,7 +3737,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-custom-kernel",
                     Label = "Block WSL Custom Kernel Configuration",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowCustomKernelConfiguration=0 in the WSL policy key. Prevents users from replacing the WSL2 kernel with custom builds via .wslconfig, ensuring only the Microsoft-signed kernel runs.",
                     Tags = ["wsl", "kernel", "custom", "policy", "integrity"],
@@ -3754,7 +3754,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-disable-disk-mount",
                     Label = "Disable WSL Disk Image Mounting",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowMount=0 in the WSL policy key. Blocks mounting of physical disks or VHD image files inside WSL2, preventing lateral movement via raw disk access from within a Linux distribution.",
                     Tags = ["wsl", "mount", "disk", "security", "policy"],
@@ -3771,7 +3771,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-wsl-networking",
                     Label = "Block WSL Outbound Networking",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowNetworking=0 in the WSL policy key. Disables network access for all WSL2 distributions, isolating Linux workloads from the corporate network and the internet.",
                     Tags = ["wsl", "network", "isolation", "policy", "security"],
@@ -3788,7 +3788,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-disable-systemd",
                     Label = "Disable systemd in WSL",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowSystemd=0 in the WSL policy key. Prevents WSL2 distributions from using systemd as PID 1, blocking system service management that could be exploited for persistence mechanisms.",
                     Tags = ["wsl", "systemd", "service", "policy", "hardening"],
@@ -3805,7 +3805,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-gpu-compute",
                     Label = "Block WSL GPU Compute Access",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowGPUCompute=0 in the WSL policy key. Disables DirectML and GPU acceleration inside WSL2, preventing Linux processes from accessing GPU compute resources via the host WDDM driver.",
                     Tags = ["wsl", "gpu", "compute", "policy", "security"],
@@ -3822,7 +3822,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-disable-dns-tunneling",
                     Label = "Disable WSL DNS Tunneling",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowDNSTunneling=0 in the WSL policy key. Prevents WSL2 from using DNS-over-HTTPS tunneling mode, ensuring DNS queries from Linux distributions go through standard Windows resolver configuration.",
                     Tags = ["wsl", "dns", "tunnel", "policy", "network"],
@@ -3839,7 +3839,7 @@ internal static class PolicySubsystems
                 {
                     Id = "wslpol-block-vtpm",
                     Label = "Block WSL Virtual TPM",
-                    Category = "Virtualization",
+                    Category = "Virtualization — Windows Subsystem Linux",
                     Description =
                         "Sets AllowVTPM=0 in the WSL policy key. Blocks Linux distributions from accessing a virtual TPM device inside WSL2. Reduces risk of TPM-based key material in the Linux trust boundary.",
                     Tags = ["wsl", "tpm", "virtual", "policy", "security"],
@@ -3864,7 +3864,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-telemetry-reporting",
             Label = "Disable VS Code Telemetry (User Policy)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables VS Code telemetry via user-level policy. Default: Enabled. Recommended: Disabled.",
@@ -3878,7 +3878,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-update-check",
             Label = "Disable VS Code Update Check (User Policy)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -3893,7 +3893,7 @@ internal static class VsCode
         {
             Id = "vscode-vsc-disable-update-notif",
             Label = "Disable VS Code Update Notifications (Machine Policy)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3916,7 +3916,7 @@ internal static class VsCode
         {
             Id = "vscode-vsc-set-gpu-accel",
             Label = "Set VS Code GPU Acceleration (Machine Policy)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -3931,7 +3931,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-natural-language-search",
             Label = "Disable VS Code Natural Language Search",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the natural language search feature in VS Code settings (prevents Bing queries). Default: enabled.",
@@ -3954,7 +3954,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-extension-recommendations",
             Label = "Disable VS Code Extension Recommendations",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables extension recommendations in VS Code via machine policy. Default: enabled.",
@@ -3968,7 +3968,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-crash-reporter",
             Label = "Disable VS Code Crash Reporter",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables VS Code crash reporter via machine policy. Stops sending crash dumps to Microsoft. Default: enabled.",
@@ -3982,7 +3982,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-experiments",
             Label = "Disable VS Code Experiments",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables A/B experiments in VS Code that can change features. Default: enabled.",
@@ -3996,7 +3996,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-remote-telemetry",
             Label = "Disable VS Code Remote Extension Telemetry",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables telemetry for VS Code Remote extensions (SSH, WSL, Dev Containers). Default: enabled.",
@@ -4010,7 +4010,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-edit-sessions",
             Label = "Disable VS Code Edit Sessions Cloud",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables VS Code Edit Sessions that sync uncommitted changes to the cloud. Keeps changes local. Default: enabled.",
@@ -4024,7 +4024,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-online-services",
             Label = "Disable VS Code Online Services",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables VS Code online service features including settings sync, marketplace, etc. Default: enabled.",
@@ -4040,7 +4040,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-extension-gallery",
             Label = "Disable Extension Marketplace",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the VS Code extension marketplace via Group Policy, preventing extension installs.",
@@ -4054,7 +4054,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-gpu-acceleration",
             Label = "Disable VS Code GPU Acceleration",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables GPU/hardware acceleration in VS Code via policy. Useful for remote desktop or VM environments.",
@@ -4068,7 +4068,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-telemetry-policy",
             Label = "Disable VS Code Telemetry (Machine)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables all VS Code telemetry and diagnostics via machine-level Group Policy.",
@@ -4092,7 +4092,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-vscode-ext-update",
             Label = "Disable VS Code Extension Auto-Update",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents VS Code from automatically updating extensions via policy.",
@@ -4106,7 +4106,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-vscode-settings-sync",
             Label = "Disable VS Code Settings Sync",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Settings Sync feature in VS Code via Group Policy.",
@@ -4120,7 +4120,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-vscode-startup-editor",
             Label = "Disable VS Code Startup Welcome Tab",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents VS Code from showing the Welcome tab on startup via policy.",
@@ -4134,7 +4134,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-vscode-telemetry",
             Label = "Disable VS Code Telemetry (All)",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets VS Code telemetry level to 'off' via machine policy, disabling all data collection.",
@@ -4148,7 +4148,7 @@ internal static class VsCode
         {
             Id = "vscode-restrict-workspace-trust",
             Label = "Restrict VS Code Workspace Trust",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic workspace trust prompts and defaults to restricted mode via policy.",
@@ -4163,7 +4163,7 @@ internal static class VsCode
         {
             Id = "vscode-policy-extension-gallery",
             Label = "Disable VS Code Extension Gallery",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables access to the VS Code public extension marketplace (useful in locked-down environments).",
@@ -4177,7 +4177,7 @@ internal static class VsCode
         {
             Id = "vscode-policy-online-services",
             Label = "Disable VS Code Online Services",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents VS Code from making requests to online services (cloud settings, snippets).",
@@ -4191,7 +4191,7 @@ internal static class VsCode
         {
             Id = "vscode-policy-nls-search",
             Label = "Disable VS Code Natural Language Search",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Bing-powered natural language extension search feature in VS Code.",
@@ -4205,7 +4205,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-account-sync",
             Label = "Disable VS Code Account & Settings Sync",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Blocks VS Code from syncing settings, keybindings and extensions to a Microsoft account.",
@@ -4219,7 +4219,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-github-copilot-chat",
             Label = "Disable VS Code GitHub Copilot Chat",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables GitHub Copilot Chat AI features in VS Code via policy registry key.",
@@ -4233,7 +4233,7 @@ internal static class VsCode
         {
             Id = "vscode-disable-output-link-detection",
             Label = "Disable VS Code Output Link Detection",
-            Category = "Developer",
+            Category = "Developer — Virtualization",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Stops VS Code from scanning terminal/output panels for clickable links (reduces CPU on heavy output).",
@@ -4248,7 +4248,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-interop",
             Label = "Disable WSL Windows Interop",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4263,7 +4263,7 @@ internal static class VsCode
         {
             Id = "wsl-sparse-vhd",
             Label = "Enable WSL Sparse VHD",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4278,7 +4278,7 @@ internal static class VsCode
         {
             Id = "wsl-firewall",
             Label = "Enable WSL Firewall Integration",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4293,7 +4293,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-gui",
             Label = "Disable WSLg (GUI App Support)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4308,7 +4308,7 @@ internal static class VsCode
         {
             Id = "wsl-safe-mode",
             Label = "Enable WSL Safe Mode",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4323,7 +4323,7 @@ internal static class VsCode
         {
             Id = "wsl-debug-console",
             Label = "Enable WSL Debug Console",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4338,7 +4338,7 @@ internal static class VsCode
         {
             Id = "wsl-limit-memory",
             Label = "Limit WSL Memory to 4 GB",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4353,7 +4353,7 @@ internal static class VsCode
         {
             Id = "wsl-systemd-default",
             Label = "Enable Systemd as Default Init (Policy)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4368,7 +4368,7 @@ internal static class VsCode
         {
             Id = "wsl-automount-metadata",
             Label = "Enable DrvFs Auto-Mount with Metadata",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4383,7 +4383,7 @@ internal static class VsCode
         {
             Id = "wsl-no-windows-path",
             Label = "Disable Windows PATH Append in WSL",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4398,7 +4398,7 @@ internal static class VsCode
         {
             Id = "wsl-swap-size",
             Label = "Limit WSL2 Swap to 2 GB",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4413,7 +4413,7 @@ internal static class VsCode
         {
             Id = "wsl-gpu-compute",
             Label = "Enable GPU Compute Pass-Through (CUDA/DirectML)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4428,7 +4428,7 @@ internal static class VsCode
         {
             Id = "wsl-interop-off-policy",
             Label = "Disable WSL Windows Interop",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -4443,7 +4443,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-binfmt-misc",
             Label = "Disable WSL Binfmt Misc Registration",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -4458,7 +4458,7 @@ internal static class VsCode
         {
             Id = "wsl-limit-processors",
             Label = "Limit WSL2 VM to 4 Processors",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4473,7 +4473,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-crash-reporting",
             Label = "Disable WSL Crash Dump Creation",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4488,7 +4488,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-telemetry",
             Label = "Disable WSL Telemetry",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4503,7 +4503,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-windows-path-interop",
             Label = "Disable Windows PATH Interop in WSL",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows PATH from being appended to WSL $PATH. Avoids conflicts with Windows executables. Default: enabled.",
@@ -4517,7 +4517,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-gui-support",
             Label = "Disable WSLg (GUI App Support)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables WSLg (Linux GUI app support via Wayland/X11). Reduces memory and resource usage. Default: enabled.",
@@ -4531,7 +4531,7 @@ internal static class VsCode
         {
             Id = "wsl-set-default-version-2",
             Label = "Set Default WSL Version to 2",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default WSL version to 2 for new distro installations. WSL2 uses a real Linux kernel. Default: 1.",
@@ -4545,7 +4545,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-dns-tunneling",
             Label = "Disable WSL DNS Tunneling",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables DNS tunneling in WSL2. Uses host DNS resolution instead. Default: enabled in newer builds.",
@@ -4559,7 +4559,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-auto-memory-reclaim",
             Label = "Disable WSL Auto Memory Reclaim",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic memory reclaim in WSL2. Prevents WSL from releasing cached memory back to Windows. Default: enabled.",
@@ -4574,7 +4574,7 @@ internal static class VsCode
         {
             Id = "wsl-enable-feature",
             Label = "Enable WSL Windows Feature (DISM)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Enables the Microsoft-Windows-Subsystem-Linux optional feature via DISM. Requires reboot.",
@@ -4609,7 +4609,7 @@ internal static class VsCode
         {
             Id = "wsl-enable-vmplatform",
             Label = "Enable Virtual Machine Platform (DISM)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Enables the VirtualMachinePlatform feature required for WSL2. Requires reboot.",
@@ -4641,7 +4641,7 @@ internal static class VsCode
         {
             Id = "wsl-compact-vhd",
             Label = "Compact WSL2 VHD Disks",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Terminates running WSL instances and compacts all .vhdx virtual disk files to reclaim unused space. One-time action.",
@@ -4669,7 +4669,7 @@ internal static class VsCode
         {
             Id = "wsl-shutdown",
             Label = "Shutdown All WSL2 Instances",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Immediately terminates all running WSL2 distributions and the lightweight utility VM. Frees memory and CPU resources.",
@@ -4688,7 +4688,7 @@ internal static class VsCode
         {
             Id = "wsl-autostart",
             Label = "Auto-Start WSL2 at Logon",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4709,7 +4709,7 @@ internal static class VsCode
         {
             Id = "wsl-compact-disk",
             Label = "Enable WSL Automatic Disk Compaction",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables automatic compaction of WSL2 virtual disks to reclaim unused space without manual intervention. Win11 22H2+.",
@@ -4723,7 +4723,7 @@ internal static class VsCode
         {
             Id = "wsl-default-v2",
             Label = "Set Default WSL Version to 2 (CLI)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4744,7 +4744,7 @@ internal static class VsCode
         {
             Id = "wsl-default-version-2",
             Label = "Set Default WSL Version to 2 (User Registry)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the default WSL version to 2 via the user-level Lxss registry key. New distro installations will use WSL2.",
@@ -4758,7 +4758,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-auto-update",
             Label = "Disable WSL Auto-Update",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents WSL from automatically checking for and installing kernel/runtime updates. Useful for controlled environments.",
@@ -4772,7 +4772,7 @@ internal static class VsCode
         {
             Id = "wsl-disable-nested-virt",
             Label = "Disable WSL Nested Virtualisation",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4787,7 +4787,7 @@ internal static class VsCode
         {
             Id = "wsl-enable-localhost-forward",
             Label = "Enable WSL Localhost Forwarding",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4802,7 +4802,7 @@ internal static class VsCode
         {
             Id = "wsl-enable-nested-virt-policy",
             Label = "Enable Nested Virtualisation (Hyper-V Policy)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -4817,7 +4817,7 @@ internal static class VsCode
         {
             Id = "wsl-enable-systemd",
             Label = "Enable Systemd (User Registry)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4832,7 +4832,7 @@ internal static class VsCode
         {
             Id = "wsl-feature",
             Label = "Enable WSL Feature (PowerShell)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -4862,7 +4862,7 @@ internal static class VsCode
         {
             Id = "wsl-kernel-update",
             Label = "Update WSL Kernel to Latest",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Runs wsl --update to download and install the latest WSL kernel and runtime. One-time action.",
@@ -4878,7 +4878,7 @@ internal static class VsCode
         {
             Id = "wsl-mirrored-network",
             Label = "Enable WSL Mirrored Networking",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -4893,7 +4893,7 @@ internal static class VsCode
         {
             Id = "wsl-update-distro",
             Label = "Update WSL Distributions (Web Download)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Runs wsl --update --web-download to update WSL components directly from the web. One-time action.",
@@ -4909,7 +4909,7 @@ internal static class VsCode
         {
             Id = "wsl-vm-platform",
             Label = "Enable VM Platform (PowerShell)",
-            Category = "Virtualization",
+            Category = "Virtualization — Windows Subsystem Linux",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =

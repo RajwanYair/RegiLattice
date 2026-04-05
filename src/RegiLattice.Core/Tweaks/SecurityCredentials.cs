@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -17,7 +17,7 @@ internal static class PolicyWinRM
                 {
                     Id = "sec-winrm-disable-digest-auth",
                     Label = "Disable Digest Authentication on WinRM Service",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Disables Digest authentication on the WinRM server. Digest auth is weak against offline dictionary and pass-the-hash attacks. Disabling forces more secure protocols (Kerberos, HTTPS + certificate). Default: Digest allowed. Recommended: disabled.",
                     Tags = ["winrm", "digest", "authentication", "security", "policy"],
@@ -33,7 +33,7 @@ internal static class PolicyWinRM
                 {
                     Id = "sec-winrm-disable-auto-config",
                     Label = "Disable WinRM Service Auto-Configuration",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Prevents the WinRM service from automatically configuring itself at startup. Auto-configuration can silently enable HTTP listeners and create firewall rules without explicit administrator action. Disabling requires explicit manual configuration. Default: auto-config allowed. Recommended: disabled.",
                     Tags = ["winrm", "autoconfig", "listener", "security", "policy"],
@@ -72,7 +72,7 @@ internal static class PolicyCredentialUI
                 {
                     Id = "sec-credui-require-trusted-path",
                     Label = "Require Trusted Path for Credential Entry",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Forces users to enter credentials through the Windows trusted path (Ctrl+Alt+Del secure desktop), rather than through possibly spoofed application dialogs. Prevents credential theft by fake login windows. Default: trusted path optional. Recommended: required.",
                     Tags = ["credential", "secure-desktop", "uac", "security", "policy"],
@@ -88,7 +88,7 @@ internal static class PolicyCredentialUI
                 {
                     Id = "sec-credui-disable-web-creds-provider",
                     Label = "Disable Web Credential Provider in Logon UI",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Blocks the Web Credentials provider tile (Microsoft Account, AAD web-auth) from appearing in the Windows Logon UI and UAC elevation dialogs. Reduces the attack surface by removing web-based authentication paths at the logon screen. Default: web credential tile shown. Recommended: disabled on enterprise domain machines.",
                     Tags = ["credential", "web", "msa", "logon", "security", "policy"],
@@ -114,7 +114,7 @@ internal static class PolicyCredentialUI
                 {
                     Id = "sec-credprov-enable-logon-legal-notice",
                     Label = "Enable Legal Notice at Logon (Compliance Banner)",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Displays a legal notice (warning banner) to all users before they log on. Required by many compliance frameworks (NIST 800-53 AC-8, CIS L1, STIG) to establish authorized-use policy. Default: no legal notice. Recommended: enabled with organization-specific text.",
                     Tags = ["credential", "logon", "compliance", "legal", "banner", "cis", "nist", "stig", "policy"],
@@ -130,7 +130,7 @@ internal static class PolicyCredentialUI
                 {
                     Id = "sec-credprov-disable-shutdown-without-logon",
                     Label = "Disable Shutdown Button on Windows Logon Screen",
-                    Category = "Security",
+                    Category = "Security — Credentials",
                     Description =
                         "Removes the Shutdown button from the Windows logon/lock screen. Prevents unauthenticated users from shutting down the machine, which could interrupt services, bypass auto-start security tools, or cause data loss. Default: Shutdown button visible. Recommended: disabled on servers and shared workstations.",
                     Tags = ["logon", "shutdown", "lockscreen", "security", "policy"],
@@ -157,7 +157,7 @@ internal static class PolicyAutoRun
         {
             Id = "autoplay-policy-disable-autorun",
             Label = "Disable AutoRun via Policy (All Drives)",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoDriveTypeAutoRun=0xFF under the Windows\\CurrentVersion\\Policies\\Explorer key. "
                 + "Disables AutoRun for all drive types (0xFF = all bits set), including optical drives, removable drives, "
@@ -177,7 +177,7 @@ internal static class PolicyAutoRun
         {
             Id = "autoplay-policy-prevent-mixed-content",
             Label = "Prevent AutoPlay for Mixed-Content Drives",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets HonorAutorunSetting=1 under the Windows\\Explorer Group Policy key. "
                 + "Instructs Windows to honour the AutoRun setting from the device itself for mixed-content discs "
@@ -197,7 +197,7 @@ internal static class PolicyAutoRun
         {
             Id = "autoplay-policy-block-set-default",
             Label = "Block Users from Changing AutoPlay Default",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoAutoplayBackpropagation=1 under the Windows\\Explorer Group Policy key. "
                 + "Prevents the AutoPlay dialog from remembering and persisting new user-selected defaults. "
@@ -216,7 +216,7 @@ internal static class PolicyAutoRun
         {
             Id = "autoplay-policy-disable-shell-autoplay-handlers",
             Label = "Disable Shell AutoPlay Handlers for Removable Media",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets DisableAutoplayForRemovableMedia=1 under the Windows\\Explorer Group Policy key. "
                 + "Suppresses all shell AutoPlay handler registrations for removable media when enforced via Group Policy. "
@@ -235,7 +235,7 @@ internal static class PolicyAutoRun
         {
             Id = "autoplay-policy-turn-off-autoplay",
             Label = "Turn Off AutoPlay for All Media Types",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets DisableAutoplay=1 under the Windows\\Explorer Group Policy key — the master switch. "
                 + "Completely disables the AutoPlay feature for ALL media and devices system-wide. "
@@ -264,7 +264,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight",
             Label = "Disable Windows Spotlight on Lock Screen",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoWindowsSpotlightOnLockScreen=1 under the Personalization Group Policy key. "
                 + "Prevents Windows Spotlight from downloading and displaying rotating background images, "
@@ -284,7 +284,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight-action-center",
             Label = "Disable Windows Spotlight in Action Centre",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoWindowsSpotlightOnActionCenter=1 under the Personalization Group Policy key. "
                 + "Prevents Windows Spotlight suggestions and featured apps from appearing in the Action Centre panel. "
@@ -303,7 +303,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-third-party-suggestions",
             Label = "Disable Third-Party App Suggestions on Lock Screen",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoThirdPartySuggestions=1 under the Personalization Group Policy key. "
                 + "Prevents Windows from displaying app suggestions from third-party publishers on the lock screen. "
@@ -322,7 +322,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight-windows-welcome",
             Label = "Disable Windows Welcome Experience Spotlight",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoWindowsSpotlightWindowsWelcomeExperience=1 under the Personalization Group Policy key. "
                 + "Prevents the 'What's new in Windows' welcome experience from appearing after feature updates. "
@@ -341,7 +341,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-lock-screen-camera",
             Label = "Disable Camera Access from Lock Screen",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoCameraOnLockScreen=1 under the Personalization Group Policy key. "
                 + "Prevents the Camera app from launching directly from the lock screen. "
@@ -360,7 +360,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight-features",
             Label = "Turn Off All Spotlight Features",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets ConfigureWindowsSpotlight=2 under the Personalization Group Policy key. "
                 + "Value 2 applies the most restrictive Spotlight policy: disabled entirely. "
@@ -379,7 +379,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight-taskbar",
             Label = "Disable Spotlight Suggestions in Taskbar Search",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoWindowsSpotlightInSearch=1 under the Personalization Group Policy key. "
                 + "Removes Microsoft-curated Spotlight content suggestions from appearing in the Windows Search bar on the taskbar. "
@@ -398,7 +398,7 @@ internal static class PolicyLockScreen
         {
             Id = "lockpol-policy-no-spotlight-settings",
             Label = "Disable Spotlight Tips in Settings",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets NoWindowsSpotlightInSettings=1 under the Personalization Group Policy key. "
                 + "Removes the Windows Spotlight-powered tips and feature highlights that appear throughout the Settings app. "
@@ -427,7 +427,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-force-logoff-on-removal",
             Label = "Force Logoff on Smart Card Removal",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets scremoveoption=2 under the SmartCardCredentialProvider Group Policy key. "
                 + "Value 2 causes a full sign-out (rather than a lock) when the smart card is removed. "
@@ -446,7 +446,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-allow-integrated-unblock",
             Label = "Allow Integrated Unblock Screen for Smart Card PIN",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets AllowIntegratedUnblock=1 under the SmartCardCredentialProvider Group Policy key. "
                 + "Enables a built-in PIN unlock screen that appears on the credential provider for blocked smart cards, "
@@ -465,7 +465,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-turn-on-virtual-card",
             Label = "Enable Virtual Smart Card Creation",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets AllowDomainPINLogon=1 under the SmartCardCredentialProvider Group Policy key. "
                 + "Allows BitLocker Network Unlock and domain accounts to authenticate with a PIN against a virtual TPM smart card. "
@@ -484,7 +484,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-enable-certificate-propagation",
             Label = "Enable Smart Card Certificate Propagation",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets CertPropEnabled=1 under the Windows\\System Group Policy key. "
                 + "Enables automatic propagation of smart card certificates from the card to the user's certificate store "
@@ -504,7 +504,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-enable-cleanup-certificates",
             Label = "Clean Up Smart Card Certificates on Card Removal",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets CleanupCerts=1 under the Windows\\System Group Policy key. "
                 + "Removes smart card certificates from the user store when the card is removed. "
@@ -524,7 +524,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-turn-off-root-auto-update",
             Label = "Prevent Smart Card Root Certificate Auto-Update",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets RootCertificateAutoUpdate=0 under the SmartCardCredentialProvider key. "
                 + "Prevents Windows from automatically downloading and updating root certificates from Windows Update "
@@ -544,7 +544,7 @@ internal static class PolicySmartCard
         {
             Id = "smartcard-policy-disable-pinpad-logon",
             Label = "Disable PIN Pad Bypass for Smart Card Logon",
-            Category = "Security",
+            Category = "Security — Credentials",
             Description =
                 "Sets DisallowPINLessLogon=1 under the SmartCardCredentialProvider Group Policy key. "
                 + "Requires a PIN to be entered for every smart card logon, even if the card supports and is configured for PINless logon. "
@@ -572,7 +572,7 @@ internal static class PolicyFido
         {
             Id = "fido-disable-security-key-signin",
             Label = "Block FIDO2 Security Key Sign-In",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -590,7 +590,7 @@ internal static class PolicyFido
         {
             Id = "fido-require-user-presence",
             Label = "Require User Presence for FIDO Authentication",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -608,7 +608,7 @@ internal static class PolicyFido
         {
             Id = "fido-disable-nfc-security-keys",
             Label = "Block NFC FIDO2 Security Keys",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Blocks NFC-based FIDO2 security keys via Group Policy. Use when only USB FIDO keys are approved for your environment.",
@@ -625,7 +625,7 @@ internal static class PolicyFido
         {
             Id = "fido-disable-ble-security-keys",
             Label = "Block Bluetooth FIDO2 Security Keys",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -643,7 +643,7 @@ internal static class PolicyFido
         {
             Id = "fido-require-attestation",
             Label = "Require FIDO2 Key Attestation",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -661,7 +661,7 @@ internal static class PolicyFido
         {
             Id = "fido-enable-enterprise-attestation",
             Label = "Enable FIDO2 Enterprise Attestation",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -679,7 +679,7 @@ internal static class PolicyFido
         {
             Id = "fido-disable-roaming-credentials",
             Label = "Disable FIDO2 Roaming Credentials",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -707,7 +707,7 @@ internal static class PolicyWindowsHello
         {
             Id = "whi-set-pin-expiry-90-days",
             Label = "Set Windows Hello PIN Expiry to 90 Days",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -725,7 +725,7 @@ internal static class PolicyWindowsHello
         {
             Id = "whi-set-pin-history-5",
             Label = "Enforce Windows Hello PIN History (5 Previous)",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -755,7 +755,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-block-microsoft-accounts",
             Label = "Block Microsoft Consumer Accounts",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -773,7 +773,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-disable-device-enrollment-user",
             Label = "Prevent User-Initiated MDM Enrollment",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -791,7 +791,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-disable-adding-work-accounts",
             Label = "Block Adding Work or School Accounts",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -809,7 +809,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-disable-find-my-device",
             Label = "Disable Find My Device (Entra Policy)",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -827,7 +827,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-prevent-privacy-settings-prompt",
             Label = "Suppress Privacy Settings Prompt at Entra Sign-In",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -845,7 +845,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-block-setup-next-steps",
             Label = "Block Entra Sign-In Setup Next-Steps Prompt",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -863,7 +863,7 @@ internal static class PolicyEntraId
         {
             Id = "entra-block-phone-link",
             Label = "Block Phone Link App on Entra-Managed Devices",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -891,7 +891,7 @@ internal static class PolicyKerberos
         {
             Id = "kerberos-enable-claims",
             Label = "Enable Kerberos Claims Authentication",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -909,7 +909,7 @@ internal static class PolicyKerberos
         {
             Id = "kerberos-enable-resource-sid-compression",
             Label = "Enable Kerberos Resource SID Compression",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -927,7 +927,7 @@ internal static class PolicyKerberos
         {
             Id = "kerberos-enable-kdc-proxy",
             Label = "Enable Kerberos KDC Proxy",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -954,7 +954,7 @@ internal static class PolicyAppInstaller
         {
             Id = "appinst-disable-local-archive-install",
             Label = "Block App Installer Local Archive Installation",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -972,7 +972,7 @@ internal static class PolicyAppInstaller
         {
             Id = "appinst-set-source-update-interval-1h",
             Label = "Set App Installer Source Update Interval to 1 Hour",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -990,7 +990,7 @@ internal static class PolicyAppInstaller
         {
             Id = "appinst-enable-bypass-cert-pinning",
             Label = "Enable Certificate Pin Bypass for Microsoft Store",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1017,7 +1017,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-block-domain-enterprise-exceptions",
             Label = "Block AppContainer Domain Enterprise Exception Bypass",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1035,7 +1035,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-disable-appcontainer-loopback",
             Label = "Disable AppContainer Loopback Exemption",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1053,7 +1053,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-require-package-authentication",
             Label = "Require Package Family Authentication for Network Isolation",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1071,7 +1071,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-disable-intranet-lookup",
             Label = "Disable Automatic Intranet Address Classification",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1089,7 +1089,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-block-proxy-browsing",
             Label = "Block AppContainer Internet Proxy Access",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1107,7 +1107,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-disable-network-capability-autodeny",
             Label = "Deny AppContainer Network Capability by Default",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1125,7 +1125,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-require-private-network-declaration",
             Label = "Require Explicit Private Network Capability Declaration",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1143,7 +1143,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-block-internet-appcontainer",
             Label = "Block AppContainer Direct Internet Access",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1161,7 +1161,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-disable-isolation-debug",
             Label = "Disable Network Isolation Debug Mode",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1179,7 +1179,7 @@ internal static class PolicyNetworkIsolation
         {
             Id = "netiso-enable-strict-capability-enforcement",
             Label = "Enforce Strict AppContainer Network Capability Checking",
-            Category = "Security",
+            Category = "Security — Credentials",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

@@ -139,7 +139,23 @@ public static class CategoryIcons
     };
 
     /// <summary>Get the icon for a category name. Returns <see cref="CategoryIcon.Gear"/> as fallback.</summary>
-    public static CategoryIcon GetIcon(string category) => Map.GetValueOrDefault(category, CategoryIcon.Gear);
+    public static CategoryIcon GetIcon(string category)
+    {
+        if (Map.TryGetValue(category, out var icon))
+            return icon;
+
+        // Subcategory prefix match: "Security — Credentials" → try "Security"
+        var dashIdx = category.IndexOf(" — ", StringComparison.Ordinal);
+        if (dashIdx > 0 && Map.TryGetValue(category[..dashIdx], out icon))
+            return icon;
+
+        // Numbered suffix match: "Network 1" → try "Network"
+        var spaceIdx = category.LastIndexOf(' ');
+        if (spaceIdx > 0 && int.TryParse(category[(spaceIdx + 1)..], out _) && Map.TryGetValue(category[..spaceIdx], out icon))
+            return icon;
+
+        return CategoryIcon.Gear;
+    }
 
     /// <summary>Get the Unicode symbol for a category icon (for CLI/text display).</summary>
     public static string GetSymbol(CategoryIcon icon) =>

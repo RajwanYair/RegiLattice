@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -18,7 +18,7 @@ internal static class Browser
         {
             Id = "browser-disable-dns-prefetch",
             Label = "Disable DNS Prefetching (All Browsers)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -41,7 +41,7 @@ internal static class Browser
         {
             Id = "browser-disable-background-network",
             Label = "Disable Background Networking (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Chrome and Edge from running background network tasks when the browser appears closed.",
@@ -63,7 +63,7 @@ internal static class Browser
         {
             Id = "browser-disable-prediction-service",
             Label = "Disable Network Prediction Service (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -86,7 +86,7 @@ internal static class Browser
         {
             Id = "browser-disable-metrics-reporting",
             Label = "Disable Usage Metrics Reporting (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables anonymous usage statistics and crash reporting for both Chrome and Edge.",
@@ -108,7 +108,7 @@ internal static class Browser
         {
             Id = "browser-disable-autofill-cc",
             Label = "Disable Credit Card AutoFill (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables credit card autofill across Chrome and Edge via policy. Protects payment information.",
@@ -130,7 +130,7 @@ internal static class Browser
         {
             Id = "browser-disable-password-manager",
             Label = "Disable Built-in Password Manager (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the built-in password manager in Chrome and Edge. Use a dedicated password manager like Bitwarden instead.",
@@ -152,7 +152,7 @@ internal static class Browser
         {
             Id = "browser-send-do-not-track",
             Label = "Enable Do Not Track Header (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Configures Chrome and Edge to send the Do Not Track (DNT) HTTP header with every request.",
@@ -174,7 +174,7 @@ internal static class Browser
         {
             Id = "browser-block-third-party-cookies",
             Label = "Block Third-Party Cookies (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Blocks third-party cookies in Chrome and Edge via group policy. Prevents cross-site tracking.",
@@ -196,7 +196,7 @@ internal static class Browser
         {
             Id = "browser-disable-safe-browsing-telemetry",
             Label = "Disable Safe Browsing Extended Reporting (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables extended safe browsing reporting which sends URLs and page content to Google/Microsoft for analysis.",
@@ -218,7 +218,7 @@ internal static class Browser
         {
             Id = "browser-disable-translate",
             Label = "Disable Built-in Translation (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the built-in page translation feature in Chrome and Edge via policy.",
@@ -240,7 +240,7 @@ internal static class Browser
         {
             Id = "browser-disable-spell-check",
             Label = "Disable Spell Check (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the browser spell checking service that sends typed text to external servers.",
@@ -262,7 +262,7 @@ internal static class Browser
         {
             Id = "browser-disable-search-suggestions",
             Label = "Disable Search Suggestions (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables real-time search suggestions that send each keystroke to the search engine.",
@@ -284,7 +284,7 @@ internal static class Browser
         {
             Id = "browser-disable-sync",
             Label = "Disable Browser Sync (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables profile sync across devices in Chrome and Edge via policy.",
@@ -306,7 +306,7 @@ internal static class Browser
         {
             Id = "browser-disable-browser-sign-in",
             Label = "Disable Forced Browser Sign-In (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Chrome and Edge from requiring or prompting for browser sign-in.",
@@ -328,7 +328,7 @@ internal static class Browser
         {
             Id = "browser-disable-media-router",
             Label = "Disable Media Router / Cast (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Cast/media router icon and functionality in Chrome and Edge.",
@@ -350,7 +350,7 @@ internal static class Browser
         {
             Id = "browser-disable-form-fill",
             Label = "Disable Form AutoFill (Chrome/Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables form data autofill suggestions across Chrome and Edge.",
@@ -372,7 +372,7 @@ internal static class Browser
         {
             Id = "browser-disable-cast-icon",
             Label = "Hide Cast Icon in Browser Toolbar",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the Google Cast icon from the Chrome and Edge toolbars.",
@@ -394,7 +394,7 @@ internal static class Browser
         {
             Id = "browser-disable-signin-interception",
             Label = "Disable Browser Sign-In Interception (Chrome)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Suppresses the Chrome prompt to sign into a Google Account when a new browser profile is detected.",
@@ -408,7 +408,7 @@ internal static class Browser
         {
             Id = "browser-disable-edge-shopping-assistant",
             Label = "Disable Edge Shopping Assistant",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Edge shopping assistant that shows price comparisons on e-commerce websites.",
@@ -422,7 +422,7 @@ internal static class Browser
         {
             Id = "browser-disable-edge-follow",
             Label = "Disable Edge Follow Feature",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Edge Follow feature that lets users subscribe to creators and topics in the sidebar.",
@@ -436,7 +436,7 @@ internal static class Browser
         {
             Id = "browser-disable-ntp-custom-background",
             Label = "Disable Custom New Tab Page Background (Chrome)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents users from setting a custom background image on the Chrome new tab page.",
@@ -450,7 +450,7 @@ internal static class Browser
         {
             Id = "browser-disable-promotional-tabs",
             Label = "Disable Promotional New Tabs (Chrome)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Chrome from opening promotional content tabs after install or browser updates.",
@@ -464,7 +464,7 @@ internal static class Browser
         {
             Id = "browser-disable-ntp-spotlight-recommendations",
             Label = "Disable Chrome NTP Spotlight Recommendations",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes personalized article recommendations and spotlight content from the Chrome new tab page.",
@@ -478,7 +478,7 @@ internal static class Browser
         {
             Id = "browser-disable-first-run-experience",
             Label = "Disable Browser First-Run Experience",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Skips the welcome/first-run setup wizard on the first launch of Chrome and Edge.",
@@ -500,7 +500,7 @@ internal static class Browser
         {
             Id = "browser-disable-autofill-address",
             Label = "Disable Address Autofill (All Browsers)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables address and shipping information autofill in Chrome and Edge.",
@@ -522,7 +522,7 @@ internal static class Browser
         {
             Id = "browser-disable-edge-prelaunch",
             Label = "Disable Edge Pre-Launch at Startup",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Edge from pre-launching silently at Windows startup to improve boot time.",
@@ -536,7 +536,7 @@ internal static class Browser
         {
             Id = "browser-disable-geolocation",
             Label = "Block Browser Geolocation Access (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -560,7 +560,7 @@ internal static class Browser
         {
             Id = "browser-disable-notifications",
             Label = "Block Browser Push Notifications (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -583,7 +583,7 @@ internal static class Browser
         {
             Id = "browser-disable-webusb",
             Label = "Block WebUSB API Access (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -607,7 +607,7 @@ internal static class Browser
         {
             Id = "browser-disable-web-bluetooth",
             Label = "Block Web Bluetooth API Access (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -631,7 +631,7 @@ internal static class Browser
         {
             Id = "browser-disable-builtin-dns-client",
             Label = "Disable Browser Built-In DNS Client (Chrome)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -648,7 +648,7 @@ internal static class Browser
         {
             Id = "browser-disable-url-keyed-metrics",
             Label = "Disable URL-Keyed Anonymized Metrics (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -673,7 +673,7 @@ internal static class Browser
         {
             Id = "browser-disable-webrtc-event-logs",
             Label = "Disable WebRTC Event Log Collection (Chrome & Edge)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -698,7 +698,7 @@ internal static class Browser
         {
             Id = "browser-force-safe-search",
             Label = "Force Google SafeSearch (Chrome)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -715,7 +715,7 @@ internal static class Browser
         {
             Id = "browser-disable-edge-read-aloud",
             Label = "Disable Edge Read Aloud Feature",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -731,7 +731,7 @@ internal static class Browser
         {
             Id = "browser-disable-edge-wallet",
             Label = "Disable Microsoft Edge Wallet",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -755,7 +755,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-renderer-code-integrity",
             Label = "Disable Chrome Renderer Code Integrity",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -770,7 +770,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-safe-browsing-extended",
             Label = "Disable Chrome Enhanced Safe Browsing",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -785,7 +785,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-spell-check-service",
             Label = "Disable Chrome Spell Check Service",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Chrome's online spell check service that sends text to Google. Local spell check still works. Default: enabled.",
@@ -799,7 +799,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-webrtc-leak",
             Label = "Restrict Chrome WebRTC IP Leaking",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Restricts WebRTC from exposing local IP addresses. Enhances VPN privacy. Default: unrestricted.",
@@ -813,7 +813,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-chrome-update",
             Label = "Disable Chrome Auto-Update",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Chrome from auto-updating via Google Update policy. Useful for version-pinned environments.",
@@ -835,7 +835,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-chrome-hwaccel",
             Label = "Disable Chrome Hardware Acceleration",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables hardware acceleration in Chrome via policy. Reduces GPU usage at the cost of rendering performance.",
@@ -849,7 +849,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-background",
             Label = "Disable Chrome Background Apps",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Chrome background apps from running when Chrome is closed. Saves memory and CPU.",
@@ -863,7 +863,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-reporter",
             Label = "Disable Chrome Software Reporter",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Chrome Software Reporter Tool (CleanUp tool) that scans for unwanted software.",
@@ -877,7 +877,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-leak-detection",
             Label = "Disable Chrome Password Leak Detection",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Chrome password leak detection that checks passwords against breach databases.",
@@ -891,7 +891,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-default-browser-check",
             Label = "Disable Chrome Default Browser Check",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Chrome from checking/prompting to be the default browser.",
@@ -905,7 +905,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-media-recommendations",
             Label = "Disable Chrome Media Recommendations",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Chrome media recommendations on the new tab page.",
@@ -919,7 +919,7 @@ internal static class Chrome
         {
             Id = "chrome-enforce-3p-cookie-block",
             Label = "Enforce Third-Party Cookie Block in Chrome",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets Chrome default cookie setting to block third-party cookies (value 1=allow all, 2=block 3p, 4=block all).",
@@ -933,7 +933,7 @@ internal static class Chrome
         {
             Id = "chrome-media-autoplay-off",
             Label = "Disable media autoplay in Chrome",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "autoplay", "media", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -945,7 +945,7 @@ internal static class Chrome
         {
             Id = "chrome-pdf-external",
             Label = "Open PDFs in external app instead of Chrome",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "pdf", "viewer", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -957,7 +957,7 @@ internal static class Chrome
         {
             Id = "chrome-cloud-reporting-off",
             Label = "Disable Chrome cloud reporting",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "cloud", "reporting", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -969,7 +969,7 @@ internal static class Chrome
         {
             Id = "chrome-incognito-mode-off",
             Label = "Disable Chrome incognito mode",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "incognito", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -981,7 +981,7 @@ internal static class Chrome
         {
             Id = "chrome-dev-tools-off",
             Label = "Disallow Chrome developer tools access",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "devtools", "developer", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -993,7 +993,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-save-history",
             Label = "Disable Chrome browsing history saving",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "history", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = false,
@@ -1005,7 +1005,7 @@ internal static class Chrome
         {
             Id = "chrome-block-camera",
             Label = "Deny camera access in Chrome",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "camera", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1017,7 +1017,7 @@ internal static class Chrome
         {
             Id = "chrome-block-microphone",
             Label = "Deny microphone access in Chrome",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "microphone", "audio", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1029,7 +1029,7 @@ internal static class Chrome
         {
             Id = "chrome-disable-ads-gpo",
             Label = "Disable Chrome advertising features",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "ads", "advertising", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1041,7 +1041,7 @@ internal static class Chrome
         {
             Id = "chrome-feedback-off",
             Label = "Disable Chrome user feedback / issue reporting",
-            Category = "Browser",
+            Category = "Browser 1",
             Tags = ["chrome", "feedback", "reporting", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1061,7 +1061,7 @@ internal static class Firefox
         {
             Id = "firefox-dns-over-https",
             Label = "Enable DNS-over-HTTPS",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables DNS-over-HTTPS in Firefox using the Cloudflare resolver.",
@@ -1087,7 +1087,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-form-history",
             Label = "Disable Firefox Form History",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1102,7 +1102,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-profile-import",
             Label = "Disable Firefox Profile Import",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1117,7 +1117,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-content-analysis",
             Label = "Disable Firefox Content Analysis",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox content analysis features that scan downloads and form data. Default: enabled.",
@@ -1131,7 +1131,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-normandy",
             Label = "Disable Firefox Normandy/Shield",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Mozilla Normandy/Shield system used for remote experiments and preference rollouts. Default: enabled.",
@@ -1145,7 +1145,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-beacon-api",
             Label = "Disable Firefox Beacon API",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1160,7 +1160,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-webrtc-leak",
             Label = "Disable Firefox WebRTC IP Leak",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents WebRTC from leaking local IP addresses. Enhances VPN privacy. Default: leaks IP.",
@@ -1177,7 +1177,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-speculative-connections",
             Label = "Disable Firefox Speculative Connections",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Firefox from pre-connecting to sites when hovering over links. Reduces network requests. Default: enabled.",
@@ -1200,7 +1200,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-telemetry",
             Label = "Disable Firefox Telemetry",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox telemetry reporting via enterprise policy. Default: enabled.",
@@ -1214,7 +1214,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-pocket",
             Label = "Disable Firefox Pocket",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Pocket save-for-later service integration in Firefox. Default: enabled.",
@@ -1228,7 +1228,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-default-browser-check",
             Label = "Disable Firefox Default Browser Check",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Firefox from prompting to set itself as default browser on launch. Default: prompts.",
@@ -1242,7 +1242,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-crash-reporter",
             Label = "Disable Firefox Crash Reporter",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Firefox crash reporter that sends crash data to Mozilla. Default: enabled.",
@@ -1256,7 +1256,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-password-manager",
             Label = "Disable Firefox Password Manager",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the built-in Firefox password manager. Use a dedicated password manager. Default: enabled.",
@@ -1270,7 +1270,7 @@ internal static class Firefox
         {
             Id = "firefox-enable-tracking-protection",
             Label = "Enable Firefox Enhanced Tracking Protection (Strict)",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables strict Enhanced Tracking Protection in Firefox. Blocks trackers, cryptominers, fingerprinters. Default: standard.",
@@ -1311,7 +1311,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-prefetch",
             Label = "Disable Firefox Link Prefetching",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables link prefetching and DNS prefetching in Firefox. Saves bandwidth and improves privacy. Default: enabled.",
@@ -1333,7 +1333,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-firefox-update",
             Label = "Disable Firefox Auto-Update",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Firefox from auto-updating via policy. For controlled environments.",
@@ -1347,7 +1347,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-auto-update",
             Label = "Disable Firefox Background Update Service",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Firefox background update service that checks for updates.",
@@ -1361,7 +1361,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-captive-portal",
             Label = "Disable Firefox Captive Portal Detection",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox captive portal detection that makes network requests on startup.",
@@ -1375,7 +1375,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-default-check",
             Label = "Disable Firefox Override Default Browser Check",
-            Category = "Browser",
+            Category = "Browser 1",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Firefox from overriding default browser settings on startup.",
@@ -1389,7 +1389,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-extension-recommendations",
             Label = "Disable Firefox Extension Recommendations",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox extension and feature recommendations on about:addons.",
@@ -1403,7 +1403,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-feedback",
             Label = "Disable Firefox Feedback Prompts",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox feedback and survey prompts via policy.",
@@ -1417,7 +1417,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-studies",
             Label = "Disable Firefox Shield Studies",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Firefox Shield studies and experiments via policy. Prevents Mozilla from testing features on your browser.",
@@ -1431,7 +1431,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-password-reveal",
             Label = "Disable Firefox Password Reveal Button",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the password reveal (eye) button in Firefox login forms via policy.",
@@ -1445,7 +1445,7 @@ internal static class Firefox
         {
             Id = "firefox-ff-disable-safe-mode",
             Label = "Disable Firefox Safe Mode",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables Firefox safe mode to prevent accidental profile resets. For managed environments.",
@@ -1459,7 +1459,7 @@ internal static class Firefox
         {
             Id = "firefox-ff-disable-screenshots",
             Label = "Disable Firefox Screenshots",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the built-in Firefox Screenshots feature.",
@@ -1473,7 +1473,7 @@ internal static class Firefox
         {
             Id = "firefox-hw-accel-on",
             Label = "Enable hardware acceleration in Firefox",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "hardware", "acceleration", "performance", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1485,7 +1485,7 @@ internal static class Firefox
         {
             Id = "firefox-mozilla-accounts-off",
             Label = "Disable Mozilla accounts / Firefox Sync",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "accounts", "sync", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1497,7 +1497,7 @@ internal static class Firefox
         {
             Id = "firefox-save-login-prompt-off",
             Label = "Disable \"Save login\" prompts in Firefox",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "login", "password", "prompt", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1509,7 +1509,7 @@ internal static class Firefox
         {
             Id = "firefox-default-bookmarks-off",
             Label = "Remove default Firefox bookmarks",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "bookmarks", "default", "cleanup", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1521,7 +1521,7 @@ internal static class Firefox
         {
             Id = "firefox-system-addon-update-off",
             Label = "Disable system add-on auto-update in Firefox",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "addon", "update", "system", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1533,7 +1533,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-private-browsing-gpo",
             Label = "Disable Firefox private browsing mode via GPO",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "private-browsing", "policy"],
             NeedsAdmin = true,
             CorpSafe = false,
@@ -1545,7 +1545,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-extension-update-gpo",
             Label = "Disable Firefox extension auto-update via GPO",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "extension", "update", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1557,7 +1557,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-sync-gpo",
             Label = "Disable Firefox Sync (Mozilla account sync) via GPO",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "sync", "mozilla", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1569,7 +1569,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-dev-tools-gpo",
             Label = "Disable Firefox developer tools via GPO",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "devtools", "developer", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1581,7 +1581,7 @@ internal static class Firefox
         {
             Id = "firefox-disable-pdf-viewer-gpo",
             Label = "Disable Firefox built-in PDF viewer (use external PDF app)",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "pdf", "viewer", "policy"],
             NeedsAdmin = true,
             CorpSafe = false,
@@ -1593,7 +1593,7 @@ internal static class Firefox
         {
             Id = "firefox-more-from-mozilla-off",
             Label = "Disable Firefox 'More from Mozilla' in settings",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "mozilla", "recommendations", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1605,7 +1605,7 @@ internal static class Firefox
         {
             Id = "firefox-skip-onboarding",
             Label = "Skip Firefox first-run onboarding screen",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "onboarding", "first-run", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1617,7 +1617,7 @@ internal static class Firefox
         {
             Id = "firefox-home-sponsored-top-sites-off",
             Label = "Disable Firefox Home sponsored top sites",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "home", "sponsored", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1629,7 +1629,7 @@ internal static class Firefox
         {
             Id = "firefox-home-pocket-off",
             Label = "Disable Firefox Home Pocket content",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "home", "pocket", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1641,7 +1641,7 @@ internal static class Firefox
         {
             Id = "firefox-home-sponsored-pocket-off",
             Label = "Disable Firefox Home sponsored Pocket stories",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["firefox", "home", "pocket", "sponsored", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1661,7 +1661,7 @@ internal static class Edge
         {
             Id = "edge-disable-collections",
             Label = "Disable Edge Collections",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1676,7 +1676,7 @@ internal static class Edge
         {
             Id = "edge-disable-mini-menu",
             Label = "Disable Edge Mini Context Menu",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1691,7 +1691,7 @@ internal static class Edge
         {
             Id = "edge-disable-personalization",
             Label = "Disable Edge Personalization and Advertising",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables personalization and advertising features in Edge that track browsing behavior. Default: enabled.",
@@ -1705,7 +1705,7 @@ internal static class Edge
         {
             Id = "edge-disable-sidebar",
             Label = "Disable Edge Sidebar",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Edge sidebar panel (Bing Chat, tools, games). Reduces distractions and memory. Default: enabled.",
@@ -1719,7 +1719,7 @@ internal static class Edge
         {
             Id = "edge-disable-copilot-sidebar",
             Label = "Disable Edge Copilot Sidebar",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Copilot AI sidebar in Edge. Reduces telemetry and resource usage. Default: enabled.",
@@ -1733,7 +1733,7 @@ internal static class Edge
         {
             Id = "edge-disable-metrics",
             Label = "Disable Edge Diagnostic Data Collection",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets Edge diagnostic data to off. Reduces telemetry sent to Microsoft. Default: optional.",
@@ -1747,7 +1747,7 @@ internal static class Edge
         {
             Id = "edge-disable-edge-update",
             Label = "Disable Edge Auto-Update",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Prevents Edge from auto-updating. Useful for controlled environments or when pinning to a specific version.",
@@ -1769,7 +1769,7 @@ internal static class Edge
         {
             Id = "edge-disable-sidebar-hub",
             Label = "Disable Edge Sidebar Hub",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Edge sidebar (Hubs) panel via enterprise policy. Removes the sidebar icon and panel.",
@@ -1783,7 +1783,7 @@ internal static class Edge
         {
             Id = "edge-disable-workspaces",
             Label = "Disable Edge Workspaces",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1798,7 +1798,7 @@ internal static class Edge
         {
             Id = "edge-disable-drop",
             Label = "Disable Edge Drop",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1813,7 +1813,7 @@ internal static class Edge
         {
             Id = "edge-disable-discover",
             Label = "Disable Edge Discover Button",
-            Category = "Browser",
+            Category = "Browser 2",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the Edge Discover (compass) button and page context features via enterprise policy. Reduces Copilot integration.",
@@ -1827,7 +1827,7 @@ internal static class Edge
         {
             Id = "edge-tab-preload-off",
             Label = "Disable Edge new tab page preloading",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "tab", "preload", "performance", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1839,7 +1839,7 @@ internal static class Edge
         {
             Id = "edge-media-autoplay-off",
             Label = "Disable media autoplay in Edge",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "autoplay", "media", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1851,7 +1851,7 @@ internal static class Edge
         {
             Id = "edge-shopping-assistant-off",
             Label = "Disable Edge shopping assistant / Bing price compare",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "shopping", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1863,7 +1863,7 @@ internal static class Edge
         {
             Id = "edge-pdf-external",
             Label = "Open PDFs in external viewer instead of Edge",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "pdf", "viewer", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1875,7 +1875,7 @@ internal static class Edge
         {
             Id = "edge-default-search-provider-lock",
             Label = "Lock default search provider in Edge",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "search", "provider", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1887,7 +1887,7 @@ internal static class Edge
         {
             Id = "edge-ie-mode-off",
             Label = "Disable Internet Explorer integration mode in Edge",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "ie", "compatibility", "policy"],
             NeedsAdmin = true,
             CorpSafe = false,
@@ -1899,7 +1899,7 @@ internal static class Edge
         {
             Id = "edge-wallet-off",
             Label = "Disable Edge Wallet / payment methods",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "wallet", "payment", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1911,7 +1911,7 @@ internal static class Edge
         {
             Id = "edge-disable-immersive-reader",
             Label = "Disable Edge Immersive Reader grammar tools",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "immersive-reader", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1923,7 +1923,7 @@ internal static class Edge
         {
             Id = "edge-disable-copilot-page-context",
             Label = "Block Edge Copilot from reading page context",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "copilot", "ai", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1935,7 +1935,7 @@ internal static class Edge
         {
             Id = "edge-disable-news-feed",
             Label = "Disable Edge new tab page news feed / content",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "news", "new-tab", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1947,7 +1947,7 @@ internal static class Edge
         {
             Id = "edge-disable-ntp-recommendations",
             Label = "Disable Edge new tab page recommended content",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "recommendations", "new-tab", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1959,7 +1959,7 @@ internal static class Edge
         {
             Id = "edge-disable-edge-bar-gpo",
             Label = "Disable Edge Bar floating browser window",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "edge-bar", "floating", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1971,7 +1971,7 @@ internal static class Edge
         {
             Id = "edge-disable-insider-promo",
             Label = "Disable Edge insider/beta channel promotions",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "insider", "promo", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -1983,7 +1983,7 @@ internal static class Edge
         {
             Id = "edge-disable-web-widget",
             Label = "Disable Edge web widget (desktop/taskbar search bar)",
-            Category = "Browser",
+            Category = "Browser 2",
             Tags = ["edge", "web-widget", "search-bar", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -2041,7 +2041,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-prevent-default-browser-message",
                 Label = "Default Browser Policy: Suppress Edge Default Browser Nag",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from displaying the 'Set Edge as default browser' prompt and notification banner. Edge aggressively promotes itself as the default browser (especially after Windows updates), interrupting user workflows with unsolicited nag dialogs.",
                 Tags = ["browser", "default", "edge", "nag", "prompt", "policy"],
@@ -2059,7 +2059,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-disable-ie-first-run-prompt",
                 Label = "Default Browser Policy: Disable Internet Explorer First Run Browser Choice",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Internet Explorer and legacy Edge from showing the first-run browser choice screen that prompts users to select a default browser. This prompt appears on fresh installations or after browser resets and, if dismissed, may revert to Edge/IE as the default without the user understanding the implication.",
                 Tags = ["browser", "default", "ie", "first run", "choice", "policy"],
@@ -2077,7 +2077,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-block-edge-html-protocol-takeover",
                 Label = "Default Browser Policy: Block Edge WebView2 Protocol Handler Registration",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from silently registering itself as the handler for HTTP and HTTPS protocols via Edge WebView2 background updates. Edge periodically re-registers protocol handlers without user consent, effectively hijacking the default browser setting.",
                 Tags = ["browser", "default", "edge", "protocol", "webview2", "policy"],
@@ -2095,7 +2095,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-lock-default-browser-users",
                 Label = "Default Browser Policy: Lock Default Browser Setting for All Users",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Locks the default browser setting so that it cannot be changed by standard users, only by administrators. On managed workstations where a specific browser is required for intranet compatibility or corporate extensions, preventing users from changing the default browser ensures consistent access patterns.",
                 Tags = ["browser", "default", "lock", "users", "restriction", "policy"],
@@ -2113,7 +2113,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-suppress-edge-startup-browser-prompt",
                 Label = "Default Browser Policy: Suppress Edge Startup Browser Default Suggestion",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from opening to the browser default suggestion page on startup (a page that directly prompts the user to set Edge as the default browser). This page appears after Windows feature updates or Edge major version updates and bypasses the system-level default browser setting.",
                 Tags = ["browser", "default", "edge", "startup", "suggestion", "policy"],
@@ -2131,7 +2131,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-disable-edge-auto-set-default-browser",
                 Label = "Default Browser Policy: Disable Edge Auto-Setting Itself as Default After Updates",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from automatically setting itself as the default browser after operating system updates or feature releases. Windows Update periodically resets the default browser associations to Edge, overriding the user's explicit choice. This policy disables that automatic override.",
                 Tags = ["browser", "default", "edge", "auto-set", "update", "policy"],
@@ -2149,7 +2149,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-disable-edge-intent-picker-redirect",
                 Label = "Default Browser Policy: Disable Edge Intent Picker Browser Redirect",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents the Windows Intent Picker (the dialog that appears when clicking a link in a non-browser app) from always proposing Edge as the handler. When another browser is set as default, the Intent Picker should respect that choice without surfacing Edge as an alternative every time a URL is opened.",
                 Tags = ["browser", "default", "edge", "intent picker", "redirect", "policy"],
@@ -2167,7 +2167,7 @@ internal static class PolicyBrowser
             {
                 Id = "defbrowser-disable-file-protocol-edge-takeover",
                 Label = "Default Browser Policy: Prevent Edge from Handling Local File (file://) URLs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from claiming file:// protocol handler registration on top of the configured default browser. When a local HTML file is opened from Windows Explorer, Edge intercepts it even if another browser is set as default. This policy shifts local file handling back to the default browser.",
                 Tags = ["browser", "default", "edge", "file protocol", "html", "policy"],
@@ -2195,7 +2195,7 @@ internal static class PolicyBrowser
                 {
                     Id = "eaguard-enable-enterprise-mode",
                     Label = "Enable Enterprise Management of Application Guard",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Enables enterprise management mode for Application Guard, allowing IT to configure trusted site lists and manage container policies centrally.",
                     Tags = ["edge", "app-guard", "enterprise", "management", "policy"],
@@ -2212,7 +2212,7 @@ internal static class PolicyBrowser
                 {
                     Id = "eaguard-block-virtual-gpu",
                     Label = "Block Hardware Accelerated Rendering in App Guard",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Disables hardware-accelerated (virtual GPU) rendering inside Application Guard, forcing software rendering to prevent GPU-based container escape attacks.",
                     Tags = ["edge", "app-guard", "gpu", "security", "policy"],
@@ -2239,7 +2239,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeaf-disable-form-data-saving",
                     Label = "Edge AutoFill: Disable Saving and Remembering of Typed Form Data",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets FormFillEnabled=0 in Edge policy. Prevents Edge from recording typed text in non-password form fields (names, addresses, search terms, custom input fields) and suggesting previously-entered values as autocomplete options in future form fills. "
                         + "Edge's form fill history accumulates text entries from all web forms — including internal expense report form fields, project code inputs, internal tool form submissions, and system prompts asking for passphrases or access codes. This history is stored in the profile database and can reveal sensitive operational information to other processes or when the profile is roamed. Disabling form fill prevents this implicit data capture.",
@@ -2257,7 +2257,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeaf-block-third-party-autofill-tools",
                     Label = "Edge AutoFill: Block Third-Party AutoFill Extensions from Injecting into Sensitive Forms",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets AutofillDropdownEnabled=0 in Edge policy. Disables Edge's autofill dropdown overlay that appears above form fields during third-party browser extension autofill interactions, preventing extensions from hijacking the autofill UI rendering layer in sensitive input fields. "
                         + "Browser extensions that implement autofill (third-party password managers, form filler tools) render their autofill dropdown UI by injecting DOM elements onto the page. A malicious extension that mimics a legitimate autofill tool can render a convincing autofill dropdown with credentials from a different site, performing a form-autofill phishing attack where the user believes they are filling stored credentials but is actually submitting attacker-controlled values.",
@@ -2275,7 +2275,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeaf-disable-personal-profile-autofill",
                     Label = "Edge AutoFill: Disable AutoFill in Non-Work Profile Contexts",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets RestrictedSitesListEnabled=0 in Edge policy (using profiles autofill channel). Disables autofill functionality specifically when Edge is operating outside the managed work profile context, ensuring that any personal browsing done in a separate profile does not populate the work profile's autofill store with personal data. "
                         + "When users sign into personal accounts within Edge alongside their work profile, form fill data from personal browsing (personal address, personal email, personal shopping sites) can end up in the same autofill database as work browsing data. This mixing creates a data classification problem where personal PII is co-mingled with work data in the managed browser profile store.",
@@ -2293,7 +2293,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeaf-enable-autofill-data-clear-on-exit",
                     Label = "Edge AutoFill: Clear AutoFill Data on Every Browser Close",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets ClearBrowsingDataOnExit=1 in Edge policy. Configures Edge to clear all autofill form history, cached addresses, and saved form data from the browser profile database each time the user closes the browser, ensuring autofill data does not accumulate across sessions. "
                         + "On shared workstations or devices with multiple users accessing the same domain-joined Windows account (e.g., shift work, shared kiosk, hotdesking), autofill data accumulated during one user's session may be offered as autofill suggestions to the next user who opens the browser. Clearing autofill data on browser exit ensures each browser session is independent from a data persistence perspective.",
@@ -2311,7 +2311,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeaf-disable-bing-autofill-suggestions",
                     Label = "Edge AutoFill: Disable Bing-Powered Search Bar AutoFill Suggestions",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets AddressBarEditingEnabled=0 in Edge policy. Prevents Edge from displaying Bing-powered autocomplete suggestions in the address bar that are derived from the user's past typed entries, Bing search history, and previous navigation history. "
                         + "Bing autocomplete suggestions in the Edge address bar are populated from multiple sources including cloud-synchronised search history and local browsing history. As the user types in the address bar, keystrokes are sent to Bing's suggestion API — even partial internal URLs or IP addresses typed for network administration may be transmitted as suggestion queries. Disabling address bar suggestions prevents this pre-submission keystroke telemetry from leaving the device.",
@@ -2339,7 +2339,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-require-certificate-transparency",
                     Label = "Edge Cert Transparency: Enforce Certificate Transparency Log Requirement",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets CertificateTransparencyEnforcementDisabledForUrls=0 (enforcement enabled) in Edge policy. Requires that all TLS certificates presented to Edge are logged in a public Certificate Transparency (CT) log, and rejects connections to HTTPS sites whose certificates are not included in a trusted CT log. "
                         + "Certificate Transparency logs provide a publicly auditable record of all certificates issued by trusted CAs. Without CT enforcement, a CA that has been compromised or coerced (e.g., by a nation-state issuing a fraudulent wildcard certificate for *.company.com) can issue certificates that Edge trusts without any detection mechanism. CT enforcement means that any certificate not logged in a trusted public log will cause Edge to display a certificate error.",
@@ -2357,7 +2357,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-disable-obsolete-tls-versions",
                     Label = "Edge Cert Transparency: Block Connections Using TLS 1.0 and 1.1",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets SSLVersionMin=\"tls1.2\" in Edge policy. Sets the minimum TLS protocol version that Edge will accept for HTTPS connections to TLS 1.2, causing connections to servers that only support TLS 1.0 or 1.1 to fail with a connection error. "
                         + "TLS 1.0 and TLS 1.1 contain known protocol weaknesses: BEAST (TLS 1.0), POODLE (TLS 1.0/1.1 can be forced cross-protocol), and SLOTH. The cipher suite negotiation for TLS 1.0/1.1 includes RC4 and CBC-mode AES ciphers that are vulnerable to practical attacks. PCI DSS, NIST SP 800-52 Rev 2, and HIPAA technical safeguards all require TLS 1.2 or higher. Disabling legacy TLS prevents protocol downgrade attacks.",
@@ -2375,7 +2375,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-enable-revocation-checking",
                     Label = "Edge Cert Transparency: Enable OCSP/CRL Certificate Revocation Checking",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets OnlineRevocationChecksEnabled=1 in Edge policy. Enables Edge to perform online certificate revocation checks via OCSP (Online Certificate Status Protocol) and CRL (Certificate Revocation List) for every TLS certificate it encounters, blocking connections to sites whose certificates have been revoked. "
                         + "Certificate revocation exists to allow CAs to invalidate certificates when the corresponding private key is compromised. Without revocation checking, Edge accepts revoked certificates as valid — meaning that if a private key for a trusted certificate is stolen and the CA issues a revocation, Edge will still accept connections authenticated by the stolen key until the site renews its certificate. OCSP checking provides near-real-time revocation status.",
@@ -2393,7 +2393,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-block-sha1-signed-certificates",
                     Label = "Edge Cert Transparency: Block Sites with SHA-1 Signed TLS Certificates",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets SHA1CertificateEnabled=0 in Edge policy. Causes Edge to refuse TLS connections to sites whose certificates are signed using the SHA-1 hash algorithm, requiring all accepted certificates to use SHA-256 or stronger. "
                         + "SHA-1 was deprecated as a certificate signing hash algorithm in 2017 following the demonstration of practical chosen-prefix collision attacks. A SHA-1 collision allows an attacker to create two different certificates with the same signature — enabling fraudulent certificate creation if a CA still issues SHA-1 certificates. Any SHA-1 certificate remaining in production is non-compliant with modern PKI standards and suggests poor certificate lifecycle management.",
@@ -2411,7 +2411,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-require-ct-for-local-anchored-certs",
                     Label = "Edge Cert Transparency: Require CT Even for Locally-Anchored Enterprise Certificates",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets RequireCTForLocallyAnchoredCerts=1 in Edge policy. Extends Certificate Transparency enforcement to certificates anchored at locally-installed enterprise root CAs (not just public CAs), requiring that internal HTTPS sites served by the enterprise PKI include a Signed Certificate Timestamp (SCT) or be logged in a compatible CT log. "
                         + "Enterprise internal CAs can issue certificates for any domain, including external domains. An enterprise CA that has been compromised can issue a certificate for google.com or company-partner.com that Edge would normally trust (since it's anchored at the enterprise root). Requiring CT for locally-anchored certificates means Enterprise CA-issued certificates for unexpected domains will fail CT validation, detecting CA misuse.",
@@ -2429,7 +2429,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-block-invalid-certificate-warning-bypass",
                     Label = "Edge Cert Transparency: Block User Override of Certificate Error Pages",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets SSLErrorOverrideAllowed=0 in Edge policy. Removes the 'Proceed anyway' / 'Advanced → Proceed to site' bypass button from Edge certificate error pages, preventing users from overriding TLS certificate errors by clicking through the warning. "
                         + "The 'Proceed anyway' button on certificate error pages is a well-known social engineering vector. Phishing and adversary-in-the-middle toolkits intentionally generate self-signed certificates for lookalike domains, then display the certificate error page and add persuasive text (in custom '404' page content) asking the user to click through. Removing the bypass button eliminates this click-through vector and forces users to contact IT when they encounter legitimate certificate misconfigurations.",
@@ -2447,7 +2447,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-enable-safe-browsing-phishing-protection",
                     Label = "Edge Cert Transparency: Enable Safe Browsing Phishing URL Protection",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets SafeBrowsingEnabled=1 in Edge policy. Enables Microsoft Defender SmartScreen URL reputation checking for every navigation in Edge that verifies the destination URL against Microsoft's known-phishing, known-malware, and URL threat intelligence database before the page loads. "
                         + "SmartScreen URL checking is Edge's first-line defence against phishing and malware distribution sites. When disabled (e.g., by a user who finds the warning pages annoying), navigations to known phishing sites proceed without warning. In enterprise environments where employees receive targeted spear-phishing emails with malicious links, SmartScreen provides automated blocking of known-bad URLs that supplements user security awareness training.",
@@ -2465,7 +2465,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-enable-enhanced-safe-browsing",
                     Label = "Edge Cert Transparency: Enable Enhanced Safe Browsing Deep URL Analysis",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets SafeBrowsingProtectionLevel=2 in Edge policy (value 2 = Enhanced Protection). Enables Edge's Enhanced Safe Browsing mode, which performs deeper URL and download analysis including file hash lookups, URL structure analysis, and real-time page content evaluation to detect novel phishing pages that have not yet been classified in the known-bad URL database. "
                         + "Standard SmartScreen uses a hash-compare against a known-bad URL blocklist. Enhanced Protection adds real-time analysis that can detect zero-day phishing pages within minutes of their creation by analysing page structure, visual similarity to known login pages, and URL entropy. This dramatically reduces the window between phishing site creation and first-user protection.",
@@ -2483,7 +2483,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-block-mixed-content-display",
                     Label = "Edge Cert Transparency: Block Passive Mixed Content (HTTP Resources on HTTPS Pages)",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets BlockThirdPartyCookies=0 is not the right key; sets MixedContentEnabled=0 in Edge policy. Blocks Edge from loading passive HTTP resources (images, CSS, fonts) on HTTPS pages, preventing mixed content that allows passive network observers to correlate browsing behaviour by monitoring the unencrypted resource requests. "
                         + "A device on a network where traffic is monitored (public Wi-Fi, hotel network, corporate proxy with DLP) that visits an HTTPS page with HTTP subresources reveals which specific content elements were loaded via the unencrypted sub-requests. An adversary can build a browser fingerprint and activity log from passive HTTP resource patterns even without breaking the HTTPS connection itself. Blocking all mixed content enforces full HTTPS for the entire page.",
@@ -2501,7 +2501,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgect-require-hsts-preload-for-intranet",
                     Label = "Edge Cert Transparency: Enforce HTTPS-Only Mode for All Navigation",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Sets HttpsOnlyMode=1 in Edge policy (value 1 = Enabled). Enables Edge's HTTPS-Only mode globally, causing Edge to attempt to upgrade all HTTP navigations to HTTPS automatically, and displaying an interstitial warning if the upgrade fails (i.e., the site only supports HTTP). "
                         + "HTTP navigation exposes session cookies, form data, content, and the URL path to passive interception on any network segment between the browser and the server. SSL stripping attacks (BEAST, sslstrip) intercept HTTP requests and prevent HTTPS upgrades transparently. HTTPS-Only mode forces the HTTPS upgrade before any HTTP request is ever sent, making all browser sessions resistant to trivial passive eavesdropping and SSL strip attacks.",
@@ -2529,7 +2529,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-restrict-dangerous-downloads",
                 Label = "Edge Download & History Policy: Block Dangerous and Malicious Downloads",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Configures Microsoft Edge to block downloads that are flagged as dangerous or malicious by Microsoft Defender SmartScreen. Setting DownloadRestrictions to 3 instructs Edge to block all downloads that SmartScreen identifies as potentially dangerous, unrecognised, or hosting malware. This is the recommended CIS-aligned value for enterprise environments. Values: 0=no restriction, 1=block SmartScreen malware detections only, 2=block unrecognised downloads, 3=block all dangerous downloads (malware + unrecognised).",
                 Tags = ["edge", "downloads", "smartscreen", "malware", "policy"],
@@ -2547,7 +2547,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-prompt-download-location",
                 Label = "Edge Download & History Policy: Always Prompt for Download Save Location",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Configures Microsoft Edge to always ask the user where to save a downloaded file instead of automatically placing files in the default downloads folder. Setting PromptForDownloadLocation to 1 ensures users review the destination before saving, which reduces accidental saves to unsanctioned locations (e.g., cloud-synced folders, shared drives, or removable media). In data-loss-prevention scenarios, prompting for location also gives the user a moment to consider whether downloading is appropriate.",
                 Tags = ["edge", "downloads", "save location", "data loss prevention", "policy"],
@@ -2565,7 +2565,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-force-bing-safe-search",
                 Label = "Edge Download & History Policy: Force Bing SafeSearch",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Activates Bing SafeSearch filtering for all Bing searches made in Microsoft Edge, filtering out adult-content results at the search engine level. Setting ForceBingSafeSearch to 1 enables moderate SafeSearch. Popular settings: 0=off (default), 1=moderate filtering, 2=strict filtering. In corporate, educational, and public-access environments, enabling ForceBingSafeSearch at policy level prevents users from disabling SafeSearch via account settings and ensures consistent safe-content enforcement across the user base.",
                 Tags = ["edge", "bing", "safe search", "content filtering", "policy"],
@@ -2583,7 +2583,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-delete-history-on-exit",
                 Label = "Edge Download & History Policy: Delete Browsing History on Browser Exit",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Configures Microsoft Edge to automatically clear browsing history (visited URLs, page titles, and cached timestamps) each time the browser closes. Setting DeleteBrowsingHistoryOnExit to 1 ensures that no browsing record persists on the local machine between sessions. This reduces the residual-data exposure on shared or public-facing machines, makes it harder for physical-access attackers to reconstruct user activity, and complies with data-minimisation requirements in privacy-sensitive deployments.",
                 Tags = ["edge", "browsing history", "privacy", "data minimisation", "shared device", "policy"],
@@ -2601,7 +2601,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-enable-auto-update",
                 Label = "Edge Download & History Policy: Ensure Microsoft Edge Automatic Updates are Enabled",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Explicitly sets Microsoft Edge to automatically apply browser updates. Setting AutoUpdateEnabled to 1 ensures Edge is not permanently frozen at a specific version by earlier misconfiguration and that security patches are applied as they are released. Enterprises that use a slower update cadence may layer version-lag policies on top, but this baseline ensures the update mechanism itself is not entirely disabled, which would leave the browser permanently unpatched.",
                 Tags = ["edge", "updates", "patch management", "security", "policy"],
@@ -2619,7 +2619,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-hide-external-protocol-checkbox",
                 Label = "Edge Download & History Policy: Remove 'Always Open' Checkbox from External Protocol Dialogs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Removes the 'Always open this type of link' checkbox from the confirmation dialog that appears when Edge is about to open an external protocol handler (e.g., mailto:, ms-teams:, itms:). Setting ExternalProtocolDialogShowAlwaysOpenCheckbox to 0 means users can only approve a single launch at a time and cannot create a permanent auto-open rule for a potentially malicious custom protocol. Each subsequent click of a custom protocol link will re-show the dialog, preventing drive-by permanent associations with attacker-controlled handlers.",
                 Tags = ["edge", "external protocol", "custom protocol", "dialog", "security", "policy"],
@@ -2637,7 +2637,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-warn-before-exit",
                 Label = "Edge Download & History Policy: Warn User Before Closing Edge with Multiple Tabs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Enables a confirmation dialog when the user attempts to close Microsoft Edge with multiple tabs or windows open. Setting WarnBeforeExitingEdge to 1 displays a 'You are about to close N tabs' prompt before the browser exits. This prevents accidental closure of browser sessions during active downloads, form filling, or multi-step web application workflows. It also deters rage-quits of the browser during intensive research sessions where re-finding pages would be time-consuming.",
                 Tags = ["edge", "exit warning", "tabs", "ux", "productivity", "policy"],
@@ -2655,7 +2655,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-hide-office-shortcut-in-favorites",
                 Label = "Edge Download & History Policy: Remove Microsoft Office Shortcut from Favorites Bar",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Removes the Microsoft Office shortcut button that Edge adds to the Favorites bar by default, which links to the Microsoft Office web portal. Setting ShowOfficeShortcutInFavoritesBar to 0 clears this commercial shortcut from the browser chrome. In enterprise environments where the Favourites bar is managed through policy, including Office portal shortcuts that users did not add themselves creates a cluttered bar that undermines IT-configured bookmarks and may imply Microsoft has elevated access to browser configuration.",
                 Tags = ["edge", "office shortcut", "favorites bar", "ux", "policy"],
@@ -2673,7 +2673,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgedl-suppress-unsupported-os-warning",
                 Label = "Edge Download & History Policy: Suppress Unsupported Operating System Warning",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Suppresses the banner that Microsoft Edge displays when it detects it is running on an operating system version that Microsoft has officially dropped from the support matrix. Setting SuppressUnsupportedOSWarning to 1 prevents this warning from appearing. This policy is primarily used in enterprise environments that have authorised extended-support or controlled-deployment Windows versions where the warning is known and managed. The underlying OS support status is unchanged; only the UI notice is hidden.",
                 Tags = ["edge", "os support", "warning", "banner", "enterprise", "policy"],
@@ -2701,7 +2701,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-enable-hsts-preloading",
                     Label = "Enable HSTS Preload List in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Enables Edge to use the HSTS (HTTP Strict Transport Security) preload list, automatically using HTTPS for sites known to enforce it before the first request.",
                     Tags = ["edge", "hsts", "preload", "https", "security", "policy"],
@@ -2718,7 +2718,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-disable-dns-prefetch",
                     Label = "Disable DNS Prefetching in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Disables DNS prefetching in Edge which resolves domain names of links on a page before the user navigates to them, eliminating DNS-based pre-browsing data leakage.",
                     Tags = ["edge", "dns-prefetch", "privacy", "policy"],
@@ -2735,7 +2735,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-disable-preconnect",
                     Label = "Disable Speculative Preconnect in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Disables speculative TCP/TLS preconnection to link destinations in Edge, reducing background network connections initiated without user interaction.",
                     Tags = ["edge", "preconnect", "privacy", "performance", "policy"],
@@ -2752,7 +2752,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-enforce-cert-transparency",
                     Label = "Enforce Certificate Transparency in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Enforces Certificate Transparency (CT) log checking for all TLS certificates in Edge, ensuring all served certificates are publicly auditable and undisclosed certificates are rejected.",
                     Tags = ["edge", "certificate-transparency", "tls", "security", "policy"],
@@ -2769,7 +2769,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-disable-early-hints-header",
                     Label = "Disable HTTP 103 Early Hints Processing in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Disables processing of HTTP 103 Early Hints response headers in Edge, which pre-load resources before the final 200 response arrives. Reduces speculative pre-fetching.",
                     Tags = ["edge", "early-hints", "http103", "privacy", "policy"],
@@ -2786,7 +2786,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgehint-disable-smart-actions",
                     Label = "Disable Bing Smart Actions in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Disables Bing-powered Smart Actions in Edge that analyse page content and selected text to offer contextual services (definitions, translations, purchases).",
                     Tags = ["edge", "smart-actions", "bing", "privacy", "policy"],
@@ -2813,7 +2813,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-block-external-extensions",
                 Label = "Edge Extension Policy: Block External (Third-Party Store) Extensions",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from installing extensions from stores other than the Microsoft Edge Add-ons store (e.g., the Chrome Web Store or direct-install CRX files). Third-party extension stores do not go through Microsoft's security review process; malicious extensions installed from off-store sources are a common delivery mechanism for browser-based malware and data exfiltration.",
                 Tags = ["edge", "extensions", "third-party", "store", "security", "policy"],
@@ -2831,7 +2831,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-developer-tools",
                 Label = "Edge Extension Policy: Disable Developer Tools",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Edge DevTools (F12 Developer Tools) for all users. DevTools allows inspection of DOM, JavaScript execution, network traffic, and source-level debugging. On locked-down workstations, kiosk terminals, and POS devices, DevTools exposure is a security risk because it can be used to bypass Content Security Policies, extract credentials from page memory, or execute arbitrary JavaScript.",
                 Tags = ["edge", "devtools", "developer tools", "security", "kiosk", "policy"],
@@ -2849,7 +2849,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-component-updates",
                 Label = "Edge Extension Policy: Disable Edge Component Updates",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents the Edge update service from automatically downloading and installing component updates — small modules bundled with Edge that can be updated independently of the main browser (e.g., PDFium, Safe Browsing DB, WebRTC codecs). In air-gapped or update-managed environments, automatic component fetches break network policy and introduce unapproved code.",
                 Tags = ["edge", "updates", "components", "offline", "policy"],
@@ -2867,7 +2867,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-insecure-extension-updates",
                 Label = "Edge Extension Policy: Block Insecure (HTTP) Extension Update URLs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from downloading extension updates from HTTP (non-secure) update manifest URLs. Extensions that use HTTP update endpoints are vulnerable to man-in-the-middle attacks where a network attacker can substitute a malicious version of the extension. All extension update communications should occur over HTTPS with certificate validation.",
                 Tags = ["edge", "extensions", "updates", "http", "security", "policy"],
@@ -2885,7 +2885,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-native-messaging",
                 Label = "Edge Extension Policy: Disable Native Messaging Host Access",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Edge extensions from using the Native Messaging API to communicate with native Win32 applications installed on the workstation. Native messaging allows browser extensions to call out to arbitrary executables on the system, which can be abused to exfiltrate data from isolated browser contexts or escalate from browser to OS level. In locked-down environments, no extension should have native host access.",
                 Tags = ["edge", "extensions", "native messaging", "security", "policy"],
@@ -2903,7 +2903,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-extensions-toolbar",
                 Label = "Edge Extension Policy: Hide Extensions Toolbar Button",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Hides the Extensions button in the Edge toolbar that shows installed extensions and their permissions. On kiosk and locked-down devices where extensions are push-installed by policy, hiding the extensions UI prevents users from seeing, disabling, or uninstalling required extensions. It also prevents users from discovering which extensions are monitoring their browsing.",
                 Tags = ["edge", "extensions", "toolbar", "ui", "kiosk", "policy"],
@@ -2921,7 +2921,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-edge-wallet",
                 Label = "Edge Extension Policy: Disable Edge Wallet (Autofill / Payment Cards)",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables Microsoft Edge Wallet, the built-in digital wallet that stores payment card data, loyalty cards, and Microsoft credentials for autofill on checkout pages. On corporate devices, employees should not be storing personal payment information in the browser. The Wallet syncs data to Microsoft accounts, creating data residency concerns on managed devices.",
                 Tags = ["edge", "wallet", "payment", "autofill", "privacy", "policy"],
@@ -2939,7 +2939,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-disable-smart-screen-apps",
                 Label = "Edge Extension Policy: Disable SmartScreen for Downloaded Apps",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Microsoft Defender SmartScreen check applied to applications downloaded from the web via Edge. This setting is for environments where a dedicated AV/EDR solution handles download scanning and the SmartScreen cloud lookup would generate unnecessary telemetry. Only disable if a supported replacement scanning mechanism is in place.",
                 Tags = ["edge", "smartscreen", "downloads", "security", "policy"],
@@ -2957,7 +2957,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeext-enable-enhance-security-mode",
                 Label = "Edge Extension Policy: Enable Enhanced Security Mode (Strict)",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Enables Microsoft Edge's Enhanced Security Mode (also called Super Duper Secure Mode) in strict mode for all sites. This mode disables JIT compilation in the V8 JavaScript engine, reducing the JavaScript execution attack surface significantly. JIT bugs are the most common class of browser exploitation vector; disabling JIT eliminates this class of vulnerability at the cost of some script performance.",
                 Tags = ["edge", "security mode", "jit", "javascript", "mitigation", "policy"],
@@ -2985,7 +2985,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-favorites",
                     Label = "Block Importing Favorites Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing favorites from other browsers into Microsoft Edge, reducing the risk of accidentally migrating browser data to a managed profile.",
                     Tags = ["edge", "browser", "import", "favorites", "policy"],
@@ -3003,7 +3003,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-history",
                     Label = "Block Importing Browsing History Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing browsing history from other browsers into Microsoft Edge, keeping the Edge history store clean and preventing cross-browser data leakage.",
                     Tags = ["edge", "browser", "import", "history", "privacy", "policy"],
@@ -3021,7 +3021,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-cookies",
                     Label = "Block Importing Cookies Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing cookies from other browsers into Microsoft Edge, reducing session-hijacking risk and keeping the Edge cookie store isolated.",
                     Tags = ["edge", "browser", "import", "cookies", "security", "policy"],
@@ -3039,7 +3039,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-homepage",
                     Label = "Block Importing Homepage Settings Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing homepage and new-tab page settings from other browsers into Microsoft Edge, preserving the enterprise-configured homepage policy.",
                     Tags = ["edge", "browser", "import", "homepage", "policy"],
@@ -3057,7 +3057,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-open-tabs",
                     Label = "Block Importing Open Tabs Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing open tabs from other browsers into Microsoft Edge, avoiding unintended opening of external browser sessions inside managed Edge.",
                     Tags = ["edge", "browser", "import", "tabs", "policy"],
@@ -3075,7 +3075,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-block-import-search-engine",
                     Label = "Block Importing Search Engine Settings Into Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from importing search engine settings from other browsers into Microsoft Edge, preserving the enterprise default search provider configuration.",
                     Tags = ["edge", "browser", "import", "search", "policy"],
@@ -3093,7 +3093,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-disable-browsing-history",
                     Label = "Disable Saving Browsing History in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents Microsoft Edge from saving the user's browsing history locally, effectively enabling a permanent private-browsing mode for history and reducing local data exposure.",
                     Tags = ["edge", "browser", "history", "privacy", "policy"],
@@ -3111,7 +3111,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-disable-user-feedback",
                     Label = "Disable Edge User Feedback Submissions",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents users from submitting feedback and usage telemetry to Microsoft via the Edge built-in feedback tool, reducing data exfiltration of browsing context.",
                     Tags = ["edge", "browser", "feedback", "telemetry", "privacy", "policy"],
@@ -3129,7 +3129,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgeimp-disable-site-info-reporting",
                     Label = "Disable Sending Site Info to Microsoft for Edge Improvement",
-                    Category = "Browser",
+                    Category = "Browser — Default Browser",
                     Description =
                         "Prevents Microsoft Edge from sending website diagnostic information to Microsoft to improve browser services, reducing cross-site browsing telemetry sent to Microsoft.",
                     Tags = ["edge", "browser", "telemetry", "site info", "privacy", "policy"],
@@ -3157,7 +3157,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-block-reload-in-ie",
                 Label = "Edge IE Mode Policy: Block User Reload in IE Mode for Standard Pages",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents users from manually reloading non-IE-mode pages in Internet Explorer mode via the Edge context menu or address bar action. Without this policy, users can force any arbitrary web page into the IE rendering engine by right-clicking and selecting 'Reload tab in Internet Explorer mode'. This bypasses IT-controlled site lists and allows uncontrolled Trident-rendered browsing, which may expose older, less patched code paths to malicious content.",
                 Tags = ["edge", "internet explorer", "ie mode", "reload", "security", "policy"],
@@ -3176,7 +3176,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-block-ie-mode-tab-in-edge",
                 Label = "Edge IE Mode Policy: Block IE Mode Tabs from Returning to Edge Mode",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Internet Explorer mode tabs from navigating back to Microsoft Edge mode (Chromium rendering) for pages that are not in the Enterprise Mode Site List. When a user navigates from an IE mode tab to a page not on the site list, the default behavior opens the new page in a separate Edge tab. Blocking this prevents session mixing between Trident and Chromium rendering contexts, which is important for maintaining consistent security isolation.",
                 Tags = ["edge", "internet explorer", "ie mode", "tab", "isolation", "policy"],
@@ -3194,7 +3194,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-block-local-file-in-ie",
                 Label = "Edge IE Mode Policy: Block Local Files from Opening in IE Mode",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents local file:// protocol pages from being loaded in Internet Explorer mode within Edge. Without this restriction, local HTML files and intranet file shares accessed via UNC paths can be forced into IE mode, where ActiveX controls, VBScript, and other legacy technologies are available. Local files rendered in the IE engine can access the local file system with fewer restrictions than Chromium-hosted content.",
                 Tags = ["edge", "internet explorer", "ie mode", "local files", "security", "policy"],
@@ -3212,7 +3212,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-block-local-page-in-ie",
                 Label = "Edge IE Mode Policy: Block Local Pages from Being Loaded in IE Mode",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents local intranet pages (those resolved via the Local intranet zone in Internet Explorer, including short hostnames and *.local domains) from being automatically elevated into Internet Explorer mode within Edge. Without this control, legacy intranet pages that IE mode site lists or automatic zone detection would route to Trident can activate legacy ActiveX controls and scripts that are unavailable in Chromium.",
                 Tags = ["edge", "internet explorer", "ie mode", "intranet", "local page", "policy"],
@@ -3230,7 +3230,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-dont-send-intranet-to-ie",
                 Label = "Edge IE Mode Policy: Disable Automatic Redirect of Intranet to Internet Explorer Mode",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents Microsoft Edge from automatically redirecting intranet zone URLs to Internet Explorer mode or the standalone Internet Explorer process. In default configurations, Edge may auto-detect intranet sites via the IE Intranet zone heuristic and silently open them in IE. Setting SendIntranetToInternetExplorer to 0 disables this behavior, ensuring intranet content is always rendered in the Chromium engine unless explicitly listed in an Enterprise Mode Site List.",
                 Tags = ["edge", "internet explorer", "intranet", "auto-redirect", "ie mode", "policy"],
@@ -3248,7 +3248,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-enhanced-hang-detection",
                 Label = "Edge IE Mode Policy: Enable Enhanced Hang Detection for IE Mode Tabs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Enables enhanced hang detection for Internet Explorer mode tabs within Microsoft Edge. When InternetExplorerIntegrationEnhancedHangDetection is set to 1, Edge applies a shorter hang timeout to IE mode tabs and surfaces a 'This page is not responding' dialog more quickly when an IE mode tab stops responding. In managed environments where IE mode is used for legacy line-of-business apps, enhanced hang detection prevents a single frozen IE component from blocking the entire Edge process.",
                 Tags = ["edge", "internet explorer", "ie mode", "hang detection", "reliability", "policy"],
@@ -3266,7 +3266,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-block-zone-id-mht-files",
                 Label = "Edge IE Mode Policy: Block Zone-Identifier MHT Files from IE Mode",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Prevents MHTML (.mht, .mhtml) files that carry a Zone.Identifier Alternate Data Stream (Mark of the Web) from being opened in Internet Explorer mode. MHT files downloaded from the internet carry a Zone.Identifier ADS marking them as untrusted. Without this policy, Edge may open such files in IE mode where legacy MSHTML parsing applies. Blocking zone-marked MHT files from IE mode forces them to open in the Chromium renderer with modern sandboxing.",
                 Tags = ["edge", "internet explorer", "ie mode", "mht", "zone identifier", "security", "policy"],
@@ -3284,7 +3284,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-set-window-open-threshold",
                 Label = "Edge IE Mode Policy: Set window.open Navigation Threshold for IE Mode Tabs",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Controls the pixel-width threshold above which new windows opened via window.open() from IE mode tabs are rendered in Edge mode rather than IE mode. When InternetExplorerIntegrationWindowOpenWidthThreshold is set to 0, all new windows opened by IE mode tabs will open in Edge (Chromium) mode regardless of their dimensions. This prevents IE mode tabs from spawning new windows that also use the Trident rendering engine, containing the legacy engine to only specifically configured tabs.",
                 Tags = ["edge", "internet explorer", "ie mode", "window.open", "rendering", "policy"],
@@ -3302,7 +3302,7 @@ internal static class PolicyBrowser
             {
                 Id = "iemode-disable-cloud-site-list-management",
                 Label = "Edge IE Mode Policy: Disable Cloud-Managed IE Mode Site List",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Cloud Site List Management feature in Microsoft Edge, which allows IT administrators to publish and update the Enterprise Mode Site List via Microsoft 365 Admin Center (Microsoft Entra ID / Intune cloud) without requiring on-premises GPO or file share deployment. When CloudSiteListManagementEnabled is set to 0, Edge only reads the site list from the locally configured URL or GPO path. This maintains site list control within the organization's on-premises infrastructure and prevents cloud-based overrides.",
                 Tags = ["edge", "internet explorer", "ie mode", "site list", "cloud", "policy"],
@@ -3330,7 +3330,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-camera",
                 Label = "Edge Media Capture Policy: Block Camera Access from Browser",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks all camera and video capture access from within Microsoft Edge for all sites by default. When VideoCaptureAllowed is set to 0, no website may request or use the system camera through the browser, regardless of site permissions previously granted. This is appropriate for locked-down workstations, reception terminals, kiosk deployments, and any environment where webcam access from a browser constitutes a privacy or security risk.",
                 Tags = ["edge", "camera", "video capture", "privacy", "kiosk", "policy"],
@@ -3348,7 +3348,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-microphone",
                 Label = "Edge Media Capture Policy: Block Microphone Access from Browser",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks all microphone and audio capture access from within Microsoft Edge for all sites by default. Setting AudioCaptureAllowed to 0 prevents any website from recording audio through the system microphone, regardless of previously granted browser permissions. Use in call-center environments where only approved communication apps may use the microphone, or in high-security areas where audio capture from a browser session is prohibited.",
                 Tags = ["edge", "microphone", "audio capture", "privacy", "security", "policy"],
@@ -3366,7 +3366,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-screen-capture",
                 Label = "Edge Media Capture Policy: Block Screen Capture from Browser",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks screen capture and screen recording APIs within Microsoft Edge by default for all sites. Setting ScreenCaptureAllowed to 0 prevents websites from calling getDisplayMedia() to share or record the screen, individual application windows, or browser tabs. This is critical in environments where DLP (Data Loss Prevention) policy prohibits screen recording by web applications, or where sensitive information displayed on screen must not be programmatically captured.",
                 Tags = ["edge", "screen capture", "recording", "dlp", "security", "policy"],
@@ -3384,7 +3384,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-disable-cast",
                 Label = "Edge Media Capture Policy: Disable Google Cast Media Streaming",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Google Cast feature integrated into Microsoft Edge, which allows casting browser tab content or entire screen to Chromecast-compatible devices on the local network. Cast operates by scanning the local network for cast-compatible receivers and establishing a peer-to-peer media stream. In corporate environments, Cast may expose browser content to unauthorized receivers or allow users to bypass screen-mirroring controls.",
                 Tags = ["edge", "cast", "chromecast", "streaming", "network", "policy"],
@@ -3402,7 +3402,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-web-bluetooth",
                 Label = "Edge Media Capture Policy: Block Web Bluetooth API",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks the Web Bluetooth API in Microsoft Edge, preventing websites from discovering, pairing with, or communicating with Bluetooth devices. The Web Bluetooth specification exposes device capabilities including model, manufacturer, and sensor data to websites. In corporate environments with Bluetooth-enabled medical devices, payment terminals, or security tokens, browser-level Bluetooth access creates an unauthorized channel for device enumeration and data exfiltration.",
                 Tags = ["edge", "bluetooth", "web bluetooth", "api", "security", "policy"],
@@ -3420,7 +3420,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-web-hid",
                 Label = "Edge Media Capture Policy: Block WebHID API Access",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks the WebHID (Human Interface Device) API in Microsoft Edge, preventing websites from accessing HID devices such as gamepads, custom input devices, and specialty hardware directly through the browser. WebHID allows arbitrary device I/O from a web page. On corporate workstations connected to HID-based security tokens, smart card readers, or biometric devices, browser HID access provides an unapproved communication channel to sensitive hardware.",
                 Tags = ["edge", "hid", "webhid", "api", "hardware", "security", "policy"],
@@ -3438,7 +3438,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-web-usb",
                 Label = "Edge Media Capture Policy: Block WebUSB API Access",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks the WebUSB API in Microsoft Edge, preventing websites from accessing USB devices connected to the system directly through the browser. WebUSB allows websites to communicate with any USB device — including USB drives, hardware security tokens, programmers, and devices with proprietary protocols. This creates a browser-level bypass of OS-enforced USB device policies and DLP controls.",
                 Tags = ["edge", "usb", "webusb", "api", "hardware", "security", "policy"],
@@ -3456,7 +3456,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-block-serial-api",
                 Label = "Edge Media Capture Policy: Block Serial Port API Access",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Blocks the Web Serial API in Microsoft Edge, preventing websites from communicating with serial port devices (RS-232, COM port, USB-to-serial adapters). The Serial API gives a web page direct read/write access to any serial device without requiring a native application. On industrial control PCs, medical workstations, and environments with serial-connected PLCs or measurement instruments, this browser API provides unauthorized low-level hardware access.",
                 Tags = ["edge", "serial api", "com port", "hardware", "security", "policy"],
@@ -3474,7 +3474,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-disable-gamepad-api",
                 Label = "Edge Media Capture Policy: Disable Gamepad API in Browser",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Gamepad API in Microsoft Edge, preventing websites from reading input state from gamepads, joysticks, and other game controllers connected to the system. The Gamepad API exposes button and axis state from all connected controllers to any web page. On corporate workstations, this API is unnecessary and can be used to fingerprint users (identifying specific controller hardware) or read input from controllers repurposed as input devices.",
                 Tags = ["edge", "gamepad", "gamepad api", "input", "policy"],
@@ -3492,7 +3492,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgemedia-disable-math-solver",
                 Label = "Edge Media Capture Policy: Disable AI Math Solver in Edge",
-                Category = "Browser",
+                Category = "Browser — Default Browser",
                 Description =
                     "Disables the Edge Math Solver feature, which adds a Math Solver button to the Edge toolbar and context menu. When activated, the feature captures the selected math expression or equation from the page and submits it to a Microsoft AI cloud service that returns step-by-step solution guidance. In academic and testing environments where students use controlled browser sessions for exams, the Math Solver creates an unauthorized AI assistance channel.",
                 Tags = ["edge", "math solver", "ai", "academic", "policy"],
@@ -3520,7 +3520,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-set-new-tab-layout-focused-mode",
                     Label = "Edge New Tab Page: Set New Tab Page to Focused Layout (Search Only)",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageLayout=2 in Edge policy (value 2 = Focused). Configures the Edge New Tab Page to display in 'Focused' layout, which shows only the search bar and removes the news grid, quick-access tiles, and Microsoft promoted content from the default new tab experience. "
                         + "Focused layout reduces the cognitive load introduced by the news grid on the New Tab Page, provides a distraction-free default browser state, and prevents accidental clicks on promoted content that may navigate to external news sites during a work browsing session. It also reduces the amount of outbound advertising telemetry generated by the default 'Inspirational' or 'Informational' layouts.",
@@ -3538,7 +3538,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-quick-search-bar",
                     Label = "Edge New Tab Page: Disable Bing Quick Search Suggestions on New Tab",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageSearchBoxEnabled=0 in Edge policy. Disables the Bing-powered search suggestions that appear as the user types in the New Tab Page search bar, preventing keystroke telemetry from being sent to Bing suggestion endpoints before the user submits a search. "
                         + "Typeahead search suggestions on the New Tab Page send partial keystrokes to Bing's autocomplete API as the user types, even for searches that may include sensitive internal terms, IP addresses, or hostnames. In high-security environments where employees should not be inadvertently leaking internal hostname patterns to external search engines, disabling typeahead prevents pre-submission data transmission.",
@@ -3556,7 +3556,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-context-personalization",
                     Label = "Edge New Tab Page: Disable Personalised Content Based on Browsing Context",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPagePersonalizedContentEnabled=0 in Edge policy. Prevents Edge from using the user's browsing history, saved sites, and M365 activity signals to personalise the content displayed on the New Tab Page with customised news topics, trending articles, and personalised ad tiles. "
                         + "Personalised New Tab content is built from browsing telemetry that is uploaded to and processed by Microsoft's Personalisation service. This telemetry includes categories of pages visited, search terms, and time-on-page signals derived from the user's on-device browsing data. In privacy-conscious organisations, this upstream browsing telemetry transmission may conflict with internal data handling policies or employee monitoring regulations.",
@@ -3574,7 +3574,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-background-image-download",
                     Label = "Edge New Tab Page: Disable Daily Background Image Download (Bing Wallpaper)",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageBingChatDefaultEnabled=0 in Edge policy. Prevents Edge from downloading the daily Bing Image of the Day wallpaper for the New Tab Page background, eliminating an outbound network request to Bing's image CDN that occurs on every new browser session or when the browser starts cold. "
                         + "The Bing Image of the Day download sends a request to Bing's CDN infrastructure that includes the user's locale, Edge client ID, and a timestamp. This request is made unconditionally on every new tab open (when local cache is expired), creating a persistent outbound C&C-style beacon pattern in enterprise proxy logs that security monitoring may flag. Disabling the background image download eliminates this regular network telemetry.",
@@ -3592,7 +3592,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-block-quick-links-modification",
                     Label = "Edge New Tab Page: Lock Quick Links and Prevent User Modification",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageQuickLinksEnabled=1 in Edge policy. Enables Quick Links on the New Tab Page but combined with enterprise link configuration policies, locks the quick links to IT-defined shortcuts for internal portals and blocks users from adding, removing, or reordering quick link tiles. "
                         + "Quick links on the Edge NTP serve as one-click navigation to frequently used sites. Without enterprise control, users populate these with personal shortcuts including personal social media, webmail, and personal banking portals. By locking quick links to enterprise-defined values (helpdesk portal, internal SharePoint, timesheet system), the NTP becomes a managed productivity tool instead of a consumer browsing shortcut bar.",
@@ -3610,7 +3610,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-weather-widget",
                     Label = "Edge New Tab Page: Disable Weather Widget on New Tab Page",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageWeatherEnabled=0 in Edge policy. Removes the weather information widget from the Edge New Tab Page, preventing the weather service from sending a geolocation lookup request or IP-based location inference request to the MSN weather API each time a new tab is opened. "
                         + "The Edge NTP weather widget resolves user location by sending a location signal (either GPS coordinates if location permission is granted, or IP-based geolocation as a fallback) to the MSN weather API. This is a low-bandwidth but persistent telemetry channel that transmits the user's approximate location to Microsoft's advertising backend. On devices used in sensitive facility locations, this geolocation signal may disclose site location to external services.",
@@ -3628,7 +3628,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-microsoft-365-feed",
                     Label = "Edge New Tab Page: Disable M365 Office Feed on New Tab Page",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageAppLauncherEnabled=0 in Edge policy. Removes the Microsoft 365 app launcher grid and recent Office documents feed from the Edge New Tab Page, which would otherwise display the user's recently modified SharePoint, OneDrive, and Teams files in a list visible to anyone viewing the screen while a new tab is open. "
                         + "The recent Office documents displayed in the Edge M365 feed are loaded from the Microsoft Graph API using the user's current access token on every new tab open. The document titles and URLs visible in the feed constitute a real-time disclosure of what the user is working on. In screen-sharing sessions or when colleagues can see the screen background, this information can be inadvertently disclosed.",
@@ -3646,7 +3646,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-disable-trending-topics-on-new-tab",
                     Label = "Edge New Tab Page: Disable Trending / Trending News on New Tab Page",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageManagedNewTabMicrosoftNews=0 in Edge policy. Removes the trending news stories and 'Trending' section from the Edge New Tab Page, preventing distraction from trending social media and news content during working hours. "
                         + "Trending news on the Edge NTP is curated by MSN's editorial and algorithmic pipeline and includes entertainment news, viral social media topics, and politically engaging content. Exposure to trending topics during work hours contributes to context switching and reduced focus. Enterprise productivity studies have associated news feed interruptions on browser tabs with significant attention cost per-interruption. Removing trending content from the NTP reduces this distraction vector.",
@@ -3664,7 +3664,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgentp-hide-new-tab-logo",
                     Label = "Edge New Tab Page: Hide Microsoft and Bing Branding from New Tab Page",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets NewTabPageHideDefaultTopSites=1 in Edge policy. Hides the default Microsoft/Bing promotional top sites tiles that appear on a fresh Edge installation's New Tab Page before the user has browsed enough to populate personal top sites, replacing them with blank slots. "
                         + "On managed enterprise deployments where Edge is pre-configured, Bing promotional top site tiles (Bing homepage, Bing Shopping, MSN) appear as prominent quick-access shortcuts that direct traffic to Microsoft's advertising properties. These pre-seeded sites serve no legitimate enterprise workflow purpose and consume quick link slot positions that could be used for IT-defined enterprise shortcuts.",
@@ -3692,7 +3692,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-block-popups",
                 Label = "Edge Notifications & Popup Policy: Block All Website Popup Windows",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures Microsoft Edge to block all popup windows opened by website JavaScript. Setting DefaultPopupsSetting to 2 prevents any site from opening new browser windows or tabs via window.open() or similar JavaScript calls. Unrequested popups are used by advertising networks for ad injection, by tech-support-scam pages to open fullscreen lock screens, and by malicious sites to spawn additional attack browser windows that are difficult to close without a Task Manager.",
                 Tags = ["edge", "popups", "popup blocking", "security", "policy"],
@@ -3710,7 +3710,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-password-reveal",
                 Label = "Edge Notifications & Popup Policy: Disable Password Reveal Button in Input Fields",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Removes the eye icon that Microsoft Edge renders in password input fields letting users toggle between hidden and plaintext password views. Setting PasswordRevealEnabled to 0 hides this button from all password fields. In open-office environments and shared-screen presentations, the reveal button is a risk because it allows a bystander to see a plaintext password in a single click. Removing the button reduces the risk of shoulder-surfing credential exposure and is aligned with common enterprise browser hardening guidance.",
                 Tags = ["edge", "password", "credential", "reveal", "shoulder surfing", "policy"],
@@ -3728,7 +3728,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-shopping-list",
                 Label = "Edge Notifications & Popup Policy: Disable Shopping List Feature",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the Shopping List sidebar feature in Microsoft Edge that allows users to save products to a personal wish list and track price changes. Setting ShoppingListEnabled to 0 removes the Shopping List button from the Edge toolbar and disables the price-tracking infrastructure. The shopping list submits product page URLs and track-point data to Microsoft cloud services for price monitoring. In enterprise environments this creates an unsanctioned data channel for product page URLs visited by employees.",
                 Tags = ["edge", "shopping list", "commerce", "privacy", "policy"],
@@ -3746,7 +3746,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-related-website-sets",
                 Label = "Edge Notifications & Popup Policy: Disable Related Website Sets Cookie Access",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from applying the Related Website Sets feature (formerly First-Party Sets) to grant cross-site cookie access across groups of domains submitted by a first party. Setting RelatedWebsiteSetsEnabled to 0 means domains that have declared themselves in a Related Website Set cannot automatically share storage with each other. This prevents first-party declared groups from being used to circumvent third-party cookie blocking, maintaining a stricter cross-site data isolation boundary.",
                 Tags = ["edge", "related website sets", "first party sets", "cookies", "privacy", "policy"],
@@ -3764,7 +3764,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-inapp-support",
                 Label = "Edge Notifications & Popup Policy: Disable In-App Microsoft Support Chat",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the in-app Microsoft support mechanism in Microsoft Edge that allows users to contact Microsoft Customer Support directly from within the browser via a chat window or feedback form. Setting InAppSupportEnabled to 0 removes this support channel from the Edge interface. In enterprise environments, user support is handled through internal IT helpdesk processes. The presence of a direct-to-Microsoft support channel may confuse end users and create shadow-IT support workflows that circumvent IT governance.",
                 Tags = ["edge", "support", "help", "in-app support", "ux", "policy"],
@@ -3782,7 +3782,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-block-sensors",
                 Label = "Edge Notifications & Popup Policy: Block Websites from Accessing Device Sensors",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents websites from accessing device motion, orientation, and ambient light sensors through the Generic Sensor API. Setting DefaultSensorsSetting to 2 blocks all sensor access so no site can read accelerometer, gyroscope, magnetometer, or ambient light data without user consent. Sensor data can be used for device fingerprinting, covert user motion profiling, and side-channel attacks like PIN inference from phone-hold orientation patterns. Blocking sensors at policy level removes this attack surface entirely.",
                 Tags = ["edge", "sensors", "accelerometer", "gyroscope", "fingerprinting", "privacy", "policy"],
@@ -3800,7 +3800,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-labs",
                 Label = "Edge Notifications & Popup Policy: Disable Edge Experimental Labs Features",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents users from accessing Edge Experimental Labs where pre-release and experimental browser features can be enabled. Setting BrowserLabsEnabled to 0 removes the labs button from the Edge toolbar and blocks access to about://flags-style experimental toggles. Experimental features may be unstable, have unreviewed security properties, or create unexpected data flows. Disabling labs in managed environments ensures only stable, IT-approved browser features are active.",
                 Tags = ["edge", "labs", "experimental features", "enterprise", "stability", "policy"],
@@ -3818,7 +3818,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgenotif-disable-fullscreen",
                 Label = "Edge Notifications & Popup Policy: Block Websites from Entering Fullscreen Mode",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents websites from programmatically entering fullscreen mode via the Fullscreen API. Setting FullscreenAllowed to 0 blocks all sites from calling requestFullscreen() on any element or the document. Fullscreen mode is routinely abused by phishing pages and tech-support scam sites to fake operating-system lock screens, panic screens, or Windows Defender alerts that fill the entire display. Users on kiosk hardware also benefit since fullscreen prevents inadvertent accidental keystrokes from covering the screen frame.",
                 Tags = ["edge", "fullscreen", "phishing", "tech support scam", "kiosk", "policy"],
@@ -3846,7 +3846,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-disable-primary-password-bypass",
                     Label = "Edge Password Manager: Require Primary Password (Master Password) Protection",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets PrimaryPasswordSetting=2 in Edge policy (value 2 = Required). Requires users to set and enter a primary password (master password) to decrypt and view any credential saved in the Edge password manager, adding an additional authentication factor before stored passwords are revealed. "
                         + "Without a primary password, any process running as the current user — including malware, malicious scripts, and other browser extensions — can access the Edge password manager's stored credentials via the Edge DevTools protocol or the profile's Cookies/Login Data files without additional authentication. A primary password means the DPAPI-encrypted store has a second layer of protection beyond just the Windows session key.",
@@ -3864,7 +3864,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-disable-password-autocomplete-on-login-forms",
                     Label = "Edge Password Manager: Disable AutoComplete on Bank and Sensitive Login Forms",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets AutofillEnabledOnSecureForms=0 in Edge policy. Disables Edge's autofill feature specifically on forms that have autocomplete='off' or that are classified as high-security by Edge's form classifier (banking portals, credential re-authentication forms). "
                         + "Bank and financial institution login forms explicitly set autocomplete='off' as a security directive. Edge's autocomplete override bypasses this signal and fills stored credentials anyway. On kiosk-style machines where sessions may not be fully cleared between users, prefilled credential forms can expose credentials from previous sessions.",
@@ -3882,7 +3882,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-enable-password-strength-monitor",
                     Label = "Edge Password Manager: Enable Weak Password Detection and Warning",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets PasswordMonitorAllowed=1 in Edge policy. Enables Edge's password strength monitor to warn users when a saved password is detected to be weak (short, common, dictionary word) or has been found in public credential breach databases via the Microsoft breach database API. "
                         + "Employees who reuse simple passwords across work and personal accounts are a primary initial access vector for credential-stuffing attacks. Edge's breach monitor checks saved passwords against a k-anonymity hash database of compromised credentials and surfaces warnings without transmitting the full password hash to Microsoft. Enabling this monitor provides passive security hygiene enforcement without requiring additional tooling.",
@@ -3900,7 +3900,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-disable-web-credential-import",
                     Label = "Edge Password Manager: Block Importing Passwords from Other Browsers or Files",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets ImportSavedPasswordsAllowed=0 in Edge policy. Disables the Edge feature that allows users to import saved passwords from other browsers (Chrome, Firefox, IE) or from CSV password export files into the Edge password manager. "
                         + "Password imports are a common initial vector for credential disclosure: a social engineering attack can cause a user to import a maliciously-modified password CSV that establishes fake entries for internal site URLs, enabling future credential phishing. Additionally, mass-importing passwords from a less-secure browser or a cleartext CSV file into Edge aggregates credentials into a single easily-targetable store.",
@@ -3918,7 +3918,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-disable-password-sharing-between-devices",
                     Label = "Edge Password Manager: Block Password Sync to Other Devices via Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets PasswordExportAllowed=0 in Edge policy. Disables Edge's password export function that allows users to download all their saved Edge passwords to a cleartext CSV file for transfer to another device or password manager. "
                         + "The Edge 'Export passwords' feature creates a comma-separated file with site URL, username, and cleartext password for every saved credential. This file, once exported to the Downloads folder, is not protected — it can be exfiltrated via email, USB, or cloud storage by any process with filesystem access. A single click exports the entire Edge credential store to a cleartext file with no additional authentication required.",
@@ -3936,7 +3936,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-block-third-party-password-manager-override",
                     Label = "Edge Password Manager: Prevent Third-Party Extensions Overriding Password Fields",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets AllowPasswordGenerationEnabled=0 in Edge policy. Disables Edge's own password generation feature and prevents third-party password manager browser extensions from having elevated API access to password input field values in Edge. "
                         + "Malicious browser extensions that present themselves as password managers request the 'all_urls' and 'tabs' permissions, which allows them to read the contents of every form field (including password fields) on every page. Limiting password field API access reduces the exposure that a compromised or malicious password manager extension has to credentials being typed into pages.",
@@ -3954,7 +3954,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-disable-filled-credentials-auto-sign-in",
                     Label = "Edge Password Manager: Disable Auto Sign-In with Saved Credentials",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets AutoSignInEnabled=0 in Edge policy. Prevents Edge from automatically submitting the login form without user interaction when it detects a single saved credential for a visited site, requiring the user to actively click 'Sign in' even when credentials are pre-filled. "
                         + "Automatic sign-in means that visiting a work sign-in page immediately authenticates the user and establishes an authenticated session — without the user actively choosing to authenticate. If the user's Windows session has been taken over (e.g., via a remote desktop hijack or accessibility API automation), auto sign-in enables an attacker to silently authenticate to all internal web apps without the user's knowledge just by navigating to login pages.",
@@ -3972,7 +3972,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgepwm-block-password-change-via-browser",
                     Label = "Edge Password Manager: Block In-Browser Password Change Flow",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets PasswordChangeThroughBrowserEnabled=0 in Edge policy. Disables Edge's 'Change password' recommendation flow that offers to navigate users directly to a site's password change page when a breached or weak credential is detected, preventing the browser from accessing password management URLs on behalf of the user. "
                         + "While the 'Change password' flow is a usability feature, it involves Edge automatically navigating to account settings URLs and interacting with credential change forms using the user's currently authenticated session. In enterprise environments where password changes must go through an identity governance workflow (PAM, helpdesk ticket), browser-automated password changes bypass these controls.",
@@ -4001,7 +4001,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-printing",
                 Label = "Edge Print & PDF Policy: Disable Printing from Edge",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables all printing from within Microsoft Edge via enterprise policy. When PrintingEnabled is set to 0, the Print option, Ctrl+P hotkey, and right-click Print are all suppressed. Use in environments where printed output from the browser must be controlled or logged through dedicated print servers, or in kiosk/terminal deployments where printing is prohibited.",
                 Tags = ["edge", "printing", "kiosk", "policy"],
@@ -4019,7 +4019,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-print-header-footer",
                 Label = "Edge Print & PDF Policy: Remove Headers and Footers from Print Output",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures Microsoft Edge to omit headers and footers from all print output via Group Policy. Normally Edge includes the page title, URL, date, and page numbers in printing headers and footers. This is useful in environments where printed documents should not expose internal URLs or timestamps, or where clean output without browser-added metadata is required for official documents.",
                 Tags = ["edge", "printing", "header", "footer", "policy"],
@@ -4037,7 +4037,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-use-system-default-printer",
                 Label = "Edge Print & PDF Policy: Default to System Default Printer in Print Dialog",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures the Edge print preview to preselect the system default printer instead of the last printer used in Edge. In managed environments, the system default printer is set by IT policy. This prevents users from accidentally printing to the last used printer (which may be a home or personal printer on a previous session) and ensures all output defaults to the approved enterprise printer.",
                 Tags = ["edge", "printing", "printer", "default", "policy"],
@@ -4055,7 +4055,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-cloud-print",
                 Label = "Edge Print & PDF Policy: Disable Google Cloud Print Submission",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from submitting print jobs via Google Cloud Print. Cloud Print routes documents through external cloud infrastructure, which may violate data-residency requirements or introduce uncontrolled data egress in corporate environments. Disabling this forces all print jobs to use local or network printers managed by IT.",
                 Tags = ["edge", "printing", "cloud print", "policy", "data-loss"],
@@ -4073,7 +4073,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-block-legacy-printer-drivers",
                 Label = "Edge Print & PDF Policy: Block Legacy Printer Drivers from Edge Printing",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from sending print jobs through legacy (non-IPP) printer drivers. Legacy printer drivers were removed from the Windows print subsystem as part of PrintNightmare remediation. When this policy is set to 0, Edge's printing stack will only use modern IPP print drivers and will refuse to enumerate or use legacy kernel-mode printer drivers, reducing attack surface.",
                 Tags = ["edge", "printing", "drivers", "security", "printnightmare", "policy"],
@@ -4091,7 +4091,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-pdf-annotations",
                 Label = "Edge Print & PDF Policy: Disable PDF Annotation Tools in Edge Viewer",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables annotation tools in the Microsoft Edge built-in PDF viewer. Annotations allow users to add highlights, underlines, and free-form text comments to PDFs and save the annotated file. In environments where PDFs are read-only compliance documents, legal filings, or audit reports, preventing browser-level annotation preserves document integrity and prevents accidental modification.",
                 Tags = ["edge", "pdf", "annotations", "viewer", "policy"],
@@ -4109,7 +4109,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-pdf-xfa-forms",
                 Label = "Edge Print & PDF Policy: Disable XFA Form Support in Edge PDF Viewer",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables XFA (XML Forms Architecture) form support in the Microsoft Edge PDF viewer. XFA is a legacy Adobe-proprietary format for dynamic PDF forms. Modern PDFs use AcroForm instead. XFA forms require a JavaScript engine running inside the PDF reader, which significantly expands the attack surface. Disabling XFA prevents this JavaScript engine from activating for PDFs with embedded XFA content.",
                 Tags = ["edge", "pdf", "xfa", "forms", "security", "policy"],
@@ -4127,7 +4127,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-set-pdf-rasterize-dpi",
                 Label = "Edge Print & PDF Policy: Enable PDF Rasterization for Printing at 150 DPI",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures Microsoft Edge to rasterize PDF documents at 150 DPI when printing them. Rasterization converts vector and text content in the PDF to a bitmap image before sending to the printer driver. This avoids font-rendering issues with PostScript printers, resolves transparency layer conflicts with some corporate printer drivers, and produces consistent output on printers that have limited PDF pass-through support.",
                 Tags = ["edge", "pdf", "printing", "rasterize", "dpi", "policy"],
@@ -4145,7 +4145,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgepdp-disable-pdf-default-recommendation",
                 Label = "Edge Print & PDF Policy: Suppress Recommendation to Set Edge as Default PDF Viewer",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from showing recommendations or prompts asking the user to set Edge as the default PDF application. In environments where a specific PDF tool (Adobe Acrobat, Foxit, Nitro) is the approved standard for PDF handling, Edge's persistent recommendation to override the default association creates user confusion and non-compliance with the approved software stack.",
                 Tags = ["edge", "pdf", "default app", "recommendation", "policy"],
@@ -4173,7 +4173,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-lockdown-browser-signin",
                 Label = "Edge Profile & Sign-In Policy: Lock Browser Sign-In to Managed Accounts",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Restricts browser sign-in so users can only sign in with accounts that are managed by the organisation. Setting BrowserSignInLockdownEnabled to 1 prevents users from signing into Edge with personal Microsoft accounts or any account outside the tenant's allowed domain list. This ensures all browser-level sync, password manager, and history data flows through managed cloud storage subject to compliance policy rather than personal cloud accounts.",
                 Tags = ["edge", "sign in", "managed accounts", "enterprise", "policy"],
@@ -4191,7 +4191,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-disable-implicit-signin",
                 Label = "Edge Profile & Sign-In Policy: Disable Implicit OS-Level Sign-In",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from automatically signing the user into the browser using the Windows OS account credentials. When ImplicitSignInEnabled is 0, Edge will not transparently authenticate against Azure AD using the Windows token obtained at OS login. In shared-device or service-account scenarios, implicit sign-in can silently associate browser sessions with accounts that should not be tied to a browser profile, exposing unexpected sync or cloud data.",
                 Tags = ["edge", "sign in", "os credentials", "implicit sign in", "privacy", "policy"],
@@ -4209,7 +4209,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-disable-guided-switch",
                 Label = "Edge Profile & Sign-In Policy: Disable Guided Profile Switching Prompts",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Suppresses the prompt that Edge displays to guide users to switch to a different profile when they navigate to a linked account resource. When GuidedSwitchEnabled is 0, Edge will not interrupt the browsing session with suggestions to switch profiles based on account link heuristics. In managed environments where all browsing should occur within a single enterprise profile, these prompts are disruptive and may encourage users to create or log into personal profiles.",
                 Tags = ["edge", "profile", "profile switch", "ux", "policy"],
@@ -4227,7 +4227,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-enable-profile-separation",
                 Label = "Edge Profile & Sign-In Policy: Enable Work and Personal Profile Separation",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Enforces logical separation between work and personal browsing profiles in Microsoft Edge. When ProfileSeparationEnabled is 1, Edge maintains distinct cookie jars, credential stores, and sync data between the managed work profile and any personal profiles, preventing data leakage from work sessions into personal storage. This is especially relevant in bring-your-own-device (BYOD) deployments where the same Edge installation must serve both corporate and personal surfing.",
                 Tags = ["edge", "profile separation", "work profile", "personal profile", "byod", "policy"],
@@ -4245,7 +4245,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-enable-azure-sso",
                 Label = "Edge Profile & Sign-In Policy: Enable Azure AD Single Sign-On in Edge",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Enables Azure Active Directory Single Sign-On for Microsoft Edge so users can access Azure-protected web applications without re-entering their credentials. Setting AzureADSSOEnabled to 1 allows Edge to use the Kerberos/NTLM tokens obtained at Windows login to satisfy Azure AD authentication seamlessly. This reduces credential fatigue, eliminates phishable password prompts for internal apps, and centralises Azure sign-in under the corporate identity provider.",
                 Tags = ["edge", "azure ad", "sso", "single sign on", "enterprise", "policy"],
@@ -4263,7 +4263,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-disable-floating-workspace",
                 Label = "Edge Profile & Sign-In Policy: Disable Floating Workspace Tab Sync",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the Floating Workspace feature in Microsoft Edge which synchronises open tabs and browser state across devices when a user moves from one machine to another. Setting FloatingWorkspaceEnabled to 0 prevents tab-session data from being transmitted to Microsoft cloud sync services when the workspace floats between devices. In secure or air-gapped environments, floating tab data can expose confidential URLs, internal resource paths, and session tokens via cloud synchronisation.",
                 Tags = ["edge", "floating workspace", "tab sync", "cloud sync", "privacy", "policy"],
@@ -4281,7 +4281,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-keep-data-on-new-enterprise-profile",
                 Label = "Edge Profile & Sign-In Policy: Retain Browsing Data When Creating Enterprise Profile",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures Edge to keep local browsing data (history, passwords, bookmarks) when the user is prompted to create a new enterprise profile from an existing personal profile. Setting EnterpriseProfileCreationKeepBrowsingData to 1 means that on profile creation the user's existing local data is preserved in the new enterprise profile rather than being wiped. This prevents accidental data loss during policy rollout when enterprise sign-in is first enforced.",
                 Tags = ["edge", "profile", "data retention", "enterprise profile", "policy"],
@@ -4299,7 +4299,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-allow-all-domain-machines",
                 Label = "Edge Profile & Sign-In Policy: Allow Sign-In on Non-Domain-Joined Machines",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents the OnlyOnPremDomainJoinedMachinesAllowed restriction from limiting Edge sign-in to on-premise domain-joined devices only. Setting OnlyOnPremDomainJoinedMachinesAllowed to 0 (the default) means Azure AD-joined, MDM-managed, and non-domain devices can also use enterprise sign-in. This is the correct value for modern hybrid Azure AD and Intune environments where the entire device fleet may not be on-prem domain-joined.",
                 Tags = ["edge", "sign in", "domain join", "azure ad", "intune", "policy"],
@@ -4317,7 +4317,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-hide-acrobat-subscription-button",
                 Label = "Edge Profile & Sign-In Policy: Hide Adobe Acrobat Subscription Upsell Button",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Removes the Adobe Acrobat subscription promotion button that Microsoft Edge injects into the PDF toolbar when a PDF is rendered in the built-in viewer. Setting ShowAcrobatSubscriptionButton to 0 suppresses this commercial upsell element from the Edge UI. In enterprise environments where Adobe licensing is managed centrally, this advertising button causes confusion and may lead users to attempt unauthorised software purchases.",
                 Tags = ["edge", "adobe acrobat", "pdf", "upsell", "ux", "policy"],
@@ -4335,7 +4335,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgeprof-disable-inprivate",
                 Label = "Edge Profile & Sign-In Policy: Disable InPrivate (Private Browsing) Mode",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents users from opening InPrivate browsing windows in Microsoft Edge. InPrivate mode does not save history, cookies, or form data locally but it does bypass some content-filtering and monitoring tools that operate on profile data rather than network traffic. Setting InPrivateModeAvailability to 1 disables InPrivate so all browsing occurs in the user's managed profile, ensuring audit log completeness and consistent policy enforcement across all sessions.",
                 Tags = ["edge", "inprivate", "private browsing", "compliance", "audit", "policy"],
@@ -4363,7 +4363,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-bing-address-bar-provider",
                 Label = "Edge Search & Address Bar Policy: Remove Microsoft Search in Bing from Address Bar",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Removes the Microsoft Search in Bing suggestion provider from the Microsoft Edge address bar. When enabled, this provider queries the Microsoft Search enterprise index and Bing whenever the user types in the address bar, even for single words or partial terms. In environments where all internet search is routed through an approved proxy or where Bing query telemetry is unwanted, removing this provider reduces unsolicited outbound traffic.",
                 Tags = ["edge", "search", "bing", "address bar", "microsoft search", "policy"],
@@ -4381,7 +4381,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-local-providers",
                 Label = "Edge Search & Address Bar Policy: Disable Local and Intranet Search Suggestions",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables local suggestion providers in the Microsoft Edge address bar, including previously visited intranet URLs, bookmarks from the managed profile, and file:// path completions. On shared workstations, browser kiosk sessions, and temporary accounts, address bar history exposure (even of intranet URLs) could reveal which internal systems and resources the previous user visited.",
                 Tags = ["edge", "search", "local providers", "intranet", "privacy", "policy"],
@@ -4399,7 +4399,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-dns-interception-check",
                 Label = "Edge Search & Address Bar Policy: Disable DNS Interception Detection",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the DNS interception detection feature in Microsoft Edge. When enabled, Edge periodically sends probe DNS requests to non-existent hostnames and checks whether the DNS resolver returns NXDOMAIN (expected) or a real IP address (indicating intercepting DNS). In enterprise environments with transparent DNS proxies, split-horizon DNS, or captive portal infrastructure, this probe generates false positives and triggers browser warnings that confuse users.",
                 Tags = ["edge", "dns", "interception", "detection", "network", "policy"],
@@ -4417,7 +4417,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-error-page-web-service",
                 Label = "Edge Search & Address Bar Policy: Disable Web Service for Navigation Error Pages",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from using a Microsoft-hosted web service to generate alternative navigation error pages when a site is unreachable. When this policy is enabled, Edge sends the unreachable URL to Microsoft's servers to retrieve a custom error page with suggestions. Disabling it keeps Edge using its built-in static error page and prevents the URL of failed navigation attempts from being submitted to Microsoft.",
                 Tags = ["edge", "error page", "navigation", "web service", "privacy", "policy"],
@@ -4435,7 +4435,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-alternate-error-pages",
                 Label = "Edge Search & Address Bar Policy: Disable Alternate Error Page Web Service",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the alternate error page feature in Microsoft Edge, which contacts a Microsoft web service to display rich error pages with suggestions, links, and diagnostics for unreachable URLs. The alternate error page service sends the unreachable hostname to Microsoft even if the hostname is a private intranet address. Disabling it keeps failed navigations private and uses only Edge's built-in static error content.",
                 Tags = ["edge", "error page", "alternate", "web service", "privacy", "policy"],
@@ -4453,7 +4453,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-cloud-related-matches",
                 Label = "Edge Search & Address Bar Policy: Disable Cloud-Based Related Matches in Address Bar",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the cloud-based Related Matches provider in the Microsoft Edge address bar. Related Matches is a Microsoft service that offers AI-enhanced cross-domain URL completions based on browsing behavior, intent signals, and trending content signals from the Bing cloud index. Unlike local completions, Related Matches sends real-time query data to Microsoft cloud even for partial input.",
                 Tags = ["edge", "search", "cloud", "related matches", "ai", "privacy", "policy"],
@@ -4471,7 +4471,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-sidebar-search",
                 Label = "Edge Search & Address Bar Policy: Disable Search in Sidebar Panel",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the Edge Search in Sidebar feature, which opens a search panel on the right side of the browser when the user right-clicks and selects 'Search using web side panel', or when the user selects text and triggers a sidebar search action. This feature creates a split-screen search experience that shares the selected text with Microsoft's search service.",
                 Tags = ["edge", "sidebar", "search", "side panel", "policy"],
@@ -4489,7 +4489,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesrch-disable-typosquatting-checker",
                 Label = "Edge Search & Address Bar Policy: Disable URL Typosquatting Checker",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the Edge typosquatting checker that compares navigated URLs against a list of commonly mistyped domain names to warn the user when they may have typed a typosquatting site. While the checker improves user safety, it performs cloud lookups for URLs navigated via the address bar and sends the navigated hostname to Microsoft for comparison, creating outbound communication for every navigation.",
                 Tags = ["edge", "typosquatting", "url", "safety", "network", "policy"],
@@ -4517,7 +4517,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-enable-revocation-checks",
                 Label = "Edge Secure Browsing Policy: Enable Online Certificate Revocation Checks",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Forces Microsoft Edge to perform online certificate revocation checks (OCSP and CRL) for every TLS connection. By default Edge uses a soft-fail model where revocation checks are skipped if the responder is unreachable. Setting EnableOnlineRevocationChecks to 1 switches to hard-fail revocation checking, so Edge refuses connections when the revocation status of a server certificate cannot be confirmed. This prevents browser connections to hosts presenting revoked certificates caused by key compromise or CA incident.",
                 Tags = ["edge", "tls", "certificate", "revocation", "ocsp", "security", "policy"],
@@ -4535,7 +4535,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-revocation-for-local-anchors",
                 Label = "Edge Secure Browsing Policy: Require Revocation Checks for Locally-Trusted Certificates",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Extends online certificate revocation checking to certificates issued by locally-trusted (enterprise) Certificate Authorities. Without this policy Edge skips revocation checks for certs signed by CAs in the local machine trust store. Setting RequireOnlineRevocationChecksForLocalAnchors to 1 is essential in enterprise environments where internal PKI is used, as a compromised internal CA should still be subject to revocation enforcement.",
                 Tags = ["edge", "pki", "certificate", "revocation", "enterprise ca", "security", "policy"],
@@ -4553,7 +4553,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-autoupgrade-mixed-content",
                 Label = "Edge Secure Browsing Policy: Auto-Upgrade Mixed Content to HTTPS",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Configures Microsoft Edge to automatically upgrade mixed HTTP sub-resources (images, audio, video) to HTTPS without user intervention. Mixed content occurs when an HTTPS page loads resources over plain HTTP. Without MixedContentAutoupgradeEnabled, passive mixed content is displayed with a warning. Setting this to 1 makes Edge silently retry the resource over HTTPS, eliminating the mixed-content downgrade attack surface and the confusing browser security warning.",
                 Tags = ["edge", "mixed content", "https", "upgrade", "security", "policy"],
@@ -4571,7 +4571,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-enable-https-upgrades",
                 Label = "Edge Secure Browsing Policy: Enable Automatic HTTP-to-HTTPS Navigation Upgrades",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Enables the Edge HTTP URL upgrader, which rewrites HTTP navigation URLs to HTTPS before the request is made. HttpsUpgradesEnabled instructs Edge to speculatively upgrade HTTP URLs to HTTPS. If the HTTPS version is unavailable, Edge falls back to HTTP. This provides opportunistic HTTPS for sites that support it without requiring HSTS headers or HTTPS-only mode and eliminates cleartext first-hops for navigations to HTTPS-capable sites.",
                 Tags = ["edge", "https", "http upgrade", "navigation", "security", "policy"],
@@ -4589,7 +4589,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-block-private-network-requests",
                 Label = "Edge Secure Browsing Policy: Block Cross-Origin Requests to Private Network Resources",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents public websites from issuing fetch/XHR requests to resources on the local network or loopback addresses (private IP ranges). Setting InsecurePrivateNetworkRequestsAllowed to 0 enforces the Private Network Access specification. Without this policy, a malicious or compromised external web page could send requests to internal servers (e.g., routers, printers, IoT devices) using the browser as an unwitting proxy.",
                 Tags = ["edge", "private network access", "csrf", "internal network", "security", "policy"],
@@ -4607,7 +4607,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-disable-dino-game",
                 Label = "Edge Secure Browsing Policy: Disable Offline Dinosaur Easter Egg Game",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Disables the offline dinosaur/T-Rex game that appears in Microsoft Edge when the device has no internet connection. The game activates on chrome://dino and on error pages when the network is unavailable. Setting AllowDinosaurEasterEgg to 0 suppresses the game. In managed kiosk or enterprise environments, the Easter egg may be considered distracting, and disabling it reinforces that the browser is a business tool where idle game sessions are not permitted.",
                 Tags = ["edge", "offline", "easter egg", "kiosk", "policy"],
@@ -4625,7 +4625,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-disable-guest-mode",
                 Label = "Edge Secure Browsing Policy: Disable Guest Browsing Mode",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents users from opening a Guest browsing window in Microsoft Edge. Guest mode creates an isolated profile that does not save browsing history, cookies, or form data but also bypasses enterprise policy enforcement in some cases. Setting BrowserGuestModeEnabled to 0 ensures all browser sessions are subject to the configured enterprise policy controls and prevents data from being accessed through a less-controlled browsing session.",
                 Tags = ["edge", "guest mode", "profile", "enterprise", "policy"],
@@ -4643,7 +4643,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-disable-clickonce",
                 Label = "Edge Secure Browsing Policy: Disable ClickOnce Application Launch from Browser",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from launching ClickOnce (.application) packages directly from the browser. ClickOnce is a legacy Microsoft technology that allows .NET applications to be installed and launched from a web server. When ClickOnceEnabled is 0, Edge will not attempt to activate .application files and instead treats them as downloads. This closes a drive-by installation vector where a malicious or compromised site could deliver malware packaged as a ClickOnce app.",
                 Tags = ["edge", "clickonce", "application launch", "security", "policy"],
@@ -4661,7 +4661,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgesec-block-sha1-local-anchors",
                 Label = "Edge Secure Browsing Policy: Block SHA-1 Certificates from Locally-Trusted CAs",
-                Category = "Browser",
+                Category = "Browser — Edge New Tab Page",
                 Description =
                     "Prevents Microsoft Edge from trusting certificates signed with the SHA-1 hash algorithm when they are issued by locally-trusted (enterprise) Certificate Authorities. SHA-1 is cryptographically broken and was deprecated by major CAs in 2017. Setting EnableSha1ForLocalAnchors to 0 ensures Edge applies the same SHA-1 deprecation to enterprise certificates as it does to public CA certificates. This forces enterprise PKI administrators to migrate to SHA-256 or better signing algorithms.",
                 Tags = ["edge", "sha1", "certificate", "pki", "cryptography", "security", "policy"],
@@ -4689,7 +4689,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-enable-strict-origin-isolation",
                     Label = "Enable Strict Origin Isolation in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables strict origin isolation so every unique origin (scheme+host+port) runs in its own renderer process instead of grouping origins by site.",
                     Tags = ["edge", "origin-isolation", "security", "policy"],
@@ -4706,7 +4706,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-enable-renderer-sandbox",
                     Label = "Enable Renderer Process Sandbox in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables the renderer process sandbox in Edge, restricting renderer processes' access to the OS to reduce the impact of renderer compromises.",
                     Tags = ["edge", "sandbox", "renderer", "security", "policy"],
@@ -4723,7 +4723,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-block-cross-origin-reads",
                     Label = "Enable Cross-Origin Read Blocking (CORB) in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables Cross-Origin Read Blocking (CORB) to prevent sensitive cross-origin responses (HTML, JSON, XML) from being readable by cross-origin scripts, mitigating Spectre side-channel attacks.",
                     Tags = ["edge", "corb", "cross-origin", "security", "policy"],
@@ -4740,7 +4740,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-disable-shared-memory",
                     Label = "Disable Cross-Process Shared Memory in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Disables shared memory IPC between renderer processes and the browser process, reducing cross-process information leakage vectors in Edge.",
                     Tags = ["edge", "shared-memory", "ipc", "security", "policy"],
@@ -4757,7 +4757,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-enable-gpu-sandbox",
                     Label = "Enable GPU Process Sandbox in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables sandboxing of the Edge GPU process to restrict GPU process access to OS resources, reducing the impact of GPU driver exploits.",
                     Tags = ["edge", "gpu", "sandbox", "security", "policy"],
@@ -4774,7 +4774,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-block-mixed-content",
                     Label = "Block Mixed Active Content in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Blocks loading of active mixed content (scripts, stylesheets from HTTP on HTTPS pages), preventing downgrade and man-in-the-middle injection on secure pages.",
                     Tags = ["edge", "mixed-content", "https", "security", "policy"],
@@ -4791,7 +4791,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-force-https-first",
                     Label = "Force HTTPS-First Mode in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Forces Edge to attempt HTTPS connections before HTTP, automatically upgrading site navigation to HTTPS where supported.",
                     Tags = ["edge", "https", "upgrade", "security", "policy"],
@@ -4808,7 +4808,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgiso-disable-webrtc-leak",
                     Label = "Disable WebRTC IP Address Leak in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Configures WebRTC to use only public-facing IP addresses for ICE candidate generation, preventing local and VPN tunnel IP address leakage via WebRTC API.",
                     Tags = ["edge", "webrtc", "ip-leak", "privacy", "policy"],
@@ -4835,7 +4835,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgsleep-set-timeout-300",
                     Label = "Set Sleeping Tabs Timeout to 5 Minutes",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Sets the Sleeping Tabs inactivity timeout to 300 seconds (5 minutes), after which idle tabs are suspended to reclaim memory.",
                     Tags = ["edge", "sleeping-tabs", "timeout", "performance", "policy"],
@@ -4852,7 +4852,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgsleep-enable-efficiency-mode",
                     Label = "Enable Edge Efficiency Mode",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables Edge Efficiency Mode which reduces CPU usage when running on battery or when device resources are constrained, improving battery life on laptops.",
                     Tags = ["edge", "efficiency", "battery", "performance", "policy"],
@@ -4869,7 +4869,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgsleep-disable-tab-thumbnail-capture",
                     Label = "Disable Tab Thumbnail Capture for Inactive Tabs",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Disables background thumbnail capture for inactive tabs which wakes sleeping tabs unnecessarily to generate preview images for the tab overview.",
                     Tags = ["edge", "thumbnail", "sleeping-tabs", "performance", "policy"],
@@ -4886,7 +4886,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgsleep-set-memory-saver-threshold",
                     Label = "Enable Memory Saver Mode in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Enables Edge Memory Saver mode which aggressively frees memory from background tabs when system memory is constrained.",
                     Tags = ["edge", "memory-saver", "performance", "policy"],
@@ -4903,7 +4903,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgsleep-disable-reader-mode-preload",
                     Label = "Disable Reader Mode Preloading in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge New Tab Page",
                     Description =
                         "Disables automatic Reader Mode preloading that parses every article page in the background to prepare a distraction-free view, consuming CPU and memory unnecessarily.",
                     Tags = ["edge", "reader-mode", "preload", "performance", "policy"],
@@ -4930,7 +4930,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-enable-pua-detection",
                 Label = "Edge SmartScreen & Site Isolation Policy: Enable SmartScreen Potentially Unwanted Application Detection",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Enables Microsoft Defender SmartScreen's additional Potentially Unwanted Application (PUA) detection layer in Microsoft Edge. Setting SmartScreenPuaEnabled to 1 makes SmartScreen block downloads of adware, bundleware, and other borderline-unwanted software that passes virus scanning but still exhibits intrusive behaviour. PUA downloads include free tool bundles that silently install toolbars, browser hijackers, and registry cleaners with opaque uninstallers. Enabling PUA detection significantly reduces support burden from accidental installs of bundled software.",
                 Tags = ["edge", "smartscreen", "pua", "potentially unwanted", "adware", "policy"],
@@ -4948,7 +4948,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-prevent-smartscreen-override",
                 Label = "Edge SmartScreen & Site Isolation Policy: Prevent Users from Overriding SmartScreen Warnings for Sites",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents users from clicking through Microsoft Defender SmartScreen warning pages to visit sites identified as phishing or malware-distributing. Setting PreventSmartScreenPromptOverride to 1 removes the 'Continue anyway' option from SmartScreen's 'This site is not safe' warning page. Without this policy, a determined or socially-engineered user can dismiss any SmartScreen warning with one click. Locking the block removes the user as a weak link in the safety chain and is a CIS Benchmark Level 1 recommendation for enterprise deployments.",
                 Tags = ["edge", "smartscreen", "override", "phishing", "security", "cis", "policy"],
@@ -4966,7 +4966,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-prevent-smartscreen-file-override",
                 Label = "Edge SmartScreen & Site Isolation Policy: Prevent Users from Overriding SmartScreen Warnings for File Downloads",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents users from bypassing Microsoft Defender SmartScreen download warnings to proceed with a download that SmartScreen has identified as malicious or unrecognised. Setting PreventSmartScreenPromptOverrideForFiles to 1 removes the 'Download anyway' option from SmartScreen's download warning panel. Without this policy, SmartScreen file warnings can be clicked past by any user regardless of IT policy intent. This control is complementary to PreventSmartScreenPromptOverride (for sites) and closes the most common vector for malware delivery via the browser: malicious file downloads.",
                 Tags = ["edge", "smartscreen", "download", "malware", "override", "security", "cis", "policy"],
@@ -4984,7 +4984,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-block-clipboard-api",
                 Label = "Edge SmartScreen & Site Isolation Policy: Block Clipboard Access for Web Pages by Default",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures Microsoft Edge to block all web page requests to read from or write to the system Clipboard API, with no automatic permissions granted. Setting DefaultClipboardSetting to 2 denies clipboard access to all websites by default; users are not shown a permission prompt. Without this policy, websites can request clipboard permission and then silently read the contents of the clipboard (passwords, PINs, financial data) or inject content, which is a common vector in web-based phishing and session-hijack attacks. Legitimate web applications requiring clipboard access can be allow-listed via ClipboardAllowedForUrls.",
                 Tags = ["edge", "clipboard", "permissions", "privacy", "security", "policy"],
@@ -5002,7 +5002,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-force-site-isolation",
                 Label = "Edge SmartScreen & Site Isolation Policy: Force Site Isolation per Origin",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Enables strict site-isolation in Microsoft Edge, ensuring that each distinct website origin is rendered in a separate OS-level process. Setting SitePerProcess to 1 prevents cross-site process sharing, which is the main requirement for defending against Spectre/Meltdown side-channel attacks that attempt to extract data from one origin's renderer process into another's. Site-per-process is the foundational mitigation for cross-site information-leakage attacks at the CPU speculation level and is recommended by Google and Microsoft security teams as an unconditional hardening measure.",
                 Tags = ["edge", "site isolation", "spectre", "meltdown", "process isolation", "security", "policy"],
@@ -5020,7 +5020,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-disable-edge-discover",
                 Label = "Edge SmartScreen & Site Isolation Policy: Disable Edge Discover Pane",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Edge Discover pane (the Copilot/AI side panel entry point that was previously branded 'Discover'). Setting EdgeDiscoverEnabled to 0 removes the Discover/Copilot feature-entry button from the Edge toolbar and prevents the sidebar pane from opening. The Discover pane communicates page context from the active tab to Microsoft's cloud AI services, which represents an unsolicited data transmission for each page visited while the pane is active. Enterprise data-classification policies may prohibit sending intranet or confidential page content to public AI endpoints.",
                 Tags = ["edge", "discover", "ai", "copilot", "sidebar", "telemetry", "policy"],
@@ -5038,7 +5038,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-disable-vertical-tabs",
                 Label = "Edge SmartScreen & Site Isolation Policy: Disable Vertical Tabs Feature",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents users from switching to Edge's vertical tab layout. Setting VerticalTabsAllowed to 0 removes the option to re-orient the tab strip from the top of the browser window to a collapsible list on the left side. In managed environments where desktop screenshots are used for compliance auditing, standardising the browser layout to horizontal tabs makes visual reviews consistent and predictable. Vertical tabs is a UI preference feature with no security implication, but organisations choosing to standardise the interface experience can enforce it via this policy.",
                 Tags = ["edge", "vertical tabs", "ui standardisation", "policy"],
@@ -5056,7 +5056,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgessf-disable-adfs",
                 Label = "Edge SmartScreen & Site Isolation Policy: Disable ADFS (Active Directory Federation Services) Integration",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables Microsoft Edge's built-in Active Directory Federation Services (ADFS) authentication integration, which automatically attempts federated sign-in to on-premises ADFS endpoints when Microsoft Entra ID (Azure AD) credentials are present. Setting ADFSEnabled to 0 prevents Edge from silently authenticating to ADFS relying parties without explicit user interaction. Organisations that have fully migrated to cloud-only Entra ID or that use a different federation provider (Okta, Ping, ADFS v3+) may wish to disable this integration to avoid unexpected authentication flows and reduce reliance on legacy ADFS infrastructure within the browser.",
                 Tags = ["edge", "adfs", "federation", "authentication", "sso", "enterprise", "policy"],
@@ -5085,7 +5085,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-set-startup-to-new-tab",
                 Label = "Edge Startup Policy: Set Startup Action to Open New Tab Page",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures Microsoft Edge to always open the New Tab Page on startup, discarding any previously open tabs and ignoring the 'Continue where you left off' option. This ensures a clean browser state on every launch, which is important for shared workstations, kiosk deployments, and compliance environments where session continuity between logins must not occur.",
                 Tags = ["edge", "startup", "new tab", "session", "policy"],
@@ -5103,7 +5103,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-disable-sleeping-tabs",
                 Label = "Edge Startup Policy: Disable Sleeping Tabs Background CPU Throttle",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Edge Sleeping Tabs feature that automatically sends unused background tabs into a low-power throttled state after a period of inactivity. While intended to reduce CPU and memory usage, the Sleeping Tabs feature sometimes causes web applications (dashboards, real-time monitoring tools, auto-paging enterprise apps) to lose their session state unexpectedly.",
                 Tags = ["edge", "sleeping tabs", "performance", "tabs", "policy"],
@@ -5121,7 +5121,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-disable-performance-detector",
                 Label = "Edge Startup Policy: Disable Edge Performance Detector",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Edge Performance Detector, which monitors browser and system performance to advise users about slow extensions, resource-heavy tabs, and memory pressure. While informational, the Performance Detector runs a background profiling service and generates telemetry reports sent to Microsoft. In managed environments where performance baselines are set by IT, this unsolicited advisor is unnecessary.",
                 Tags = ["edge", "performance detector", "telemetry", "profiling", "policy"],
@@ -5139,7 +5139,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-disable-new-tab-prerender",
                 Label = "Edge Startup Policy: Disable New Tab Page Prerendering",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents Edge from pre-rendering the New Tab Page (NTP) before the user explicitly opens a new tab. The NTP prerender fetches background images, news feed content, and Bing search suggestions in advance. Disabling prerendering reduces background network activity, decreases memory usage, and prevents prefetch requests from appearing in corporate network monitoring tools.",
                 Tags = ["edge", "new tab", "prerender", "performance", "network", "policy"],
@@ -5157,7 +5157,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-force-bing-search-on-ntp",
                 Label = "Edge Startup Policy: Lock New Tab Page Search Box to Bing (Prevent Override)",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures the New Tab Page search box type to Bing and prevents users from changing it to a third-party or intranet search engine. In enterprise deployments where Bing is the approved search provider (or where the Enterprise New Tab Page is set to a corporate portal), this prevents inconsistency in the search experience and avoids accidental data submission to unapproved search services.",
                 Tags = ["edge", "new tab", "search box", "bing", "search engine", "policy"],
@@ -5175,7 +5175,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-set-homepage-to-new-tab",
                 Label = "Edge Startup Policy: Set Home Page to New Tab Page",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures the Edge home page button to navigate to the New Tab Page rather than a custom URL. This ensures the home button is functional and consistent on all managed devices. When combined with the startup action policy, the home button and startup both go to the NTP, providing a consistent entry point across all managed Edge profiles.",
                 Tags = ["edge", "homepage", "new tab", "startup", "policy"],
@@ -5193,7 +5193,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-disable-experimentation-service",
                 Label = "Edge Startup Policy: Disable Edge Experimentation and A/B Testing Service",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents Microsoft Edge from contacting the Experimentation and Configuration Service (ECS) that enrolls the browser in A/B feature experiments and delivers remote feature flag overrides. ECS can silently enable or disable browser features without a version update. In enterprise environments, uncontrolled feature experiments can change behaviour, break web app compatibility, or activate preview features not approved by IT.",
                 Tags = ["edge", "experimentation", "ab testing", "feature flags", "policy"],
@@ -5211,7 +5211,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgestart-disable-tab-groups",
                 Label = "Edge Startup Policy: Disable Edge Tab Groups",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Edge Tab Groups feature that lets users organize browser tabs into named, colored groups. On kiosk and locked-down devices where the number of open tabs is restricted by policy, and where session restoration of tab groups between logins would create persistent state, disabling tab groups simplifies the browser UX and prevents group state from persisting across logons.",
                 Tags = ["edge", "tab groups", "kiosk", "simplification", "policy"],
@@ -5239,7 +5239,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-strict-tracking-prevention",
                 Label = "Edge Tracking Protection Policy: Enforce Strict Tracking Prevention",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Forces Microsoft Edge to use Strict tracking prevention mode, which blocks all known trackers regardless of whether they are from sites the user has previously visited. Strict mode blocks trackers that cause compatibility issues and prevents tracking from any source — including cross-site embedded trackers, fingerprinting scripts, and crypto mining scripts. In privacy-focused corporate environments, strict mode reduces enterprise data leakage to advertising networks.",
                 Tags = ["edge", "tracking prevention", "strict", "privacy", "telemetry", "policy"],
@@ -5258,7 +5258,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-clear-cache-on-exit",
                 Label = "Edge Tracking Protection Policy: Clear Cached Images and Files on Exit",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures Microsoft Edge to automatically delete all cached images and files from the browser cache when the browser closes. The disk cache is a persistent storage mechanism that survives browser restarts and can be used as a covert channel for tracking users across sessions (cache timing attacks, ETag tracking, and cache element counting). Clearing the cache on exit prevents this class of cross-session tracking.",
                 Tags = ["edge", "cache", "privacy", "exit", "tracking", "policy"],
@@ -5276,7 +5276,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-disable-signed-http-exchange",
                 Label = "Edge Tracking Protection Policy: Disable Signed HTTP Exchange Support",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables Signed HTTP Exchange (SXG) support in Microsoft Edge. SXG is a web packaging format that allows content to be pre-signed by the original publisher and served from a CDN or cache while appearing to originate from the publisher's domain. While this improves performance for AMP and pre-fetched content, it can break referrer-origin alignment, complicate certificate revocation for distributed content, and interfere with corporate content inspection proxies.",
                 Tags = ["edge", "signed http exchange", "sxg", "security", "proxy", "policy"],
@@ -5294,7 +5294,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-disable-shared-array-buffer-unrestricted",
                 Label = "Edge Tracking Protection Policy: Enforce Cross-Origin Isolation for SharedArrayBuffer",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Prevents websites from using the SharedArrayBuffer (SAB) API without proper cross-origin isolation headers (COOP/COEP). SharedArrayBuffer enables high-resolution timer attacks and Spectre-class side-channel exploits when used from pages that are not properly isolated. Disabling unrestricted SAB access forces all websites that require SharedArrayBuffer to declare cross-origin isolation, which significantly reduces Spectre exploitation potential.",
                 Tags = ["edge", "sharedarraybuffer", "spectre", "security", "cross-origin", "policy"],
@@ -5312,7 +5312,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-disable-surf-game",
                 Label = "Edge Tracking Protection Policy: Disable Surf Easter Egg Game on Error Pages",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Surf easter egg game that appears on Edge error pages (similar to Chrome's T-Rex game). When AllowSurfGame is set to 0, the game cannot be activated on the no-internet or ERR_CONNECTION_REFUSED error page. In managed enterprise environments and kiosk deployments, the hidden game represents an uncontrolled interactive application running within the browser, which may distract users or enable unintended browser activity on locked-down systems.",
                 Tags = ["edge", "surf game", "easter egg", "error page", "kiosk", "policy"],
@@ -5330,7 +5330,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-block-intrusive-ads",
                 Label = "Edge Tracking Protection Policy: Block Ads on Sites with Intrusive Ad Experiences",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Configures Microsoft Edge to block all ads on websites that have been flagged by the Better Ads Standards initiative for running intrusive ad experiences (auto-playing video with sound, countdown interstitials, prestitial ads with countdown). Setting AdsSettingForIntrusiveAdsSites to 2 activates the integrated ad-blocking on flagged domains. This reduces the number of ad trackers loaded, improves page load performance, and removes disruptive content on violating sites.",
                 Tags = ["edge", "ads", "intrusive ads", "better ads", "tracking", "policy"],
@@ -5348,7 +5348,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-disable-builtin-dns-client",
                 Label = "Edge Tracking Protection Policy: Disable Edge Built-In DNS Client (Use OS DNS)",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the built-in DNS client in Microsoft Edge and forces the browser to use the operating system's DNS resolver for all name resolution. Edge's built-in DNS client can use different DNS servers, timeout settings, and resolution strategies than the OS-configured DNS — potentially bypassing corporate DNS policies, split-horizon DNS configurations, and DNS-based filtering. Using the OS DNS ensures Edge resolution goes through the same monitored and filtered DNS path as all other applications.",
                 Tags = ["edge", "dns", "built-in dns", "network", "corporate", "policy"],
@@ -5366,7 +5366,7 @@ internal static class PolicyBrowser
             {
                 Id = "edgetrack-disable-lens-search",
                 Label = "Edge Tracking Protection Policy: Disable Image Lens Region Search",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 Description =
                     "Disables the Lens Region Search feature in Microsoft Edge, which adds a camera/Bing icon to the browser toolbar and context menu allowing users to select a region of any web page and submit it as an image search query to Bing. Lens Region Search uploads a screenshot of the selected page region to Microsoft Bing's image search service. This creates an implicit image-based data exfiltration path for sensitive content displayed on internal corporate web pages or classified documents.",
                 Tags = ["edge", "lens search", "bing", "image search", "privacy", "policy"],
@@ -5395,7 +5395,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-telemetry",
                     Label = "Disable WebView2 Telemetry",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Disables usage and diagnostic telemetry in the Edge WebView2 runtime, preventing embedded browser telemetry from third-party apps that use WebView2 for rendering.",
                     Tags = ["edge", "webview2", "telemetry", "privacy", "policy"],
@@ -5412,7 +5412,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-crash-reporting",
                     Label = "Disable WebView2 Crash Reporting",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Disables automatic crash report uploads from WebView2-hosted applications, preventing crash dump data from being sent to Microsoft.",
                     Tags = ["edge", "webview2", "crash-report", "privacy", "policy"],
@@ -5429,7 +5429,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-auto-update",
                     Label = "Disable WebView2 Runtime Auto-Update",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Disables automatic updates for the Edge WebView2 runtime, ensuring the runtime version is managed by WSUS or MDM rather than auto-updated from the internet.",
                     Tags = ["edge", "webview2", "update", "policy"],
@@ -5446,7 +5446,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-block-third-party-cookies",
                     Label = "Block Third-Party Cookies in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Blocks third-party cookies in all WebView2 instances, preventing cross-origin tracking via embedded browser controls in desktop applications.",
                     Tags = ["edge", "webview2", "cookies", "tracking", "privacy", "policy"],
@@ -5463,7 +5463,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-geolocation",
                     Label = "Disable Geolocation API in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Disables the Geolocation API in WebView2 instances, preventing embedded browser controls from accessing location data.",
                     Tags = ["edge", "webview2", "geolocation", "privacy", "policy"],
@@ -5480,7 +5480,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-block-file-system-access",
                     Label = "Block File System API Access in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Blocks web content in WebView2 from accessing the local file system via the File System Access API, preventing read/write of arbitrary host files.",
                     Tags = ["edge", "webview2", "file-system", "security", "policy"],
@@ -5497,7 +5497,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-notifications",
                     Label = "Block Notification Requests in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Blocks web push notification permission requests in WebView2 instances, preventing embedded browser controls from requesting notification access.",
                     Tags = ["edge", "webview2", "notifications", "privacy", "policy"],
@@ -5514,7 +5514,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-force-safe-browsing",
                     Label = "Force Safe Browsing in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Forces Safe Browsing URL reputation checking in WebView2 instances, ensuring all URLs loaded in embedded browser controls are checked against the Safe Browsing database.",
                     Tags = ["edge", "webview2", "safe-browsing", "security", "policy"],
@@ -5531,7 +5531,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-disable-speech-api",
                     Label = "Disable Speech Recognition API in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Disables the Web Speech API in WebView2 instances, preventing embedded browser controls from accessing the microphone for speech recognition.",
                     Tags = ["edge", "webview2", "speech", "microphone", "privacy", "policy"],
@@ -5548,7 +5548,7 @@ internal static class PolicyBrowser
                 {
                     Id = "wv2pol-block-protocol-handlers",
                     Label = "Block Custom Protocol Handlers in WebView2",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Prevents web content in WebView2 from registering custom URI protocol handlers, blocking potential protocol exploitation vectors in embedded browser controls.",
                     Tags = ["edge", "webview2", "protocol-handlers", "security", "policy"],
@@ -5575,7 +5575,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-force-work-profile-sign-in",
                     Label = "Edge Work Profile: Force Sign-In with Work or School Account",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets ForceSyncTypes=1 in Edge policy. Forces Edge to require the user to sign in with a work or school account (Entra ID / Microsoft 365) before browsing can begin, ensuring the browser session is always associated with a managed identity and data protection policies are applied. "
                         + "Unauthenticated Edge browsing sessions (guest mode, personal profile, no-sign-in mode) do not inherit the user's Conditional Access, DLP, or browser policy configurations. A user who bypasses the sign-in prompt has a browser session without enterprise policies applied, including without SSL inspection, information barrier enforcement, or Purview data classification labels. Forcing sign-in ensures all browser activity is attributable to a managed identity.",
@@ -5593,7 +5593,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-disable-personal-browsing-in-work-profile",
                     Label = "Edge Work Profile: Disable Switching to Personal Browse Session in Work Profile",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets PersonalBrowsingAllowed=0 in Edge policy. Prevents users from switching from the managed work profile to an unmanaged personal browsing context within the same Edge browser window, keeping all browsing within the enforceable work profile context. "
                         + "Edge's 'Browse without your data' and 'Personal profile' features allow users to open an unmanaged browser context without enterprise DLP, SSL inspection, and proxy policies. These personal contexts, despite running in the same process, do not inherit the work profile's Conditional Access tokens or data protection rules. A user can copy sensitive data from a managed tab to an unmanaged personal tab, then upload it to a personal cloud service.",
@@ -5611,7 +5611,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-block-non-work-account-sign-in",
                     Label = "Edge Work Profile: Block Signing In with Non-Work / Personal Accounts",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets RestrictSigninToPattern=1 in Edge policy. Restricts the Edge browser sign-in to accounts that match the organisation's verified domain pattern only, preventing users from signing into Edge with personal Microsoft accounts, Google accounts (via linking), or third-party identity providers. "
                         + "Allowing personal account sign-in into Edge bypasses Conditional Access evaluation because the personal account token does not flow through the organisation's IdP. A user signed in with a personal account in a work browser context can install unvetted extensions, sync personal bookmarks containing personal cloud credentials, and access personal services without DLP policy enforcement.",
@@ -5629,7 +5629,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-enable-mandatory-workplace-access",
                     Label = "Edge Work Profile: Enable Mandatory Workplace (MAM) Access Enforcement in Edge",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets MandatoryBrowserWorkplaceAccess=1 in Edge policy. Enables Microsoft Edge's Mobile Application Management (MAM)-style policy enforcement when the user is authenticated with a work account, automatically applying Intune app protection policies to the Edge browser session. "
                         + "Without MAM/workplace access enforcement, a user on a non-compliant device (e.g., a personal device not enrolled in Intune) can sign into Edge with a work account and access M365 resources without device compliance checks, DLP policies applying to copy/paste, or data transfer restrictions. Workplace access enforcement applies app-level protection policies to the browser session independent of device enrollment state.",
@@ -5648,7 +5648,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-disable-guest-mode-browsing",
                     Label = "Edge Work Profile: Disable Guest Mode Browsing",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets GuestModeEnabled=0 in Edge policy. Disables the Edge 'Guest' profile mode, which launches an ephemeral browser context with no policies, no identity, no browsing history persistence, and no enterprise configuration applied. "
                         + "Guest mode is commonly used to access the browser without any profile's policies applying. On a managed enterprise device, a user opening Edge in guest mode bypasses every configured Edge Group Policy — with no managed account bound to the session. SSL inspection, extension allow-listing, DLP policies, and URL filtering policies all become ineffective in a guest mode session.",
@@ -5666,7 +5666,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-enforce-managed-profile-on-startup",
                     Label = "Edge Work Profile: Enforce Managed Work Profile at Browser Startup",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets ManagedBrowserStartEnabled=1 in Edge policy. Ensures that Edge always opens to the managed work profile on startup, rather than offering a profile picker or defaulting to the most recently used (possibly personal) profile. "
                         + "On multi-profile Edge installations, the browser may start in a personal or unmanaged profile if that was the last one used. Users habitually working in a personal profile while corporate data is accessible in internal apps may inadvertently paste or upload work data from a personal-profile session where DLP is not enforced. Ensuring startup always opens the managed work profile makes the default context the compliant one.",
@@ -5684,7 +5684,7 @@ internal static class PolicyBrowser
                 {
                     Id = "edgewp-disable-profile-sharing-across-windows",
                     Label = "Edge Work Profile: Disable Profile Data Sharing Across Edge Windows",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets ShareSessionCookiesWithExternalApps=0 in Edge policy. Prevents Edge from sharing session state, cookies, and profile context with Edge WebView2-embedded browser controls in third-party applications, ensuring the managed work profile's authentication tokens are isolated to the Edge browser process. "
                         + "Edge WebView2-based applications (such as Teams, Office web views, and third-party Electron apps) can access the Edge user profile's cookie jar and session tokens if profile sharing is enabled. A compromised Electron application running with Edge WebView2 can silently extract the authenticated session tokens for SharePoint, Exchange, and other M365 services from the shared Edge profile, enabling token theft without the user's knowledge.",
@@ -5717,7 +5717,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-ie-enterprise-mode",
                 Label = "IE Compat: Disable IE Enterprise Mode Site List",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeEntMode],
@@ -5734,7 +5734,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-ie-first-run",
                 Label = "IE Compat: Disable IE First-Run Wizard",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeMainPolicy],
@@ -5751,7 +5751,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-prevent-deleting-ie-cookies",
                 Label = "IE Compat: Prevent Users Deleting IE Cookies",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeMainPolicy],
@@ -5768,7 +5768,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-changing-homepage",
                 Label = "IE Compat: Prevent Changing IE Start Page",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeMainPolicy],
@@ -5785,7 +5785,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-ie-autocomplete",
                 Label = "IE Compat: Disable IE AutoComplete for Forms",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeMainPolicy],
@@ -5802,7 +5802,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-ie-zone-elevation",
                 Label = "IE Compat: Disable Zone Elevation for IE Process",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeSecurity],
@@ -5819,7 +5819,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-disable-ie-addon-install-prompt",
                 Label = "IE Compat: Suppress IE Add-on Install Prompts",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [IeMainPolicy],
@@ -5836,7 +5836,7 @@ internal static class PolicyBrowser
             {
                 Id = "iecompat-enforce-edge-https-upgrades",
                 Label = "IE Compat: Enforce HTTPS Upgrades in Edge",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EdgeMain],
@@ -5863,7 +5863,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-context-menu",
                     Label = "Disable IE Right-Click Context Menu",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoBrowserContextMenu=1 to disable the right-click context menu in Internet Explorer and Edge IE Mode tabs. "
                         + "Prevents users from accessing context-menu options such as Save As, View Source, and Print from within "
@@ -5882,7 +5882,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-browser-options",
                     Label = "Disable IE Internet Options Dialog",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoBrowserOptions=1 to remove access to the Internet Options dialog from IE and Edge IE Mode. "
                         + "Prevents users from modifying proxy settings, security zone configurations, privacy controls, "
@@ -5901,7 +5901,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-view-source",
                     Label = "Disable IE View Source",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoViewSource=1 to prevent users from viewing the HTML source code of web pages in IE and Edge IE Mode. "
                         + "Removing view-source access discourages extraction of embedded credentials, internal URLs, and application "
@@ -5920,7 +5920,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-favorites",
                     Label = "Disable IE Favorites Menu",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoFavorites=1 to remove the Favorites menu and prevent users from adding or accessing "
                         + "bookmarked sites in Internet Explorer and Edge IE Mode. Favorites-based URL access creates "
@@ -5939,7 +5939,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-select-download-dir",
                     Label = "Prevent Changing IE Download Folder",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoSelectDownloadDir=1 to prevent users from changing the download destination folder in IE. "
                         + "Forces all file downloads to use the administrator-configured download directory, "
@@ -5958,7 +5958,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-find-files",
                     Label = "Disable IE Find Files Command",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoFindFiles=1 to disable the Find > Files or Folders command within Internet Explorer. "
                         + "Prevents users from using the built-in file search capability that can expose the local filesystem "
@@ -5977,7 +5977,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-open-in-new-window",
                     Label = "Prevent IE Links Opening in New Windows",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoOpenInNewWnd=1 to prevent hyperlinks and scripts in Internet Explorer from opening content "
                         + "in new browser windows. Stops script-driven window spawning used by pop-up ads and potentially "
@@ -5996,7 +5996,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-browser-toolbar",
                     Label = "Remove IE Browser Toolbar",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoToolBar=1 to remove the toolbar from Internet Explorer and Edge IE Mode. "
                         + "Prevents access to toolbar controls, add-ons, and navigation shortcuts from the toolbar area. "
@@ -6015,7 +6015,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-theater-mode",
                     Label = "Disable IE Theater / Full-Screen Mode",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoTheaterMode=1 to disable the Theater Mode (full-screen F11 view) in Internet Explorer. "
                         + "Prevents users from entering full-screen presentation mode, which hides the taskbar and system indicators "
@@ -6034,7 +6034,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ierest-disable-close-browser",
                     Label = "Disable IE Close Browser Button",
-                    Category = "Browser",
+                    Category = "Browser — Edge Smart Screen And Site Isolation",
                     Description =
                         "Sets NoBrowserClose=1 to prevent users from closing the Internet Explorer window via the X button or "
                         + "File > Close. Used in kiosk and locked-down browsing scenarios where IE is the only interface "
@@ -6070,7 +6070,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-lock-zones-to-machine",
                 Label = "Lock Security Zones to Machine Policy",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "security", "zones", "policy", "hardening"],
@@ -6087,7 +6087,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-activex-internet",
                 Label = "Disable ActiveX Controls in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "activex", "security", "zone", "hardening"],
@@ -6103,7 +6103,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-activescript-internet",
                 Label = "Disable Active Scripting in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "scripting", "javascript", "zone", "security"],
@@ -6119,7 +6119,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-prevent-cert-error-bypass",
                 Label = "Prevent Users Bypassing Certificate Errors",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "certificate", "tls", "security", "ssl"],
@@ -6135,7 +6135,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-auto-file-download",
                 Label = "Block Automatic File Download Prompts in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "download", "zone", "security", "policy"],
@@ -6151,7 +6151,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-enable-smartscreen-legacy",
                 Label = "Enable SmartScreen Phishing Filter for Legacy Apps",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "smartscreen", "phishing", "filter", "security"],
@@ -6167,7 +6167,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-form-submit-unencrypted",
                 Label = "Block Unencrypted Form Submission in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "form", "https", "encryption", "data"],
@@ -6183,7 +6183,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-mixed-content",
                 Label = "Block Mixed HTTP/HTTPS Content in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "mixed-content", "https", "http", "security"],
@@ -6199,7 +6199,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-unsafe-activex-init",
                 Label = "Block Unsafe ActiveX Initialisation in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "activex", "signed", "unsafe", "zone"],
@@ -6215,7 +6215,7 @@ internal static class PolicyBrowser
             {
                 Id = "izone-block-script-clipboard-internet",
                 Label = "Block Script Access to Clipboard in Internet Zone",
-                Category = "Browser",
+                Category = "Browser — Edge Smart Screen And Site Isolation",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["internet", "clipboard", "script", "zone", "security"],
@@ -6247,7 +6247,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-block-about-flags",
                     Label = "Block Access to edge://flags in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Prevents access to the edge://flags page in the legacy Microsoft Edge (EdgeHTML) browser, stopping users from enabling experimental features that may bypass security controls.",
                     Tags = ["edge", "legacy edge", "flags", "experimental", "security", "policy"],
@@ -6265,7 +6265,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-disable-address-bar-dropdown",
                     Label = "Disable Address Bar Drop-Down List in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Disables the drop-down suggestion list that appears when the user types in the legacy Edge address bar, preventing URL history and search suggestion exposure.",
                     Tags = ["edge", "legacy edge", "address bar", "suggestions", "privacy", "policy"],
@@ -6283,7 +6283,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-disable-tab-preloading",
                     Label = "Disable Tab Preloading at Windows Startup in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Prevents legacy Microsoft Edge from preloading tabs in the background when Windows starts, reducing RAM usage and startup overhead on managed systems.",
                     Tags = ["edge", "legacy edge", "tab", "preload", "startup", "performance", "policy"],
@@ -6301,7 +6301,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-prevent-smartscreen-bypass",
                     Label = "Prevent Bypassing SmartScreen Warnings in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Prevents users from ignoring or bypassing SmartScreen phishing and malware warnings in legacy Microsoft Edge, enforcing the block when a threat is detected.",
                     Tags = ["edge", "legacy edge", "smartscreen", "security", "bypass", "policy"],
@@ -6319,7 +6319,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-disable-inprivate-browsing",
                     Label = "Disable InPrivate Browsing in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Disables InPrivate browsing mode in legacy Microsoft Edge, ensuring all sessions are tracked in history so that browsing can be audited on managed devices.",
                     Tags = ["edge", "legacy edge", "inprivate", "private browsing", "audit", "policy"],
@@ -6337,7 +6337,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-prevent-flip-ahead",
                     Label = "Disable Flip Ahead Page Prediction in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Disables the Flip Ahead feature in legacy Microsoft Edge that pre-fetches the next page in a series, preventing unsolicited network requests and reducing data sent to Microsoft.",
                     Tags = ["edge", "legacy edge", "flip ahead", "prefetch", "privacy", "policy"],
@@ -6355,7 +6355,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-hide-first-run-prompt",
                     Label = "Hide the First-Run Welcome Page in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Suppresses the first-run welcome page and setup wizard in legacy Microsoft Edge, streamlining deployment on managed machines where browser configuration is set by policy.",
                     Tags = ["edge", "legacy edge", "first run", "onboarding", "deployment", "policy"],
@@ -6373,7 +6373,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-prevent-extension-dev-tools",
                     Label = "Prevent Loading Unpacked Extensions in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Blocks loading of extensions that are not from the Microsoft Store in legacy Microsoft Edge, preventing unpacked or sideloaded extensions from running on managed devices.",
                     Tags = ["edge", "legacy edge", "extensions", "developer mode", "security", "policy"],
@@ -6391,7 +6391,7 @@ internal static class PolicyBrowser
                 {
                     Id = "ledge-disable-home-button",
                     Label = "Disable the Home Button in Legacy Edge",
-                    Category = "Browser",
+                    Category = "Browser — Legacy Edge",
                     Description =
                         "Removes the home button from the legacy Microsoft Edge toolbar, preventing users from quickly navigating to a home page that may not comply with enterprise navigation policies.",
                     Tags = ["edge", "legacy edge", "home button", "toolbar", "policy"],

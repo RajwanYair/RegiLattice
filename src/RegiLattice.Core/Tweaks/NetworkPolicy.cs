@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -60,7 +60,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-adhoc-networks",
                 Label = "Disable Ad-hoc Wireless Network Connections",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -77,7 +77,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-wifi-direct",
                 Label = "Disable Wi-Fi Direct",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -94,7 +94,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-hotspot-creation",
                 Label = "Disable Wireless Hotspot Creation",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -111,7 +111,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-wifi-sense",
                 Label = "Disable Wi-Fi Sense Automatic Connection Sharing",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -128,7 +128,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-wireless-config",
                 Label = "Disable Wireless Network Configuration by Users",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -145,7 +145,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-unmanaged-networks",
                 Label = "Block Connections to Unmanaged Wireless Networks",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -162,7 +162,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-random-mac",
                 Label = "Disable Random Hardware MAC Address",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -179,7 +179,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-auto-connect-open",
                 Label = "Disable Auto-Connect to Open Wireless Networks",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -196,7 +196,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-wireless-telemetry",
                 Label = "Disable Wireless Network Telemetry",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -213,7 +213,7 @@ internal static class PolicyNetwork
             {
                 Id = "adhocnet-disable-wlan-service",
                 Label = "Restrict WLAN AutoConfig Service Use",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -244,7 +244,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-require-machine-cert-ikev2",
                     Label = "Always On VPN: Require Machine Certificate for IKEv2 Auth",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets DisableAdvancedCredentialUI=1 in RasMan policy parameters. Disables username/password (MSCHAPv2) authentication fallback for IKEv2 VPN connections, requiring machine certificate authentication. MSCHAPv2 is vulnerable to offline brute-force attacks; certificate-based IKEv2 auth uses asymmetric cryptography that cannot be brute-forced. This policy is critical for AOVPN deployments where device tunnel must authenticate before user logon.",
                     Tags = ["aovpn", "certificate", "ikev2", "authentication", "security"],
@@ -262,7 +262,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-enable-dns-registration",
                     Label = "Always On VPN: Enable Dynamic DNS Registration via VPN",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets RegisterDnsARecords=1 in RasMan/Parameters. Enables dynamic DNS registration for the VPN adapter's IP address against the corporate DNS server when AOVPN connects. Without DNS registration, remote clients cannot be reached by hostname from the corporate network, breaking RDP-to-client, IT-admin remote management, SCCM/Intune management channels, and MDM policies that require network-initiated connections to the endpoint.",
                     Tags = ["aovpn", "dns", "registration", "management", "connectivity"],
@@ -280,7 +280,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-disable-vpn-reconnect-prompt",
                     Label = "Always On VPN: Disable Reconnect UI Prompt After Disconnect",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets DisableReconnectToIncompatible=1. Suppresses the Windows dialog that prompts users to reconnect to their VPN after an unexpected disconnection. In AOVPN deployments, the VPN reconnects automatically without user interaction; the reconnect dialog is therefore unnecessary and confusing. Hiding it prevents users from attempting manual reconnects that could interfere with the AOVPN auto-reconnect logic.",
                     Tags = ["aovpn", "reconnect", "ui", "ux", "enterprise"],
@@ -298,7 +298,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-enable-bypass-for-local",
                     Label = "Always On VPN: Enable Local Network Subnet Bypass",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets BypassForLocal=1 in VPN profile policy. Allows traffic to local network resources (LAN printers, local file shares, home NAS) to bypass the VPN tunnel and route directly over the local interface. Without local bypass, users connected via AOVPN in a full-tunnel configuration must route all local traffic through the VPN server, preventing access to home printers and causing unnecessarily slow local file transfers.",
                     Tags = ["aovpn", "split-tunnel", "local-bypass", "lan", "performance"],
@@ -316,7 +316,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-set-ikev2-max-retries",
                     Label = "Always On VPN: Set IKEv2 Reconnect Max Retries to 3",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets MaxRetries=3 in RasMan. Limits IKEv2 tunnel re-establishment attempts to 3 on network interruptions before the AOVPN client gives up and waits for next trigger. Excessive retries during network instability cause IKEv2 SA flooding on the VPN gateway server and degrade performance for all concurrent VPN users. Three retries covers transient interruptions while preventing retry storm behavior.",
                     Tags = ["aovpn", "ikev2", "retry", "reliability", "network"],
@@ -333,7 +333,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-disable-rpc-over-http",
                     Label = "Always On VPN: Disable RPC over HTTP for VPN Connections",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets RpcOverHttpEnabled=0 in Internet Settings. Disables Outlook's RPC over HTTP (ActiveSync/HTTPS proxy) for RPC calls when the AOVPN connection is active. RPC over HTTP creates a secondary HTTPS path for Exchange/Outlook traffic that bypasses the VPN tunnel's traffic inspection. When AOVPN is active, all corporate Outlook/Exchange traffic should route through the IPsec tunnel to the corporate Exchange server, not through a separate HTTPS path.",
                     Tags = ["aovpn", "rpc", "outlook", "exchange", "security"],
@@ -351,7 +351,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-enable-filter-list-audit",
                     Label = "Always On VPN: Enable VPN Traffic Filter Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets VpnFilterAudit=1 in RasMan. Enables Windows auditing for VPN traffic filter rule matches (AppId filters and destination IP/port filters) configured in the AOVPN profile. Filter audit events are written to the Windows Security event log (Event ID 5455). This provides visibility into which applications and traffic flows are matching or bypassing AOVPN traffic routing rules, supporting both security monitoring and VPN policy debugging.",
                     Tags = ["aovpn", "audit", "filter", "logging", "security"],
@@ -369,7 +369,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-disable-class-based-route",
                     Label = "Always On VPN: Disable Class-Based Default Route via VPN",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets DisableClassBasedDefaultRoute=1 in RasMan. Prevents Windows from adding a class-based default IP route through the VPN adapter when AOVPN connects in split-tunnel mode. Class-based routes incorrectly override specific split-tunnel routes, causing internet traffic to unexpectedly route through the VPN (de facto full-tunneling despite split-tunnel configuration). Disabling class-based routes ensures only the explicitly defined AOVPN split-tunnel routes are used.",
                     Tags = ["aovpn", "routing", "split-tunnel", "default-route", "network"],
@@ -386,7 +386,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-set-ike-sa-lifetime",
                     Label = "Always On VPN: Set IKE SA Lifetime to 8 Hours",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets IkeProtocolStateTransitionTimeout=28800 (8 hours). Sets the IKE Security Association (SA) lifetime for AOVPN IKEv2 tunnels to 8 hours. After 8 hours, the SA requires cryptographic renewal (re-keying). Shorter SA lifetimes improve forward secrecy (compromising one session key doesn't expose 24 hours of traffic) while not rekeying so frequently that it disrupts session continuity. 8 hours matches a standard work day without mid-session rekeying.",
                     Tags = ["aovpn", "ikev2", "sa-lifetime", "cryptography", "security"],
@@ -404,7 +404,7 @@ internal static class PolicyNetwork
                 {
                     Id = "aovpn-enable-lockdown",
                     Label = "Always On VPN: Enable Lockdown Mode (Block Traffic When VPN Down)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets VpnLockDown=1 in RasMan. Activates AOVPN Lockdown mode which uses the Windows Filtering Platform to block ALL network traffic except the VPN tunnel traffic when the AOVPN connection is disconnected or not yet established. In Lockdown mode, sensitive endpoint data cannot leak to the local network or internet during the window between network connection and VPN establishment. Essential for privileged endpoints handling classified or highly sensitive data.",
                     Tags = ["aovpn", "lockdown", "traffic-block", "security", "enterprise"],
@@ -432,7 +432,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-limit-max-bandwidth",
                     Label = "Limit BITS Maximum Bandwidth (1 Mbps)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Caps total BITS download bandwidth to 1 Mbps per machine. Prevents Windows Update, Delivery Optimization uploads, and other BITS consumers from saturating the network link during business hours. Default: unlimited. Recommended: adjust per available bandwidth.",
                     Tags = ["bits", "bandwidth", "network", "throttle", "policy"],
@@ -449,7 +449,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-limit-max-jobs",
                     Label = "Limit Maximum Concurrent BITS Jobs to 5",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Restricts the number of BITS jobs that can run concurrently per user to 5. Prevents a single application or attacker from flooding the BITS queue with a large number of simultaneous download jobs. Default: up to 200 jobs. Recommended: 5 for controlled environments.",
                     Tags = ["bits", "jobs", "throttle", "resource-limit", "policy"],
@@ -466,7 +466,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-limit-files-per-job",
                     Label = "Limit Maximum Files Per BITS Job to 100",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Limits each BITS job to a maximum of 100 files. Prevents a single job from monopolising BITS or being used to exfiltrate a large number of small files in one batch operation. Default: up to 200 files per job. Recommended: 100.",
                     Tags = ["bits", "files", "job-limit", "resource-limit", "policy"],
@@ -483,7 +483,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-limit-job-download-size",
                     Label = "Limit BITS Job Download Size to 4 GB",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Caps the total bytes a single BITS job can download to 4 GiB (4,294 MB). Feature updates are typically ≤ 4 GiB; this prevents misuse of BITS for downloading arbitrarily large payloads. Default: no download size limit. Recommended: 4 GiB.",
                     Tags = ["bits", "download-size", "resource-limit", "policy"],
@@ -500,7 +500,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-limit-job-upload-size",
                     Label = "Limit BITS Job Upload Size to 1 GB",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Restricts the amount of data that a single BITS upload job can send to 1 GiB. Prevents BITS from being used as an exfiltration vector to upload large amounts of data to an attacker-controlled server. Default: no upload size limit. Recommended: 1 GiB.",
                     Tags = ["bits", "upload-size", "dlp", "resource-limit", "policy"],
@@ -517,7 +517,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-disable-internet-uploads",
                     Label = "Block BITS Uploads to Internet Destinations",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Prevents BITS upload jobs from targeting internet destinations (hosts outside the local network and trusted intranet zones). Limits BITS uploads to intranet servers only, blocking a common Living-off-the-Land (LotL) exfiltration technique that uses BITS to send data to external C2 servers. Default: internet upload allowed. Recommended: 1.",
                     Tags = ["bits", "upload", "internet", "exfiltration", "lotl", "security", "policy"],
@@ -534,7 +534,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-require-https",
                     Label = "Require HTTPS for BITS Transfers",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Forces all BITS download/upload jobs to use HTTPS only. HTTP transfers expose the payload to MITM interception or tampering in transit. Default: HTTP transfers allowed. Recommended: 1 in high-security environments.",
                     Tags = ["bits", "https", "tls", "encryption", "security", "policy"],
@@ -551,7 +551,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-set-job-inactivity-timeout",
                     Label = "Set BITS Job Inactivity Timeout to 7 Days",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Removes BITS jobs from the queue if they have not made progress within 7 days (604,800 seconds). Prevents stale or abandoned jobs from persisting indefinitely and consuming queue resources. Default: 90-day timeout. Recommended: 7 days.",
                     Tags = ["bits", "timeout", "inactivity", "cleanup", "policy"],
@@ -568,7 +568,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-disable-peer-caching-client",
                     Label = "Disable BITS Peer Caching (Client)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Prevents the local machine from acting as a BITS peer cache client — it will not receive content from peer machines on the LAN via BITS peer caching. Reduces lateral data movement between machines and limits the LAN attack surface of BITS. Default: peer caching enabled. Recommended: 1 when central delivery is preferred.",
                     Tags = ["bits", "peer-cache", "lan", "network", "policy"],
@@ -585,7 +585,7 @@ internal static class PolicyNetwork
                 {
                     Id = "bitsadv-enable-audit-logging",
                     Label = "Enable BITS Transfer Audit Logging",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Records BITS job creation, completion, cancellation, and error events to the Microsoft-Windows-Bits-Client/Operational event log. Provides forensic visibility into what files were downloaded or uploaded via BITS, essential for detecting LotL abuse. Default: limited operational logging. Recommended: 1.",
                     Tags = ["bits", "audit", "logging", "forensics", "lotl", "policy"],
@@ -612,7 +612,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-job-inactivity-30d",
                 Label = "Reduce BITS Job Inactivity Timeout to 30 Days",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets JobInactivityTimeout=2592000 (30 days in seconds) in BITS policy. The default allows stale BITS jobs to persist for 90 days. Reducing to 30 days reclaims disk space from incomplete download caches sooner and prevents long-running abandoned transfer jobs.",
                 Tags = ["bits", "background", "transfer", "policy", "cleanup"],
@@ -626,7 +626,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-max-jobs-machine",
                 Label = "Limit BITS Jobs to 50 per Machine",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxJobsPerMachine=50 in BITS policy. Default is 300 concurrent jobs per computer. Limiting to 50 prevents BITS storms where many applications queue simultaneous background downloads, competing for network and I/O resources.",
                 Tags = ["bits", "background", "transfer", "policy", "performance"],
@@ -640,7 +640,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-max-jobs-user",
                 Label = "Limit BITS Jobs to 20 per User",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxJobsPerUser=20 in BITS policy. Default is 60 concurrent jobs per user. Capping at 20 ensures no single user account can saturate BITS with background transfers, which is especially relevant for multi-user terminal server environments.",
                 Tags = ["bits", "background", "transfer", "policy", "performance"],
@@ -654,7 +654,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-max-files-per-job",
                 Label = "Limit BITS Job to 100 Files",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxJobFilesPerJob=100 in BITS policy. Default is 200 files per BITS job. Reducing to 100 limits the blast radius of a misbehaving application that creates overly large BITS jobs and helps ensure all jobs can complete without exhausting I/O queue depth.",
                 Tags = ["bits", "background", "transfer", "policy", "performance"],
@@ -668,7 +668,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-max-ranges-per-file",
                 Label = "Limit BITS to 100 Byte Ranges per File",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxRangesPerFile=100 in BITS policy. Default is 500 byte ranges per file. Each range costs memory in the BITS service process. Limiting ranges reduces BITS memory overhead on machines with many concurrent background downloads from multi-part servers.",
                 Tags = ["bits", "background", "transfer", "policy", "performance"],
@@ -682,7 +682,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-max-download-time-24h",
                 Label = "Limit BITS Download Jobs to 24 Hours",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxDownloadTime=86400 (24 hours in seconds) in BITS policy. By default BITS has no wall-clock limit on download jobs. Setting a 24-hour maximum prevents stalled or hung BITS jobs from occupying an active transfer slot indefinitely.",
                 Tags = ["bits", "background", "transfer", "policy", "timeout"],
@@ -696,7 +696,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-internet-bandwidth-limit",
                 Label = "Cap BITS Internet Bandwidth at 8 Mbps",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets MaxInternetBandwidth=8192 (Kbps) in BITS policy. Prevents BITS background downloads from monopolising internet bandwidth. 8 Mbps is sufficient for most Windows Update payloads while leaving headroom for interactive network traffic.",
                 Tags = ["bits", "background", "transfer", "bandwidth", "policy"],
@@ -710,7 +710,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-enable-bandwidth-throttle",
                 Label = "Enable BITS Bandwidth Throttling",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets EnableBITSMaxBandwidth=1 in BITS policy. Activates the BITS bandwidth throttle schedule, causing BITS to honour the MaxInternetBandwidth setting during the configured hours. Without this flag the bandwidth cap defined by the schedule has no effect.",
                 Tags = ["bits", "background", "transfer", "bandwidth", "policy"],
@@ -724,7 +724,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-disable-peercaching-client",
                 Label = "Disable BITS Peer Caching (Client)",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets DisablePeerCachingClient=1 in BITS policy. Prevents this machine from downloading BITS content from peer computers on the LAN. Disabling peer-client ensures all BITS traffic goes through the legitimate server rather than potentially compromised peers.",
                 Tags = ["bits", "peercache", "network", "policy", "security"],
@@ -738,7 +738,7 @@ internal static class PolicyNetwork
             {
                 Id = "bitspol-disable-peercaching-server",
                 Label = "Disable BITS Peer Caching (Server)",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 Description =
                     "Sets DisablePeerCachingServer=1 in BITS policy. Prevents this machine from serving cached BITS content to other peers on the LAN. Disabling peer-server mode stops the machine from becoming an unintended content distribution node that consumes upload bandwidth.",
                 Tags = ["bits", "peercache", "network", "policy", "security"],
@@ -764,7 +764,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-enable-distributed-mode",
                 Label = "Enable BranchCache in Distributed Cache Mode",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "network", "caching", "distributed", "performance"],
@@ -780,7 +780,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-set-cache-25pct",
                 Label = "Set BranchCache Cache to 25% of Disk",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "cache", "disk", "size", "performance"],
@@ -796,7 +796,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-cap-cache-5gb",
                 Label = "Cap BranchCache Absolute Cache at 5 GB",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "cache", "disk", "quota", "limit"],
@@ -812,7 +812,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-use-sha256-hashes",
                 Label = "Use SHA-256 for BranchCache Content Hashes",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "security", "sha256", "hash", "integrity"],
@@ -828,7 +828,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-enable-firewall-exceptions",
                 Label = "Enable BranchCache Automatic Firewall Exceptions",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "firewall", "network", "ports", "automation"],
@@ -844,7 +844,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-set-retrieval-latency-5s",
                 Label = "Set BranchCache Retrieval Segment TTL to 5 Seconds",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "latency", "performance", "timeout", "retrieval"],
@@ -860,7 +860,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-enable-hash-publication-smb",
                 Label = "Enable BranchCache Hash Publication for SMB Shares",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "smb", "hash", "publication", "server"],
@@ -877,7 +877,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-prefer-hosted-cache-server",
                 Label = "Prefer BranchCache Hosted Cache over Auto-Discovery",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "hosted", "discovery", "server", "preference"],
@@ -893,7 +893,7 @@ internal static class PolicyNetwork
             {
                 Id = "bc-zero-initial-offering-delay",
                 Label = "Eliminate BranchCache Initial Peer Offering Delay",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["branchcache", "caching", "initial", "delay", "optimization"],
@@ -923,7 +923,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-distributed-mode",
                     Label = "Set BranchCache to Distributed Mode",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Configures BranchCache to operate in distributed (peer-to-peer) mode where clients share cached content with each other. Default: not configured.",
                     Tags = ["branchcache", "distributed", "p2p", "caching", "policy"],
@@ -940,7 +940,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-set-cache-percent",
                     Label = "Set BranchCache Disk Cache to 10 Percent",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description = "Limits the BranchCache disk cache size to 10% of the data drive. Prevents runaway cache growth. Default: 5%.",
                     Tags = ["branchcache", "cache-size", "disk", "storage", "policy"],
                     NeedsAdmin = true,
@@ -956,7 +956,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-set-cache-age",
                     Label = "Set BranchCache Maximum Content Age to 28 Days",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets cached content expiry to 28 days. Content older than this is evicted from the local cache. Default: 28 days (696 hours).",
                     Tags = ["branchcache", "cache-age", "expiry", "retention", "policy"],
@@ -973,7 +973,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-enable-content-discovery",
                     Label = "Enable Automatic Hosted Cache Discovery",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Enables automatic Service Connection Point (SCP) discovery for hosted cache servers. Clients auto-locate the nearest cache server. Default: disabled.",
                     Tags = ["branchcache", "hosted-cache", "discovery", "scp", "policy"],
@@ -990,7 +990,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-enable-latency-detection",
                     Label = "Enable Network Latency Caching Threshold",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Enables the BranchCache latency threshold — content is cached only when WAN round-trip time exceeds the configured threshold. Default: disabled (cache all).",
                     Tags = ["branchcache", "latency", "wan", "threshold", "policy"],
@@ -1007,7 +1007,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-set-latency-threshold",
                     Label = "Set BranchCache Latency Threshold to 80ms",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets the round-trip latency threshold at 80ms. WAN content served above this latency is cached; below this it is fetched live. Default: 80ms.",
                     Tags = ["branchcache", "latency", "threshold", "wan", "policy"],
@@ -1024,7 +1024,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-enable-http-hash",
                     Label = "Enable HTTP Content Hash Generation",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Enables hash generation for HTTP-based content served through BranchCache. Required for web-server content offloading. Default: disabled.",
                     Tags = ["branchcache", "http", "hash", "web", "policy"],
@@ -1041,7 +1041,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-enable-smb-hash",
                     Label = "Enable SMB Content Hash Generation",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Enables hash generation for SMB/CIFS file shares. Required for file-server content caching via BranchCache. Default: disabled.",
                     Tags = ["branchcache", "smb", "file-share", "hash", "policy"],
@@ -1058,7 +1058,7 @@ internal static class PolicyNetwork
                 {
                     Id = "branchcache-enable-bits-hash",
                     Label = "Enable BITS Content Hash for BranchCache",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Enables hash publication for Background Intelligent Transfer Service (BITS) downloads. WSUS and ConfigMgr content benefits from BranchCache. Default: disabled.",
                     Tags = ["branchcache", "bits", "wsus", "sccm", "policy"],
@@ -1085,7 +1085,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-disable-offline-cache",
                 Label = "Disable Offline Files Caching (Client-Side Caching)",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1102,7 +1102,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-encrypt-offline-files",
                 Label = "Encrypt Offline Files Cache",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1119,7 +1119,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-limit-cache-size",
                 Label = "Restrict Offline Files Cache Size",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1136,7 +1136,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-disable-transparent-cache",
                 Label = "Disable Transparent Caching of Remote Files",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1153,7 +1153,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-disable-browser-cache-sharing",
                 Label = "Disable IE/Edge Browser Cache External Sharing",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1170,7 +1170,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-clear-cache-on-logoff",
                 Label = "Clear Offline Files Cache on User Logoff",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1187,7 +1187,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-disable-pin-for-readonly",
                 Label = "Disable Pinning of Read-Only Files for Offline",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1204,7 +1204,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-require-cache-encryption-before-sync",
                 Label = "Require Cache Encryption Before Offline Sync",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1221,7 +1221,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-disable-admin-pin",
                 Label = "Disable Administrator-Pinned Offline Files",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1238,7 +1238,7 @@ internal static class PolicyNetwork
             {
                 Id = "cachemgr-audit-offline-access",
                 Label = "Enable Offline Files Access Audit Logging",
-                Category = "Network",
+                Category = "Network — Adhoc Network",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1267,7 +1267,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-disable-connected-cache-client",
                     Label = "Disable Microsoft Connected Cache Client",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Prevents Windows from acting as a client to Microsoft Connected Cache (MCC) servers. "
                         + "The device will not retrieve Windows Update, Delivery Optimization, or Microsoft 365 content from local MCC nodes.",
@@ -1289,7 +1289,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-restrict-to-enterprise-nodes",
                     Label = "Restrict Connected Cache to Enterprise MCC Nodes Only",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Configures Windows to only retrieve cached content from administrator-specified "
                         + "Microsoft Connected Cache nodes, preventing download from unapproved or public MCC servers.",
@@ -1311,7 +1311,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-set-cache-node-hostname",
                     Label = "Set Connected Cache Node Hostname (Configures MCC Server)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Specifies the FQDN or IP address of the Microsoft Connected Cache node that this device should use "
                         + "as its primary cache source for Windows Update and Delivery Optimization content.",
@@ -1331,7 +1331,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-limit-background-bandwidth-percent",
                     Label = "Limit Delivery Optimization Background Bandwidth (50%)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Caps background Delivery Optimization download transfers at 50% of the measured internet bandwidth, "
                         + "preventing bulk update downloads from saturating the connection during working hours.",
@@ -1353,7 +1353,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-limit-foreground-bandwidth-percent",
                     Label = "Limit Delivery Optimization Foreground Bandwidth (80%)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Caps foreground Delivery Optimization download transfers at 80% of the measured bandwidth, "
                         + "allowing user-initiated downloads like Microsoft Store apps or Windows Updates to proceed quickly "
@@ -1374,7 +1374,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-set-cache-drive-size-gb",
                     Label = "Set Connected Cache Storage Limit (20 GB)",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Sets the maximum disk space available to the Microsoft Connected Cache client for storing downloaded content packages. "
                         + "Prevents the cache from consuming unpredictable amounts of the system drive.",
@@ -1394,7 +1394,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mcc-disable-cache-on-metered-connection",
                     Label = "Disable MCC Downloads on Metered Connections",
-                    Category = "Network",
+                    Category = "Network — Adhoc Network",
                     Description =
                         "Prevents Delivery Optimization and Microsoft Connected Cache downloads from occurring when the network connection "
                         + "is detected as metered (e.g., mobile data). Downloads resume automatically on unmetered connections.",
@@ -1426,7 +1426,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-traffic-shaper",
                 Label = "Disable Data Sense Traffic Shaper",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1443,7 +1443,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-restrict-background-data",
                 Label = "Restrict Background Data Usage",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1460,7 +1460,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-usage-tracking",
                 Label = "Disable Data Usage Tracking",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1477,7 +1477,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-hotspot-throttle",
                 Label = "Disable Mobile Hotspot Throttle",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1494,7 +1494,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-telemetry",
                 Label = "Disable Data Sense Telemetry",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1511,7 +1511,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-auto-data-saving",
                 Label = "Disable Auto Data Saving Mode",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1528,7 +1528,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-zero-metered-threshold",
                 Label = "Set Metered Connection Threshold to Zero",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1545,7 +1545,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-connected-standby-data",
                 Label = "Disable Connected Standby Data Usage",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1562,7 +1562,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-notifications",
                 Label = "Disable Data Sense Notifications",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1579,7 +1579,7 @@ internal static class PolicyNetwork
             {
                 Id = "dtsense-disable-feature",
                 Label = "Disable Data Sense Feature",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1606,7 +1606,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-disable-background-data",
                     Label = "Block Background Data on Metered Connections",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Prevents Windows apps from using background data when the network connection is marked as metered. Reduces unintended data consumption on mobile broadband or limited-data plans. Default: not enforced. Recommended: 1.",
                     Tags = ["data-usage", "metered", "background", "cellular", "bandwidth", "policy"],
@@ -1623,7 +1623,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-disable-automatic-roaming-data",
                     Label = "Block Automatic Data Use While Roaming",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Prevents Windows from automatically sending or receiving data while the device is roaming on a cellular network. Eliminates surprise roaming charges. Default: not restricted. Recommended: 1.",
                     Tags = ["data-usage", "roaming", "cellular", "cost", "bandwidth", "policy"],
@@ -1640,7 +1640,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-enforce-data-limit-warning",
                     Label = "Enforce Data Usage Warning at 80% Limit",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Triggers a system notification when the device has consumed 80% of the configured data usage limit. Early warning helps users avoid plan overages. Default: not configured. Recommended: 80.",
                     Tags = ["data-usage", "warning", "limit", "cellular", "notification", "policy"],
@@ -1657,7 +1657,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-disable-store-metered-updates",
                     Label = "Block Microsoft Store Updates Over Metered Connections",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Prevents the Microsoft Store from downloading app updates automatically when connected via a metered network. Avoids large background downloads on limited plans. Default: not restricted. Recommended: 1.",
                     Tags = ["data-usage", "store", "metered", "updates", "bandwidth", "policy"],
@@ -1674,7 +1674,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-disable-usage-telemetry-upload",
                     Label = "Block Data Usage Telemetry Upload",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Stops Windows from uploading data usage statistics (per-app bandwidth consumption) to Microsoft telemetry services. Prevents sending usage patterns off-device. Default: upload enabled. Recommended: 1.",
                     Tags = ["data-usage", "telemetry", "privacy", "upload", "bandwidth", "policy"],
@@ -1691,7 +1691,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-set-default-metered",
                     Label = "Mark New Wi-Fi Connections as Metered by Default",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets all new Wi-Fi connections to metered by default, automatically activating bandwidth-saving restrictions. Useful for laptop fleets that frequently connect to mobile hotspots. Default: not metered. Recommended: when roaming is common.",
                     Tags = ["data-usage", "metered", "wifi", "default", "bandwidth", "policy"],
@@ -1708,7 +1708,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-disable-cost-based-app-limits",
                     Label = "Disable Cost-Based App Background Limits",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Disables the automatic cost-awareness throttling that restricts background-capable apps based on connection cost (e.g., fixed vs. variable plan). Allows apps to run unrestricted on all connections. Default: cost-aware throttling active. Recommended: 0 on unlimited plans.",
                     Tags = ["data-usage", "cost", "background", "apps", "bandwidth", "policy"],
@@ -1725,7 +1725,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-block-wifisense-hotspot-sharing",
                     Label = "Block Wi-Fi Sense Hotspot Data Sharing",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Prevents Wi-Fi Sense from sharing mobile hotspot connection credentials with contacts and social networks. Stops unintended bandwidth sharing over a data plan. Default: not restricted. Recommended: 1.",
                     Tags = ["data-usage", "wifi-sense", "hotspot", "sharing", "security", "policy"],
@@ -1742,7 +1742,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-monthly-data-limit-mb",
                     Label = "Set Monthly Cellular Data Limit (5120 MB)",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Configures the monthly cellular data budget to 5120 MB (5 GB). Windows tracks usage against this limit and triggers warnings and restrictions when approaching/exceeding it. Default: not set. Recommended: set per plan size.",
                     Tags = ["data-usage", "limit", "cellular", "budget", "bandwidth", "policy"],
@@ -1759,7 +1759,7 @@ internal static class PolicyNetwork
                 {
                     Id = "datuse-reset-limit-on-cycle",
                     Label = "Auto-Reset Data Counter on Billing Cycle",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Enables automatic reset of the data usage counter at the beginning of each billing cycle (configured per adapter). Ensures the usage counter aligns with the carrier billing period. Default: not configured. Recommended: 1.",
                     Tags = ["data-usage", "reset", "billing-cycle", "cellular", "bandwidth", "policy"],
@@ -1786,7 +1786,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-min-background-qos",
                 Label = "Set DO Minimum Background Download QoS",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Sets the minimum download speed (kbps) for Delivery Optimization background downloads to 500 kbps. Prevents DO from saturating network during background updates. Default: no limit. Recommended: 500.",
                 Tags = ["delivery-optimization", "bandwidth", "background", "qos"],
@@ -1801,7 +1801,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-max-upload-bandwidth",
                 Label = "Limit DO Upload Bandwidth to 10%",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Caps Delivery Optimization upload bandwidth to 10% of available bandwidth. Prevents DO peering from consuming upstream bandwidth on metered or shared connections. Default: 0 (no limit). Recommended: 10.",
                 Tags = ["delivery-optimization", "upload", "bandwidth", "network"],
@@ -1816,7 +1816,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-max-cache-size",
                 Label = "Limit DO Cache to 5% of Disk",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Limits the Delivery Optimization disk cache to 5% of the drive. Prevents DO from consuming excessive disk space on smaller drives. Default: 20%. Recommended: 5.",
                 Tags = ["delivery-optimization", "disk", "cache"],
@@ -1831,7 +1831,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-absolute-max-cache-size",
                 Label = "Cap DO Absolute Cache Size to 1 GB",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Sets an absolute 1 024 MB cap on the Delivery Optimization cache regardless of disk size. Prevents DO from accumulating large caches on high-capacity drives. Default: 10 240 MB. Recommended: 1024.",
                 Tags = ["delivery-optimization", "disk", "cache", "storage"],
@@ -1846,7 +1846,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-min-disk-size-allowed",
                 Label = "Require 32 GB Disk for DO Caching",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents Delivery Optimization caching on drives smaller than 32 GB. Protects limited-storage devices from DO disk pressure. Default: no minimum. Recommended: 32768 MB.",
                 Tags = ["delivery-optimization", "disk", "cache", "storage"],
@@ -1861,7 +1861,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-min-ram-allowed",
                 Label = "Require 4 GB RAM for DO Peering",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents Delivery Optimization peer-to-peer upload on devices with less than 4 GB RAM. Avoids resource contention on low-memory devices. Default: 4 GB. Recommended: 4096 MB.",
                 Tags = ["delivery-optimization", "memory", "peering", "network"],
@@ -1876,7 +1876,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-min-file-size",
                 Label = "Set DO Minimum File Size for Peering to 100 MB",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Only enables DO peering for files ≥ 100 MB. Reduces peer overhead for small updates that are fast to download directly. Default: 100 MB. Recommended: 102400 kB.",
                 Tags = ["delivery-optimization", "peering", "file-size"],
@@ -1891,7 +1891,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-max-cache-age",
                 Label = "Set DO Cache Expiry to 3 Days",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Sets the maximum age of cached Delivery Optimization content to 259 200 seconds (3 days). Reclaims disk space from stale cached updates faster. Default: 259 200 seconds. Recommended: 259200.",
                 Tags = ["delivery-optimization", "cache", "expiry", "disk"],
@@ -1906,7 +1906,7 @@ internal static class PolicyNetwork
             {
                 Id = "doptpol-set-hours-limit-background",
                 Label = "Limit DO Background Downloads to Off-Hours",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Restricts Delivery Optimization background download activity to off-peak hours (22:00–06:00). Reduces DO network impact during business/active hours. Default: 0 (not set). Recommended: 1 (enabled).",
                 Tags = ["delivery-optimization", "background", "schedule", "bandwidth"],
@@ -1933,7 +1933,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-disable-offline-files",
                 Label = "DFS Namespace Policy: Disable Offline Files (Client-Side Caching)",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Disables the Offline Files (Client-Side Caching / CSC) feature that automatically caches network share content to the local disk for offline access. In environments where file servers use DFS namespaces and data sovereignty or compliance rules prohibit local caching of server content, disabling this feature ensures sensitive files never persist on endpoint storage.",
                 Tags = ["offline files", "csc", "caching", "dfs", "policy"],
@@ -1951,7 +1951,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-enable-dfs-long-paths",
                 Label = "DFS Namespace Policy: Enable Long Path Support for DFS Paths",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Enables Windows to handle UNC path strings longer than MAX_PATH (260 characters) when accessing DFS namespace paths. Enterprise DFS deployments frequently use hierarchical namespace paths (e.g., \\\\corp.example.com\\dfs\\region\\department\\project\\archive) that exceed the legacy WIN32_MAX_PATH limit. Without this setting, applications may fail or truncate paths.",
                 Tags = ["dfs", "long paths", "unc", "max path", "policy"],
@@ -1969,7 +1969,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-disable-add-vpn-connection-ui",
                 Label = "DFS Namespace Policy: Restrict VPN Connection Profile UI",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents standard user accounts from adding new VPN (Virtual Private Network) connection profiles through the Windows Settings network UI. In enterprises where VPN access is centrally managed via Group Policy push or SCCM, allowing users to add their own VPN connection profiles can bypass security controls, split-tunnel policies, or inspection proxies.",
                 Tags = ["vpn", "network connections", "dfs", "restriction", "policy"],
@@ -1987,7 +1987,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-restrict-ics-sharing",
                 Label = "DFS Namespace Policy: Restrict Internet Connection Sharing",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents users from turning the workstation into a shared Internet connection gateway using the Windows Internet Connection Sharing (ICS) feature. ICS allows the machine to act as a router, potentially routing corporate traffic through an uncontrolled path. On enterprise networks, this creates unauthorized network egress points that bypass perimeter security controls.",
                 Tags = ["ics", "connection sharing", "network", "restriction", "policy"],
@@ -2005,7 +2005,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-restrict-network-location-wizard",
                 Label = "DFS Namespace Policy: Restrict Network Location Wizard",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents the Network Location Wizard from appearing when connecting to new networks. The wizard prompts users to classify networks as Home, Work, or Public, which affects firewall profile activation. When users misclassify a public network as Work, Windows activates less restrictive firewall rules that allow inbound connections, increasing attack surface.",
                 Tags = ["network location", "wizard", "firewall", "profile", "policy"],
@@ -2023,7 +2023,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-disable-remote-access-ui",
                 Label = "DFS Namespace Policy: Disable Remote Access Connection Manager UI",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Hides the Remote Access Connection Manager UI from standard users, preventing them from creating or modifying dial-up, VPN, or PPPoE connections. The RA Connection Manager exposes modem and VPN profile creation which, in corporate environments, is an IT-managed function. User-created RA entries can conflict with MDM-deployed connection profiles.",
                 Tags = ["remote access", "vpn", "connection manager", "restriction", "policy"],
@@ -2041,7 +2041,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-disable-network-bridge",
                 Label = "DFS Namespace Policy: Prohibit Network Bridge Creation",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents users from creating network bridges between multiple network adapters. A network bridge connects two separate network segments — for example, bridging an Ethernet NIC to a Wi-Fi adapter — effectively merging the corporate LAN with external networks. This can bypass network segmentation, VLAN policies, and security zones on enterprise networks.",
                 Tags = ["network bridge", "segmentation", "ethernet", "wifi", "policy"],
@@ -2059,7 +2059,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-disable-connection-properties-ui",
                 Label = "DFS Namespace Policy: Hide Network Connection Properties UI",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents standard users from opening or modifying the properties of existing network connections (TCP/IP settings, DNS servers, IPv6 configuration). In corporate environments, network adapter settings are pushed via DHCP and GPO. Allowing users to modify these settings can break network policy compliance monitoring, static IP assignments, or proxy configuration.",
                 Tags = ["network", "tcp/ip", "properties", "restriction", "policy"],
@@ -2077,7 +2077,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-prohibit-delete-connections",
                 Label = "DFS Namespace Policy: Prohibit Deletion of Network Connections",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents standard users from deleting managed network connection entries in the Network Connections control panel. MDM-enrolled devices typically have VPN, Always On VPN, or Wi-Fi profiles pushed by Intune or SCCM; allowing users to delete these disrupts corporate connectivity and certificate trust, and may deactivate required compliance posture monitoring.",
                 Tags = ["network connections", "delete", "restriction", "vpn", "policy"],
@@ -2095,7 +2095,7 @@ internal static class PolicyNetwork
             {
                 Id = "dfsn-prohibit-connect-disconnect-ras",
                 Label = "DFS Namespace Policy: Prohibit Connect/Disconnect of RAS Connections",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents standard users from manually connecting or disconnecting remote access service (RAS) connections such as VPN tunnels and dial-up connections. On corporate machines where Always-On VPN (AOVPN) or DirectAccess must remain connected for security monitoring, allowing users to toggle the tunnel off creates a gap in endpoint visibility and protection.",
                 Tags = ["ras", "vpn", "connect", "disconnect", "policy"],
@@ -2123,7 +2123,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-set-bandwidth-throttle-256kbps",
                     Label = "DFSR Policy: Set Default Replication Bandwidth Throttle to 256 Kbps",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets BandwidthThrottle=256 in DFSR policy. Sets the default maximum DFS-R replication bandwidth to 256 Kbps per connection. Without bandwidth throttling, DFS-R can saturate WAN links during initial replication or large change storms, causing VoIP, RDP, and other latency-sensitive traffic to degrade. 256 Kbps is a conservative baseline for branch-office replication over typical enterprise MPLS links. DFS-R honors scheduled replication windows defined per-group in DFSR configuration; this policy sets the background rate as a safety cap.",
                     Tags = ["dfsr", "replication", "bandwidth", "wan", "throttle"],
@@ -2141,7 +2141,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-set-staging-cleanup-quota-512mb",
                     Label = "DFSR Policy: Set Staging Area Cleanup Quota to 512 MB",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets StagingCleanupQuota=524288 in DFSR policy (512 MB in KB). Sets the staging area maximum size before DFS-R initiates cleanup of staged files. The staging area holds files being replicated in transit between source and destination. If the staging area fills completely, DFS-R stalls replication. The default staging area quota is often too small for environments with large Office files or CAD data. Conversely, a staging area that grows without bound can fill the volume. 512 MB provides a reasonable buffer before cleanup is triggered.",
                     Tags = ["dfsr", "staging", "quota", "disk-space", "replication"],
@@ -2159,7 +2159,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-enable-debug-logging",
                     Label = "DFSR Policy: Enable DFS-R Debug Logging",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets DebugLogEnabled=1 in DFSR policy. Enables the DFS-R service's internal diagnostic log. The debug log records detailed DFS-R events including file change notifications, connection establishment, bandwidth negotiation, and conflict detection. Without debug logging, diagnosing DFS-R replication failures (missing files, stale replicas, split-brain situations) requires attaching debuggers or live tracing. Debug logs are stored in %SystemRoot%\\debug\\dfsr*.log and are rolled with configurable maximum file size. Essential for DFS-R health monitoring and incident investigation.",
                     Tags = ["dfsr", "debug", "logging", "diagnostics", "monitoring"],
@@ -2177,7 +2177,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-set-max-conflict-files-1000",
                     Label = "DFSR Policy: Set Maximum Conflict Files to 1,000",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets MaxConflictFiles=1000 in DFSR policy. Sets the maximum number of conflict files DFS-R can retain in the DfsrPrivate\\ConflictAndDeleted folder on each member. When two users edit the same file simultaneously on different DFS-R members, DFS-R keeps one version as the primary and moves the losing version to the ConflictAndDeleted folder for review. If too many conflicts accumulate without cleanup, DFS-R stops creating new conflict copies and silently discards them. 1,000 is a balanced limit; with the default file size cap, this represents a manageable administrator review queue.",
                     Tags = ["dfsr", "conflict", "resolution", "files", "consistency"],
@@ -2195,7 +2195,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-enable-rdc-compression",
                     Label = "DFSR Policy: Enable Remote Differential Compression",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets RdcEnabled=1 in DFSR policy. Enables Remote Differential Compression (RDC) for DFS-R replication traffic. RDC analyses replicated files and transfers only the changed byte ranges (blocks) rather than the complete file. For large documents where only a small portion changes (e.g., a one-line change in a 10 MB Excel file), RDC can reduce replication traffic by 90%+. Without RDC, every small change triggers a full file retransfer. RDC is especially valuable over low-bandwidth WAN links between branch offices.",
                     Tags = ["dfsr", "rdc", "compression", "bandwidth", "differential"],
@@ -2213,7 +2213,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-disable-auto-recovery",
                     Label = "DFSR Policy: Disable Automatic DFS-R Error Recovery",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets AutoRecovery=0 in DFSR policy. Prevents DFS-R from automatically performing database recovery operations when it detects that the jet database has become inconsistent. Automatic recovery can cause DFS-R to re-replicate files from scratch (initial sync) which creates heavy WAN traffic spikes and can take hours to complete for large libraries. In managed environments, DFS-R database issues should be investigated and resolved by IT; automatic silent recovery can mask underlying storage or filesytem issues that need attention. Manual recovery is done via DFSRDIAG or deleting the DFSR database.",
                     Tags = ["dfsr", "recovery", "database", "stability", "control"],
@@ -2231,7 +2231,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-set-poll-interval-60min",
                     Label = "DFSR Policy: Set DFSR Group Configuration Poll Interval to 60 Minutes",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets ConfigurationPollIntervalInMin=60 in DFSR policy. Sets the interval at which DFS-R members poll Active Directory for changes to their replication group configuration (member list, connection topology, bandwidth schedule). The default poll interval is 60 minutes but can be reduced in experimental or testing environments and forgotten in production. Frequent polling increases AD query load and can cause DFS-R to temporarily reset active connections during configuration refresh. 60 minutes is the recommended production interval — configuration changes are applied within the hour.",
                     Tags = ["dfsr", "polling", "ad", "configuration", "interval"],
@@ -2249,7 +2249,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-enable-stop-replication-on-low-disk",
                     Label = "DFSR Policy: Stop Replication When Disk Is Under 1% Free",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets StopReplicationOnAutoRecovery=1 in DFSR policy. Configures DFS-R to stop incoming replication when the volume hosting the replicated folder falls below 1% free disk space. Without this protection, DFS-R will continue replicating files even as the disk fills to 100%, potentially causing the volume to fill completely — stopping all writes including system services, other applications, and file shares. A 1% threshold gives the DFS-R service enough runway to detect the condition and alert before the disk is completely full.",
                     Tags = ["dfsr", "disk-space", "resilience", "fault-tolerance", "monitoring"],
@@ -2267,7 +2267,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-set-min-staging-age-3days",
                     Label = "DFSR Policy: Set Minimum Staging File Age to 3 Days Before Cleanup",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets MinStagingAge=3 in DFSR policy. Sets the minimum number of days a staging file must remain in the staging area before it is eligible for deletion during staging area cleanup. Staging files are needed if replication fails and needs to be retried. If staging files are cleaned up too aggressively (before all members have acknowledged receipt), DFS-R must re-prepare the staged file from scratch on the next retry. 3 days provides a sufficient window for transient network outages (weekends, planned maintenance) to resolve without losing staging work.",
                     Tags = ["dfsr", "staging", "cleanup", "retention", "replication"],
@@ -2285,7 +2285,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dfsr-enable-preseed-support",
                     Label = "DFSR Policy: Enable DFS-R Pre-seed Mode Support",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets PreseedingEnabled=1 in DFSR policy. Enables DFS-R to use pre-existing content on a new member server as the seed for initial replication rather than transferring all data from scratch across the WAN. When adding a new branch-office DFS-R member, the typical initial sync requires transferring the entire replicated folder (potentially hundreds of gigabytes) over the WAN. Pre-seeding works by physically copying the data to the new member (via external drive or data centre transfer), then DFS-R detects the existing files and only replicates differences. Reduces initial sync WAN traffic by 99%+.",
                     Tags = ["dfsr", "preseed", "initial-sync", "bandwidth", "branch"],
@@ -2315,7 +2315,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-promote-multimedia",
                     Label = "DiffServ QoS: Promote Multimedia Streams to AF41 DSCP Class",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets MultimediaNetworkClientSchedulingRate=1 in QoS policy. Sets the default QoS scheduling policy for multimedia network streams to AF41 (Assured Forwarding class 4, low drop precedence = DSCP 0x22/34). This ensures real-time audio and video streams (Teams calls, Zoom, VoIP) receive preferential bandwidth scheduling over background traffic on enterprise routers and switches that honour DSCP markings. On a 100 Mbps office network shared by 50 users, this prevents audio dropouts during high-bandwidth periods.",
                     Tags = ["qos", "dscp", "multimedia", "voip", "network"],
@@ -2333,7 +2333,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-enable-qos-packet-scheduler",
                     Label = "DiffServ QoS: Enable Windows QoS Packet Scheduler Service",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets TimerResolution=1 in Psched. Enables the Windows QoS Packet Scheduler at the OS level (and enables the DiffServ-capable packet scheduling path). Without the packet scheduler, Group Policy QoS rules installed via GPMC and the Windows QoS API cannot influence packet marking or scheduling. The packet scheduler is a prerequisite for any DSCP-based QoS policy to have effect on network adapters.",
                     Tags = ["qos", "packet-scheduler", "psched", "dscp", "enterprise"],
@@ -2351,7 +2351,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-enable-ecn-signaling",
                     Label = "DiffServ QoS: Enable Explicit Congestion Notification (ECN)",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets ECNCapability=1 under TCP/IP parameters. Enables Explicit Congestion Notification (ECN) in the Windows TCP/IP stack. ECN allows routers to signal impending congestion to TCP senders by setting ECN bits in the IP header instead of dropping packets. TCP senders then voluntarily reduce their sending rate before packet loss occurs, eliminating the jitter and latency spike caused by packet loss and retransmission cycles. ECN is especially beneficial for WebRTC, TCP-based video streaming, and Enterprise applications on shared WAN links.",
                     Tags = ["qos", "ecn", "tcp", "congestion", "network"],
@@ -2369,7 +2369,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-limit-background-bandwidth",
                     Label = "DiffServ QoS: Limit Background (BE) Traffic to 80% of Bandwidth",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets MaxOutstandingRequests=80 in QoS policy. Sets the maximum percentage of bandwidth allocated to best-effort background traffic at 80%, implicitly reserving 20% for QoS-priority marked flows. This prevents background services (Windows Update, OneDrive sync, backup agents) from consuming the full network adapter bandwidth and starving foreground latency-sensitive applications from their required bandwidth share.",
                     Tags = ["qos", "bandwidth", "background", "best-effort", "network"],
@@ -2387,7 +2387,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-enable-wmm-support",
                     Label = "DiffServ QoS: Enable Wi-Fi Multimedia (WMM) QoS Mapping",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets WmmEnabled=1 in wireless QoS policy. Enables Wi-Fi Multimedia (WMM) support which maps DSCP values from the wired network to the appropriate 802.11 QoS access categories (AC_VO for voice, AC_VI for video, AC_BE for best effort, AC_BK for background). WMM mapping ensures that DSCP markings remain effective across wireless segments: Teams/Zoom audio packets with EF DSCP markings are transmitted in the voice AC queue on Wi-Fi, preventing audio glitches in crowded Wi-Fi environments.",
                     Tags = ["qos", "wmm", "wifi", "dscp", "voip"],
@@ -2405,7 +2405,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-dscp-marking-for-signaing",
                     Label = "DiffServ QoS: Mark SIP/Signaling Traffic with CS3 DSCP",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets SipDscpValue=24 (CS3) in QoS policy. Sets the default DSCP marking for SIP (Session Initiation Protocol) signaling traffic at CS3 (Class Selector 3 = DSCP 24). SIP is the signaling protocol used by Teams, Skype for Business, and most enterprise VoIP systems to establish and tear down calls. Marking SIP signaling at CS3 ensures that call setup traffic has higher priority than best-effort traffic but lower priority than the actual RTP voice stream (which should be EF = 46).",
                     Tags = ["qos", "sip", "dscp", "cs3", "voip"],
@@ -2423,7 +2423,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-enable-dscp-marking-not-set",
                     Label = "DiffServ QoS: Disable DSCP Overwrite by Network Adapters",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets DoNotUseNla=0 in QoS policy. Prevents network adapter drivers from overwriting the Windows QoS Packet Scheduler's DSCP markings with their own values or zeroing them before transmission. Some enterprise NIC drivers and offload engines strip or modify DSCP bits set by the OS, negating all Windows QoS policy markings. Setting this policy ensures DSCP values applied by Group Policy QoS rules are preserved in the packet header as sent onto the wire.",
                     Tags = ["qos", "dscp", "nic", "offload", "preserve"],
@@ -2441,7 +2441,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-enable-rsvp-admission-control",
                     Label = "DiffServ QoS: Enable RSVP Admission Control Signaling",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets AdmissionControl=1 in QoS/Psched policy. Enables RSVP-based admission control for QoS-reserving applications. When an application calls QOSAddSocketToFlow requesting a guaranteed bandwidth reservation, the packet scheduler uses RSVP PATH messages to signal bandwidth requirements to network routers. Admission control with RSVP ensures that QoS resources are not over-subscribed: if the network cannot accommodate a new reservation, the application's request is denied rather than silently over-committing.",
                     Tags = ["qos", "rsvp", "admission-control", "bandwidth", "enterprise"],
@@ -2459,7 +2459,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dsqos-prioritize-system-service-traffic",
                     Label = "DiffServ QoS: Prioritize Windows System Services Network Traffic",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets SystemTrafficPriority=1 in QoS policy. Configures the Windows QoS Packet Scheduler to assign elevated priority to traffic from critical Windows system services including Active Directory domain controller replication, LDAP queries, DNS, and Kerberos authentication traffic. On busy enterprise networks, AD replication and authentication traffic competing with user data can cause Kerberos ticket timeouts, logon failures, and Group Policy application delays. System traffic prioritization prevents these transient disruptions.",
                     Tags = ["qos", "system-traffic", "active-directory", "ldap", "kerberos"],
@@ -2491,7 +2491,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-use-custom-ncsi-probe",
                     Label = "DirectAccess: Configure Corporate NCSI Probe Server",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets UseGlobalDNS=1 in NCSI. Instructs Windows Network Connectivity Status Indicator to use a corporate-managed DNS probe server instead of Microsoft's public servers. This is required when DirectAccess or Always On VPN is deployed because connected-but-via-DirectAccess machines would appear as 'not connected' to the default Microsoft probing endpoint. With a corporate probe, NCSI correctly shows the DirectAccess connection as 'Internet access'.",
                     Tags = ["directaccess", "ncsi", "probe", "corporate", "connectivity"],
@@ -2509,7 +2509,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-force-tunneling",
                     Label = "DirectAccess: Enable Force Tunneling (Route All Traffic via DA)",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets ForceTunneling=1 in DirectAccess client policy. Forces all client network traffic through the DirectAccess IPsec tunnel to the corporate network when connected, including internet traffic. Without force tunneling, DirectAccess uses split tunneling: corporate traffic goes through DA and internet traffic goes direct. Force tunneling ensures all user internet traffic is subject to corporate proxy filtering, IDS/IPS inspection, and web content filtering regardless of the user's physical location.",
                     Tags = ["directaccess", "force-tunnel", "vpn", "security", "network"],
@@ -2527,7 +2527,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-dnssec-validation",
                     Label = "DirectAccess: Enable DNSSEC Validation on DNS Queries",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets EnableAutoDoh=3 and DNSSECEnabled=1 in DNS client policy. Enables DNSSEC signature validation for all DNS responses received by the Windows DNS client. DNSSEC prevents DNS cache poisoning attacks where a malicious DNS server injects forged records. When combined with DirectAccess or Always On VPN, DNSSEC ensures that internal zone DNS responses from the corporate resolver carry valid signatures, preventing man-in-the-middle injection of corporate hostname records.",
                     Tags = ["directaccess", "dnssec", "dns", "security", "validation"],
@@ -2545,7 +2545,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-corporate-resources-check",
                     Label = "DirectAccess: Enable Corporate Resource Detection",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets CorporateConnectivity=1 in NCSI. Configures NCSI to determine corporate network connectivity by probing internal corporate URLs/hosts rather than Microsoft's public connectivity test servers. In DirectAccess deployments, the NCA (Network Connectivity Assistant) uses this setting to show users whether they have successfully established a corporate connection. Without this setting, DirectAccess connection status is shown incorrectly as 'No internet' in NCSI.",
                     Tags = ["directaccess", "connectivity", "ncsi", "corporate", "nca"],
@@ -2563,7 +2563,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-iphttps",
                     Label = "DirectAccess: Enable IP-HTTPS Fallback Transport",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets IpHttpsEnabled=1 in DirectAccess client policy. Enables IP-HTTPS as a DirectAccess fallback transport protocol when Teredo and 6to4 UDP tunnels are blocked. IP-HTTPS encapsulates IPv6 DirectAccess traffic inside an HTTPS (TLS 443) connection, which passes through nearly all enterprise and internet firewalls. IP-HTTPS is the most widely compatible DirectAccess transport and should be enabled as a fallback for users on restrictive hotel, airport, or carrier-grade NAT networks.",
                     Tags = ["directaccess", "iphttps", "fallback", "vpn", "enterprise"],
@@ -2581,7 +2581,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enforce-machine-certificate",
                     Label = "DirectAccess: Require Machine Certificate for IPsec Authentication",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets NtlmAllowed=0 in DirectAccess policy. Forces DirectAccess IPsec tunnel authentication to use machine certificates (PKI-based) rather than accepting NTLM proxy authentication as a fallback. NTLM in DirectAccess is a known downgrade attack vector; an attacker with network access to the DirectAccess server could perform an NTLM relay attack to authenticate malicious clients. Requiring machine certificates enforces mutual PKI authentication for all DA connections.",
                     Tags = ["directaccess", "certificate", "pki", "ntlm", "ipsec"],
@@ -2599,7 +2599,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-da-status-ui",
                     Label = "DirectAccess: Enable DirectAccess Status in System Tray",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets ShowUI=1 in DirectAccess client policy. Enables the Network Connectivity Assistant (NCA) system tray icon that shows the current DirectAccess connection health: connected, connecting, or disconnected. Without the NCA UI, users cannot tell whether their DirectAccess tunnel is active, leading to calls to the helpdesk when connectivity issues occur. The NCA UI also provides diagnostic information that helps tier-1 support quickly identify DA connectivity problems.",
                     Tags = ["directaccess", "ui", "nca", "tray", "connectivity"],
@@ -2617,7 +2617,7 @@ internal static class PolicyNetwork
                 {
                     Id = "daccess-enable-sitemap-detection",
                     Label = "DirectAccess: Enable Corporate Site Network Detection",
-                    Category = "Network",
+                    Category = "Network — Data Sense",
                     Description =
                         "Sets BypassInSiteEnabled=0 in DirectAccess client policy. Disables the DirectAccess bypass feature that would skip the DA tunnel when Windows detects it is physically on the corporate subnet. The bypass is convenient but creates an inconsistent security posture: on-premises clients operate without DA inspection while remote clients are subject to it. Disabling bypass ensures uniform policy enforcement whether the device is on-site or remote.",
                     Tags = ["directaccess", "site-detection", "bypass", "security"],
@@ -2645,7 +2645,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-disable-dynamic-registration",
                 Label = "Disable DNS Dynamic Registration",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Disables dynamic DNS registration for all network adapters on this machine. Prevents the client from automatically publishing its IP addresses in DNS. Reduces DNS footprint in privacy-sensitive environments. Default: 1 (enabled). Recommended: 0.",
                 Tags = ["dns", "dynamic-registration", "privacy", "network"],
@@ -2660,7 +2660,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-disable-adapter-name-registration",
                 Label = "Disable DNS Registration of Adapter Names",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Prevents DNS registration of network adapter names (hostname-adapterX records). Only the primary hostname is registered, reducing DNS clutter and information exposure. Default: 0 (adapter names not registered by default). Recommended: 0.",
                 Tags = ["dns", "registration", "adapter", "privacy"],
@@ -2675,7 +2675,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-disable-multicast-fqdn",
                 Label = "Disable DNS Multicast FQDN Resolution",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Disables use of multicast DNS (mDNS/LLMNR) for FQDN resolution. Reduces broadcast-based name-resolution that can leak hostname information on the local network. Default: 0 (not restricted). Recommended: 1.",
                 Tags = ["dns", "multicast", "mdns", "llmnr", "privacy", "network"],
@@ -2690,7 +2690,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-disable-append-primary-suffixes",
                 Label = "Disable DNS Primary Suffix Appending",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Disables automatic appending of the primary DNS suffix and parent suffixes when resolving single-label names. Reduces name-leakage and resolves-to-wrong-server scenarios in multi-domain environments. Default: 1. Recommended: 0.",
                 Tags = ["dns", "suffix", "name-resolution", "security"],
@@ -2705,7 +2705,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-disable-unicode-dns",
                 Label = "Disable Unicode (IDN) DNS Name Resolution",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Disables Internationalized Domain Name (IDN) / Unicode DNS resolution. Prevents IDN homograph attacks by refusing Unicode domain name lookups. Default: 1. Recommended: 0 in high-security environments.",
                 Tags = ["dns", "idn", "unicode", "security", "homograph"],
@@ -2720,7 +2720,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-set-refresh-interval",
                 Label = "Set DNS Registration Refresh Interval to 24h",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Sets the DNS registration refresh interval to 86 400 seconds (24 hours). The default is every 24 hours but can be overridden by DHCP lease frequency. Explicit policy ensures stable refresh timing. Default: 86400. Recommended: 86400.",
                 Tags = ["dns", "registration", "interval", "refresh"],
@@ -2735,7 +2735,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnscgpo-ttl-limit",
                 Label = "Cap DNS Negative Cache TTL to 5 Seconds",
-                Category = "Network",
+                Category = "Network — Data Sense",
                 Description =
                     "Sets the maximum DNS negative cache TTL to 5 seconds. Short negative TTL reduces the window where a failed DNS lookup is cached, improving resilience during DNS failover events. Default: 900. Recommended: 5.",
                 Tags = ["dns", "ttl", "cache", "negative-cache"],
@@ -2760,7 +2760,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-multicast",
                 Label = "Disable Multicast DNS (mDNS)",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2777,7 +2777,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-netbios-name-res",
                 Label = "Disable NetBIOS Name Resolution Fallback",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2794,7 +2794,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-global-query-block",
                 Label = "Enable DNS Global Query Block List",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2811,7 +2811,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-dns-devolution",
                 Label = "Disable DNS Devolution",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2828,7 +2828,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-cache-poisoning",
                 Label = "Enable DNS Cache Poisoning Protection",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2845,7 +2845,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-resolution-failure-cache",
                 Label = "Disable DNS Resolution Failure Cache",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2862,7 +2862,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-register-ptr",
                 Label = "Disable DNS PTR Record Registration",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2879,7 +2879,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-suffix-search",
                 Label = "Restrict DNS Suffix Search List",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2896,7 +2896,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-over-tcp",
                 Label = "Disable DNS Resolution Fallback over TCP",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2913,7 +2913,7 @@ internal static class PolicyNetwork
             {
                 Id = "dnssec-disable-updateregistration",
                 Label = "Disable Dynamic DNS A Record Registration",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2940,7 +2940,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-enable-doh-require",
                     Label = "Enable DNS-over-HTTPS — Require Mode",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets EnableAutoDoh=3 to require DoH for all DNS queries. DNS resolution fails if a DoH resolver is unavailable, preventing plaintext DNS fallback.",
                     Tags = ["doh", "dns", "encryption", "hardening", "policy"],
@@ -2957,7 +2957,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-doh-enforcement-mode",
                     Label = "Set DoH Policy Enforcement Mode (Require=3)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets DoHEnforcementMode=3 in the policy to ensure DoH is required across all network profiles, complementing EnableAutoDoh for comprehensive enforcement.",
                     Tags = ["doh", "dns", "enforcement", "hardening", "policy"],
@@ -2974,7 +2974,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-block-plain-dns-fallback",
                     Label = "Block Plaintext DNS Fallback",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description = "Prevents the DNS client from falling back to unencrypted UDP/TCP port-53 DNS queries when DoH is unavailable.",
                     Tags = ["doh", "dns", "fallback", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -2990,7 +2990,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-enable-dnssec-validation",
                     Label = "Enable DNSSEC Validation",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Enables DNSSEC (Domain Name System Security Extensions) validation to authenticate DNS responses and detect tampering.",
                     Tags = ["doh", "dnssec", "dns", "hardening", "policy"],
@@ -3007,7 +3007,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-disable-netbios-name-resolution",
                     Label = "Disable NetBIOS Name Resolution",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Disables NetBIOS name resolution over TCP/IP to prevent NBNS poisoning attacks. Clients must use DNS or DoH for name resolution.",
                     Tags = ["doh", "netbios", "dns", "hardening", "policy"],
@@ -3024,7 +3024,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-enforce-doh-all-profiles",
                     Label = "Enforce DoH Across All Network Profiles",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Enforces DoH on all network profiles (domain, private, public) rather than individual adapters, ensuring uniform encryption.",
                     Tags = ["doh", "dns", "profiles", "hardening", "policy"],
@@ -3041,7 +3041,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-require-signed-dns-responses",
                     Label = "Require Signed DNS Responses",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Requires cryptographically signed DNS responses, rejecting unsigned answers to prevent DNS spoofing and cache poisoning attacks.",
                     Tags = ["doh", "dns", "signing", "hardening", "policy"],
@@ -3058,7 +3058,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-doh-query-timeout",
                     Label = "Set DoH Query Timeout to 30 Seconds",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets the DoH query timeout to 30 seconds before the resolver fails, ensuring consistent behaviour across slow or degraded DoH server connections.",
                     Tags = ["doh", "dns", "timeout", "policy"],
@@ -3075,7 +3075,7 @@ internal static class PolicyNetwork
                 {
                     Id = "dohpol-disable-doh-cache",
                     Label = "Disable DNS-over-HTTPS Cache",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Disables caching of DoH resolver responses in the DNS client cache, ensuring fresh lookups and preventing stale cached records from being served.",
                     Tags = ["doh", "dns", "cache", "privacy", "policy"],
@@ -3102,7 +3102,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-protocol",
                 Label = "Disable Dynamic Data Exchange Protocol",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3119,7 +3119,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-server-launch",
                 Label = "Disable DDE Server Launch Through Shell",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3136,7 +3136,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-network-dde",
                 Label = "Disable Network DDE Service",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3153,7 +3153,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-remote-dde",
                 Label = "Disable Remote DDE Connections",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3170,7 +3170,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-auto-link",
                 Label = "Disable DDE Auto-Link Updates",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3187,7 +3187,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-in-explorer",
                 Label = "Disable DDE in Windows Explorer File Associations",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3204,7 +3204,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-in-hyperlinks",
                 Label = "Disable DDE in Hyperlink Resolution",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3221,7 +3221,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-dde-warning-bypass",
                 Label = "Prevent DDE Security Warning Bypass",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3238,7 +3238,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-audit-dde-usage",
                 Label = "Enable DDE Usage Audit Logging",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3255,7 +3255,7 @@ internal static class PolicyNetwork
             {
                 Id = "ddepol-disable-clipboard-dde",
                 Label = "Disable DDE via Clipboard Operations",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3284,7 +3284,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-require-server-cert-validation",
                     Label = "Require Server Certificate Validation for EAP",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Forces EAP authentication to validate the RADIUS/NPS server certificate before accepting the authentication challenge. Without this, a rogue access point with a fake RADIUS server can capture credentials. Default: validation may be skipped depending on supplicant configuration. Recommended: 1.",
                     Tags = ["eap", "802.1x", "certificate", "radius", "security", "policy"],
@@ -3302,7 +3302,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-disable-simple-certificate-selection",
                     Label = "Disable Simple Certificate Selection for EAP-TLS",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Disables the automatic (heuristic) certificate selection for EAP-TLS / PEAP authentication. When enabled, Windows auto-selects a certificate without user confirmation — which can choose an expired or unintended certificate. Forcing explicit selection ensures the correct certificate is always used. Default: automatic selection enabled. Recommended: 1.",
                     Tags = ["eap", "eap-tls", "certificate", "selection", "policy"],
@@ -3320,7 +3320,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-enable-fast-reconnect",
                     Label = "Enable EAP Fast Reconnect (PEAP Session Resumption)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Enables PEAP fast reconnect which allows a client to resume an authenticated session without a full re-authentication when roaming between access points or reconnecting after a brief disconnection. Reduces authentication latency on Wi-Fi roaming without weakening security. Default: fast reconnect disabled in strict environments. Recommended: 1.",
                     Tags = ["eap", "peap", "fast-reconnect", "wifi", "roaming", "policy"],
@@ -3337,7 +3337,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-disable-identity-privacy",
                     Label = "Disable EAP Identity Privacy (Anonymous Outer Identity)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "By default PEAP sends an outer anonymous identity (e.g., 'anonymous') to keep the real username hidden from unauthenticated observers. On tightly controlled networks where the RADIUS server already knows all identities, the anonymous outer identity adds unnecessary overhead. Setting this to 0 reveals the actual username in the outer EAP exchange. Recommended: leave as default (1) unless anonymous identity causes RADIUS matching issues.",
                     Tags = ["eap", "peap", "identity", "privacy", "radius", "policy"],
@@ -3354,7 +3354,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-require-cryptobinding",
                     Label = "Require Cryptobinding for PEAP",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Requires cryptobinding TLV in PEAP Type-Length-Value exchanges to bind the inner and outer authentication channels. Cryptobinding prevents channel-binding attacks where an attacker relays an inner authentication from a different outer TLS tunnel. Default: not required by all RADIUS implementations. Recommended: 1 where RADIUS supports it.",
                     Tags = ["eap", "peap", "cryptobinding", "security", "policy"],
@@ -3371,7 +3371,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-disable-eap-md5",
                     Label = "Disable EAP-MD5 Authentication Method",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Removes EAP-MD5 from the list of permitted EAP methods. MD5 uses a challenge-response scheme with a one-way hash that is vulnerable to dictionary and offline brute-force attacks. Operators should use EAP-TLS or PEAP instead. Default: MD5 may be offered. Recommended: 1.",
                     Tags = ["eap", "md5", "authentication", "security", "policy"],
@@ -3388,7 +3388,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-log-authentication-events",
                     Label = "Enable EAP Authentication Event Logging",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Records successful and failed EAP / 802.1X authentication attempts to the Security event log. Provides visibility into network authentication activity including unexpected failures that may indicate a rogue access point or credential attack. Default: EAP events not always forwarded to Security log. Recommended: 1.",
                     Tags = ["eap", "802.1x", "audit", "logging", "security", "policy"],
@@ -3405,7 +3405,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-set-max-auth-failures",
                     Label = "Set Maximum EAP Authentication Failures to 3",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Limits the number of consecutive EAP authentication failures before the supplicant stops retrying. Limits brute-force attempts against the RADIUS server from a single endpoint and reduces event log noise from misconfigured supplicants. Default: may retry indefinitely. Recommended: 3.",
                     Tags = ["eap", "authentication", "retry", "brute-force", "policy"],
@@ -3423,7 +3423,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-require-mutual-auth",
                     Label = "Require Mutual Authentication for EAP",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Enforces bidirectional (mutual) authentication in EAP exchanges — both the client and the RADIUS server must authenticate to each other. Without mutual auth, a client may authenticate to a rogue server without the server proving its own identity. Default: some EAP types do not enforce mutual auth. Recommended: 1.",
                     Tags = ["eap", "mutual-auth", "radius", "security", "policy"],
@@ -3440,7 +3440,7 @@ internal static class PolicyNetwork
                 {
                     Id = "eappol-block-nontls-methods",
                     Label = "Block Non-TLS EAP Methods on Corporate Networks",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Restricts 802.1X authentication to TLS-based EAP methods (EAP-TLS, PEAP-TLS) only. Legacy password-based EAP types (LEAP, EAP-PAP) that transmit or derive credentials without TLS protection are blocked. Default: legacy methods permitted. Recommended: 1 in enterprise 802.1X deployments.",
                     Tags = ["eap", "tls", "legacy", "authentication", "security", "policy"],
@@ -3469,7 +3469,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-sharing-wizard",
                 Label = "HomeGroup: Block Network Sharing Wizard",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables the Windows Network Setup and Sharing Wizard that appears when connecting to a new network, which includes prompts to share files and configure HomeGroup-style sharing. The sharing wizard can inadvertently configure broad file-sharing settings when users accept defaults without understanding the implications. Blocking it ensures network sharing is configured intentionally through a dedicated management interface.",
                 Tags = ["homegroup", "sharing wizard", "network", "policy"],
@@ -3487,7 +3487,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-homegroup-creation",
                 Label = "HomeGroup: Block HomeGroup Creation by Users",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents standard users from creating new HomeGroups. Even on systems where HomeGroup-related features have been removed at the UI level, the underlying service (HomeGroupProvider) may still be accessible through PowerShell or legacy APIs. This policy enforces a mandatory block on new HomeGroup creation regardless of the access method used.",
                 Tags = ["homegroup", "creation", "restriction", "policy"],
@@ -3505,7 +3505,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-join-existing",
                 Label = "HomeGroup: Block Joining Existing HomeGroups",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents users on this machine from joining existing HomeGroups on the local network. If older machines on the same LAN still have active HomeGroups, this policy blocks the current machine from joining them and accessing their shared resources. This is particularly important in mixed-version environments where Windows 7/8.1 machines may still be using HomeGroup.",
                 Tags = ["homegroup", "join", "network", "policy"],
@@ -3523,7 +3523,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-disable-sharing-library-access",
                 Label = "HomeGroup: Disable Shared Library Access via HomeGroup",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables access to shared libraries (Music, Pictures, Videos, Documents folders) through any active HomeGroup connection. Even when HomeGroup creation is blocked, access to legacy shares may persist if the machine was previously part of a HomeGroup. This policy ensures that the library sharing mechanism cannot be used to access data through legacy share paths, regardless of prior HomeGroup membership.",
                 Tags = ["homegroup", "library sharing", "pictures", "music", "policy"],
@@ -3541,7 +3541,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-network-bridge",
                 Label = "HomeGroup: Block Network Bridge Creation",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents users from creating a network bridge between multiple network adapters. A network bridge connects two otherwise isolated network segments (e.g., a wired corporate LAN and a personal Wi-Fi hotspot), creating a routing path that bypasses network access controls. This is a long-standing attack vector for data exfiltration and is blocked in any CIS Benchmark Level 1 configuration.",
                 Tags = ["homegroup", "network bridge", "network isolation", "security", "policy"],
@@ -3559,7 +3559,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-internet-connection-sharing",
                 Label = "HomeGroup: Block ICS UI for Current User (User-Scope Policy)",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents the current user from enabling Internet Connection Sharing (ICS) by hiding the sharing tab in network adapter properties at the user-policy level. This user-scope complement to the machine-scope ICS restriction ensures that even when a user navigates to the Network Connections UI on their own account, the option to configure ICS is hidden. Combined with the machine-scope block, this creates defence-in-depth against ad-hoc NAT routing.",
                 Tags = ["homegroup", "ics", "internet sharing", "user policy", "network"],
@@ -3583,7 +3583,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-suppress-peer-name-resolution",
                 Label = "HomeGroup: Suppress Peer Name Resolution Protocol (PNRP)",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables the Peer Name Resolution Protocol (PNRP) service, which HomeGroup and Windows Collaboration used for peer-to-peer device discovery on the local network. PNRP announces the machine's presence and identity to other devices on the same network segment and was a prerequisite for HomeGroup operation. On corporate networks, PNRP can result in inadvertent machine exposure and is not needed when domain-based or MDM-managed directory services are used.",
                 Tags = ["homegroup", "pnrp", "peer to peer", "discovery", "policy"],
@@ -3601,7 +3601,7 @@ internal static class PolicyNetwork
             {
                 Id = "homegroup-block-homegroup-listener",
                 Label = "HomeGroup: Disable HomeGroup Listener Service Policy",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Applies the Group Policy flag that prevents the HomeGroupListener service from starting. The HomeGroupListener service (on older Windows 10 builds or those upgraded from Windows 8.1) processes HomeGroup notifications and sharing requests from network peers. Disabling it via policy ensures the service is blocked even if a service configuration change or script attempts to start it during a user session.",
                 Tags = ["homegroup", "listener", "service", "policy"],
@@ -3631,7 +3631,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-captive-portal",
                 Label = "Disable Captive Portal Detection",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets Enabled=0 in the HotspotAuthentication policy key. "
                     + "Prevents Windows from detecting captive portal Wi-Fi hotspots and launching the "
@@ -3652,7 +3652,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-auto-connect-new",
                 Label = "Disable Auto-Connect to New Wi-Fi Networks",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fBlockNonDomain=1 in the WcmSvc Local policy key. "
                     + "Prevents Windows from automatically connecting to new or unknown Wi-Fi networks, "
@@ -3672,7 +3672,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-internet-sharing",
                 Label = "Disable Wi-Fi Internet Connection Sharing",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets NC_ShowSharedAccessUI=0 in the WcmSvc Local policy key. "
                     + "Hides and disables the Internet Connection Sharing (ICS) functionality in Windows "
@@ -3692,7 +3692,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-wifi-sense",
                 Label = "Disable Wi-Fi Sense Contact Sharing",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fScanConnectIntervalNearby=0 in the WcmSvc Local policy key. "
                     + "Disables the Wi-Fi Sense feature that automatically shares Wi-Fi passwords with "
@@ -3712,7 +3712,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-manual-hotspot",
                 Label = "Disable Mobile Hotspot Feature",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets AllowHotspot=0 in the WcmSvc Local policy key. "
                     + "Prevents users from enabling the Windows Mobile Hotspot feature, which turns the "
@@ -3732,7 +3732,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-hotspot2",
                 Label = "Disable Wi-Fi Hotspot 2.0 / Passpoint",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fDisablePassport=1 in the HotspotAuthentication policy key. "
                     + "Disables the Wi-Fi Hotspot 2.0 (Passpoint / 802.11u) automatic authentication protocol. "
@@ -3753,7 +3753,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-network-roaming",
                 Label = "Disable Wi-Fi Network Roaming",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets DisableRoaming=1 in the WcmSvc Local policy key. "
                     + "Prevents the Windows wireless service from automatically roaming between Wi-Fi access points, "
@@ -3774,7 +3774,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-wlan-autoconfig",
                 Label = "Block WLAN AutoConfig Profile Changes",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fPreventAutoConnectToWiFiSenseHotspots=1 in the HotspotAuthentication policy key. "
                     + "Prevents WLAN AutoConfig from applying automatic Wi-Fi profile changes from the Hotspot "
@@ -3794,7 +3794,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-wireless-gpt-policy",
                 Label = "Block GPT Wireless Policy Push",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fEnableGPTWirelessPolicy=0 in the GPTWirelessPolicy key. "
                     + "Prevents Windows Wireless Group Policy from applying Group Policy Template (GPT) wireless "
@@ -3815,7 +3815,7 @@ internal static class PolicyNetwork
             {
                 Id = "hotspot-disable-credential-caching",
                 Label = "Disable Hotspot Credential Caching",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Sets fCacheCredentials=0 in the HotspotAuthentication policy key. "
                     + "Prevents the Hotspot 2.0 authentication service from caching Wi-Fi network "
@@ -3850,7 +3850,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-enable-wired-8021x",
                     Label = "IEEE 802.1x: Enable Wired Network 802.1x Authentication",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets EnableAutoConfig=1 in WiredNetwork policy. Activates the Windows wired 802.1x supplicant (the Wired AutoConfig service) and enables port-based network access control on all wired Ethernet adapters. With 802.1x enabled, the switch's authentication server (RADIUS) validates the endpoint's identity before granting network access. Unauthenticated endpoints are placed in a guest VLAN or denied access. Essential security control for protecting internal network access via physical Ethernet port.",
                     Tags = ["ieee8021x", "wired", "authentication", "network", "nac"],
@@ -3868,7 +3868,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-set-eapol-start-timeout",
                     Label = "IEEE 802.1x: Set EAPOL-Start Timeout to 20 Seconds",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets AuthResponse=20 in WiredNetwork policy. Configures the supplicant's EAPOL-Start transmission timer: how long the supplicant waits for an EAPOL Request-Identity from the switch before sending an explicit EAPOL-Start frame. On access switches that do not send the initial EAP Request/Identity packet (authenticator-initiated), the supplicant must initiate. A longer initial wait delays authentication. Setting to 20 seconds reduces the wait for supplicant-initiated authentication without being so short it floods slow switch responses.",
                     Tags = ["ieee8021x", "eapol", "timeout", "supplicant", "wired"],
@@ -3886,7 +3886,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-set-max-eapol-retransmit",
                     Label = "IEEE 802.1x: Limit EAPOL-Start Retransmit Count to 5",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets MaxEapolStartAttempts=5 in WiredNetwork policy. Limits the number of EAPOL-Start retransmission attempts before the supplicant gives up and treats the port as unauthenticated. Each EAPOL-Start is separated by the AuthResponse timer (AuthResponse seconds). With 5 retransmits at 20 seconds each, the supplicant spends 100 seconds attempting to authenticate before failing. This limits the time a machine retries against an unavailable RADIUS server while ensuring legitimate connection delays are handled gracefully.",
                     Tags = ["ieee8021x", "eapol", "retransmit", "retry", "supplicant"],
@@ -3904,7 +3904,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-enable-single-sign-on",
                     Label = "IEEE 802.1x: Enable Single Sign-On Integration",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets BlockPeriod=0 in WiredNetwork policy (enables SSO) and sets SingleSignOn=1. Configures the wired supplicant to synchronise 802.1x authentication with Windows logon. In SSO mode, machine certificates are used before the Windows logon screen (machine authentication), and user certificates are presented after the user logs in (user authentication). Without SSO, the machine may remain in a partially authenticated state during logon, potentially delaying Group Policy application or network-dependent logon scripts.",
                     Tags = ["ieee8021x", "sso", "logon", "authentication", "wired"],
@@ -3922,7 +3922,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-disable-user-only-mode",
                     Label = "IEEE 802.1x: Disable User-Only 802.1x Mode (Require Machine Auth)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets UserOnlyMode=0 in WiredNetwork policy. Prevents the supplicant from operating in user-only authentication mode where only user credentials are sent and machine credentials are not used. In user-only mode, the machine VLAN access depends entirely on the currently logged-in user's authentication; when no user is logged in (e.g., at Windows logon screen, or when machine admin scripts run before user logon), the port may be unauthenticated. Machine authentication ensures the port is authenticated regardless of user logon state.",
                     Tags = ["ieee8021x", "machine-auth", "user-auth", "wired", "security"],
@@ -3940,7 +3940,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-disable-guest-vlan-access",
                     Label = "IEEE 802.1x: Disable Automatic Guest VLAN Fallback on Auth Failure",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets AllowGuestVLAN=0 in WiredNetwork policy. Prevents the Windows 802.1x supplicant from signalling to the switch that it accepts placement in a guest VLAN on authentication failure. Some switch configurations use EAP-Failure with a VLAN assignment to place unauthenticated endpoints in a restricted guest VLAN. Setting AllowGuestVLAN=0 causes the supplicant to treat authentication failure as a complete block rather than accepting reduced-access guest VLAN placement. Prevents accidental network access via the guest VLAN.",
                     Tags = ["ieee8021x", "guest-vlan", "fallback", "authentication", "security"],
@@ -3958,7 +3958,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-set-eap-type-tls",
                     Label = "IEEE 802.1x: Set Wired EAP Method to EAP-TLS (Certificate-Based)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets EAPType=13 in WiredNetwork policy (EAP-TLS, EAP type 13 per IANA). Configures the Windows wired 802.1x supplicant to use EAP-TLS as the preferred EAP authentication method. EAP-TLS uses mutual certificate-based authentication: the client presents a certificate (from machine store or smart card) and the RADIUS server presents a server certificate. It is the strongest EAP method available, providing phishing-resistant authentication and protection against credential interception attacks that affect password-based PEAP.",
                     Tags = ["ieee8021x", "eap-tls", "certificate", "authentication", "wired"],
@@ -3976,7 +3976,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-enable-eap-inner-identity",
                     Label = "IEEE 802.1x: Enable Anonymous Identity (Outer Identity Privacy)",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets EnableAnonymousIdentity=1 in EapHost policy. Enables the use of an anonymous outer identity in tunnelled EAP methods (PEAP, TTLS). The EAP Identity response (outer identity) is transmitted in plaintext in the first EAP exchange. Without anonymous identity, the user's actual username is visible in the network traffic of the outer EAP exchange, revealing who is authenticating before the TLS tunnel is established. An anonymous outer identity (e.g., 'anonymous@contoso.com') hides the actual username until the protected tunnel is established.",
                     Tags = ["ieee8021x", "eap", "identity", "privacy", "peap"],
@@ -3994,7 +3994,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-disable-cached-wireless-creds",
                     Label = "IEEE 802.1x: Disable Wireless 802.1x Credential Caching",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets DisableUserCredentialCaching=1 in WirelessNetwork policy. Prevents the Windows wireless supplicant from caching 802.1x user credentials to local storage. Some EAP methods (PEAP-MSCHAPv2) can cache credentials to allow re-authentication without prompting the user. While convenient, cached credentials are a persistence mechanism for the credentials and may be accessible from the credential cache if the machine is compromised. Required credentials are re-fetched on each authentication using the user's interactive session or certificate store.",
                     Tags = ["ieee8021x", "wireless", "credential-cache", "security", "wifi"],
@@ -4012,7 +4012,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ieee8021x-require-mutual-authentication",
                     Label = "IEEE 802.1x: Require Mutual Authentication in PEAP Handshake",
-                    Category = "Network",
+                    Category = "Network — Dns Secure",
                     Description =
                         "Sets RequireMutualAuth=1 in EapHost policy. Requires that tunnelled EAP methods (PEAP, TTLS) perform full mutual authentication: the server must present a trusted certificate AND the client must authenticate with a credential inside the TLS tunnel. Without mutual authentication, a rogue access point can complete the outer TLS handshake with any certificate while the client still transmits their inner credentials to an attacker-controlled server. Mutual authentication (server cert validation + valid inner credentials) is the minimum security requirement for PEAP deployments.",
                     Tags = ["ieee8021x", "mutual-authentication", "peap", "certificate", "security"],
@@ -4042,7 +4042,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-restrict-internet-communication",
                 Label = "Internet Communication: Restrict All Internet Communication Features",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Enables the master Internet Communication Management policy that restricts or disables all Windows features that communicate with the internet, including Windows Error Reporting, Windows Update, Help and Support Center online search, Microsoft Customer Experience Improvement Program (CEIP), online activation, and other phone-home features. This is the master switch that enables sub-policies defined elsewhere under the InternetManagement key.",
                 Tags = ["internet communication", "internet restriction", "privacy", "phone home", "policy"],
@@ -4061,7 +4061,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-printing-over-http",
                 Label = "Internet Communication: Disable Printing Over HTTP",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables the ability for Windows to send print jobs over HTTP, which is used for sending documents to Internet Printing Protocol (IPP) printers outside the corporate network. HTTP printing can bypass proxy controls and DLP systems. On managed networks, all printing should be directed to IT-managed printer queues; direct-to-internet IPP printing is a potential data exfiltration vector.",
                 Tags = ["internet communication", "printing", "http", "data loss prevention", "policy"],
@@ -4079,7 +4079,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-windows-update-access",
                 Label = "Internet Communication: Disable Access to Windows Update (Non-WSUS)",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Blocks Windows from accessing Microsoft's Windows Update servers directly, restricting update access to corporate WSUS or Windows Update for Business (WUfB) only. Direct Windows Update connections bypass the organization's patch approval process, potentially installing untested updates or creating tracking data. This policy should be combined with a WSUS or Intune Update Ring configuration to ensure updates are still received through an approved channel.",
                 Tags = ["internet communication", "windows update", "wsus", "patch management", "policy"],
@@ -4097,7 +4097,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-web-communities",
                 Label = "Internet Communication: Disable Windows Web Communities Feature",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables the Windows Web Communities feature that allowed Windows Explorer and Help Center to automatically submit queries to Microsoft-hosted community websites (forums, knowledge base, support articles). While useful in consumer scenarios, this feature sends details about the user's system context, open documents, and help searches to external Microsoft servers, which creates a data-leakage concern in regulated business environments.",
                 Tags = ["internet communication", "communities", "help center", "telemetry", "policy"],
@@ -4115,7 +4115,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-event-viewer-links",
                 Label = "Internet Communication: Disable Event Viewer Online Links",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents Event Viewer from displaying the 'More Information' link that opens a Microsoft online support page when viewing event log entries. Clicking these links sends event detail data (Event ID, source, parameters) to Microsoft's online event log lookup service. In sensitive environments, event log data may contain internal application identifiers, username fragments, or file path details that should not be transmitted outside the network.",
                 Tags = ["internet communication", "event viewer", "online links", "privacy", "policy"],
@@ -4133,7 +4133,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-registration-wizard",
                 Label = "Internet Communication: Disable Windows Registration Wizard",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Disables the Windows Product Registration Wizard that appears after OS installation and prompts users to register the Windows license with Microsoft. The registration process transmits hardware information (CPU, RAM, disk size), Windows edition, and product key metadata to Microsoft's registration servers. On volume-licensed enterprise deployments, this registration is handled by Microsoft's volume activation infrastructure and the wizard is unnecessary.",
                 Tags = ["internet communication", "registration", "product key", "privacy", "policy"],
@@ -4151,7 +4151,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-windows-activation-online",
                 Label = "Internet Communication: Disable Windows Online Activation",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents Windows from attempting online activation via Microsoft's activation servers. In enterprise environments using KMS (Key Management Service) or MAK (Multiple Activation Key) volume licensing, Windows activates against the internal KMS server. Attempting simultaneous online activation can cause interference and may expose the KMS key or activation state to Microsoft's telemetry infrastructure.",
                 Tags = ["internet communication", "activation", "kms", "volume license", "policy"],
@@ -4169,7 +4169,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-task-scheduler-download",
                 Label = "Internet Communication: Disable Task Scheduler Internet Download",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents Windows Task Scheduler from downloading programs, scripts, or task definitions from internet URIs. Task Scheduler tasks can be configured with action items that fetch content from HTTP/HTTPS URLs. Blocking internet downloads from Task Scheduler prevents lateral movement via scheduled tasks that pull malware from C2 servers and prevents administrative tasks from overriding proxy policies by downloading directly.",
                 Tags = ["internet communication", "task scheduler", "download", "security", "policy"],
@@ -4187,7 +4187,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-online-search-help",
                 Label = "Internet Communication: Disable Windows Online Search in Help",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents the Windows Help and Support Center from augmenting local help content with online Microsoft documentation and search results. The online search feature sends the user's help query terms and partial system context to Microsoft's servers. In environments where query terms may contain project names, application names, or technical details classified as business-sensitive, disabling online help search prevents inadvertent disclosure.",
                 Tags = ["internet communication", "help center", "online search", "privacy", "policy"],
@@ -4205,7 +4205,7 @@ internal static class PolicyNetwork
             {
                 Id = "inetcomm-disable-driver-update-internet",
                 Label = "Internet Communication: Disable Driver Download from Windows Update",
-                Category = "Network",
+                Category = "Network — Dns Secure",
                 Description =
                     "Prevents Windows from automatically downloading device driver updates directly from Windows Update when a new device is plugged in. Driver updates fetched directly from Windows Update bypass the organization's driver qualification and testing process. In managed environments, all driver updates should go through SCCM, Intune, or another MDM platform that can test and stage driver deployments before production rollout.",
                 Tags = ["internet communication", "driver update", "windows update", "device management", "policy"],
@@ -4235,7 +4235,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-disable-default-exemptions",
                     Label = "Disable IPSec Default Exemptions",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets DisableDefaultExemptions=3 to remove built-in IKE, Kerberos, and multicast exemptions, ensuring all traffic is subject to IPSec filtering rules.",
                     Tags = ["ipsec", "ike", "exemptions", "hardening", "policy"],
@@ -4252,7 +4252,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-strong-crl-check",
                     Label = "Enable Strong CRL Checking for IPSec",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Enables certificate revocation list (CRL) checking for certificates used in IPSec authentication, preventing revoked certificates from being accepted.",
                     Tags = ["ipsec", "crl", "certificate", "hardening", "policy"],
@@ -4269,7 +4269,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-ike-key-lifetime",
                     Label = "Set IKE Main Mode Key Lifetime to 8 Hours",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets the IKE main mode key lifetime to 480 minutes (8 hours). Regular renegotiation limits the window of exposure if a key is compromised.",
                     Tags = ["ipsec", "ike", "key-lifetime", "hardening", "policy"],
@@ -4286,7 +4286,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-session-key-lifetime",
                     Label = "Set IPSec Session Key Lifetime to 15 Minutes",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets the IPSec quick mode session key lifetime to 900 seconds (15 minutes), limiting the impact window of a compromised session key.",
                     Tags = ["ipsec", "session-key", "lifetime", "hardening", "policy"],
@@ -4303,7 +4303,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-enable-pfs",
                     Label = "Enable Perfect Forward Secrecy for IPSec",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Enables Perfect Forward Secrecy (PFS) so each session key is derived independently, preventing compromise of one key from exposing past or future sessions.",
                     Tags = ["ipsec", "pfs", "encryption", "hardening", "policy"],
@@ -4320,7 +4320,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-require-dh-group2",
                     Label = "Require Diffie-Hellman Group 2 for IKE",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Sets the minimum DH group to Group 2 (1024-bit MODP) for IKE negotiation, blocking the weaker Group 1 (768-bit).",
                     Tags = ["ipsec", "dh", "diffie-hellman", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -4336,7 +4336,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-enable-ah-integrity",
                     Label = "Enable AH Integrity Checking for IPSec",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Enables the AH (Authentication Header) integrity mechanism, ensuring packet headers are cryptographically verified during IPSec communication.",
                     Tags = ["ipsec", "ah", "integrity", "hardening", "policy"],
@@ -4353,7 +4353,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-block-null-encryption",
                     Label = "Block Null Encryption in IPSec ESP",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables null encryption in ESP (Encapsulating Security Payload), ensuring all IPSec-encrypted traffic uses a real cipher such as AES.",
                     Tags = ["ipsec", "esp", "encryption", "hardening", "policy"],
@@ -4370,7 +4370,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-require-esp-encryption",
                     Label = "Require ESP Encryption for All IPSec Tunnels",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Requires ESP with encryption for all IPSec connections, preventing integrity-only AH-only or unencrypted tunnels.",
                     Tags = ["ipsec", "esp", "encryption", "hardening", "policy"],
                     NeedsAdmin = true,
@@ -4386,7 +4386,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ipsecpol-negotiation-poll-interval",
                     Label = "Set IPSec Negotiation Poll Interval to 5 Minutes",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets the IPSec policy negotiation polling interval to 300 seconds (5 minutes), controlling how frequently the service checks for policy changes.",
                     Tags = ["ipsec", "negotiation", "policy", "interval"],
@@ -4413,7 +4413,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-ipv6",
                 Label = "Disable IPv6 on All Network Adapters",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4430,7 +4430,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-teredo",
                 Label = "Disable Teredo IPv6 Tunnel",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4447,7 +4447,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-6to4",
                 Label = "Disable 6to4 IPv6 Tunnel Adapter",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4464,7 +4464,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-isatap",
                 Label = "Disable ISATAP IPv6 Tunnel",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4481,7 +4481,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-prefer-ipv4",
                 Label = "Prefer IPv4 over IPv6 by Default",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4498,7 +4498,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-dhcpv6",
                 Label = "Disable DHCPv6 Client",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4515,7 +4515,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-ipv6-multicast",
                 Label = "Disable IPv6 Multicast Listener Discovery",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4532,7 +4532,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-privacy-extensions",
                 Label = "Disable IPv6 Privacy Extensions",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4549,7 +4549,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-restrict-ipv6-scope",
                 Label = "Restrict IPv6 to Site-Local Scope",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4566,7 +4566,7 @@ internal static class PolicyNetwork
             {
                 Id = "ipv6pol-disable-ipv6-transition-mechs",
                 Label = "Disable IPv6 Transition Technologies",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4593,7 +4593,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-disable-auto-share-wks",
                     Label = "Disable Automatic Admin Shares (Workstation)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents Windows from automatically creating administrative shares (C$, D$) on workstations.",
                     Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
                     NeedsAdmin = true,
@@ -4609,7 +4609,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-disable-auto-share-server",
                     Label = "Disable Automatic Admin Shares (Server)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents Windows from automatically creating server-side default network shares (ADMIN$).",
                     Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
                     NeedsAdmin = true,
@@ -4625,7 +4625,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-disable-plain-text-password",
                     Label = "Disable Plain-Text Password Authentication (Server)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents the SMB server from accepting unencrypted password authentication over the network.",
                     Tags = ["smb", "authentication", "lanman", "security", "password"],
                     NeedsAdmin = true,
@@ -4641,7 +4641,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-enable-security-signature",
                     Label = "Enable SMB Server Security Signatures",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Enables cryptographic packet signing for SMB server connections to detect in-transit tampering.",
                     Tags = ["smb", "signing", "lanman", "security", "integrity"],
                     NeedsAdmin = true,
@@ -4657,7 +4657,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-require-security-signature",
                     Label = "Require SMB Server Security Signature",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Mandates that all SMB connections to this server use packet signing; unsigned clients are rejected.",
                     Tags = ["smb", "signing", "lanman", "security", "integrity", "enforce"],
                     NeedsAdmin = true,
@@ -4673,7 +4673,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-enable-spn-validation",
                     Label = "Enable SMB Server SPN Validation",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Requires clients to provide a valid Service Principal Name when connecting, preventing relay attacks.",
                     Tags = ["smb", "spn", "kerberos", "lanman", "security", "relay"],
                     NeedsAdmin = true,
@@ -4689,7 +4689,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-restrict-null-session",
                     Label = "Restrict Null Session Access",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Blocks anonymous null-session connections from enumerating shares, users, and other resources.",
                     Tags = ["smb", "null-session", "anonymous", "lanman", "security"],
                     NeedsAdmin = true,
@@ -4705,7 +4705,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-auto-disconnect-idle",
                     Label = "Auto-Disconnect Idle SMB Sessions",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Automatically disconnects idle SMB client sessions after 15 minutes to reduce resource exposure.",
                     Tags = ["smb", "session", "idle", "lanman", "resource"],
                     NeedsAdmin = true,
@@ -4721,7 +4721,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-disable-multicast",
                     Label = "Disable SMB WSD Multicast Discovery",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Disables WS-Discovery multicast traffic used by SMB to advertise network shares on the local subnet.",
                     Tags = ["smb", "multicast", "discovery", "lanman", "network"],
                     NeedsAdmin = true,
@@ -4737,7 +4737,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lansrv-audit-insecure-guest-logon",
                     Label = "Audit Insecure SMB Guest Logon Attempts",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Logs an event whenever a client attempts an anonymous or guest SMB logon that would be rejected.",
                     Tags = ["smb", "audit", "guest", "lanman", "security", "logging"],
                     NeedsAdmin = true,
@@ -4763,7 +4763,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-block-insecure-guest-auth",
                     Label = "Block Insecure Guest Authentication",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents the SMB client from falling back to insecure guest authentication when a server rejects credentials.",
                     Tags = ["smb", "guest", "authentication", "lanman", "security"],
                     NeedsAdmin = true,
@@ -4779,7 +4779,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-disable-plain-text-password",
                     Label = "Disable Plain-Text Password Authentication (Client)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Stops the SMB workstation client from sending unencrypted passwords to network servers.",
                     Tags = ["smb", "authentication", "plaintext", "password", "security"],
                     NeedsAdmin = true,
@@ -4795,7 +4795,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-enable-security-signature",
                     Label = "Enable SMB Client Security Signatures",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Enables cryptographic SMB packet signing on the client for outbound connections when the server supports it.",
                     Tags = ["smb", "signing", "client", "lanman", "security"],
                     NeedsAdmin = true,
@@ -4811,7 +4811,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-require-security-signature",
                     Label = "Require SMB Client Security Signature",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Mandates that the SMB client use packet signing for all connections; unsigned servers are rejected.",
                     Tags = ["smb", "signing", "client", "lanman", "security", "enforce"],
                     NeedsAdmin = true,
@@ -4827,7 +4827,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-enable-smb-encryption",
                     Label = "Enable SMB Client Encryption",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Requests encrypted SMB connections wherever the server supports SMB 3.x encryption.",
                     Tags = ["smb", "encryption", "client", "lanman", "security"],
                     NeedsAdmin = true,
@@ -4843,7 +4843,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-disable-smb1",
                     Label = "Disable SMBv1 Client Protocol",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Disables the legacy SMBv1 dialect on the workstation client to prevent WannaCry-class exploits.",
                     Tags = ["smb", "smb1", "client", "lanman", "security", "legacy"],
                     NeedsAdmin = true,
@@ -4859,7 +4859,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-require-ntlmv2",
                     Label = "Require NTLMv2 Authentication (Client)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents the SMB workstation client from using the weak NTLMv1 authentication protocol.",
                     Tags = ["smb", "ntlm", "ntlmv1", "client", "authentication", "security"],
                     NeedsAdmin = true,
@@ -4875,7 +4875,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-enable-logon-audit",
                     Label = "Enable SMB Workstation Logon Audit",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Records authentication events for SMB workstation connections in the Security event log.",
                     Tags = ["smb", "audit", "logon", "client", "lanman", "logging"],
                     NeedsAdmin = true,
@@ -4891,7 +4891,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-disable-no-inplace-sharing",
                     Label = "Disable In-Place Sharing on Removable Media",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Prevents in-place file sharing on removable storage media accessed through SMB workstation connections.",
                     Tags = ["smb", "removable", "sharing", "client", "lanman"],
                     NeedsAdmin = true,
@@ -4907,7 +4907,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lanwks-disable-multicast-name-resolution",
                     Label = "Disable SMB Multicast Name Resolution",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description = "Stops the SMB client from using LLMNR and NetBIOS multicast name resolution, reducing lateral movement risk.",
                     Tags = ["smb", "llmnr", "netbios", "multicast", "client", "security"],
                     NeedsAdmin = true,
@@ -4935,7 +4935,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-require-ldap-signing",
                     Label = "LDAP Client: Require LDAP Signing (Negotiate/Require)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets LDAPClientIntegrity=2 in the LDAP policy hive (value 2 = Require signing; value 1 = Negotiate signing; value 0 = None). Requires LDAP clients to request LDAP packet signing on all LDAP connections to domain controllers. Without LDAP signing, the LDAP exchange is susceptible to LDAP relay attacks — an attacker who can perform a man-in-the-middle attack can modify LDAP query results without detection. LDAP signing is part of the security hardening recommended by Microsoft Security Advisory ADV190023 (LDAP channel binding and LDAP signing). Combined with LDAP channel binding, this closes a class of LDAP relay and NTLM relay attacks.",
                     Tags = ["ldap", "signing", "integrity", "adv190023", "relay"],
@@ -4953,7 +4953,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-require-ldap-channel-binding",
                     Label = "LDAP Client: Require LDAP Channel Binding Token (CBT)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets LdapEnforceChannelBinding=2 in the LDAP policy hive (value 2 = Always require channel binding; value 1 = Supported; value 0 = Never). LDAP Channel Binding Tokens (CBT) cryptographically bind an LDAP authentication exchange to the specific TLS channel it is using. This prevents LDAP relay attacks where an attacker intercepts an NTLM authentication for an LDAP-over-TLS connection and replays it over a different TLS connection (cross-channel relay). Combined with LDAP signing enforcement, this closes the NTLM relay to LDAP attack vector used by tools like Responder and ntlmrelayx.",
                     Tags = ["ldap", "channel-binding", "cbt", "ntlm-relay", "tls"],
@@ -4971,7 +4971,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-set-ldap-client-timeout-120s",
                     Label = "LDAP Client: Set LDAP Search and Connection Timeout to 120 Seconds",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets LdapClientTimeout=120 in the LDAP policy hive (units: seconds). Sets the maximum number of seconds an LDAP client will wait for a search result before terminating the operation. Without a timeout, an LDAP client that connects to a slow or unresponsive domain controller can hold open connections indefinitely — an attacker who controls a fake DC can exploit this by responding very slowly to keep the LDAP connection open and drain client resources. Setting a bounded timeout ensures that LDAP operations fail gracefully when the DC is unresponsive, and the client can fall back to another DC.",
                     Tags = ["ldap", "timeout", "connection-limit", "dc-failover", "dos-mitigation"],
@@ -4989,7 +4989,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-disable-ldap-anonymous-bind",
                     Label = "LDAP Client: Disable Unauthenticated (Anonymous) LDAP Bind",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets DisableAnonymousBind=1 in the LDAP policy hive. Prevents LDAP clients from performing anonymous (unauthenticated) LDAP binds to Active Directory domain controllers. Anonymous LDAP binds historically allowed any system on the network to query AD for directory information (user accounts, group memberships, computer accounts) without authenticating. While Windows Server 2003 and later restrict anonymous LDAP read access by default at the DC level, client-side enforcement ensures that applications in the environment never attempt anonymous LDAP binds — a pattern that could succeed against non-standard LDAP servers or legacy DCs with weakened configuration.",
                     Tags = ["ldap", "anonymous-bind", "authentication", "directory-enumeration"],
@@ -5007,7 +5007,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-enforce-ldaps-port-636",
                     Label = "LDAP Client: Enforce LDAP over TLS (LDAPS) on Port 636",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets UseLdapSsl=1 in the LDAP policy hive. Enforces the use of LDAP over TLS (LDAPS on port 636) for LDAP connections. Standard LDAP on port 389 transmits all directory queries and responses, including credentials, in plaintext. An attacker performing network traffic capture on the corporate network can extract LDAP bind credentials, observe group memberships, and construct detailed maps of Active Directory structure. LDAPS encrypts the entire LDAP session using TLS. Combined with LDAP signing and channel binding, LDAPS provides end-to-end protection for directory communications.",
                     Tags = ["ldap", "ldaps", "tls", "port-636", "plaintext-prevention"],
@@ -5025,7 +5025,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-set-max-ldap-connections-500",
                     Label = "LDAP Client: Cap Maximum Concurrent LDAP Connections to 500",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets MaxConnections=500 in the LDAP service key. Limits the number of concurrent LDAP connections the client interface will maintain to 500. Unbounded LDAP connections on an LDAP client can lead to memory exhaustion if an application has a connection leak or if a malicious application attempts to open large numbers of LDAP connections to degrade other directory services consumers on the same host. This setting provides a reasonable upper bound for normal enterprise usage while preventing connection floods.",
                     Tags = ["ldap", "connection-limit", "resource-bound", "dos-mitigation", "memory"],
@@ -5043,7 +5043,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-enable-referral-following-sasl",
                     Label = "LDAP Client: Require SASL Authentication When Following LDAP Referrals",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets FollowReferralsWithSasl=1 in the LDAP policy hive. Requires that when an LDAP client follows an LDAP referral (a response from one DC that redirects the client to query a different DC or domain), the subsequent connection to the referred server uses SASL (GSSAPI/Kerberos) authentication rather than simple bind. An attacker who can serve a crafted LDAP referral can attempt to redirect the client to a malicious LDAP server — if the client then connects using simple bind (password), the credentials can be captured. SASL with Kerberos prevents this: the referral target must prove its identity via Kerberos before credentials are presented.",
                     Tags = ["ldap", "referral", "sasl", "kerberos", "credential-capture"],
@@ -5061,7 +5061,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-enable-ldap-diagnostic-logging",
                     Label = "LDAP Client: Enable LDAP Client Diagnostic Event Logging",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets LdapDiagnosticsEnabled=1 in the LDAP policy hive. Enables LDAP client diagnostic logging to the Windows Application event log. When enabled, LDAP authentication failures, TLS handshake errors, channel binding failures, and referral-following events are logged with details including the DC hostname, error code, and the identity attempting authentication. This logging is essential for detecting LDAP attacks (repeated anonymous bind attempts, LDAP relay attempts where channel binding fails) and for diagnosing LDAP signing/channel binding compatibility issues during enforcement rollout.",
                     Tags = ["ldap", "diagnostics", "logging", "event-log", "forensics"],
@@ -5079,7 +5079,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-block-ntlm-ldap-fallback",
                     Label = "LDAP Client: Block NTLM Fallback in LDAP Authentication Negotiation",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets BlockNtlmLdapFallback=1 in the LDAP policy hive. Prevents the LDAP client from falling back to NTLM authentication when Kerberos authentication to a domain controller fails. An attacker who performs a downgrade attack (e.g., interfering with Kerberos SPN resolution) can force an LDAP client to use NTLM instead of Kerberos for authentication. NTLM is weaker and susceptible to relay attacks. Blocking NTLM fallback forces the client to fail visibly when Kerberos is unavailable rather than silently using the weaker protocol — making downgrade attacks immediately visible in logs.",
                     Tags = ["ldap", "ntlm-fallback", "kerberos", "downgrade", "relay"],
@@ -5097,7 +5097,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapclnt-enforce-ldap-query-size-limit-1000",
                     Label = "LDAP Client: Enforce Maximum LDAP Query Result Size of 1000 Objects",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets MaxPageSize=1000 in the LDAP policy hive. Limits LDAP query results to a maximum of 1000 directory objects per page. Unbounded LDAP queries (queries without a size limit) can return tens of thousands of objects, consuming excessive DC memory and CPU, and enabling bulk directory enumeration by an attacker who has obtained LDAP query access. Setting a page size limit of 1000 ensures that applications must use paged results (LDAP paging control) to enumerate large sets of objects — and an attacker attempting to dump the entire directory in one query receives an error and must iterate, increasing the attack duration and detectability.",
                     Tags = ["ldap", "query-size", "paging", "enumeration", "dos-mitigation"],
@@ -5127,7 +5127,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-require-client-signing",
                     Label = "Require LDAP Client Signing for All Directory Connections",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Configures the LDAP client to always request LDAP signing (integrity protection), preventing man-in-the-middle attacks against LDAP sessions that could be used to modify query results or inject forged LDAP responses.",
                     Tags = ["ldap", "signing", "integrity", "mitm", "policy"],
@@ -5144,7 +5144,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-require-channel-binding",
                     Label = "Require LDAP Channel Binding Tokens (CBT Hardening)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Configures the LDAP client to include EPA Channel Binding Tokens in all LDAP over TLS sessions, preventing NTLM relay attacks that forward LDAP authentication to a different TLS channel.",
                     Tags = ["ldap", "channel-binding", "cbt", "ntlm-relay", "policy"],
@@ -5161,7 +5161,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-disable-simple-bind",
                     Label = "Disable LDAP Simple Bind Authentication",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Prevents the use of LDAP Simple Bind authentication which sends credentials as plaintext Base64 without integrity protection. NTLM or Kerberos SASL must be used for all LDAP authentication.",
                     Tags = ["ldap", "simple-bind", "plaintext-auth", "sasl", "policy"],
@@ -5178,7 +5178,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-require-ldaps-port636",
                     Label = "Require LDAP over SSL/TLS (LDAPS, Port 636) for All AD Connections",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Configures the LDAP client to use LDAPS (LDAP over TLS on port 636) for all Active Directory connections, ensuring the entire LDAP session including SASL auth handshake is TLS-encrypted.",
                     Tags = ["ldap", "ldaps", "tls", "port-636", "policy"],
@@ -5195,7 +5195,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-set-max-query-result-size",
                     Label = "Set Maximum LDAP Query Result Set to 1000 Entries",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Limits LDAP query result sets to 1000 entries, preventing oversized LDAP result enumeration attacks that could be used to enumerate all AD objects in a single query exceeding normal LDAP paged result limits.",
                     Tags = ["ldap", "result-size", "enumeration-prevention", "security", "policy"],
@@ -5212,7 +5212,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-set-query-timeout-30s",
                     Label = "Set LDAP Query Timeout to 30 Seconds to Prevent Slow Queries",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Sets the LDAP client query timeout to 30 seconds, ensuring that slow/hanging LDAP queries do not block authentication processes and preventing DoS via crafted slow LDAP response attacks.",
                     Tags = ["ldap", "query-timeout", "dos-prevention", "authentication", "policy"],
@@ -5229,7 +5229,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-disable-ldap-null-base-queries",
                     Label = "Disable Unauthenticated LDAP Null-Base DNS Queries",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Prevents anonymous LDAP queries with a null base (empty search base DN) that enable unauthenticated discovery of AD domain information, domain naming context, and supported SASL mechanisms.",
                     Tags = ["ldap", "null-base", "anonymous", "enumeration", "policy"],
@@ -5246,7 +5246,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-log-signing-failures",
                     Label = "Log LDAP Signing and Channel Binding Failure Events",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Enables Security audit log entries for LDAP sessions that fail signing or channel binding requirements, providing visibility into tools and applications sending unsigned LDAP queries.",
                     Tags = ["ldap", "signing-failure", "event-log", "audit", "policy"],
@@ -5263,7 +5263,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-disable-ldap-telemetry",
                     Label = "Disable LDAP Client Telemetry to Microsoft",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Prevents the Windows LDAP client from sending signing negotiation stats, connection failure rates, and cipher suite telemetry to Microsoft.",
                     Tags = ["ldap", "telemetry", "privacy", "microsoft", "policy"],
@@ -5280,7 +5280,7 @@ internal static class PolicyNetwork
                 {
                     Id = "ldapsec-enable-integrity-check-on-reconnect",
                     Label = "Re-Verify LDAP Integrity on Session Reconnection",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Forces the LDAP client to re-negotiate and verify signing integrity tokens when an LDAP session is reconnected after a network interruption, preventing session hijacking via injection into a reconnected unsigned LDAP stream.",
                     Tags = ["ldap", "reconnect", "integrity", "session-hijacking", "policy"],
@@ -5317,7 +5317,7 @@ internal static class PolicyNetwork
             {
                 Id = "legprot-disable-lltd",
                 Label = "Disable LLTD (Link-Layer Topology Discovery)",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5335,7 +5335,7 @@ internal static class PolicyNetwork
             {
                 Id = "legprot-disable-6to4",
                 Label = "Disable IPv6-to-IPv4 Transition (6to4)",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5353,7 +5353,7 @@ internal static class PolicyNetwork
             {
                 Id = "legprot-disable-wins-client",
                 Label = "Disable WINS Client Lookup",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -5372,7 +5372,7 @@ internal static class PolicyNetwork
             {
                 Id = "legprot-disable-llmnr-fallback",
                 Label = "Disable LLMNR Name Resolution Fallback",
-                Category = "Network",
+                Category = "Network — Ipsec Rule",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5401,7 +5401,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-lltd-io",
                     Label = "Disable LLTD I/O (Network Map Responder on Private Networks)",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD I/O component that allows this machine to respond to Link Layer Topology Discovery queries on private networks (home/work), preventing its network adapters from appearing in the Windows Network Map.",
                     Tags = ["lltd", "network-map", "topology-discovery", "privacy", "policy"],
@@ -5418,7 +5418,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-lltd-io-domain",
                     Label = "Disable LLTD I/O on Domain Networks",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD I/O component on domain-authenticated networks, preventing this machine from exposing its network topology to network discovery tools on corporate domain networks.",
                     Tags = ["lltd", "domain-network", "topology-discovery", "corporate", "policy"],
@@ -5435,7 +5435,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-lltd-io-public",
                     Label = "Disable LLTD I/O on Public Networks",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD I/O component on public networks (airports, hotels, coffee shops), preventing network enumeration of this machine by other devices on untrusted public Wi-Fi networks.",
                     Tags = ["lltd", "public-network", "topology-discovery", "security", "policy"],
@@ -5452,7 +5452,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-rspndr",
                     Label = "Disable LLTD Responder Component on Private Networks",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD Responder driver (rspndr) on private networks, preventing this machine from sending LLTD discovery responses that reveal its presence and IP/MAC mapping to network topology collectors.",
                     Tags = ["lltd", "responder", "network-discovery", "mac-address", "policy"],
@@ -5469,7 +5469,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-rspndr-domain",
                     Label = "Disable LLTD Responder on Domain Networks",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD Responder driver on domain-authenticated networks, preventing topology discovery responses on corporate LANs where network mapping is managed exclusively by centralised network tools.",
                     Tags = ["lltd", "responder", "domain-network", "corporate", "policy"],
@@ -5486,7 +5486,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-rspndr-public",
                     Label = "Disable LLTD Responder on Public Networks",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD Responder driver on public networks, ensuring that this machine does not expose its presence, MAC address, or IP mapping to other hosts on untrusted public network segments.",
                     Tags = ["lltd", "responder", "public-network", "security", "policy"],
@@ -5503,7 +5503,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-log-lltd-probe-events",
                     Label = "Enable Logging of LLTD Discovery Probe Events",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Enables event log entries when LLTD discovery probes are received, providing audit trail of which hosts on the network are conducting topology discovery scans against this machine.",
                     Tags = ["lltd", "audit", "discovery-probe", "event-log", "policy"],
@@ -5520,7 +5520,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-managed-network-qos",
                     Label = "Disable LLTD Managed Network QoS Signalling",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables the LLTD managed network Quality of Service signalling extension, preventing this machine from participating in QoS scheduling signals broadcast over LLTD on Windows home network environments.",
                     Tags = ["lltd", "qos", "network-management", "policy"],
@@ -5537,7 +5537,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-block-lltd-service-admin-change",
                     Label = "Block Admin From Re-Enabling LLTD Without Policy Override",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Prevents local administrators from re-enabling LLTD I/O or Responder components without a Group Policy override, ensuring that the LLTD disable policy cannot be circumvented at the local machine level.",
                     Tags = ["lltd", "admin-lockdown", "gpo", "policy"],
@@ -5554,7 +5554,7 @@ internal static class PolicyNetwork
                 {
                     Id = "lltdpol-disable-lltd-multicast",
                     Label = "Disable LLTD Multicast Discovery on All Segments",
-                    Category = "Network",
+                    Category = "Network — Ipsec Rule",
                     Description =
                         "Disables LLTD multicast discovery messages sent across all network segments, preventing bandwidth consumption from periodic LLTD multicast discovery packets on busy enterprise networks.",
                     Tags = ["lltd", "multicast", "bandwidth", "network", "policy"],
@@ -5581,7 +5581,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-auto-download",
                     Label = "Disable Automatic Offline Maps Download",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Windows from automatically downloading offline map data updates in the background. Reduces unnecessary network traffic on metered connections and removes a low-value background data transfer. Default: auto-download enabled. Recommended: 1.",
                     Tags = ["maps", "offline", "download", "background", "network", "policy"],
@@ -5598,7 +5598,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-untriggered-network-traffic",
                     Label = "Disable Maps App Untriggered Network Traffic",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Stops the Maps application from initiating network requests that are not triggered by explicit user interaction (such as background tile prefetching or POI data sync). Reduces bandwidth consumption and privacy exposure. Default: background network traffic allowed. Recommended: 1.",
                     Tags = ["maps", "network", "background", "privacy", "policy"],
@@ -5615,7 +5615,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-location-for-maps",
                     Label = "Disable Location Access for Windows Maps",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Blocks the Windows Maps application from using the device's current location (GPS, Wi-Fi triangulation, IP geolocation) to centre the map or suggest nearby places. Prevents continuous location sampling by the app. Default: location allowed. Recommended: 1 on privacy-hardened endpoints.",
                     Tags = ["maps", "location", "gps", "privacy", "policy"],
@@ -5632,7 +5632,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-block-map-traffic-data",
                     Label = "Disable Real-Time Traffic Data in Maps",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Windows Maps from fetching real-time traffic data (congestion, incidents, road closures) from Microsoft's mapping service. Reduces background network calls and location telemetry inferences. Default: traffic data enabled. Recommended: 1 on privacy-hardened endpoints.",
                     Tags = ["maps", "traffic", "realtime", "network", "privacy", "policy"],
@@ -5649,7 +5649,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-map-tile-storage",
                     Label = "Disable Offline Map Tile Storage",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Windows Maps from caching map tiles on local disk for offline use. Removes the map data footprint from managed devices where the maps feature is not used. Default: tiles cached locally. Recommended: 1 on space-constrained or managed endpoints where maps is unused.",
                     Tags = ["maps", "tile", "cache", "storage", "disk", "policy"],
@@ -5666,7 +5666,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-bing-search-integration",
                     Label = "Disable Bing Search Integration in Maps",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Windows Maps from sending search queries to Bing when a user searches for a place, address, or business. Stops search terms from being transmitted to Microsoft's servers. Default: Bing integration enabled. Recommended: 1 on privacy-hardened endpoints.",
                     Tags = ["maps", "bing", "search", "privacy", "network", "policy"],
@@ -5683,7 +5683,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-route-sharing",
                     Label = "Disable Route/Directions Sharing from Maps",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Removes the 'Share' button and functionality from Windows Maps so users cannot share routes, locations, or directions via mail, SMS, or other apps. Prevents incidental location data leakage through sharing. Default: sharing enabled. Recommended: 1.",
                     Tags = ["maps", "sharing", "route", "privacy", "dlp", "policy"],
@@ -5700,7 +5700,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-personalized-maps",
                     Label = "Disable Personalised Map Suggestions",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Disables personalised place recommendations and 'frequent locations' features in Windows Maps that are based on past search history and route patterns. Prevents the accumulation of a location history profile. Default: personalisation enabled. Recommended: 1.",
                     Tags = ["maps", "personalisation", "history", "privacy", "policy"],
@@ -5717,7 +5717,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-indoor-maps",
                     Label = "Disable Indoor Maps Feature",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Turns off the indoor floor-plan mapping feature in Windows Maps. Indoor maps require additional tile downloads and location data for floor-level positioning. On managed endpoints the feature is rarely needed and adds unnecessary resource usage. Default: indoor maps enabled. Recommended: 1.",
                     Tags = ["maps", "indoor", "floorplan", "network", "policy"],
@@ -5734,7 +5734,7 @@ internal static class PolicyNetwork
                 {
                     Id = "mapsbr-disable-3d-maps",
                     Label = "Disable 3D Maps View (Birds Eye / Air View)",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Windows Maps from loading 3D aerial/birds-eye imagery tiles. 3D tiles are much larger than standard tiles and result in significant bandwidth consumption. On managed endpoints with limited bandwidth or no approved use of Maps, this reduces network overhead. Default: 3D imagery enabled. Recommended: 1.",
                     Tags = ["maps", "3d", "aerial", "network", "bandwidth", "policy"],
@@ -5761,7 +5761,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-cellular-data-roaming",
                 Label = "Mobility Policy: Disable Cellular Data Roaming",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents Windows from enabling cellular data roaming, which connects to and uses foreign carrier networks at potentially extreme per-MB charges. "
                     + "On enterprise-managed endpoints with cellular adapters, roaming data costs can accumulate without user awareness. "
@@ -5782,7 +5782,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-mobile-hotspot",
                 Label = "Mobility Policy: Disable Mobile Hotspot Sharing",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents the device from being configured as a mobile hotspot that shares its cellular or Wi-Fi connection with other devices. "
                     + "Mobile hotspot sharing bypasses network access controls and can expose the corporate network to unauthorised connected devices. "
@@ -5802,7 +5802,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-usb-tethering",
                 Label = "Mobility Policy: Disable USB Tethering",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents the device from being used as a USB tethering gateway, sharing its internet connection via USB to other devices. "
                     + "USB tethering creates a NAT bridge that can leak network traffic around firewall controls. "
@@ -5822,7 +5822,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-automatic-connection-switch",
                 Label = "Mobility Policy: Disable Auto WiFi-to-Cellular Switch",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents Windows from automatically switching the active network connection from Wi-Fi to cellular when Wi-Fi signal drops. "
                     + "Automatic switching can result in cellular data consumption and unexpected data charges on limited data plans. "
@@ -5843,7 +5843,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-bluetooth-tethering",
                 Label = "Mobility Policy: Disable Bluetooth Tethering",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents the device from sharing its internet connection via Bluetooth DUN (Dial-Up Networking) to devices paired over Bluetooth. "
                     + "Bluetooth tethering is a lower-visibility bridging path that can expose sensitive traffic without user awareness. "
@@ -5863,7 +5863,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-data-sense",
                 Label = "Mobility Policy: Disable Data Sense Usage Monitoring",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Disables the Data Sense feature that monitors per-app cellular usage and restricts background data on metered connections. "
                     + "On managed endpoints, data usage enforcement should come from network policy rather than per-device Data Sense heuristics. "
@@ -5883,7 +5883,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-carrier-provisioning",
                 Label = "Mobility Policy: Disable Carrier Provisioning Updates",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents mobile carriers from remotely pushing provisioning XML updates to the device that can change network settings, APN configurations, and restrictions. "
                     + "Carrier provisioning is an automated out-of-band configuration channel that can override IT-managed network settings. "
@@ -5904,7 +5904,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-wifi-sense",
                 Label = "Mobility Policy: Disable Wi-Fi Sense Auto-Connect",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Disables Wi-Fi Sense, which automatically connects to crowdsourced open Wi-Fi hotspots and can share Wi-Fi credentials with contacts. "
                     + "Wi-Fi Sense credential-sharing is a privacy and security risk on enterprise networks — credentials can be propagated to users' personal device contacts. "
@@ -5924,7 +5924,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-network-roaming-policy",
                 Label = "Mobility Policy: Disable Network Roaming Profiles Sync",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents user roaming profiles from synchronising over cellular connections when roaming on a foreign network. "
                     + "Syncing large roaming profiles over cellular roaming can incur significant data charges and slow the logon process. "
@@ -5944,7 +5944,7 @@ internal static class PolicyNetwork
             {
                 Id = "mob-disable-wwan-ui",
                 Label = "Mobility Policy: Disable WWAN Cellular UI Controls",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Hides the cellular (WWAN) control panel and settings UI from users, preventing manual changes to cellular configuration on managed endpoints. "
                     + "On enterprise endpoints where cellular settings are managed via MDM or IT policy, user-facing cellular UI is redundant and can lead to misconfiguration. "
@@ -5974,7 +5974,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-disable-nearby-sharing",
                     Label = "Disable Nearby Sharing (GPO)",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets DisableNearbySharing=1 to disable the Windows Nearby Sharing feature via Group Policy. Prevents file and URL transfers between nearby devices over Bluetooth and Wi-Fi Direct.",
                     Tags = ["nearby", "sharing", "bluetooth", "wifi-direct", "policy"],
@@ -5991,7 +5991,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-block-paired-devices",
                     Label = "Block Paired Device File Sharing",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowPairedDevices=0. Prevents this device from sharing files or URLs with paired Bluetooth devices through the Nearby Sharing subsystem, even when the feature itself is enabled.",
                     Tags = ["nearby", "paired", "bluetooth", "sharing", "policy"],
@@ -6008,7 +6008,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-disable-message-sync",
                     Label = "Disable Phone Link Message Sync",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowMessageSync=0 in the Nearby Sharing policy. Prevents SMS and MMS messages from being synced from a paired Android device to this PC through the Phone Link (formerly Your Phone) application.",
                     Tags = ["nearby", "phone", "message", "sync", "policy"],
@@ -6025,7 +6025,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-block-contacts-sync",
                     Label = "Block Phone Link Contacts Sync",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowContactsSync=0. Prevents the Phone Link app from synchronising device contacts from a paired phone to the Windows People app or contact suggestions across the OS.",
                     Tags = ["nearby", "phone", "contacts", "sync", "policy"],
@@ -6042,7 +6042,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-disable-phone-link",
                     Label = "Disable Phone Link Feature (GPO)",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets DisablePhoneLinkFromSettings=1. Removes the Phone Link pairing option from the Windows Settings app, preventing users from linking a mobile phone to this PC through the connected-devices platform.",
                     Tags = ["nearby", "phone-link", "pairing", "policy", "settings"],
@@ -6059,7 +6059,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-restrict-to-my-devices",
                     Label = "Restrict Nearby Sharing to My Devices Only",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets SharingScope=1 to restrict Nearby Sharing to devices signed in with the same Microsoft or Azure AD account. Prevents sharing with unknown nearby devices while preserving same-account file transfers.",
                     Tags = ["nearby", "scope", "trusted", "devices", "policy"],
@@ -6076,7 +6076,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-block-bluetooth-sharing",
                     Label = "Block Bluetooth File Sharing",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowBluetoothSharing=0 in the Nearby Sharing policy. Blocks the Bluetooth Object Push Profile (OPP) used by Nearby Sharing, preventing file reception from any Bluetooth source.",
                     Tags = ["nearby", "bluetooth", "opp", "sharing", "policy"],
@@ -6093,7 +6093,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-block-wifi-direct-sharing",
                     Label = "Block Wi-Fi Direct Nearby Sharing",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowWifiDirectNearbySharing=0. Disables the Wi-Fi Direct transport layer used for Nearby Sharing. Prevents high-speed peer-to-peer file transfers that bypass the corporate network.",
                     Tags = ["nearby", "wifi-direct", "p2p", "sharing", "policy"],
@@ -6110,7 +6110,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-disable-activity-feed-sharing",
                     Label = "Disable Nearby Activity Feed Sharing",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowActivityFeed=0 in the Nearby Sharing policy scope. Prevents the connected-devices platform from broadcasting recently-used documents and activities to nearby enrolled devices via the activity feed.",
                     Tags = ["nearby", "activity", "feed", "sharing", "policy"],
@@ -6127,7 +6127,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nshpol-block-cross-device-clipboard",
                     Label = "Block Cross-Device Clipboard via Nearby Sharing",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets AllowCrossDeviceClipboard=0 in the Nearby Sharing policy. Prevents clipboard content from being sent or received between nearby Windows devices through the connected-devices platform, blocking near-field clipboard data exfiltration.",
                     Tags = ["nearby", "clipboard", "cross-device", "sharing", "policy"],
@@ -6154,7 +6154,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-netbios-over-tcpip",
                 Label = "Disable NetBIOS over TCP/IP on All Network Interfaces",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6171,7 +6171,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-llmnr-resolution",
                 Label = "Disable Link-Local Multicast Name Resolution",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6188,7 +6188,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-wins-client",
                 Label = "Disable WINS Client Name Resolution",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6205,7 +6205,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-netbios-name-broadcasts",
                 Label = "Disable NetBIOS Name Broadcast Announcements",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6222,7 +6222,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-nbt-ns-resolution",
                 Label = "Disable NetBIOS over TCP/IP Name Service Queries",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6239,7 +6239,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-computer-browser-service",
                 Label = "Disable Computer Browser Service NetBIOS Dependency",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6256,7 +6256,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-restrict-smb-netbios-sharing",
                 Label = "Restrict SMB NetBIOS File Sharing to Authenticated Users",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6273,7 +6273,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-audit-netbios-name-queries",
                 Label = "Enable Audit Logging for NetBIOS Name Query Events",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6290,7 +6290,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-netbt-registration",
                 Label = "Disable NetBIOS Computer Name Registration on Network",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6307,7 +6307,7 @@ internal static class PolicyNetwork
             {
                 Id = "netbios-disable-multicast-dns",
                 Label = "Disable Multicast DNS to Prevent mDNS-Based Poisoning",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6334,7 +6334,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-disable-ncsi-active-probe",
                 Label = "Disable Network Connectivity Status Indicator Active Internet Probe",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6351,7 +6351,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-disable-ncsi-passive-polling",
                 Label = "Disable NCSI Passive Network Polling for Network Status Detection",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6368,7 +6368,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-configure-global-dns-suffix",
                 Label = "Configure Global DNS Suffix for Network Name Resolution Policy",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6385,7 +6385,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-restrict-network-location-awareness",
                 Label = "Restrict Network Location Awareness Profile Assignment",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6402,7 +6402,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-disable-network-connectivity-popup",
                 Label = "Disable Network Connectivity Status Popup Notifications",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -6419,7 +6419,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-block-captive-portal-redirect",
                 Label = "Block Captive Portal Redirect Detection and Notification",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6436,7 +6436,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-enable-interface-metric-policy",
                 Label = "Enable Policy-Based Interface Metric Configuration",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6453,7 +6453,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-restrict-apipa-assignment",
                 Label = "Restrict Automatic Private IP Address Assignment on Link Failure",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -6470,7 +6470,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-block-wi-fi-sense-auto-connect",
                 Label = "Block Wi-Fi Sense Automatic Connection to Shared Networks",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -6487,7 +6487,7 @@ internal static class PolicyNetwork
             {
                 Id = "netcfg-enforce-secure-dns-configuration",
                 Label = "Enforce Secure DNS Configuration for Network Name Resolution",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -6518,7 +6518,7 @@ internal static class PolicyNetwork
                 {
                     Id = "netio-set-tcp-checksum-hardware",
                     Label = "Net IO: Enable TCP/IP Hardware Checksum Offload",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets EnableTCPChimneyOffload=1 and ChecksumOffloadEnabled=1 in TCP/IP settings. Configures the TCP/IP stack to delegate TCP and IP header checksum computation to the network adapter hardware (TCP Offload Engine). Hardware checksum computation removes the CPU overhead of per-packet checksum calculations from the host CPU. On servers handling 10 Gbps+ traffic or high-PPS packet flows, hardware checksum offload can reduce CPU utilization by 5–15% for network processing.",
                     Tags = ["tcp", "checksum", "offload", "hardware", "nic"],
@@ -6536,7 +6536,7 @@ internal static class PolicyNetwork
                 {
                     Id = "netio-set-tcp-autotuning-high",
                     Label = "Net IO: Set TCP Window Autotuning to Highly Restricted Mode",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets TcpAutoTuningLevel=4 (highly restricted) in TCP/IP parameters. Sets TCP receive window auto-tuning to a conservative algorithm that grows the receive buffer more cautiously than the default. The highly restricted mode is appropriate for environments with high-speed last-mile but intermediate links with lossy behavior (satellite links, 4G LTE backhaul) where aggressive window growth causes sporadic retransmit storms. On reliable Ethernet networks, 'normal' (0) autotuning provides higher throughput.",
                     Tags = ["tcp", "autotuning", "window", "buffer", "network"],
@@ -6554,7 +6554,7 @@ internal static class PolicyNetwork
                 {
                     Id = "netio-enable-rss",
                     Label = "Net IO: Enable Receive-Side Scaling (RSS) for Multi-CPU Load",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets EnableRSS=1 and MaxRssProcessors=4 in network adapter policy. Enables Receive-Side Scaling (RSS) which distributes incoming network packet processing across multiple CPU cores. Without RSS, all incoming traffic for a given NIC is processed on a single CPU core, creating a per-core throughput bottleneck at approximately 3–5 Gbps on modern hardware. With RSS, incoming packets are hashed to multiple CPU queues, scaling receive throughput linearly with CPU cores up to the NIC's hardware RSS queue limit.",
                     Tags = ["rss", "networking", "cpu", "performance", "offload"],
@@ -6572,7 +6572,7 @@ internal static class PolicyNetwork
                 {
                     Id = "netio-set-afd-fast-send-datagram",
                     Label = "Net IO: Enable AFD Fast Send Datagram Path",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets FastSendDatagramThreshold=1024 in AFD parameters. Configures the Windows Ancillary Function Driver (AFD) to use the fast datagram send path for UDP packets under 1024 bytes. The fast path bypasses several AFD buffer validation steps for trusted-size datagrams, reducing per-packet CPU cost for high-PPS UDP workloads. This benefits applications generating large volumes of small UDP packets: DNS servers processing thousands of queries per second, game servers, or network telemetry agents.",
                     Tags = ["afd", "udp", "datagram", "fast-path", "performance"],
@@ -6590,7 +6590,7 @@ internal static class PolicyNetwork
                 {
                     Id = "netio-disable-ipv6-source-routing",
                     Label = "Net IO: Disable IPv6 Source Routing (Anti-Spoofing)",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Sets DisableIPv6SourceRouting=1 in TCPv6 parameters. Drops IPv6 packets containing Type 0 Routing Header (RH0) extension headers. IPv6 RH0 was used in major amplified DoS attacks (CVE-2007-2242) where a small packet can be amplified to an enormous amount of traffic by specifying 127 intermediate hops in the routing header. RFC 5095 deprecated RH0; all modern networks should drop RH0-containing packets. This setting enforces RFC 5095 at the host‐stack level.",
                     Tags = ["ipv6", "source-routing", "rh0", "dos", "hardening"],
@@ -6619,7 +6619,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-always-classify-as-public",
                     Label = "Always Classify Unrecognised Networks as Public",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Forces Windows to classify all new or unrecognised network connections as Public network profile (most restrictive firewall rules) until explicitly reclassified by an administrator, applying maximum firewall protection to unknown networks.",
                     Tags = ["nla", "network-classification", "public-profile", "firewall", "policy"],
@@ -6636,7 +6636,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-block-user-profile-reclassification",
                     Label = "Block Standard Users from Reclassifying Network Profiles",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents standard users from changing a network's classification (Private/Public/Domain Work) in Windows, ensuring that firewall profile assignments can only be modified by administrators.",
                     Tags = ["nla", "network-profile", "reclassification", "standard-user", "policy"],
@@ -6653,7 +6653,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-disable-domain-network-upgrade",
                     Label = "Disable Automatic Domain Network Upgrade from NLA",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents NLA from automatically reclassifying a network from Public/Private to Domain Work profile when domain controllers are reachable, keeping explicit admin-assigned firewall profiles even on domain member machines.",
                     Tags = ["nla", "domain-profile", "auto-detect", "firewall", "policy"],
@@ -6670,7 +6670,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-log-profile-change-events",
                     Label = "Log Network Profile Change Events",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Enables System event log entries when a network connection profile is changed (Private to Public, etc.), providing audit visibility into firewall profile transitions that could weaken security posture.",
                     Tags = ["nla", "network-profile", "event-log", "audit", "policy"],
@@ -6687,7 +6687,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-disable-nla-internet-probe",
                     Label = "Disable NLA Internet Connectivity Probe (NCSI Bypass)",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Disables the Network Connectivity Status Indicator (NCSI) probe that NLA sends to Microsoft servers (connectivity.microsoft.com) to determine internet connectivity status, preventing outbound probe traffic to cloud hosts.",
                     Tags = ["nla", "ncsi", "connectivity-probe", "microsoft", "privacy", "policy"],
@@ -6704,7 +6704,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-disable-captive-portal-detect",
                     Label = "Disable Captive Portal Detection",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Disables Windows captive portal detection that redirects a browser to a hotel/airport landing page, preventing unwanted browser launches in locked-down environments and avoiding false-positive network change alerts.",
                     Tags = ["nla", "captive-portal", "hotspot", "browser", "policy"],
@@ -6721,7 +6721,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-require-auth-for-private-upgrade",
                     Label = "Require User Authentication Before Private Network Upgrade",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Requires an administrator confirmation before NLA upgrades a network from Public to Private profile, preventing accidental loosening of firewall rules when a device connects to an unknown but trusted-seeming network.",
                     Tags = ["nla", "private-profile", "authentication", "firewall", "policy"],
@@ -6738,7 +6738,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-block-network-name-ui",
                     Label = "Hide Network Name and Location in System Tray",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Removes the network name and location type from the system tray network flyout, preventing casual users from seeing and potentially modifying network profile names or locations.",
                     Tags = ["nla", "system-tray", "network-name", "ui", "policy"],
@@ -6755,7 +6755,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-disable-network-telemetry",
                     Label = "Disable NLA Network Profile Telemetry to Microsoft",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Prevents Network Location Awareness from sending network profile assignment and classification telemetry to Microsoft, protecting information about this machine's network environment from cloud disclosure.",
                     Tags = ["nla", "telemetry", "privacy", "microsoft", "policy"],
@@ -6772,7 +6772,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nlaadv-set-profile-icon-classification",
                     Label = "Set Network Profile Icon to Reflect Classification",
-                    Category = "Network",
+                    Category = "Network — Maps Browser",
                     Description =
                         "Configures the network profile icon in the system tray to visually reflect the current classification (Public/Private/Domain) to ensure users have immediate visual awareness of the active firewall profile strength.",
                     Tags = ["nla", "network-icon", "ui", "firewall-profile", "policy"],
@@ -6801,7 +6801,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-nap-client-enforcement",
                 Label = "NAP Policy: Enable NAP Client Enforcement Mode",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Enables the Network Access Protection (NAP) client on the machine, allowing the machine to participate in NAP health validation and enforcement workflows. NAP is a policy-based network access control framework that evaluates the health state of a machine (antivirus, patch level, firewall status) before granting full network access. Enabling enforcement mode ensures that a machine reporting an unhealthy health state is placed in a restricted network segment until it is remediated.",
                 Tags = ["nap", "network access protection", "compliance", "health validation", "policy"],
@@ -6820,7 +6820,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-require-health-validation",
                 Label = "NAP Policy: Require Health Certificate for Network Access",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Configures the NAP client to require a valid System Health Certificate (SHC) before being granted unrestricted network access. Without a health certificate, the machine is placed in the quarantine network. Health certificates are issued by the Health Registration Authority (HRA) after the NPS Health Policy Server verifies that all system health validators (SHVs) report a compliant state. This policy forms the core of the 802.1X-based NAP enforcement chain.",
                 Tags = ["nap", "health certificate", "802.1x", "hps", "policy"],
@@ -6839,7 +6839,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enforce-vpn-shv",
                 Label = "NAP Policy: Enable System Health Validation for VPN Connections",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Activates System Health Validator (SHV) evaluation for VPN-based NAP enforcement, ensuring that remote machines connecting via VPN are subject to the same health compliance checks as internally-connected machines. Without VPN-SHV enforcement, remote workers can connect to the corporate network with out-of-date antivirus signatures or missing security patches while bypassing the health gating that on-premises machines face.",
                 Tags = ["nap", "vpn", "system health validator", "remote access", "policy"],
@@ -6858,7 +6858,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-disable-auto-remediation",
                 Label = "NAP Policy: Disable Automatic Health Remediation",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Prevents the NAP client from automatically remediating detected health deficiencies by making software changes (e.g., enabling Windows Firewall, triggering Windows Update). Automatic remediation can make unexpected changes to a system without user awareness and may conflict with endpoint management tools (such as Intune or SCCM) that manage those settings centrally. Disabling auto-remediation forces the user or help desk to perform explicit remediation steps.",
                 Tags = ["nap", "auto remediation", "endpoint management", "policy"],
@@ -6877,7 +6877,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enforce-quarantine-timeout",
                 Label = "NAP Policy: Set Quarantine Timeout Period for Unhealthy Machines",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Configures how long (in minutes) a machine can remain in the quarantine network before its health is re-evaluated and upgraded to full access or flagged for intervention. A timeout of 480 minutes (8 hours) reflects a typical business-day remediation window. Without a timeout, a machine placed in quarantine due to a transient health failure stays restricted indefinitely unless an administrator intervenes or the NAP client is restarted.",
                 Tags = ["nap", "quarantine", "timeout", "health policy", "policy"],
@@ -6895,7 +6895,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-quarantine-state-pki",
                 Label = "NAP Policy: Enable PKI-Based Quarantine State Machine",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Activates the PKI-based state machine within the NAP client that uses X.509 certificates to encode the machine's health attestation state. The PKI state machine is required for the IPSEC enforcement method, which uses health certificates to gate machine-to-machine communication at the network layer. Without this, only 802.1X or DHCP-based NAP enforcement methods are available, which are less granular than IPSEC health-gated policies.",
                 Tags = ["nap", "pki", "ipsec", "health attestation", "policy"],
@@ -6913,7 +6913,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-dhcp-enforcement",
                 Label = "NAP Policy: Enable DHCP-Based NAP Enforcement",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Enables the DHCP enforcement client for NAP, allowing the machine to participate in DHCP quarantine workflows. In DHCP enforcement mode, the DHCP server issues different IP address leases (quarantine vs. full-access scope) based on the client's health certificate. This is the simplest NAP enforcement method to deploy and requires no changes to network switches, making it suitable for organisations with legacy switching infrastructure.",
                 Tags = ["nap", "dhcp enforcement", "quarantine", "network access", "policy"],
@@ -6931,7 +6931,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-wired-8021x-enforcement",
                 Label = "NAP Policy: Enable Wired 802.1X NAP Enforcement",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Activates the 802.1X enforcement client for wired network connections, enabling switch-level NAP quarantine for machines that fail health evaluations. 802.1X enforcement is the strongest NAP mechanism because it operates at the switch port level — a machine placed in quarantine cannot communicate on the network at all without passing through the enforcement switch, regardless of IP configuration. This method requires 802.1X-capable managed switches.",
                 Tags = ["nap", "802.1x", "wired enforcement", "switch", "policy"],
@@ -6950,7 +6950,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-ts-gateway-enforcement",
                 Label = "NAP Policy: Enable Terminal Services Gateway NAP Enforcement",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Enables the Terminal Services (Remote Desktop) Gateway NAP enforcement client. When active, the TS Gateway evaluates the client machine's NAP health certificate before establishing an RDP tunnel, ensuring that remote desktop sessions from unhealthy endpoints are blocked at the gateway. This is particularly important for privileged access workstations (PAWs) connecting to administrative systems — an infected admin workstation should not be allowed to initiate RDP sessions.",
                 Tags = ["nap", "terminal services", "remote desktop", "gateway", "policy"],
@@ -6968,7 +6968,7 @@ internal static class PolicyNetwork
             {
                 Id = "napcomp-enable-ipsec-enforcement",
                 Label = "NAP Policy: Enable IPsec-Based NAP Enforcement",
-                Category = "Network",
+                Category = "Network — Maps Browser",
                 Description =
                     "Activates the IPsec enforcement client for NAP, which uses short-lived health certificates to enforce IPsec policies between machines on the same network. IPsec NAP enforcement ensures that only machines with current, valid health certificates can communicate over authenticated IPsec channels. This is the most granular NAP enforcement method and enables zero-trust-style east-west traffic control within a corporate network segment.",
                 Tags = ["nap", "ipsec", "zero trust", "east-west", "policy"],
@@ -6997,7 +6997,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-nap-client",
                     Label = "Disable NAP Client Service",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets Enabled=0 to disable the Network Access Protection client service. NAP was deprecated in Windows 10 but the client components remain; disabling prevents unnecessary service overhead.",
                     Tags = ["nap", "network", "policy", "service"],
@@ -7014,7 +7014,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-dhcp-quarantine",
                     Label = "Disable NAP DHCP Quarantine Enforcement",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets EnableDhcpQuarantine=0 to disable NAP enforcement through DHCP. Prevents the client from being quarantined to a restricted network when DHCP health checks fail.",
                     Tags = ["nap", "dhcp", "quarantine", "network"],
@@ -7031,7 +7031,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-8021x-quarantine",
                     Label = "Disable NAP 802.1X Quarantine Enforcement",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets Enable8021xQuarantine=0 to disable NAP enforcement through 802.1X-authenticated network switches. Prevents 802.1X-based client quarantine on wired/wireless networks.",
                     Tags = ["nap", "802.1x", "quarantine", "network"],
@@ -7048,7 +7048,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-vpn-quarantine",
                     Label = "Disable NAP VPN Quarantine Enforcement",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets EnableVpnQuarantine=0 to disable VPN-based NAP enforcement. Prevents VPN connections from triggering NAP health evaluations and potential quarantine.",
                     Tags = ["nap", "vpn", "quarantine", "network"],
@@ -7065,7 +7065,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-ipsec-quarantine",
                     Label = "Disable NAP IPSec Quarantine Enforcement",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets EnableIpsecQuarantine=0 to disable IPSec-based NAP health enforcement. Prevents IPSec connections from routing through NAP health validation and quarantine zones.",
                     Tags = ["nap", "ipsec", "quarantine", "network", "security"],
@@ -7082,7 +7082,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-dhcp-auto-remediation",
                     Label = "Disable NAP DHCP Auto-Remediation",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets DisableDhcpAutoRemediation=1 to prevent the NAP client from automatically attempting to remediate health failures during DHCP-based enforcement. Manual intervention is required.",
                     Tags = ["nap", "dhcp", "remediation", "network"],
@@ -7099,7 +7099,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-nap-status-notifications",
                     Label = "Disable NAP Status Notifications",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets DisableStatusNotifications=1 to suppress NAP status change notifications from appearing to users. Network Access Protection events are logged but not displayed.",
                     Tags = ["nap", "notifications", "network", "policy"],
@@ -7116,7 +7116,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-nap-ui",
                     Label = "Disable NAP User Interface",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets DisableUserUi=1 to completely disable the Network Access Protection user interface. NAP-related dialogs and status pages are inaccessible to users.",
                     Tags = ["nap", "ui", "network", "policy"],
@@ -7133,7 +7133,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-hide-nap-tray-icon",
                     Label = "Hide NAP System Tray Icon",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets HideSystemTrayIcon=1 to prevent the NAP system tray notification icon from appearing. Reduces status bar clutter when NAP components are otherwise disabled.",
                     Tags = ["nap", "tray", "ui", "network"],
@@ -7150,7 +7150,7 @@ internal static class PolicyNetwork
                 {
                     Id = "nappol-disable-nap-policy-autoupdate",
                     Label = "Disable NAP Policy Auto-Update",
-                    Category = "Network",
+                    Category = "Network — Network Access Prot",
                     Description =
                         "Sets DisablePolicyAutoUpdate=1 to prevent the NAP client from automatically downloading updated health requirement policies from the network policy server (NPS).",
                     Tags = ["nap", "policy", "update", "network"],

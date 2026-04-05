@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -964,7 +964,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bluetooth-advertising",
                 Label = "BT Advertising: Disable Bluetooth Advertising (BLE Beacon)",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -981,7 +981,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-promiscuous-mode",
                 Label = "BT Advertising: Disable Bluetooth Promiscuous Mode",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BthPort],
@@ -998,7 +998,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bluetooth-pairing-notification",
                 Label = "BT Advertising: Disable Bluetooth Auto-Pairing Notifications",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1015,7 +1015,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-set-connectable-timeout-short",
                 Label = "BT Advertising: Limit Bluetooth Discoverable/Connectable Timeout",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BthPort],
@@ -1032,7 +1032,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bluetooth-file-transfer",
                 Label = "BT Advertising: Disable Bluetooth OBEX File Transfer",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1049,7 +1049,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bluetooth-phonebook-access",
                 Label = "BT Advertising: Disable Bluetooth Phone Book Access",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1066,7 +1066,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-require-bt-encryption",
                 Label = "BT Advertising: Require Encryption on Bluetooth Connections",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BthPort],
@@ -1083,7 +1083,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-remote-audio-playback",
                 Label = "BT Advertising: Disable Remote Audio Playback over Bluetooth",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1100,7 +1100,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bt-discoverable-state",
                 Label = "BT Advertising: Force Bluetooth Always Non-Discoverable",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1117,7 +1117,7 @@ internal static class PolicyDevice
             {
                 Id = "btadv-disable-bluetooth-shared-experiences",
                 Label = "BT Advertising: Disable Bluetooth Shared Experiences",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [BtPolicy],
@@ -1146,7 +1146,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-enable-health-attestation",
                     Label = "Device Compliance: Enable Device Health Attestation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets EnableHealthAttestation=1 in DeviceHealthAttestation policy. Enables the Windows Device Health Attestation (DHA) service which uses the device's TPM to cryptographically attest its boot sequence. The DHA service generates a health certificate that can be consumed by MDM providers (Intune, SCCM) and conditional access systems to verify that the device booted without tampering: Secure Boot was enabled, BitLocker is active, the boot path was not modified, and no ELAM-detected malware was present. Without DHA, conditional access can only rely on OS-reported state — which malware can spoof.",
                     Tags = ["dha", "health-attestation", "tpm", "conditional-access", "boot-integrity"],
@@ -1164,7 +1164,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-require-bitlocker-for-compliance",
                     Label = "Device Compliance: Require BitLocker Encryption for Compliance",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireBitLockerForCompliance=1 in HealthCenter policy. Marks a device as non-compliant if BitLocker Drive Encryption is not enabled on the system drive. Compliance status is reported to MDM (Intune/SCCM) and can trigger conditional access policies that block the device from connecting to corporate resources until BitLocker is enabled. Data loss from stolen or lost unencrypted laptops is one of the most common sources of data breaches. Requiring BitLocker for compliance ensures all mobile devices connecting to corporate resources are encrypted.",
                     Tags = ["compliance", "bitlocker", "encryption", "conditional-access", "data-protection"],
@@ -1182,7 +1182,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-require-antivirus-for-compliance",
                     Label = "Device Compliance: Require Active Antivirus for Compliance",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireAntivirusForCompliance=1 in HealthCenter policy. Marks a device as non-compliant if a registered and up-to-date antivirus product is not detected by the Security Center. Real-time protection must be active and signatures cannot be critically outdated. Devices that have disabled antivirus, have expired protection subscriptions, or have antivirus that is consuming no CPU (indicative of process termination by malware) are flagged. Security Center status is checked periodically and on every MDM compliance check cycle.",
                     Tags = ["compliance", "antivirus", "security-center", "real-time-protection", "endpoint"],
@@ -1200,7 +1200,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-set-compliance-check-interval-4h",
                     Label = "Device Compliance: Set Compliance Check Interval to 4 Hours",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets ComplianceCheckIntervalHours=4 in HealthCenter policy. Sets the interval at which Windows re-evaluates device compliance state and sends the current status to the MDM provider. A default compliance check interval that is too long (24+ hours) means a device that becomes non-compliant (user disables BitLocker, AV signs expire, firewall turned off) continues to access corporate resources for up to a day before its compliance status is updated. 4 hours ensures compliance violations are detected and reflected in conditional access within the business day after they occur.",
                     Tags = ["compliance", "check-interval", "mdm", "detection", "conditional-access"],
@@ -1218,7 +1218,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-require-secure-boot-for-compliance",
                     Label = "Device Compliance: Require Secure Boot for Compliance",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireSecureBootForCompliance=1 in HealthCenter policy. Marks a device as non-compliant if UEFI Secure Boot is not enabled. Secure Boot prevents bootkit malware and rootkits from replacing the boot path with untrusted code — without Secure Boot, an attacker with brief physical access can boot from a USB drive to bypass Windows authentication or install a persistent bootkit. Devices with Secure Boot disabled cannot be trusted to run an uncompromised OS. This check complements DHA attestation with a policy-layer enforcement.",
                     Tags = ["compliance", "secure-boot", "uefi", "bootkit", "physical-security"],
@@ -1236,7 +1236,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-enable-compliance-grace-period-7days",
                     Label = "Device Compliance: Enable 7-Day Grace Period for Non-Compliant Devices",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets ComplianceGracePeriodDays=7 in HealthCenter policy. Grants newly enrolled devices or devices that first become non-compliant a 7-day grace period before conditional access blocks are enforced. Without a grace period, a device that enrolls in MDM but has not yet completed all compliance remediation (BitLocker encrypting, definitions updating) is immediately blocked from corporate resources — creating a chicken-and-egg problem. The grace period allows IT to remediate the device before it loses access. After 7 days without remediation, access restrictions are enforced.",
                     Tags = ["compliance", "grace-period", "enrolment", "remediation", "mdm"],
@@ -1254,7 +1254,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-require-minimum-os-build",
                     Label = "Device Compliance: Require Minimum OS Build for Compliance",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireMinimumOsBuild=1 in HealthCenter policy. Enables minimum OS build checking as a compliance criterion. When enabled, devices running OS builds older than the configured minimum (set separately as MinimumBuildNumber) report as non-compliant. This policy ensures that devices running versions of Windows that are out of Microsoft's support cycle (no security patches) or that have known unpatched critical vulnerabilities are flagged before they access corporate resources. Combined with Windows Update policies, this creates an enforced minimum security baseline.",
                     Tags = ["compliance", "os-build", "patch-level", "security-baseline", "outdated-os"],
@@ -1272,7 +1272,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-require-firewall-for-compliance",
                     Label = "Device Compliance: Require Windows Firewall Active for Compliance",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireFirewallForCompliance=1 in HealthCenter policy. Marks a device as non-compliant if Windows Defender Firewall (or a registered third-party firewall) is not active on all network profiles (domain, private, public). The Windows Firewall is a critical network-based attack prevention control. Users may disable the firewall when troubleshooting connection issues and forget to re-enable it. A device with no host firewall on a public network is exposed to direct network attacks. This compliance check ensures firewalls stay active.",
                     Tags = ["compliance", "firewall", "network-protection", "security-center", "perimeter"],
@@ -1290,7 +1290,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-block-noncompliant-resource-access",
                     Label = "Device Compliance: Block Non-Compliant Devices from Joining AD Resources",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets BlockNonCompliantNetworkAccess=1 in HealthCenter policy. Enables a local enforcement hook that checks compliance state before allowing the device to connect to protected network resources. When this is enabled and the device is marked non-compliant by the health centre, outbound connections to domain-classified resources can be blocked at the Windows Filtering Platform (WFP) layer. This provides local enforcement independent of whether external conditional access (AAD, MFA, proxy) is in place — useful as defence-in-depth for environments where some legacy resources lack conditional access support.",
                     Tags = ["compliance", "network-access", "block", "conditional-access", "wfp"],
@@ -1308,7 +1308,7 @@ internal static class PolicyDevice
                 {
                     Id = "devcpl-enable-tpm-attestation-logging",
                     Label = "Device Compliance: Enable TPM Health Attestation Event Logging",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets TpmAttestationLogging=1 in DeviceHealthAttestation policy. Enables event log entries for TPM health attestation operations: TPM measurement capture, health certificate request, health certificate delivery, and health attestation failures. Without attestation logging, diagnosing why a device cannot obtain a health certificate (TPM in reduced functionality mode, endorsement key provisioning failure, attestation service unreachable) is difficult. Log entries enable IT helpdesk to diagnose attestation failures and restore compliance without escalating to infrastructure teams.",
                     Tags = ["tpm", "attestation", "logging", "compliance", "diagnostics"],
@@ -1338,7 +1338,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-set-max-devices-per-user-5",
                     Label = "Device Enrollment Limit: Set Maximum Devices per User to 5",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets MaxDevicesPerUser=5 in DeviceEnrollment policy. Limits the number of devices a single user account can enroll in MDM to 5. Without per-user limits, a single compromised account can be used to enroll large numbers of devices into the MDM tenant, consuming Intune licenses, polluting the device inventory, and potentially using the MDM service to push malware to enrolled devices. A limit of 5 is generous enough for users with a phone, tablet, laptop, home PC, and a spare device, while preventing bulk enrollment abuse.",
                     Tags = ["enrollment", "device-limit", "per-user", "abuse-prevention", "inventory"],
@@ -1356,7 +1356,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-block-byod-personal-enrollment",
                     Label = "Device Enrollment Limit: Block Personal BYOD Devices from Enrolling",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets BlockPersonalDeviceEnrollment=1 in DeviceEnrollment policy. Prevents devices that are registered as personal devices (not Azure AD Joined or Hybrid Joined) from enrolling in corporate MDM. A personally-owned device that enrolls in corporate MDM becomes subject to remote wipe commands — which could irreversibly delete personal data. Blocking personal device enrollment prevents accidental enrollment of personal hardware into MDM while protecting users' personal devices from corporate management actions. Users who need BYOD access should use Workplace Join with limited MDM (MAM without device enrollment) instead.",
                     Tags = ["byod", "personal-device", "enrollment-block", "remote-wipe-protection", "privacy"],
@@ -1374,7 +1374,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-require-device-category-on-enroll",
                     Label = "Device Enrollment Limit: Require Device Category Assignment at Enrollment",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireDeviceCategoryOnEnrollment=1 in DeviceEnrollment policy. Requires administrators to assign a device category (e.g., Corporate Laptop, Kiosk, Shared Workstation) at enrollment time. Device categories in Intune are used to automatically assign devices to dynamic groups, which in turn receive different policy sets. Without mandatory category assignment, all devices land in the uncategorised default group and receive a single policy set. Mandatory categories ensure that kiosk devices, shared workstations, and executive laptops each receive appropriately scoped policies from the moment of enrollment.",
                     Tags = ["enrollment", "device-category", "dynamic-group", "policy-scoping", "intune"],
@@ -1392,7 +1392,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-block-unused-enrollment-profiles",
                     Label = "Device Enrollment Limit: Block Devices Without an Enrollment Profile",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireEnrollmentProfile=1 in DeviceEnrollment policy. Prevents devices from enrolling unless they match a pre-configured Intune enrollment profile (Device Enrollment Program, Autopilot profile, or bulk enrollment token). Without this restriction, any device that has credentials for a licensed user can self-enroll in MDM using the standard Settings > Accounts flow. Pre-requiring an enrollment profile means that only devices that IT has explicitly authorized for enrollment (by creating or assigning a profile) can join MDM — unknown or unauthorized devices are rejected.",
                     Tags = ["enrollment", "enrollment-profile", "autopilot", "authorization", "unknown-devices"],
@@ -1410,7 +1410,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-restrict-enrollment-to-aad-join",
                     Label = "Device Enrollment Limit: Restrict MDM Enrollment to AAD Joined Devices Only",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RestrictEnrollmentToAadJoin=1 in MDM policy. Prevents MDM enrollment from completing unless the device is Azure AD Joined (not just Workplace Joined). Workplace Join provides a limited form of registration that does not require the device to be AAD-joined — this allows personal devices to register without a full AAD Join. By restricting enrollment to AAD Join, this policy ensures that enrolled devices are fully registered in Azure AD with a machine account, which is required for Hybrid Join, Conditional Access device trust, and all domain-level group policies backed by AAD.",
                     Tags = ["enrollment", "aad-join", "device-trust", "conditional-access", "hybrid-join"],
@@ -1428,7 +1428,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-enable-enrollment-status-page",
                     Label = "Device Enrollment Limit: Enable MDM Enrollment Status Page During OOBE",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets ShowEnrollmentStatusPage=1 in DeviceEnrollment policy. Enables the Enrollment Status Page (ESP) during Autopilot or standard OOBE enrollment. The ESP shows the user (and IT) the real-time progress of device setup: account provisioning, app installations, policy applications, and certificate enrollments. Without the ESP, the user is deposited at the desktop while apps are still installing or policies are still applying — the device may appear functional but actually be in an incomplete configuration state. The ESP holds the user at the setup screen until all critical configurations are complete.",
                     Tags = ["enrollment", "esp", "oobe", "autopilot", "setup-progress"],
@@ -1446,7 +1446,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-block-enrollment-from-unknown-networks",
                     Label = "Device Enrollment Limit: Block Enrollment Attempts from Non-Corporate Networks",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireCorporateNetworkForEnrollment=1 in DeviceEnrollment policy. Restricts MDM enrollment to devices on corporate networks (defined by the network location awareness profile). Enrollment attempts from unclassified or public networks are blocked. This prevents bulk enrollment of devices by an attacker using stolen credentials from outside the corporate network perimeter. While this is most relevant for legacy MDM setups without Azure AD conditional access, it adds network perimeter enforcement as an extra enrollment control — enrollment over public networks requires re-evaluation of the risk posture.",
                     Tags = ["enrollment", "network-restriction", "corporate-network", "nla", "perimeter"],
@@ -1464,7 +1464,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-log-enrollment-failures",
                     Label = "Device Enrollment Limit: Enable Detailed Logging of Enrollment Failures",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets LogEnrollmentFailures=1 in DeviceEnrollment policy. Enables detailed logging of MDM enrollment failure events to the Windows Event Log. Enrollment failures are written to the Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin channel with structured error codes (HRESULT), the enrollment phase that failed (token acquisition, DRS discovery, enrollment registration, certificate acquisition), and whether the failure was a network error, authentication error, or server error. This significantly accelerates helpdesk troubleshooting of Autopilot and enrollment failures.",
                     Tags = ["enrollment", "failure-logging", "event-log", "diagnostics", "helpdesk"],
@@ -1482,7 +1482,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-require-mfa-for-enrollment",
                     Label = "Device Enrollment Limit: Require MFA at MDM Enrollment Time",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireMfaForEnrollment=1 in DeviceEnrollment policy. Requires multi-factor authentication at the time of MDM enrollment in addition to the standard password credential. Without MFA at enrollment, a stolen password is sufficient to enroll an attacker's device into the corporate MDM tenant. With enrollment MFA enforced, the attacker must also have the victim's second factor (phone, hardware key) to complete enrollment. MDM enrollment grants the device significant privileges (policy application, certificate issuance, resource access upon compliance) — requiring MFA at this critical step is essential.",
                     Tags = ["mfa", "enrollment", "authentication", "conditional-access", "identity"],
@@ -1500,7 +1500,7 @@ internal static class PolicyDevice
                 {
                     Id = "devenl-audit-enrollment-activity",
                     Label = "Device Enrollment Limit: Audit All Device Enrollment Activity",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets AuditEnrollmentActivity=1 in DeviceEnrollment policy. Enables audit logging for all device enrollment activity: successful enrollments, failed enrollment attempts, enrollment profile matching and rejection, and unenrollment events. Audit records include the user UPN that initiated the enrollment, the device serial number and hardware ID, the enrollment profile matched (or lack thereof), and the outcome. Enrollment audit logs are written to the Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin channel and can be forwarded to SIEM for detection of rogue enrollment attempts.",
                     Tags = ["enrollment", "audit", "siem", "monitoring", "security-event"],
@@ -1528,7 +1528,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-disable-mdm-enrollment",
                 Label = "Disable Automatic MDM Enrollment with Azure AD Join",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1545,7 +1545,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-disable-bulk-enrollment",
                 Label = "Disable Bulk MDM Enrollment via Provisioning Packages",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1562,7 +1562,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-enable-enrollment-status-page",
                 Label = "Enable MDM Enrollment Status Page During Autopilot",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1579,7 +1579,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-block-unknown-unenrollment",
                 Label = "Block User-Initiated MDM Unenrollment",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1596,7 +1596,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-require-enrollment-compliance",
                 Label = "Require MDM Enrollment Compliance Before Resource Access",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1613,7 +1613,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-enable-enrollment-certificate-auth",
                 Label = "Require Certificate Authentication for MDM Enrollment",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1630,7 +1630,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-audit-enrollment-events",
                 Label = "Enable Audit Logging for MDM Enrollment Events",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1647,7 +1647,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-set-enrollment-retry-limit",
                 Label = "Set Maximum MDM Enrollment Retry Limit",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1664,7 +1664,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-enforce-enrollment-encryption",
                 Label = "Enforce BitLocker Before MDM Enrollment Completion",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1681,7 +1681,7 @@ internal static class PolicyDevice
             {
                 Id = "devenrl-restrict-enrollment-to-approved-tenant",
                 Label = "Restrict MDM Enrollment to Approved Tenant Only",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1708,7 +1708,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-require-uefi-mat",
                     Label = "Require UEFI Memory Attributes Table for HVCI",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Requires the firmware to expose a UEFI Memory Attributes Table, enabling stricter HVCI enforcement.",
                     Tags = ["hvci", "uefi", "mat", "device-guard", "firmware", "security"],
                     NeedsAdmin = true,
@@ -1724,7 +1724,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-enable-system-guard",
                     Label = "Enable System Guard Secure Launch",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Enables System Guard Secure Launch to verify platform integrity at boot using Dynamic Root of Trust (DRTM).",
                     Tags = ["system-guard", "drtm", "secure-launch", "device-guard", "security"],
                     NeedsAdmin = true,
@@ -1740,7 +1740,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-enable-kernel-shadow-stack",
                     Label = "Enable Kernel Mode Hardware-Enforced Stack Protection",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Activates Hardware-Enforced Call Stack Protection (CET Shadow Stack) for kernel mode to resist ROP attacks.",
                     Tags = ["cet", "shadow-stack", "device-guard", "kernel", "security", "rop"],
                     NeedsAdmin = true,
@@ -1757,7 +1757,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-enable-hvci-audit-mode",
                     Label = "Disable HVCI Audit Mode (Enforce Mode)",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Ensures HVCI operates in enforcement mode rather than audit-only mode for active code integrity protection.",
                     Tags = ["hvci", "audit-mode", "device-guard", "enforce", "security"],
                     NeedsAdmin = true,
@@ -1773,7 +1773,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-block-unsigned-drivers",
                     Label = "Block Unsigned Kernel Drivers via Policy",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Prevents loading of unsigned kernel-mode drivers, supplementing HVCI at the policy layer.",
                     Tags = ["device-guard", "drivers", "signing", "kernel", "security"],
                     NeedsAdmin = true,
@@ -1789,7 +1789,7 @@ internal static class PolicyDevice
                 {
                     Id = "devguard-audit-device-guard-status",
                     Label = "Enable Device Guard Status Auditing",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description = "Logs Device Guard and Credential Guard startup status to the event log for compliance monitoring.",
                     Tags = ["device-guard", "audit", "logging", "compliance", "security"],
                     NeedsAdmin = true,
@@ -1826,7 +1826,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-enable-hvci",
                 Label = "Enable Hypervisor-Protected Code Integrity (HVCI)",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1845,7 +1845,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-require-secure-boot-dma",
                 Label = "Require Secure Boot + DMA Protection for VBS",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1863,7 +1863,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-enable-config-ci-policy",
                 Label = "Enable Configurable Code Integrity (WDAC Boot Policy)",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1882,7 +1882,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-enable-kernel-shadow-stacks",
                 Label = "Enable Kernel Shadow Stacks (Control Flow Guard Enforcement)",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1901,7 +1901,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-lock-hvci",
                 Label = "Lock HVCI to Prevent Disable Without Reboot",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1919,7 +1919,7 @@ internal static class PolicyDevice
             {
                 Id = "vbs-disable-lsa-protection-audit-mode",
                 Label = "Disable LSA Protected Process Audit Mode",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1950,7 +1950,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-enable-tpm-health-check",
                     Label = "Device Health: Enable TPM Health State Evaluation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets EnableTpmHealthCheck=1 in DeviceHealthAttestation policy. Enables evaluation of TPM health state as part of the device health check. The TPM health check evaluates whether the TPM is enabled, activated, owned, and in a known-good state. TPMs can enter a reduced-functionality mode (e.g., after detecting too many failed PIN attempts or a firmware update that changes the platform configuration registers). A TPM in degraded state cannot attest the boot chain, which can silently cause attestation failures unless the health check actively reports the degraded status.",
                     Tags = ["tpm", "health-check", "attestation", "degraded-state", "security"],
@@ -1968,7 +1968,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-require-elam-driver-for-health",
                     Label = "Device Health: Require ELAM Driver Active for Healthy State",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireElamDriverForHealth=1 in DeviceHealthAttestation policy. Reports the device as unhealthy if an Early Launch Anti-Malware (ELAM) driver is not loaded and active at boot. ELAM drivers are loaded before all other non-Microsoft drivers, giving them the ability to evaluate and classify boot drivers as trusted, untrusted, or unknown before they are allowed to initialize. Without an active ELAM driver, the device's pre-OS environment cannot be assessed for rootkits or boot drivers installed by malware. Windows Defender is an ELAM-registered product and satisfies this requirement.",
                     Tags = ["elam", "health", "boot-security", "early-launch", "malware-prevention"],
@@ -1986,7 +1986,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-evaluate-secure-boot-measurement",
                     Label = "Device Health: Evaluate Secure Boot PCR Measurement Consistency",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets EvaluateSecureBootMeasurement=1 in DeviceHealthAttestation policy. Enables DHA to evaluate the consistency of Secure Boot Platform Configuration Register (PCR) measurements. TPM PCR values record hashes of every component in the boot chain. If the PCR values in the most recent health certificate differ from the baseline (e.g., a firmware update changed a boot component hash), the attestation service can detect this deviation and flag the device. This catches scenarios where a firmware update inadvertently introduced an unsigned component or where a bootkit altered a measured value.",
                     Tags = ["secure-boot", "pcr", "measurement", "attestation", "boot-chain"],
@@ -2004,7 +2004,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-set-health-report-retention-30days",
                     Label = "Device Health: Retain Health Reports for 30 Days",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets HealthReportRetentionDays=30 in DeviceHealthAttestation policy. Sets the number of days that device health reports are retained locally before being purged. Retaining health reports for 30 days provides a rolling audit of the device's health state history. This is useful for post-incident forensics: if a device was compromised, the health report history can show the exact point at which the TPM measurements changed, when Secure Boot was disabled, or when the ELAM driver was removed — correlating health state changes with suspicious events in the device's event log.",
                     Tags = ["health-report", "retention", "forensics", "audit", "30-days"],
@@ -2022,7 +2022,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-disable-health-check-bypass",
                     Label = "Device Health: Disable Health Check Bypass for Non-Compliant State",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets DisableHealthCheckBypass=1 in DeviceHealthAttestation policy. Prevents clients (including local administrators) from bypassing or suppressing the device health check. Without this policy, a sophisticated user or malware with admin privileges can modify the health state cache or suppress health certificate requests, causing the device to appear healthy to conditional access systems while actually being compromised. Disabling the bypass ensures that the DHA client cannot be locally tampered with to present a false healthy state.",
                     Tags = ["health-check", "bypass-prevention", "anti-tampering", "admin-restriction", "integrity"],
@@ -2040,7 +2040,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-enable-health-check-auto-remediation",
                     Label = "Device Health: Enable Automatic Remediation for Known Health Issues",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets EnableHealthAutoRemediation=1 in DeviceHealthAttestation policy. Enables the Device Health agent to attempt automatic remediation for known, non-critical health issues. Remediable issues include re-enabling Windows Defender real-time protection that was automatically disabled by a third-party AV (after that AV was uninstalled), re-enrolling the TPM endorsement key if the certificate expired, or restarting stalled health service processes. Automatic remediation reduces helpdesk tickets for transient compliance failures caused by installation or configuration drift.",
                     Tags = ["health", "auto-remediation", "defender", "tpm", "service-restart"],
@@ -2058,7 +2058,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-enable-tpm-endorsement-key-validation",
                     Label = "Device Health: Enable TPM Endorsement Key Validation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets ValidateTpmEndorsementKey=1 in TPM policy. Enables validation that the TPM's Endorsement Key (EK) certificate is in a known-valid certificate chain rooted at a trusted TPM manufacturer CA. The EK uniquely identifies the physical TPM chip. If EK validation is disabled or skipped, software-based fake TPM implementations (used in virtual machines without vTPM, or malicious virtual TPM drivers) can pass attestation checks. EK validation ensures the attestation chain is anchored to a real hardware chip with a manufacturer-issued certificate.",
                     Tags = ["tpm", "endorsement-key", "ek-validation", "hardware-anchor", "attestation"],
@@ -2076,7 +2076,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-require-tpm-version-20",
                     Label = "Device Health: Require TPM 2.0 for Health Attestation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets RequireTpm20ForHealthAttestation=1 in TPM policy. Marks devices as unable to provide health attestation if they only have a TPM 1.2 chip (as opposed to a TPM 2.0). TPM 1.2 supports SHA-1 algorithm measurement banks. TPM 2.0 adds SHA-256 banks, algorithm agility, and enhanced authorization structures. Modern DHA services require TPM 2.0's enhanced capabilities for accurate, tamper-resistant attestation. TPM 1.2 attestation can be spoofed more easily and lacks support for Credential Guard, Device Guard, and Virtualization-Based Security measurements.",
                     Tags = ["tpm", "tpm-20", "attestation", "sha256", "vbs"],
@@ -2094,7 +2094,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-enable-code-integrity-measurement",
                     Label = "Device Health: Enable Code Integrity State in Health Reports",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets IncludeCodeIntegrityInReport=1 in DeviceHealthAttestation policy. Includes Windows Code Integrity (CI) enforcement state in the DHA health certificate. Code Integrity state records whether Windows Defender Application Control (WDAC) or Device Guard is active, whether CI is in audit vs. enforcement mode, and whether User-Mode Code Integrity (UMCI) is enabled in addition to HVCI (Hypervisor-Protected Code Integrity). Including CI state in the attestation report allows conditional access systems to require not just that the device is healthy but that it is actively enforcing application whitelisting.",
                     Tags = ["code-integrity", "wdac", "device-guard", "hvci", "attestation"],
@@ -2112,7 +2112,7 @@ internal static class PolicyDevice
                 {
                     Id = "devhc-enable-vbs-state-measurement",
                     Label = "Device Health: Include VBS/Credential Guard State in Health Reports",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Bluetooth Adv",
                     Description =
                         "Sets IncludeVbsStateInReport=1 in DeviceHealthAttestation policy. Includes Virtualization-Based Security (VBS) and Credential Guard state in the DHA health certificate. VBS isolates critical OS components (LSA, UEFI variable writes) inside a secure virtual machine backed by the CPU hypervisor, making credential theft attacks (Pass-the-Hash, Pass-the-Ticket) significantly harder. Including VBS state in attestation reports allows conditional access to enforce that only VBS-enabled devices handle sensitive workloads — for example, requiring VBS for devices that access privileged admin consoles.",
                     Tags = ["vbs", "credential-guard", "hypervisor", "attestation", "lsa-protection"],
@@ -2148,7 +2148,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-enable-class-block",
                 Label = "Device Install Policy: Enable Setup Class GUID Restriction List",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2167,7 +2167,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-retroactive-id-block",
                 Label = "Device Install Policy: Apply Device ID Blocks Retroactively",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2187,7 +2187,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-retroactive-class-block",
                 Label = "Device Install Policy: Apply Class GUID Blocks Retroactively",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2207,7 +2207,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-disable-driver-web-search",
                 Label = "Device Install Policy: Disable Driver Search via Windows Update",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2226,7 +2226,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-disable-co-installers",
                 Label = "Device Install Policy: Disable Third-Party Co-Installer Loading",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -2246,7 +2246,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-disable-wer-missing-driver",
                 Label = "Device Install Policy: Disable WER Reports for Missing Drivers",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2265,7 +2265,7 @@ internal static class PolicyDevice
             {
                 Id = "dinst-block-device-metadata-internet",
                 Label = "Device Install Policy: Block Device Metadata Downloads from the Internet",
-                Category = "Peripherals",
+                Category = "Peripherals — Bluetooth Adv",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2295,7 +2295,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-deny-unspecified-devices",
                     Label = "Deny Installation of Unlisted Device Classes",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Prevents Windows from installing devices whose class is not explicitly permitted by device installation policy.",
                     Tags = ["device-install", "device-class", "restriction", "security"],
                     NeedsAdmin = true,
@@ -2311,7 +2311,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-deny-removable-devices",
                     Label = "Deny Installation of Removable Storage Devices",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Blocks Windows from installing USB drives, SD cards, and other removable storage devices.",
                     Tags = ["device-install", "removable-storage", "usb", "restriction", "dlp", "security"],
                     NeedsAdmin = true,
@@ -2327,7 +2327,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-no-admin-override",
                     Label = "Prevent Admins from Overriding Device Installation Restrictions",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Removes the administrator privilege that normally allows bypassing device installation policy restrictions.",
                     Tags = ["device-install", "admin", "restriction", "override", "security"],
                     NeedsAdmin = true,
@@ -2343,7 +2343,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-enable-setup-logging",
                     Label = "Enable Verbose Device Installation Event Logging",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Enables detailed event logging in the Windows device installation subsystem for auditing and diagnostics.",
                     Tags = ["device-install", "logging", "audit", "events", "monitoring"],
                     NeedsAdmin = true,
@@ -2359,7 +2359,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-disable-driver-search-online",
                     Label = "Disable Online Driver Search During Device Install",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Prevents Windows from searching the Internet (Windows Update) for drivers during device installation.",
                     Tags = ["device-install", "driver", "windows-update", "online", "security"],
                     NeedsAdmin = true,
@@ -2375,7 +2375,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-no-driver-store-from-wer",
                     Label = "Disable WER-Triggered Driver Package Downloads",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Prevents Windows Error Reporting from triggering automatic driver package downloads from the Internet.",
                     Tags = ["device-install", "wer", "driver", "download", "security"],
                     NeedsAdmin = true,
@@ -2391,7 +2391,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-block-legacy-ieee1394",
                     Label = "Restrict IEEE 1394 (FireWire) Device Installation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Blocks installation of IEEE 1394 (FireWire) bus controllers, which support DMA and can bypass OS memory protection.",
                     Tags = ["device-install", "firewire", "ieee1394", "dma", "security", "hardware"],
@@ -2408,7 +2408,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-create-restore-point-on-install",
                     Label = "Create System Restore Point During Driver Installation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Forces Windows to create a system restore point before installing any new device driver, enabling rollback.",
                     Tags = ["device-install", "driver", "restore-point", "rollback", "safety"],
                     NeedsAdmin = true,
@@ -2424,7 +2424,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-disable-drivers-from-cd",
                     Label = "Disable Driver Installation from Optical Media",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Prevents Windows from using drivers stored on removable optical media (CD/DVD) during device installation.",
                     Tags = ["device-install", "cd", "dvd", "optical", "driver", "security"],
                     NeedsAdmin = true,
@@ -2440,7 +2440,7 @@ internal static class PolicyDevice
                 {
                     Id = "devinstall-notify-admin-on-block",
                     Label = "Notify Admins When Device Installation Is Blocked",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description = "Sends a notification to administrators when a device installation attempt is blocked by policy.",
                     Tags = ["device-install", "notification", "admin", "audit", "monitoring"],
                     NeedsAdmin = true,
@@ -2468,7 +2468,7 @@ internal static class PolicyDevice
             {
                 Id = "devlockgpo-disable-hello-pin-recovery",
                 Label = "Device Lock GPO: Disable Windows Hello PIN Recovery Service",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Disables the cloud-based Windows Hello PIN recovery service that allows users to reset their device PIN via their Microsoft account or Azure AD credentials. The PIN recovery service sends encrypted PIN reset data to Microsoft cloud servers. In high-security environments where no cloud dependencies are allowed, this service should be disabled.",
                 Tags = ["windows hello", "pin", "recovery", "cloud", "policy"],
@@ -2486,7 +2486,7 @@ internal static class PolicyDevice
             {
                 Id = "devlockgpo-require-screensaver-password",
                 Label = "Device Lock GPO: Require Password When Resuming from Screen Saver",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Forces Windows to require the user's password (or PIN) when resuming from a screen saver or after a period of inactivity. This is a foundational physical security control that prevents unauthorized access to unattended workstations. Without this policy, an unlocked workstation can be accessed by anyone who sits down at the keyboard.",
                 Tags = ["screen saver", "lock", "password", "unattended", "policy"],
@@ -2504,7 +2504,7 @@ internal static class PolicyDevice
             {
                 Id = "devlockgpo-set-screensaver-timeout-600",
                 Label = "Device Lock GPO: Set Screen Saver Timeout to 10 Minutes (600 s)",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets the screen saver / auto-lock timeout to 600 seconds (10 minutes). Industry security frameworks (CIS, NIST SP 800-53, PCI DSS) recommend an idle timeout of 10–15 minutes for standard workstations. A 10-minute timeout balances security with productivity, locking unattended machines before a brief absence creates risk.",
                 Tags = ["screen saver", "timeout", "idle", "lock", "policy"],
@@ -2522,7 +2522,7 @@ internal static class PolicyDevice
             {
                 Id = "devlockgpo-disable-lock-screen-notifications",
                 Label = "Device Lock GPO: Disable Notifications on Lock Screen",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Prevents Windows from displaying app notifications (toast notifications) on the lock screen. Lock-screen notifications can expose sensitive information to passersby — email previews, chat messages, calendar events — without requiring authentication. This policy disables all notification content from appearing while the screen is locked.",
                 Tags = ["lock screen", "notifications", "privacy", "policy"],
@@ -2540,7 +2540,7 @@ internal static class PolicyDevice
             {
                 Id = "devlockgpo-disable-camera-on-lockscreen",
                 Label = "Device Lock GPO: Disable Camera Access on Lock Screen",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Prevents cameras (webcams, built-in laptop cameras) from being activated while the workstation is locked. Some Windows Hello facial recognition implementations allow the camera to be used on the lock screen, but malicious code or physical manipulation could trigger unauthorized image capture. Disabling the camera on the lock screen closes this attack surface.",
                 Tags = ["lock screen", "camera", "privacy", "security", "policy"],
@@ -2571,7 +2571,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-skip-machine-oobe",
                 Label = "OOBE: Skip the machine out-of-box experience setup",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets SkipMachineOOBE=1 in the OOBE policy key. Prevents the machine-level OOBE "
                     + "wizard from running, useful for pre-provisioned enterprise devices.",
@@ -2586,7 +2586,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-skip-user-oobe",
                 Label = "OOBE: Skip the user out-of-box experience setup",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets SkipUserOOBE=1 in the OOBE policy key. Skips the per-user OOBE wizard that "
                     + "prompts for Cortana, account sign-in, and other optional setup steps.",
@@ -2601,7 +2601,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-no-connected-oobe",
                 Label = "OOBE: Disable cloud-connected experience during OOBE",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets DisableOOBEWithNetworkConnectivity=1 in the OOBE policy key. Prevents the "
                     + "OOBE wizard from triggering cloud-connected steps when network connectivity is detected.",
@@ -2616,7 +2616,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-disable-homegroup",
                 Label = "HomeGroup: Prevent computers from joining a HomeGroup",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets DisableHomeGroup=1 in the HomeGroup policy key. Prevents users from joining "
                     + "or creating HomeGroups. Recommended on domain-joined and managed devices.",
@@ -2631,7 +2631,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-disable-wpj-flyout",
                 Label = "Workplace Join: Disable the 'Connect to work or school' flyout",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets FlyoutDisabled=1 in the WorkplaceJoin policy key. Hides the Workplace Join "
                     + "notification flyout from the Action Center and Settings entry point.",
@@ -2646,7 +2646,7 @@ internal static class PolicyDevice
             {
                 Id = "devprov-disable-find-my-device",
                 Label = "Cloud Content: Disable the Find My Device feature",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 Description =
                     "Sets DisableFindMyDevice=1 in the CloudContent policy key. Prevents Windows from "
                     + "registering the device with Microsoft's Find My Device location tracking service.",
@@ -2671,7 +2671,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-disable-auto-device-registration",
                     Label = "Disable Automatic Azure AD Device Registration",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Prevents the device from automatically registering with Azure Active Directory / Entra ID during domain join or user sign-in. Gives IT full control over when and how devices are registered. Default: auto-register on domain join. Recommended: 1 when phased registration is required.",
                     Tags = ["device-registration", "azure-ad", "entra", "mdm", "enrollment", "policy"],
@@ -2689,7 +2689,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-require-tpm-for-registration",
                     Label = "Require TPM for Device Registration",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Mandates that a TPM 2.0 chip is present and functional before the device can complete Azure AD registration. Ensures only hardware-attested devices can enrol; blocks VMs and devices without TPM. Default: TPM not required. Recommended: 1 for Zero Trust deployments.",
                     Tags = ["device-registration", "tpm", "hardware-attestation", "zero-trust", "policy"],
@@ -2706,7 +2706,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-set-registration-retry-3",
                     Label = "Set Device Registration Retry Count to 3",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Limits the number of automatic re-registration attempts when initial Azure AD registration fails (e.g., due to network error) to 3 before stopping. Prevents persistent registration loops. Default: unlimited retries. Recommended: 3.",
                     Tags = ["device-registration", "retry", "enrollment", "network", "policy"],
@@ -2723,7 +2723,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-block-personal-account-registration",
                     Label = "Block Personal MSA Device Registration",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Prevents users from registering the device with their personal Microsoft Account (MSA). Only corporate Azure AD / Entra accounts can register the device. Default: MSA registration allowed. Recommended: 1 on managed corporate endpoints.",
                     Tags = ["device-registration", "msa", "personal-account", "corporate", "policy"],
@@ -2740,7 +2740,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-disable-user-initiated-registration",
                     Label = "Block Users from Initiating Device Registration",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Prevents standard users from accessing the 'Join this device to Azure AD' and 'Connect to work or school' flows in Settings. Only administrators can register the device. Default: users allowed. Recommended: 1 on shared/kiosk endpoints.",
                     Tags = ["device-registration", "user-restriction", "settings", "enrollment", "policy"],
@@ -2757,7 +2757,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-enable-registration-audit-log",
                     Label = "Enable Device Registration Audit Logging",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Enables Security audit events for device registration and de-registration actions. Allows SOC/SIEM correlation of device lifecycle events with user authentication. Default: not audited. Recommended: 1 in SOC-monitored environments.",
                     Tags = ["device-registration", "audit", "logging", "security", "siem", "policy"],
@@ -2774,7 +2774,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-enforce-compliant-device-only",
                     Label = "Require Device Compliance for Registration",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Enforces that the device must meet Intune / Endpoint Manager compliance policies before completing Azure AD Hybrid registration. Non-compliant devices are blocked until they satisfy the compliance posture. Default: not enforced. Recommended: 1 for Conditional Access deployments.",
                     Tags = ["device-registration", "compliance", "intune", "conditional-access", "policy"],
@@ -2792,7 +2792,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-certificate-validity-days-365",
                     Label = "Set Device Certificate Validity to 365 Days",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Configures the maximum validity period for the device authentication certificate issued during Azure AD registration to 365 days. Forces annual certificate renewal, reducing the window of credential exposure. Default: 180 days. Recommended: 365 for balance.",
                     Tags = ["device-registration", "certificate", "validity", "renewal", "security", "policy"],
@@ -2809,7 +2809,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-block-stale-device-reuse",
                     Label = "Block Re-Registration of Already-Registered Device Record",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Prevents a device from creating a new Azure AD registration record if a record for the same device already exists (stale object). Requires IT to clean up the old object before re-registration. Default: new record created silently. Recommended: 1.",
                     Tags = ["device-registration", "stale", "reuse", "hygiene", "policy"],
@@ -2826,7 +2826,7 @@ internal static class PolicyDevice
                 {
                     Id = "devreg-disable-registration-status-page-skip",
                     Label = "Block Skipping Device Registration Status Page (OOBE)",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Prevents Autopilot/OOBE from skipping the device registration status page (ESP — Enrollment Status Page). Ensures the device fully completes registration before the user can log in. Default: ESP may be skipped. Recommended: 1 during Autopilot deployments.",
                     Tags = ["device-registration", "oobe", "autopilot", "esp", "enrollment", "policy"],
@@ -2855,7 +2855,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-enable-firmware-update-via-wu",
                     Label = "Firmware Update: Enable UEFI Firmware Updates via Windows Update",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets EnableFirmwareUpdates=1 in the Firmware Update policy key. Enables delivery of UEFI firmware, microcode, and driver firmware updates via the Windows Update UEFI firmware update mechanism (ESRT — UEFI System Resource Table). Microsoft and OEMs publish firmware updates as Windows Update packages. Enabling this ensures that critical security firmware updates (CPU microcode for Spectre/Meltdown, firmware CVEs, NIC firmware security patches) are delivered automatically alongside Windows updates. Without this, firmware updates must be manually applied from OEM download pages — creating a persistent firmware patching gap in enterprise environments.",
                     Tags = ["firmware", "windows-update", "esrt", "microcode", "uefi"],
@@ -2873,7 +2873,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-require-capsule-signing",
                     Label = "Firmware Update: Require Signed Capsule Delivery for All Firmware Updates",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets RequireCapsuleSigning=1 in the Firmware Update policy key. Requires that all UEFI firmware update capsules are digitally signed before they are accepted for delivery. An unsigned firmware update capsule (delivered via Windows Update or a local installer) that passes through this check unchallenged could be a malicious replacement firmware (firmware implant). Requiring capsule signing ensures that only OEM or Microsoft-signed firmware capsules are accepted — unauthenticated replacement firmware is rejected.",
                     Tags = ["firmware", "capsule", "signing", "firmware-implant", "uefi"],
@@ -2891,7 +2891,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-enable-firmware-version-audit",
                     Label = "Firmware Update: Enable UEFI Firmware Version Reporting to WU",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets EnableFirmwareVersionReporting=1 in the Firmware Update policy key. Enables reporting of the current UEFI firmware version to Windows Update/SCCM/Intune. Firmware version reporting allows IT administrators to audit which firmware versions are deployed across the fleet and identify devices that are behind on firmware updates. Without this reporting, enterprise firmware version visibility requires per-device BIOS queries or WMI polling. Centralised firmware version reporting via Windows Update enables proactive identification of devices vulnerable to known firmware CVEs.",
                     Tags = ["firmware", "version-reporting", "audit", "intune", "vulnerability-management"],
@@ -2909,7 +2909,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-disable-os-downgrade-firmware-flag",
                     Label = "Firmware Update: Disable Firmware-Controlled OS Downgrade (SetOsIndications Clear)",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets PreventFirmwareOSIndications=1 in the Firmware Update policy key. Prevents software from setting UEFI OS Indications variables that request the firmware to perform privileged OS-downgrade or firmware recovery operations on next boot. Some firmware implementations respond to OS-set OsIndications values by entering a special recovery or setup mode. An attacker with kernel access who can write UEFI variables could set OsIndications to trigger firmware-level recovery or OS reinstallation on next boot — effectively causing a denial-of-service by re-imaging the OS. Blocking OsIndications writes prevents this DOS vector.",
                     Tags = ["firmware", "os-indications", "uefi-variables", "dos-prevention", "kernel"],
@@ -2927,7 +2927,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-set-firmware-update-scan-interval-7days",
                     Label = "Firmware Update: Set Firmware Update Scan Frequency to 7 Days",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets FirmwareUpdateScanFrequency=7 in the Firmware Update policy key (units: days). Sets the frequency at which the Windows Update client checks for new firmware updates to every 7 days. By default, firmware update check frequency follows the general Windows Update schedule. Setting an explicit 7-day cadence ensures that new firmware security updates are picked up within one week of publication — balancing prompt patching against the operational cost of weekly firmware update deployments. For high-security environments, reduce to 1–3 days.",
                     Tags = ["firmware", "update-scan", "cadence", "patch-management", "windows-update"],
@@ -2945,7 +2945,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-block-user-firmware-rollback",
                     Label = "Firmware Update: Block User-Initiated Firmware Version Rollback",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets BlockFirmwareRollback=1 in the Firmware Update policy key. Prevents users and non-admin processes from rolling back UEFI firmware to an older version once a newer version has been applied. Firmware rollback (to a version with known, unpatched vulnerabilities) is a prerequisite step for many firmware persistence attacks — an attacker who can roll back to a vulnerable firmware version can then exploit the known vulnerability to plant a firmware implant. Blocking rollback ensures that once a security firmware update is applied, the device cannot be returned to a less-secure firmware state by an attacker.",
                     Tags = ["firmware", "rollback-prevention", "downgrade", "firmware-implant", "security"],
@@ -2963,7 +2963,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-enable-firmware-update-eventlog",
                     Label = "Firmware Update: Enable Firmware Update Event Logging to Windows Event Log",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets EnableFirmwareUpdateEventLog=1 in the Firmware Update policy key. Enables logging of UEFI firmware update application events to the Windows event log (System event log, source: UFIUpdate). Events include the firmware component updated, the from/to version, the update status (success/failure), and the reason for failure if applicable. Firmware update event logging supports change management tracking — every firmware update on any enterprise device generates an auditable event that SIEM and asset management tools can correlate with approved firmware change records.",
                     Tags = ["firmware", "event-log", "audit", "change-management", "siem"],
@@ -2981,7 +2981,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-require-admin-for-manual-firmware-update",
                     Label = "Firmware Update: Require Admin Approval for Manual Firmware Update Execution",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets RequireAdminForFirmwareUpdate=1 in the Firmware Update policy key. Requires administrator approval before a manually initiated firmware update (e.g., via OEM firmware update tool run locally) can execute. Without this requirement, a standard user who can run an OEM firmware update utility can potentially flash a modified firmware — especially if the OEM tool accepts a firmware image file path. Requiring admin approval ensures that firmware updates not delivered via Windows Update must be explicitly authorised by an administrator, preventing social engineering attacks where users are deceived into running a firmware installer.",
                     Tags = ["firmware", "admin-approval", "manual-update", "uac", "social-engineering"],
@@ -2999,7 +2999,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-set-firmware-update-defer-days-14",
                     Label = "Firmware Update: Set Firmware Update Deferral to 14 Days After Release",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets DeferFirmwareUpdatesDays=14 in the Windows Update policy key. Defers firmware update installation by 14 days from the date Microsoft or OEM first publishes them to Windows Update. The 14-day deferral period allows time for reported deployment issues to surface and for regression reports to be filed before the update reaches the enterprise fleet. Firmware updates with critical compatibility issues (e.g., BSOD-inducing microcode updates, display driver firmware breaking external monitors) are often reported in the first 3–7 days post-release. 14 days provides a reasonable canary window without creating an unacceptable security gap.",
                     Tags = ["firmware", "deferral", "quality-gate", "canary", "windows-update"],
@@ -3017,7 +3017,7 @@ internal static class PolicyDevice
                 {
                     Id = "fwupd-enable-legacy-bios-update-block",
                     Label = "Firmware Update: Block Legacy BIOS (Non-UEFI) Firmware Update Installation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Sets BlockLegacyBiosUpdate=1 in the Firmware Update policy key. Prevents the installation of firmware updates designed for legacy BIOS (MBR/CSM-mode) systems. Enterprise Secure Boot and UEFI-based systems should not accept legacy BIOS firmware packages — they are built for different firmware architectures. A malicious actor who delivers a forged 'legacy BIOS update' to a UEFI system may attempt to exploit the UEFI CSM (Compatibility Support Module) or subvert firmware update routing. Blocking legacy BIOS updates ensures only proper UEFI capsule updates are accepted.",
                     Tags = ["firmware", "legacy-bios", "csm", "update-filter", "uefi"],
@@ -3045,7 +3045,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-prevent-unknown-install",
                 Label = "Prevent Installation of Devices Not Described by Other Policies",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3062,7 +3062,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-prevent-removable-install",
                 Label = "Prevent Installation of Removable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3079,7 +3079,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-drv-store-copy",
                 Label = "Disable Device Driver File Store Copy",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3096,7 +3096,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-windows-update-drivers",
                 Label = "Disable Driver Download from Windows Update",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3113,7 +3113,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-generic-drivers",
                 Label = "Disable Installation of Generic USB Drivers",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3130,7 +3130,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-dev-metadata-internet",
                 Label = "Disable Device Metadata Retrieval from Internet",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3147,7 +3147,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-auto-install",
                 Label = "Disable Automatic Device Installation",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3164,7 +3164,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-devinstall-telemetry",
                 Label = "Disable Device Installation Telemetry",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3181,7 +3181,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-dev-setup-exceptions",
                 Label = "Disable Device Setup Class Exceptions",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3198,7 +3198,7 @@ internal static class PolicyDevice
             {
                 Id = "hwdev-disable-drv-search-online",
                 Label = "Disable Online Driver Search",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3226,7 +3226,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-block-pre-boot-dma",
                     Label = "Block Pre-Boot DMA Access on Thunderbolt Ports",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Blocks all Thunderbolt DMA access during the pre-boot phase, preventing attacks that attach malicious Thunderbolt devices before the OS IOMMU policy is loaded.",
                     Tags = ["kernel-dma", "thunderbolt", "pre-boot", "security", "policy"],
@@ -3243,7 +3243,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-enforce-iommu-all-devices",
                     Label = "Enforce IOMMU DMA Remapping for All PCIe Devices",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Requires IOMMU DMA remapping to be applied to all PCIe devices regardless of whether they declare DMA support, ensuring legacy storage and network cards are also isolated.",
                     Tags = ["kernel-dma", "iommu", "all-devices", "pcie", "policy"],
@@ -3260,7 +3260,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-block-dma-resume-attack",
                     Label = "Block DMA Attack During Sleep/Resume Transition",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Maintains IOMMU DMA remapping tables across system sleep/hibernate and resume cycles, preventing DMA attacks that exploit the window during which remapping tables are reloaded.",
                     Tags = ["kernel-dma", "sleep", "resume", "iommu", "policy"],
@@ -3277,7 +3277,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-restrict-tb-autorisation",
                     Label = "Restrict Thunderbolt Authorisation to Admin-Only",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Restricts the authorisation of new Thunderbolt devices (adding to the trusted device store) to administrators only, preventing standard users from approving new DMA-capable Thunderbolt peripherals.",
                     Tags = ["kernel-dma", "thunderbolt", "authorisation", "admin", "policy"],
@@ -3294,7 +3294,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-enable-dma-audit-log",
                     Label = "Enable DMA Remapping Audit Event Logging",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Enables kernel event logging for DMA remapping policy enforcement actions, recording each blocked or remapped DMA access attempt for forensic analysis.",
                     Tags = ["kernel-dma", "audit-log", "iommu", "forensics", "policy"],
@@ -3311,7 +3311,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-block-expresscard-dma",
                     Label = "Block ExpressCard/PCMCIA DMA Access",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Blocks DMA access for legacy ExpressCard and PCMCIA devices that pre-date IOMMU support, preventing DMA attacks via older expansion card interfaces on laptops.",
                     Tags = ["kernel-dma", "expresscard", "pcmcia", "legacy", "policy"],
@@ -3328,7 +3328,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-require-vtd-for-tb4",
                     Label = "Require VT-d Active for Thunderbolt 4 Operation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Requires Intel VT-d (IOMMU) to be active and enforcing before Thunderbolt 4 devices are enumerated and allowed DMA access, blocking TB4 use on systems with IOMMU disabled in BIOS.",
                     Tags = ["kernel-dma", "vtd", "thunderbolt-4", "iommu", "policy"],
@@ -3345,7 +3345,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-block-usb4-dma-without-auth",
                     Label = "Block USB4 DMA Without Device Authorisation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Requires explicit device authorisation for USB4 (Thunderbolt-tunnelled) DMA access, blocking USB4 tunnelled DMA from unapproved devices until confirmed by an administrator.",
                     Tags = ["kernel-dma", "usb4", "thunderbolt", "authorisation", "policy"],
@@ -3362,7 +3362,7 @@ internal static class PolicyDevice
                 {
                     Id = "kdmapol-set-remapping-timeout",
                     Label = "Set DMA Remapping Table Rebuild Timeout to 5 Seconds",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Device Install",
                     Description =
                         "Limits the DMA remapping table rebuild timeout to 5 seconds, ensuring that if a device fails to initialise IOMMU remapping within the timeout, it is disconnected rather than granted unrestricted DMA.",
                     Tags = ["kernel-dma", "remapping", "timeout", "iommu", "policy"],
@@ -3397,7 +3397,7 @@ internal static class PolicyDevice
             {
                 Id = "dump-disable-wer-queue",
                 Label = "Disable WER Queuing of Crash Reports",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 2,
@@ -3425,7 +3425,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-ensure-pagefile-enabled",
                 Label = "Ensure Page File Is Enabled",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3442,7 +3442,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-clear-pagefile-shutdown",
                 Label = "Clear Page File at Shutdown",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3459,7 +3459,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-ensure-swapfile-active",
                 Label = "Ensure Swap File Is Active",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3476,7 +3476,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-set-max-size-4096",
                 Label = "Set Maximum Page File Size 4096 MB",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3493,7 +3493,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-disable-peak-detection",
                 Label = "Disable Automatic Peak Page File Detection",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3510,7 +3510,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-allow-system-managed",
                 Label = "Allow System-Managed Page File",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3527,7 +3527,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-allow-low-memory-detection",
                 Label = "Allow Low Memory Detection",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3544,7 +3544,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-place-on-system-drive",
                 Label = "Place Page File on System Drive",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3561,7 +3561,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-disable-telemetry",
                 Label = "Disable Page File Telemetry",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3578,7 +3578,7 @@ internal static class PolicyDevice
             {
                 Id = "pgfpol-disable-memory-dump",
                 Label = "Disable Memory Dump Creation",
-                Category = "Peripherals",
+                Category = "Peripherals — Device Install",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3605,7 +3605,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-deny-portable-devices",
                     Label = "Deny Portable Device (MTP/WPD) Access",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Blocks access to Windows Portable Devices (WPD) via the Media Transfer Protocol (MTP), preventing smartphones, cameras, and media players from accessing or transferring files when connected via USB.",
                     Tags = ["wpd", "mtp", "portable-device", "usb", "policy"],
@@ -3622,7 +3622,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-block-autoplay-portable",
                     Label = "Block AutoPlay for Portable Media Devices",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Disables the AutoPlay action that launches when a portable device (camera, media player, phone) is connected, preventing automatic media import dialogs and auto-execution of content from portable devices.",
                     Tags = ["wpd", "autoplay", "portable-device", "security", "policy"],
@@ -3639,7 +3639,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-block-camera-device-install",
                     Label = "Block Camera Device Installation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Prevents installation of USB-connected camera devices (webcams, digital cameras) on the system, useful in secure environments where all photography and video capture must be blocked.",
                     Tags = ["wpd", "camera", "usb", "device-install", "policy"],
@@ -3656,7 +3656,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-disable-picture-transfer",
                     Label = "Disable Windows Picture Transfer Protocol",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Disables the Picture Transfer Protocol (PTP) used by digital cameras and smartphones to transfer photos, preventing photo device discovery and auto-import from cameras.",
                     Tags = ["wpd", "ptp", "picture-transfer", "camera", "policy"],
@@ -3673,7 +3673,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-apply-audit-on-write",
                     Label = "Enable Write Audit Logging for Removable Media",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Enables security audit events when files are written to removable storage devices, creating a log trail for data being exfiltrated to USB drives or portable devices.",
                     Tags = ["wpd", "removable-media", "audit-log", "dlp", "policy"],
@@ -3690,7 +3690,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-disable-usb-mass-storage",
                     Label = "Disable USB Mass Storage Class Driver",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Disables the USB Mass Storage class driver (usbstor), preventing USB flash drives, external hard drives, and USB memory sticks from mounting as drive letters in Windows Explorer.",
                     Tags = ["wpd", "usb-mass-storage", "usbstor", "security", "policy"],
@@ -3707,7 +3707,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-block-portable-music-player",
                     Label = "Block Portable Music Player Synchronisation",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Blocks synchronisation between Windows media players (Windows Media Player sync) and portable MP3 or music players via USB, preventing media content from being exported to portable devices.",
                     Tags = ["wpd", "music-player", "sync", "media", "policy"],
@@ -3724,7 +3724,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-readonly-removable-media",
                     Label = "Enforce Read-Only Mode for All Removable Media",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Mounts all removable storage devices in read-only mode, allowing data to be read from USB drives but blocking any write operations to prevent data exfiltration.",
                     Tags = ["wpd", "removable-media", "read-only", "dlp", "policy"],
@@ -3741,7 +3741,7 @@ internal static class PolicyDevice
                 {
                     Id = "wpd-block-external-thunderbolt-storage",
                     Label = "Block External Thunderbolt Storage Devices",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Portable Device",
                     Description =
                         "Prevents external storage devices connected via Thunderbolt from mounting, closing the high-speed Thunderbolt exfiltration path while allowing other Thunderbolt peripherals like displays and docks.",
                     Tags = ["wpd", "thunderbolt", "storage", "security", "policy"],
@@ -3768,7 +3768,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-autoplay",
                 Label = "Disable AutoPlay for Portable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3785,7 +3785,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-sync",
                 Label = "Disable Portable Device Sync",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3802,7 +3802,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-media-acquisition",
                 Label = "Disable Portable Device Media Acquisition",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3819,7 +3819,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-wpdautorun",
                 Label = "Disable Windows Portable Device AutoRun",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3836,7 +3836,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-deny-read",
                 Label = "Deny Read Access to Portable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3853,7 +3853,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-deny-write",
                 Label = "Deny Write Access to Portable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3870,7 +3870,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-camera-access",
                 Label = "Disable Camera Portable Device Access",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3887,7 +3887,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-wpd-driver-install",
                 Label = "Disable WPD Driver Auto-Installation",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3904,7 +3904,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-wpd-notification",
                 Label = "Disable Portable Device Connection Notifications",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3921,7 +3921,7 @@ internal static class PolicyDevice
             {
                 Id = "portdev-disable-telemetry",
                 Label = "Disable Portable Device Telemetry",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3948,7 +3948,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-disable-speculative-execution",
                 Label = "Enable Spectre/Meltdown Mitigations",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3965,7 +3965,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-retpoline",
                 Label = "Enable Retpoline Spectre Variant 2 Mitigation",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3982,7 +3982,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-kva-shadowing",
                 Label = "Enable Kernel VA Shadowing (Meltdown Mitigation)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3999,7 +3999,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-ssbd",
                 Label = "Enable Speculative Store Bypass Disable (SSBD)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4016,7 +4016,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-mds-mitigations",
                 Label = "Enable Microarchitectural Data Sampling Mitigations",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4033,7 +4033,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-disable-hyper-threading-spectre",
                 Label = "Configure SMT for Speculative Execution Safety",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4050,7 +4050,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-tsx-mitigations",
                 Label = "Enable TSX Asynchronous Abort Mitigations",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4067,7 +4067,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-ibrs",
                 Label = "Enable Indirect Branch Restricted Speculation (IBRS)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4084,7 +4084,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-ibpb",
                 Label = "Enable Indirect Branch Predictor Barrier (IBPB)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4101,7 +4101,7 @@ internal static class PolicyDevice
             {
                 Id = "proccpol-enable-stibp",
                 Label = "Enable Single Thread Indirect Branch Predictors (STIBP)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4128,7 +4128,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-superfetch",
                 Label = "Disable SuperFetch (SysMain) Service",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4151,7 +4151,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-prefetch",
                 Label = "Disable Application Prefetch",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4173,7 +4173,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-readyboost",
                 Label = "Disable ReadyBoost",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4195,7 +4195,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-readydrive",
                 Label = "Disable ReadyDrive Hybrid HDD Cache",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4217,7 +4217,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-boot-trace",
                 Label = "Disable Boot Trace for Prefetch",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4239,7 +4239,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-app-launch-prefetch",
                 Label = "Disable App-Launch Prefetch Optimisation",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4261,7 +4261,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-logon-prefetch",
                 Label = "Disable Logon Prefetch Scenario",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4283,7 +4283,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-memory-profiling",
                 Label = "Disable SysMain Memory Profiling",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4305,7 +4305,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-heap-prefetch",
                 Label = "Disable Application Heap Prefetch",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4327,7 +4327,7 @@ internal static class PolicyDevice
             {
                 Id = "sfetch-disable-telemetry",
                 Label = "Disable SuperFetch Telemetry",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4368,7 +4368,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-write-protect",
                 Label = "USB Storage: Enable Hardware Write-Protection on All Removable Drives",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [StoragePolicy],
@@ -4385,7 +4385,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-all-removable-write",
                 Label = "USB Storage: Deny Write Access to All Removable Storage Classes (GPO)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RemovableDevices],
@@ -4402,7 +4402,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-all-removable-execute",
                 Label = "USB Storage: Deny Execution from All Removable Storage Classes (GPO)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RemovableDevices],
@@ -4419,7 +4419,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-all-removable-read",
                 Label = "USB Storage: Deny Read Access to All Removable Storage (Strict Lockdown)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [RemovableDevices],
@@ -4436,7 +4436,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-usb-disk-write",
                 Label = "USB Storage: Deny Write Access to USB Disk Drives (Class Policy)",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [UsbFloppyClass],
@@ -4453,7 +4453,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-cdrom-write",
                 Label = "USB Storage: Deny Write Access to Optical/CD-ROM Drives",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [CdRomClass],
@@ -4470,7 +4470,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-cdrom-read",
                 Label = "USB Storage: Deny Read Access to optical drives",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [CdRomClass],
@@ -4487,7 +4487,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-tape-write",
                 Label = "USB Storage: Deny Write Access to Tape Drives",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [TapeClass],
@@ -4504,7 +4504,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-wpd-write",
                 Label = "USB Storage: Deny Write Access to WPD (MTP/PTP) Portable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WpdClass],
@@ -4521,7 +4521,7 @@ internal static class PolicyDevice
             {
                 Id = "usbstor-deny-wpd-read",
                 Label = "USB Storage: Deny Read Access to WPD (MTP/PTP) Portable Devices",
-                Category = "Peripherals",
+                Category = "Peripherals — Portable Device",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WpdClass],
@@ -4548,7 +4548,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-block-vhd-mount",
                     Label = "Block Standard Users from Mounting VHD/VHDX Files",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Prevents standard (non-admin) users from attaching or mounting Virtual Hard Disk (VHD/VHDX) files, closing the data-exfiltration path of creating an encrypted virtual disk and filling it with sensitive data.",
                     Tags = ["vhd", "virtual-disk", "mount", "security", "policy"],
@@ -4565,7 +4565,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-block-iso-mount",
                     Label = "Block Standard Users from Mounting ISO/IMG Files",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Prevents standard users from mounting ISO, IMG, and other optical disc image files via the Explorer 'Mount' context menu, restricting virtual drive creation to administrators.",
                     Tags = ["iso", "virtual-drive", "mount", "security", "policy"],
@@ -4582,7 +4582,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-disable-disk-management-snap-in",
                     Label = "Disable Disk Management Snap-In for Standard Users",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Blocks the Disk Management MMC snap-in (diskmgmt.msc) for non-administrator accounts, preventing standard users from viewing, partitioning, formatting, or managing physical and virtual disks.",
                     Tags = ["disk-management", "mmc", "standard-user", "policy"],
@@ -4599,7 +4599,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-require-admin-for-partition",
                     Label = "Require Admin for Disk Partitioning Operations",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Enforces that all disk partitioning operations (create, delete, resize partition) require administrator privileges, preventing accidental or malicious disk modification by standard users.",
                     Tags = ["disk-management", "partition", "admin", "security", "policy"],
@@ -4616,7 +4616,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-disable-removable-format",
                     Label = "Disable Formatting of Removable Drives by Standard Users",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Prevents standard users from formatting removable drives (USB drives, SD cards, external HDDs) through Explorer or Disk Management, avoiding irreversible data loss by users without sufficient knowledge.",
                     Tags = ["disk-management", "format", "removable", "standard-user", "policy"],
@@ -4633,7 +4633,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-log-vhd-attach-events",
                     Label = "Enable Audit Logging for VHD/VHDX Attach and Detach Events",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Enables event log entries for every VHD/VHDX mount and unmount operation, recording the file path and user account responsible for each attachment.",
                     Tags = ["vhd", "audit-log", "virtual-disk", "security", "policy"],
@@ -4650,7 +4650,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-disable-dynamic-disk",
                     Label = "Disable Dynamic Disk Conversions",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Prevents conversion of basic disks to dynamic disk format, blocking the creation of spanned, striped, or mirrored volumes via Windows dynamic disk — recommending Storage Spaces instead for resilient configurations.",
                     Tags = ["disk-management", "dynamic-disk", "conversion", "policy"],
@@ -4667,7 +4667,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-block-auto-initialize-disk",
                     Label = "Block Automatic Disk Initialisation on New Disk Detection",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Prevents Windows from automatically opening the Initialize Disk wizard when a new uninitialized disk is detected, requiring an administrator to manually initiate disk initialisation.",
                     Tags = ["disk-management", "auto-initialize", "new-disk", "policy"],
@@ -4684,7 +4684,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-require-bitlocker-for-external",
                     Label = "Require BitLocker Encryption Before External Drive Writability",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Requires that external or removable drives be encrypted with BitLocker To Go before allowing write access, preventing unencrypted exfiltration of sensitive data to external media.",
                     Tags = ["disk-management", "bitlocker", "external-drive", "encryption", "dlp", "policy"],
@@ -4701,7 +4701,7 @@ internal static class PolicyDevice
                 {
                     Id = "vdspol-disable-wps-disk-provision",
                     Label = "Disable Windows Provisioning Service Disk Auto-Provision",
-                    Category = "Peripherals",
+                    Category = "Peripherals — Virtual Disk Service",
                     Description =
                         "Disables the Windows Provisioning Service automatic disk provisioning feature that configures disk topology on first boot, ensuring that enterprise imaging tools retain full control over disk layout.",
                     Tags = ["disk-management", "provisioning", "auto-provision", "enterprise", "policy"],
@@ -4726,7 +4726,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-tap",
             Label = "Disable Touchpad Tap-to-Click (Perf)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4741,7 +4741,7 @@ internal static class Input
         {
             Id = "input-filter-keys",
             Label = "Disable Filter Keys",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Filter Keys accessibility shortcut that can interfere with gaming.",
@@ -4755,7 +4755,7 @@ internal static class Input
         {
             Id = "input-mouse-scroll-lines",
             Label = "Set Mouse Scroll to 5 Lines",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets mouse wheel scroll amount to 5 lines (default 3).",
@@ -4769,7 +4769,7 @@ internal static class Input
         {
             Id = "input-disable-spell-check",
             Label = "Disable Spell Checking",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4784,7 +4784,7 @@ internal static class Input
         {
             Id = "input-disable-text-suggestions",
             Label = "Disable Text Suggestions",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4799,7 +4799,7 @@ internal static class Input
         {
             Id = "input-set-cursor-blink-rate",
             Label = "Set Fast Cursor Blink Rate",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4814,7 +4814,7 @@ internal static class Input
         {
             Id = "input-increase-double-click-speed",
             Label = "Increase Double-Click Speed",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4829,7 +4829,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-accel",
             Label = "Disable Mouse Acceleration",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4855,7 +4855,7 @@ internal static class Input
         {
             Id = "input-disable-pen-workspace",
             Label = "Disable Pen Workspace",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Pen Workspace (Screen Sketch, Sticky Notes shortcut). Useful on non-pen devices. Default: enabled.",
@@ -4878,7 +4878,7 @@ internal static class Input
         {
             Id = "input-disable-handwriting-panel",
             Label = "Disable Handwriting Panel",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the handwriting input panel from appearing on touch/pen input. Default: enabled on pen devices.",
@@ -4892,7 +4892,7 @@ internal static class Input
         {
             Id = "input-set-mouse-hover-width",
             Label = "Increase Mouse Hover Detection Area",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Widens the mouse hover detection rectangle from 4 to 10 pixels. Reduces accidental tooltip triggering. Default: 4.",
@@ -4906,7 +4906,7 @@ internal static class Input
         {
             Id = "input-disable-writing-insights",
             Label = "Disable Writing Insights",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Windows Writing Insights that analyse text input for suggestions. Improves privacy. Default: enabled.",
@@ -4920,7 +4920,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-sonar",
             Label = "Disable Mouse Sonar (Show Pointer on Ctrl Press)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4935,7 +4935,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-vanish",
             Label = "Disable Mouse Vanish (Hide Pointer While Typing)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4950,7 +4950,7 @@ internal static class Input
         {
             Id = "input-set-caret-width-2",
             Label = "Set Text Cursor (Caret) Width to 2 px",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4965,7 +4965,7 @@ internal static class Input
         {
             Id = "input-disable-lang-switch-hotkey",
             Label = "Disable Keyboard Language Switch Hotkey (Alt+Shift)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4980,7 +4980,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-two-finger-tap",
             Label = "Disable Precision Touchpad Two-Finger Tap (Right-Click)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -4998,7 +4998,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-edge-swipe",
             Label = "Disable Precision Touchpad Edge Swipe Gestures",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5013,7 +5013,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-three-finger-tap",
             Label = "Disable Precision Touchpad Three-Finger Tap",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5034,7 +5034,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-four-finger-tap",
             Label = "Disable Precision Touchpad Four-Finger Tap",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5052,7 +5052,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-right-zone",
             Label = "Disable Precision Touchpad Right-Click Corner Zone",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5073,7 +5073,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-swipe-nav",
             Label = "Disable Precision Touchpad Swipe Navigation (Back/Forward)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5097,7 +5097,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-pinch-zoom",
             Label = "Disable Precision Touchpad Pinch-to-Zoom",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5119,7 +5119,7 @@ internal static class TouchPen
         {
             Id = "touch-pen-screenshot",
             Label = "Pen Double-Click: Screen Sketch",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button double-click to Screen Sketch (screenshot annotation). Default: Nothing.",
@@ -5133,7 +5133,7 @@ internal static class TouchPen
         {
             Id = "touch-pen-longpress",
             Label = "Pen Long-Press: Ink Workspace",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button long-press to open the Ink Workspace. Default: Nothing.",
@@ -5147,7 +5147,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-edge-swipe",
             Label = "Disable Edge Swipe Gesture (Policy)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the screen-edge swipe gesture that opens Action Centre / notification pane. Prevents accidental triggers.",
@@ -5161,7 +5161,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks",
             Label = "Disable Pen Flick Gestures",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pen flick gestures (quick strokes for scroll, back, forward). Prevents accidental navigation.",
@@ -5175,7 +5175,7 @@ internal static class TouchPen
         {
             Id = "touch-reverse-scroll",
             Label = "Enable Reverse (Natural) Scrolling",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5190,7 +5190,7 @@ internal static class TouchPen
         {
             Id = "touch-sensitivity-high",
             Label = "Set Touchpad Sensitivity to High",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5205,7 +5205,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-palm-rejection",
             Label = "Disable Touchpad Palm Rejection",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5220,7 +5220,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-feedback",
             Label = "Disable Touch Visual Feedback",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual ripple effect when touching the screen. Default: enabled.",
@@ -5234,7 +5234,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-gesture-feedback",
             Label = "Disable Touch Gesture Visual Feedback",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual feedback for multi-finger gestures (pinch, swipe). Default: enabled.",
@@ -5248,7 +5248,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-screen",
             Label = "Disable Touch Screen Input (HID)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the HID-compliant touch screen. Touch will not work until re-enabled. Default: enabled.",
@@ -5262,7 +5262,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-handwriting-panel",
             Label = "Disable Pen Handwriting Panel Auto-Invoke",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents the handwriting panel from auto-appearing when using a pen in text fields. Default: auto.",
@@ -5276,7 +5276,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks-policy",
             Label = "Disable Pen Flicks via Group Policy",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables pen flicks (gesture shortcuts) system-wide via Group Policy. Default: pen flicks enabled.",
@@ -5290,7 +5290,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-ink-workspace-app-suggestions",
             Label = "Disable Ink Workspace App Suggestions",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables suggested app recommendations inside the Windows Ink Workspace. Default: enabled.",
@@ -5313,7 +5313,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-keyboard-suggestions",
             Label = "Disable Touch Keyboard Autocomplete Suggestions",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5328,7 +5328,7 @@ internal static class TouchPen
         {
             Id = "touch-set-double-tap-speed",
             Label = "Reduce Pen Double-Tap Detection Speed",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the time window for pen double-tap detection. Makes double-tap feel snappier. Default: 500ms window.",
@@ -5342,7 +5342,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-pc-input-service",
             Label = "Disable Tablet PC Input Service",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5357,7 +5357,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-flick-sound",
             Label = "Disable Pen Flick Sound",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the sound effect played when performing pen flick gestures. Default: sound enabled.",
@@ -5371,7 +5371,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-prediction",
             Label = "Disable Touch Input Prediction",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables predictive touch movement smoothing. Reduces latency for precise stylus work. Default: prediction enabled.",
@@ -5394,7 +5394,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-autocorrect",
             Label = "Disable Touch Keyboard Auto-Correct",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5409,7 +5409,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-mode-auto-switch",
             Label = "Disable Automatic Tablet Mode Switching",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5424,7 +5424,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-auto-keyboard-invoke",
             Label = "Disable Automatic Touch Keyboard Pop-Up",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -5439,7 +5439,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-edge-gesture",
             Label = "Disable Touch Edge Gesture Swipe",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5473,7 +5473,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-handwriting-panel",
             Label = "Disable Touch Keyboard / Handwriting Panel Auto-Show",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -5491,7 +5491,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-text-prediction",
             Label = "Disable Ink Text Prediction and Recommendations",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -5509,7 +5509,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-flicks",
             Label = "Disable Pen Flicks (Swipe Gestures)",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -5527,7 +5527,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-press-and-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -5545,7 +5545,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-learn-from-this-device",
             Label = "Disable 'Learn from This Device' for Input Personalization",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             NeedsAdmin = false,
             CorpSafe = false,
             ImpactScore = 2,
@@ -5563,7 +5563,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-visual-feedback",
             Label = "Disable Pen Visual Feedback",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Removes the cursor/halo effects shown when using a stylus. "
                 + "Useful on high-DPI tablets where the glow overlay obscures fine linework.",
@@ -5577,7 +5577,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-workspace-app-launch",
             Label = "Block App Launches from Pen Workspace",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Disables the ability to launch apps from the Pen Workspace panel. "
                 + "Reduces attack surface on shared devices where pen-launched apps should be restricted.",
@@ -5592,7 +5592,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-right-click-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Disables the 'press and hold' pen gesture that simulates a right-click. "
                 + "Prevents accidental context menus when resting the pen on the screen.",
@@ -5606,7 +5606,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-tablet-ink-policy",
             Label = "Disable Ink Programs via Group Policy",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Applies the TabletPC policy to disable InkBall and other built-in ink-based games/apps. "
                 + "Recommended for corporate tablets to prevent access to entertainment apps.",
@@ -5621,7 +5621,7 @@ internal static class WindowsInk
         {
             Id = "ink-set-pen-double-tap-speed",
             Label = "Set Pen Double-Tap Speed to 400 ms",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Increases the pen double-tap recognition window to 400 ms (default 200 ms). "
                 + "Helps users with motor impairment or those using thick-nib styluses to register double-taps reliably.",
@@ -5635,7 +5635,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-customization-page",
             Label = "Disable Pen Customization Settings Page",
-            Category = "Peripherals",
+            Category = "Peripherals — Virtual Disk Service",
             Description =
                 "Hides the Pen Customization settings page from the Settings app via Group Policy. "
                 + "Prevents users from rebinding pen buttons on managed/shared devices.",

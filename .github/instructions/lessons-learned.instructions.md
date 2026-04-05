@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-05 (v6.6.0, C# 13 / .NET 10.0-windows, ~9440 tweaks, 116 categories, 3376 tests)
+> Last updated: 2026-04-05 (v6.12.0, C# 13 / .NET 10.0-windows, ~7,189 tweaks, 122 categories, 3,052 tests)
 
 ---
 
@@ -1418,7 +1418,7 @@ Version history:
 | v6.10.0 | 0 | -44 | — (Phase C: removed 44 scoop tool-install tweaks from Developer.cs; 8,847→8,803 tweaks) |
 | v6.11.0 | 5 | +50 | 667–671 (PolicyLocation/PolicyDataCollection/PolicyWinRM/PolicyCredentialUI/PolicyMediaPlayer) |
 | v6.12.0 | 0 | -1,664 | — (mass dedup: removed 1,756 duplicate TweakDef blocks, kept alphabetically-first module; 8,853→7,189 tweaks; 26→23 categories; 35→31 modules) |
-**Current version**: v6.12.0 — 7,189 tweaks, 23 categories, 31 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v6.12.0 — 7,189 tweaks, 122 categories, 31 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 

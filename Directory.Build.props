@@ -27,6 +27,9 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
+    <!-- ReadyToRun: ahead-of-time compile during publish for faster cold-start
+         (~200-400ms improvement). Only applies to dotnet publish -r win-x64. -->
+    <PublishReadyToRun>true</PublishReadyToRun>
     <!-- ── Build output redirection (OneDrive lock workaround) ─────────────
          Redirect obj/ and bin/ to %TEMP%\RegiLattice-build\<ProjectName> so
          MSBuild never touches OneDrive-synced paths during compilation.

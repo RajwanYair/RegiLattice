@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -14,7 +14,7 @@ internal static class PolicyFirewallProfiles
         {
             Id = "fw-policy-domain-allow-outbound",
             Label = "Allow Outbound by Default (Domain Profile)",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -33,7 +33,7 @@ internal static class PolicyFirewallProfiles
         {
             Id = "fw-policy-public-allow-outbound",
             Label = "Allow Outbound by Default (Public Profile)",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -69,7 +69,7 @@ internal static class PolicyNetLogon
         {
             Id = "sec-netlogon-dns-only-domain-join",
             Label = "Restrict Domain Join to DNS Registration",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -88,7 +88,7 @@ internal static class PolicyNetLogon
         {
             Id = "sec-netlogon-avoid-pdc-on-wan",
             Label = "Avoid PDC Emulator on WAN for Authentication",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -143,7 +143,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-enhanced-phishing-capture",
             Label = "Enable Enhanced Phishing Protection — Capture Check",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -162,7 +162,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-enhanced-phishing-notify-malicious",
             Label = "Enhanced Phishing Protection — Notify on Malicious Site",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -181,7 +181,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-enhanced-phishing-notify-password-reuse",
             Label = "Enhanced Phishing Protection — Warn on Password Reuse",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -200,7 +200,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-enhanced-phishing-unsafe-app",
             Label = "Enhanced Phishing Protection — Warn on Unsafe App Password Entry",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -219,7 +219,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-safer-log-policy",
             Label = "Enable Software Restriction Policy Event Logging",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -238,7 +238,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-mrt-disable-auto-download",
             Label = "Disable Automatic MRT Download via Windows Update",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -258,7 +258,7 @@ internal static class PolicySmartScreenWin
         {
             Id = "sec-smartscreen-mrt-disable-infection-report",
             Label = "Disable MRT Infection Report Upload to Microsoft",
-            Category = "Security",
+            Category = "Security — Firewall Misc",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -332,7 +332,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-disable-add-remove-programs",
                     Label = "Disable Add or Remove Programs Applet",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoAddRemovePrograms=1 to hide the Add or Remove Programs item from Control Panel entirely. "
                         + "Users cannot access the application management interface for installing, modifying, or removing software. "
@@ -351,7 +351,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-hide-add-new-programs",
                     Label = "Hide Add New Programs Tab",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoAddPage=1 to hide the 'Add New Programs' tab in the Add or Remove Programs applet. "
                         + "Users cannot browse or install programs from CD/DVD, floppy disk, or network-hosted installation packages "
@@ -370,7 +370,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-hide-windows-components",
                     Label = "Hide Add/Remove Windows Components Page",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoWindowsSetupPage=1 to remove the 'Add/Remove Windows Components' page from the applet. "
                         + "Prevents users from adding or removing built-in Windows features and optional components such as "
@@ -389,7 +389,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-prevent-program-changes",
                     Label = "Prevent Changing Installed Programs",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoChangePage=1 to hide the Change Program button in Add or Remove Programs. "
                         + "Users are prevented from running application setup programs to modify or repair installed software. "
@@ -408,7 +408,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-block-remove-programs",
                     Label = "Block Remove Programs Page",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoRemovePage=1 to hide the Remove Programs section in Add or Remove Programs. "
                         + "Prevents standard users from uninstalling any software via the Control Panel interface, "
@@ -427,7 +427,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-hide-support-info",
                     Label = "Hide Software Support Information Links",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoSupportInfo=1 to remove the Support Information hyperlink from the Change or Remove Programs list. "
                         + "Prevents disclosure of vendor contact information and URLs embedded in installed software registry entries, "
@@ -446,7 +446,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-block-add-from-network",
                     Label = "Block Adding Programs from Network Shares",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoAddFromNetwork=1 to hide the option to add programs from a network share or corporate distribution point "
                         + "within the Add or Remove Programs applet. Prevents users from browsing network paths and self-installing "
@@ -465,7 +465,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-hide-services-page",
                     Label = "Hide Add/Remove Services Tab",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoServices=1 to remove the 'Services' tab from the Add or Remove Programs applet, "
                         + "preventing users from enabling or disabling optional system services via this interface. "
@@ -484,7 +484,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-hide-choose-programs",
                     Label = "Hide Set Program Access and Defaults Page",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets NoChooseProgramsPage=1 to hide the 'Set Program Access and Computer Defaults' page "
                         + "that allows users to configure default programs for file types and protocols. "
@@ -503,7 +503,7 @@ internal static class PolicyAppControl
                 {
                     Id = "arpp-enforce-category-view",
                     Label = "Enforce Category View in Add/Remove Programs",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DefaultCategory=1 to force the Add or Remove Programs applet to display the installed program list "
                         + "sorted by category as the default view. Overrides any per-user sort preference stored in the user profile, "
@@ -532,7 +532,7 @@ internal static class PolicyAppControl
             {
                 Id = "accompat-disable-user-assistance-telemetry",
                 Label = "Disable User Assistance Telemetry",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description = "Disables the User Assistance Telemetry component from sending application crash and help request data to Microsoft.",
                 Tags = ["appcompat", "privacy", "telemetry", "group-policy"],
                 NeedsAdmin = true,
@@ -545,7 +545,7 @@ internal static class PolicyAppControl
             {
                 Id = "accompat-disable-wizard",
                 Label = "Disable Program Compatibility Wizard",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Removes the Program Compatibility Wizard from the context menu and prevents users from running it to set compatibility modes.",
                 Tags = ["appcompat", "group-policy", "debloat"],
@@ -559,7 +559,7 @@ internal static class PolicyAppControl
             {
                 Id = "accompat-prevent-access-16bit",
                 Label = "Prevent Access to 16-bit Applications",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description = "Blocks execution of 16-bit applications by disabling the Windows on Windows (WOW) subsystem via Group Policy.",
                 Tags = ["appcompat", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -572,7 +572,7 @@ internal static class PolicyAppControl
             {
                 Id = "accompat-turn-off-windows-error-reporting",
                 Label = "Turn Off App Compatibility Windows Error Reporting",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description = "Suppresses Windows Error Reporting prompts generated by the Application Compatibility framework.",
                 Tags = ["appcompat", "privacy", "telemetry", "group-policy"],
                 NeedsAdmin = true,
@@ -595,7 +595,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-pca",
                     Label = "Disable Program Compatibility Assistant",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Disables the Program Compatibility Assistant (PCA) that monitors application launches and prompts users to run programs in a compatibility mode when failure is detected. PCA interactions can generate telemetry events and prompt users into changing application settings. Default: PCA enabled. Recommended: 1 on locked-down managed desktops.",
                     Tags = ["app-compat", "pca", "assistant", "compatibility", "policy"],
@@ -612,7 +612,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-engine",
                     Label = "Disable Application Compatibility Engine",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Turns off the Windows application compatibility shim engine. Shims intercept Win32 API calls and transparently modify behaviour for legacy applications. Disabling the engine prevents any shim from being applied and removes the attack surface of the shim infrastructure. Caution: may break some legacy applications. Default: engine enabled. Recommended: 1 where all deployed apps are tested on current Windows.",
                     Tags = ["app-compat", "shim", "engine", "legacy", "security", "policy"],
@@ -629,7 +629,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-removal-program",
                     Label = "Disable Application Compatibility Removal Program",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Suppresses the prompt that appears when a program known to be incompatible with the current version of Windows is detected. The prompt normally says 'This program might not have installed correctly' and can lead to unintended re-installation attempts. Default: prompt enabled. Recommended: 1 on managed fleets.",
                     Tags = ["app-compat", "removal", "prompt", "policy"],
@@ -647,7 +647,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-sdb-lookup-online",
                     Label = "Disable Online SDB Look-up for App Compatibility",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Prevents Windows from querying Microsoft's online SDB (Shim Data Base) to check whether a running application has a known compatibility fix that should be applied. Reduces outbound network calls and removes a subtle data channel where app hashes are sent. Default: online SDB lookup enabled. Recommended: 1.",
                     Tags = ["app-compat", "sdb", "shim", "online-lookup", "privacy", "policy"],
@@ -664,7 +664,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-telemetry",
                     Label = "Disable Application Compatibility Telemetry Upload",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Blocks Windows from uploading application compatibility telemetry events (crash data, failed launch events, installer outcomes) to Microsoft Watson servers. Reduces the PCA telemetry data channel. Default: telemetry uploaded. Recommended: 1.",
                     Tags = ["app-compat", "telemetry", "privacy", "watson", "policy"],
@@ -681,7 +681,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-allow-only-approved-shims",
                     Label = "Allow Only IT-Approved Compatibility Shims",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Restricts SDB shim loading so that only shims from administrator-supplied SDB files can be applied. Prevents attackers from installing malicious custom shims (a known persistence technique) by blocking user-context SDB installs. Default: any SDB files can be installed. Recommended: 1.",
                     Tags = ["app-compat", "shim", "sdb", "security", "persistence", "policy"],
@@ -698,7 +698,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-block-sdb-user-install",
                     Label = "Block Users from Installing SDB Files",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Prevents standard users from registering application compatibility database (.sdb) files in the registry. SDB-based persistence (Shim-Based Patch Injection) is a known attack technique. Restricting SDB installs to administrators significantly reduces this attack vector. Default: no restriction. Recommended: 1.",
                     Tags = ["app-compat", "sdb", "persistence", "user-restriction", "security", "policy"],
@@ -715,7 +715,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-compatibility-chooser-ui",
                     Label = "Disable Compatibility Chooser UI in Right-Click Menu",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Removes the 'Troubleshoot Compatibility' option from the Explorer right-click context menu for executable files. Prevents users from launching the Program Compatibility Troubleshooter which could change per-user compatibility settings. Default: option shown. Recommended: 1 on managed desktops.",
                     Tags = ["app-compat", "context-menu", "ui", "troubleshooter", "policy"],
@@ -733,7 +733,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-log-shim-events",
                     Label = "Log Application Compatibility Shim Events",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Enables logging of shim application events (which SDB was applied, which process, and which API was intercepted) to the Application Compatibility event log channel. Provides forensic visibility into shim activity for threat hunting. Default: shim events not logged. Recommended: 1.",
                     Tags = ["app-compat", "shim", "audit", "logging", "forensics", "policy"],
@@ -750,7 +750,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcompat-disable-switches-per-process",
                     Label = "Disable Per-Process Compatibility Settings Override",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Prevents per-user compatibility settings stored in HKCU from overriding machine-wide app compatibility configuration. Ensures that even if a user manually sets a compatibility mode for an application, the system policy takes precedence. Default: per-user HKCU overrides allowed. Recommended: 1 on managed desktops.",
                     Tags = ["app-compat", "per-process", "override", "policy"],
@@ -778,7 +778,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-disable-consent-store",
                     Label = "Disable App Consent Store",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets Enable=0 to disable the Windows App Consent Store that tracks and manages per-app privacy consent decisions. Apps requiring user consent are denied automatically.",
                     Tags = ["consent", "privacy", "apps", "policy"],
@@ -795,7 +795,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-restrict-app-consent-grants",
                     Label = "Restrict Automatic App Consent Grants",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AllowConsentForApps=0 to prevent apps from receiving automatic consent grants. Every app consent request will require explicit user approval.",
                     Tags = ["consent", "privacy", "apps", "policy"],
@@ -812,7 +812,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-block-sensitive-consent",
                     Label = "Block Sensitive Information App Consent",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AllowSensitiveConsentForApps=0 to block apps from requesting consent to access sensitive personal information categories such as health, financial, or communication data.",
                     Tags = ["consent", "sensitive", "privacy", "policy"],
@@ -829,7 +829,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-disable-consent-ux",
                     Label = "Disable App Consent User Interface",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DisableConsentUx=1 to suppress the app consent dialog UI. Consent decisions are handled silently according to current policy without surfacing prompts to the user.",
                     Tags = ["consent", "ui", "privacy", "policy"],
@@ -846,7 +846,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-require-admin-consent-approval",
                     Label = "Require Administrator Consent Approval",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets RequireAdminApproval=1 so that all app consent requests must be explicitly approved by an administrator. Standard users cannot grant app permissions independently.",
                     Tags = ["consent", "admin", "policy", "security"],
@@ -863,7 +863,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-disable-consent-prompts",
                     Label = "Disable App Consent Prompts for Standard Users",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DisableConsentPrompts=1 to prevent consent dialog prompts from appearing for standard users. All consent decisions are handled by Group Policy settings.",
                     Tags = ["consent", "prompts", "users", "policy"],
@@ -880,7 +880,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-block-third-party-app-consent",
                     Label = "Block Third-Party App Consent Requests",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets BlockThirdPartyConsent=1 to prevent sideloaded or third-party applications from requesting access to sensitive resources through the consent store.",
                     Tags = ["consent", "third-party", "sideload", "policy"],
@@ -897,7 +897,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-disable-consent-history",
                     Label = "Disable App Consent Decision History",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DisableConsentHistory=1 to prevent the consent store from recording a history of app consent decisions. Improves privacy by not persisting consent audit trails locally.",
                     Tags = ["consent", "history", "privacy", "policy"],
@@ -914,7 +914,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-restrict-consent-data-collection",
                     Label = "Restrict Consent Data Collection by Apps",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets RestrictConsentDataCollection=1 to limit the types of data that applications can be granted consent to collect through the Windows consent store framework.",
                     Tags = ["consent", "data-collection", "privacy", "policy"],
@@ -931,7 +931,7 @@ internal static class PolicyAppControl
                 {
                     Id = "acspol-disable-consent-notifications",
                     Label = "Disable App Consent Change Notifications",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DisableConsentNotifications=1 to suppress system notifications when apps are granted or denied consent to access resources. Reduces noise from consent-related toasts.",
                     Tags = ["consent", "notifications", "privacy", "policy"],
@@ -958,7 +958,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-loopback",
                 Label = "Disable App Container Loopback",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -975,7 +975,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-capability-enumeration",
                 Label = "Disable App Container Capability Enumeration",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -992,7 +992,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-network-access",
                 Label = "Restrict App Container Network Access",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1009,7 +1009,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-local-filesystem",
                 Label = "Restrict App Container Local Filesystem Access",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1026,7 +1026,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-clipboard-access",
                 Label = "Restrict App Container Clipboard Access",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1043,7 +1043,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-usb-access",
                 Label = "Restrict App Container USB Access",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1060,7 +1060,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-com-access",
                 Label = "Restrict App Container COM Server Access",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1077,7 +1077,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-telemetry",
                 Label = "Disable App Container Telemetry",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1094,7 +1094,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-disable-auto-launch",
                 Label = "Disable App Container Automatic Launch",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1111,7 +1111,7 @@ internal static class PolicyAppControl
             {
                 Id = "appcont-enforce-app-isolation",
                 Label = "Enforce App Container Strict Isolation",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1140,7 +1140,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcon-deny-broadfileaccess",
                     Label = "Deny Broad File System Access Capability to UWP Apps",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Blocks UWP apps from exercising the broadFileSystemAccess capability that allows reading files outside the app's sandbox, preventing apps from reading arbitrary user files even if they declare the capability in their manifest.",
                     Tags = ["appcontainer", "broad-file-access", "capability", "sandbox", "policy"],
@@ -1157,7 +1157,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcon-enable-appcontainer-network-isolation",
                     Label = "Enable Network Isolation for AppContainer Processes",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Enforces strict network isolation for AppContainer processes, ensuring that UWP apps can only make network connections to endpoints declared in their manifest capabilities, blocking undeclared outbound connections.",
                     Tags = ["appcontainer", "network-isolation", "sandbox", "security", "policy"],
@@ -1174,7 +1174,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcon-block-appcontainer-loopback",
                     Label = "Block AppContainer Loopback Exemption by Default",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Prevents UWP/AppContainer apps from being granted loopback network access exemptions that bypass AppContainer network isolation, ensuring all sandbox processes respect network isolation boundaries.",
                     Tags = ["appcontainer", "loopback", "network-isolation", "security", "policy"],
@@ -1191,7 +1191,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcon-disable-appcontainer-telemetry",
                     Label = "Disable AppContainer and AppPrivacy Telemetry to Microsoft",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Prevents AppContainer isolation components and app privacy capability grant telemetry from being sent to Microsoft, protecting information about app capability usage patterns from cloud disclosure.",
                     Tags = ["appcontainer", "telemetry", "privacy", "microsoft", "policy"],
@@ -1208,7 +1208,7 @@ internal static class PolicyAppControl
                 {
                     Id = "appcon-audit-capability-grants",
                     Label = "Audit AppContainer Capability Grant Events in Security Log",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Enables Security event log entries when a UWP application is granted access to a sensitive capability (location, microphone, camera, contacts, calendar), providing an audit trail of capability access grants.",
                     Tags = ["appcontainer", "capability", "audit", "event-log", "policy"],
@@ -1235,7 +1235,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-enable-managed-mode",
                 Label = "Enable Microsoft Defender Application Guard Managed Mode",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1252,7 +1252,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-disable-clipboard-host-to-container",
                 Label = "Disable Clipboard from Host to Application Guard Container",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1269,7 +1269,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-disable-clipboard-container-to-host",
                 Label = "Disable Clipboard from Application Guard Container to Host",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1286,7 +1286,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-disable-print-from-container",
                 Label = "Disable Printing from Application Guard Container",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1303,7 +1303,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-disable-container-persistence",
                 Label = "Disable Application Guard Container Data Persistence",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1320,7 +1320,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-enable-audit-logging",
                 Label = "Enable Application Guard Usage Audit Logging",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1337,7 +1337,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-block-enterprise-content-in-container",
                 Label = "Block Access to Enterprise Sites inside Application Guard",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1354,7 +1354,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-disable-camera-microphone-in-container",
                 Label = "Disable Camera and Microphone in Application Guard Container",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1371,7 +1371,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-block-download-saving",
                 Label = "Block Saving Downloaded Files from Application Guard",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1388,7 +1388,7 @@ internal static class PolicyAppControl
             {
                 Id = "appgrd-prevent-certificate-sharing",
                 Label = "Prevent Certificate Sharing from Host to Application Guard",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1415,7 +1415,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-settings",
                 Label = "Disable WinGet Settings Modification",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Prevents users from modifying Windows Package Manager settings via 'winget settings'. Configuration remains at machine defaults.",
                 Tags = ["winget", "app-installer", "policy"],
@@ -1433,7 +1433,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-experimental-features",
                 Label = "Disable WinGet Experimental Features",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Blocks use of experimental (preview) features in Windows Package Manager. Ensures only stable, supported behaviour is used.",
                 Tags = ["winget", "app-installer", "policy"],
@@ -1451,7 +1451,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-local-manifests",
                 Label = "Require Repository Manifests Only",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Prevents installing packages from local manifest files. All installs must originate from an approved repository source. Reduces risk of unapproved package installs.",
                 Tags = ["winget", "app-installer", "policy", "hardening"],
@@ -1469,7 +1469,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-additional-sources",
                 Label = "Block Addition of Custom Package Sources",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Prevents users from adding custom (non-approved) package sources to Windows Package Manager. All source management requires admin approval.",
                 Tags = ["winget", "app-installer", "policy", "hardening"],
@@ -1487,7 +1487,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-restrict-to-allowed-sources",
                 Label = "Restrict Installs to Allowed Sources Only",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Enforces an allowlist of approved package sources. Any source not on the allowed list is blocked for package installation.",
                 Tags = ["winget", "app-installer", "policy", "allowlist"],
@@ -1505,7 +1505,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-default-source",
                 Label = "Disable WinGet Default Source (winget.pkgs.com)",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Disables the default winget community repository (winget.pkgs.com). Package installs are restricted to enterprise-approved sources.",
                 Tags = ["winget", "app-installer", "policy", "source"],
@@ -1523,7 +1523,7 @@ internal static class PolicyAppControl
             {
                 Id = "appins-disable-store-source",
                 Label = "Disable Microsoft Store as WinGet Source",
-                Category = "Security",
+                Category = "Security — Add Remove Programs",
                 Description =
                     "Removes the Microsoft Store as an available package source within Windows Package Manager. Store-sourced installs must go through the Microsoft Store application directly.",
                 Tags = ["winget", "app-installer", "store", "policy"],
@@ -1553,7 +1553,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-disable-container-data-persistence",
                     Label = "WDAG Persistence: Disable Container Data Persistence Across Sessions",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AllowPersistence=0 in AppHVSI policy. Disables WDAG container data persistence — ensuring that cookies, browser history, cached web content, and local storage inside the WDAG container are purged when the container is closed. This provides the strongest isolation: each session starts from a completely clean container image with no carry-over state from previous sessions. While this means users must re-authenticate to websites in each WDAG session, it prevents any session-to-session data leakage or attack artefact accumulation in the container.",
                     Tags = ["wdag", "persistence", "cookie-purge", "session-isolation", "clean-state"],
@@ -1571,7 +1571,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-enable-office-application-guard",
                     Label = "WDAG Persistence: Enable Office Application Guard for Untrusted Documents",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets EnableOfficeApplicationGuard=1 in Office\\16.0\\Common\\AppHVSI policy. Enables Office Application Guard (OAG), which opens untrusted Office documents (Word, Excel, PowerPoint) received from the internet or marked as untrusted in a Hyper-V container. Malicious Office documents (weaponised macros, embedded OLE objects, exploit documents) open in the isolated container — if the document exploits a vulnerability in the Office parser, the exploit is contained. This is the most effective protection against socially-engineered office document attacks, which are the #1 initial access vector.",
                     Tags = ["office-application-guard", "word", "excel", "document-isolation", "hyperv"],
@@ -1589,7 +1589,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-block-office-guard-macro-execution",
                     Label = "WDAG Persistence: Block Macro Execution in Office Application Guard",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets DisableMacrosInOfficeGuard=1 in Office\\16.0\\Common\\AppHVSI policy. Disables all VBA macro execution in documents opened inside the Office Application Guard container. Even within the isolated container, macros can perform network calls, attempt to communicate with the host, or interact with the container's file system. Blocking macros in the container provides defence-in-depth: if a document exploits a macro execution vulnerability, the macro cannot execute. Documents requiring macros should be opened outside the container only if they are trusted and have been scanned.",
                     Tags = ["office-guard", "macro", "vba", "disable", "container"],
@@ -1607,7 +1607,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-restrict-guard-clipboard-to-host-in",
                     Label = "WDAG Persistence: Restrict Office Guard Clipboard to Host-to-Container Direction",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets OfficeguardClipboardSettings=2 in AppHVSI policy (host → container only). Configures clipboard behaviour for Office Application Guard containers to allow clipboard content from the host to be pasted into the container (enabling the user to paste text into a WDAG form) but blocking the container from exporting clipboard content to the host. This asymmetric clipboard policy prevents an exploit in the Office container from using the clipboard as a covert data exfiltration channel — a technique used by some document-borne malware.",
                     Tags = ["office-guard", "clipboard", "asymmetric", "exfiltration", "container"],
@@ -1625,7 +1625,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-enforce-hardware-requirements",
                     Label = "WDAG Persistence: Enforce Hardware Requirement Check Before Starting WDAG",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSIHardwareRequirementEnabled=1 in AppHVSI policy. Enables a pre-flight hardware compatibility check before WDAG containers are started. This check verifies that the CPU supports SLAT (for Hyper-V), VT-x/AMD-V is enabled in firmware, IOMMU is active (for DMA protection), and minimum RAM is available. If hardware requirements are not met, WDAG fails gracefully with a user-visible message rather than attempting to start a degraded container. Without this check, WDAG may start a container that appears functional but lacks proper isolation guarantees on incompatible hardware.",
                     Tags = ["wdag", "hardware-check", "slat", "vt-x", "iommu"],
@@ -1643,7 +1643,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-enable-container-threat-report",
                     Label = "WDAG Persistence: Enable WDAG Container Threat and Crash Reporting",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSIThreatReportEnabled=1 in AppHVSI policy. Enables WDAG to send threat and container crash reports to the Windows Defender ATP (Defender for Endpoint) service when a container experiences anomalous crashes or attempted security boundary violations. These reports include container crash minidumps, the URL that was active when the crash occurred, and whether the crash pattern is consistent with known exploit signatures. Threat reports enable the SOC to detect when WDAG has actually stopped an exploit attempt — containers that crash unexpectedly are almost always indicators of an exploitation attempt.",
                     Tags = ["wdag", "threat-report", "crash", "mde", "exploit-detection"],
@@ -1661,7 +1661,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-block-extension-from-container",
                     Label = "WDAG Persistence: Block Browser Extension Usage in WDAG Container",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSIExtensionBlock=1 in AppHVSI policy. Prevents browser extensions from loading within the WDAG Edge container. Browser extensions are a significant attack surface — a malicious extension installed in the host browser that also loads in the WDAG container could behave as a covert channel, passing data between the container and the internet or between the container and the host. Blocking extensions in the container ensures the WDAG isolation is not weakened by extension code that has access to both the container's DOM and the extension API.",
                     Tags = ["wdag", "extension-block", "browser-extension", "container", "covert-channel"],
@@ -1679,7 +1679,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-enable-automatic-container-update",
                     Label = "WDAG Persistence: Enable Automatic WDAG Container Image Update",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSIAutoUpdateEnabled=1 in AppHVSI policy. Enables automatic updates of the WDAG base container image via Windows Update. The WDAG container image is essentially a minimal Windows installation. If the container image is not updated, it may accumulate known vulnerabilities within the container OS components — which, while isolated, could be leveraged to escape the isolation more easily. Automatic updates ensure that even if an attacker gains code execution within the container, the container itself is patched against known privilege escalation vulnerabilities.",
                     Tags = ["wdag", "auto-update", "container-image", "patch", "windows-update"],
@@ -1697,7 +1697,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-disable-container-proxy-bypass",
                     Label = "WDAG Persistence: Disable Proxy Bypass Inside the WDAG Container",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSIProxyBypassEnabled=0 in AppHVSI policy. Prevents network traffic originating from within the WDAG container from bypassing the corporate proxy. Without this, a compromised website in the WDAG container that uses direct outbound connections (bypassing the proxy) can communicate with C2 infrastructure without appearing in proxy logs. Ensuring all container traffic goes through the corporate proxy enables DUT (Discover, Understand, Track) analysis of container network activity — even malicious connections from exploits are visible in proxy logs.",
                     Tags = ["wdag", "proxy", "bypass-prevention", "network-monitoring", "c2-detection"],
@@ -1715,7 +1715,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdagpe-set-container-network-isolation-level-2",
                     Label = "WDAG Persistence: Set Container Network Isolation Level 2 (Restrict Host Communication)",
-                    Category = "Security",
+                    Category = "Security — Add Remove Programs",
                     Description =
                         "Sets AppHVSINetworkIsolationLevel=2 in AppHVSI policy. Sets the WDAG container network isolation level to 2 (restrictive: container can only reach the proxy and the trusted domain list; host-to-container direct communication is blocked). At level 1, the container can communicate to any internet address via the host proxy. At level 2, only the enterprise proxy endpoint and explicitly whitelisted external domains are reachable from the container network. This reduces the C2 communication surface — a compromised WDAG session can only reach domains the enterprise has explicitly permitted.",
                     Tags = ["wdag", "network-isolation", "level-2", "c2-restriction", "outbound"],
@@ -1746,7 +1746,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprstrt-disable-wer-queue",
                 Label = "App Restart: Disable WER Problem Queue",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WerPolicy],
@@ -1763,7 +1763,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprstrt-bypass-data-throttling",
                 Label = "App Restart: Disable WER Data Throttling",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WerPolicy],
@@ -1780,7 +1780,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprstrt-disable-wer-ui-consent",
                 Label = "App Restart: Disable WER User Consent Prompts",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WerPolicy],
@@ -1797,7 +1797,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprstrt-wer-minimum-dump-size",
                 Label = "App Restart: Reduce WER Dump Log Retention to 1 Entry",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [WerMain],
@@ -1829,7 +1829,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-audit-exe",
                     Label = "Enable AppLocker Audit Mode for Executables",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Configures the AppLocker EXE rule collection to Audit mode, which logs every executable launch against rules (EventID 8004) without blocking it, enabling policy discovery before enforcement mode is activated.",
                     Tags = ["applocker", "audit-mode", "exe", "application-control", "policy"],
@@ -1846,7 +1846,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-dll-enforcement",
                     Label = "Enable AppLocker DLL Enforcement",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Enables AppLocker DLL collection enforcement, which checks every DLL loaded by a process against AppLocker rules before allowing load, providing defence against DLL hijacking and side-loading attacks.",
                     Tags = ["applocker", "dll", "dll-enforcement", "application-control", "policy"],
@@ -1863,7 +1863,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-script-enforcement",
                     Label = "Enable AppLocker Script Enforcement",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Enables AppLocker Script collection enforcement for PowerShell (.ps1), batch (.cmd/.bat), VBScript (.vbs), and Windows Scripting Host files, blocking untrusted scripts from executing.",
                     Tags = ["applocker", "script", "powershell", "application-control", "policy"],
@@ -1880,7 +1880,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-appx-enforcement",
                     Label = "Enable AppLocker Packaged App (AppX) Enforcement",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Enables AppLocker PackagedApp collection enforcement for MSIX/AppX Store-installed applications, blocking or auditing UWP apps that do not match configured publisher or package name rules.",
                     Tags = ["applocker", "appx", "msix", "store-apps", "application-control", "policy"],
@@ -1897,7 +1897,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-msi-enforcement",
                     Label = "Enable AppLocker Windows Installer (MSI) Enforcement",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Enables AppLocker Windows Installer collection enforcement, blocking MSI and MSP installer execution that does not match publisher or path allow rules, preventing unauthorised software installation.",
                     Tags = ["applocker", "msi", "installer", "application-control", "policy"],
@@ -1914,7 +1914,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-enable-applocker-event-logging",
                     Label = "Enable AppLocker Policy Enforcement Event Logging",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Configures the AppLocker event log to capture all rule enforcement (allowed, denied, audited) events in the Microsoft-Windows-AppLocker operational log for SOC and SIEM ingestion.",
                     Tags = ["applocker", "event-log", "audit", "application-control", "policy"],
@@ -1931,7 +1931,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-block-override-by-user",
                     Label = "Block Users from Overriding AppLocker Policy",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Prevents standard users from modifying AppLocker configuration via local policy, ensuring application control rules can only be changed via domain GPO or local administrator action.",
                     Tags = ["applocker", "override", "standard-user", "application-control", "policy"],
@@ -1948,7 +1948,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-allow-publisher-rules",
                     Label = "Allow Publisher-Based Rules as Default AppLocker Allow Strategy",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Configures AppLocker to prefer publisher rules (signed certificate chains) over path rules, enabling software to be allowed based on an identified digital signature rather than a potentially spoofable file path.",
                     Tags = ["applocker", "publisher-rules", "digital-signature", "application-control", "policy"],
@@ -1965,7 +1965,7 @@ internal static class PolicyAppControl
                 {
                     Id = "alockadv-disable-applocker-telemetry",
                     Label = "Disable AppLocker Enforcement Telemetry to Microsoft",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Prevents AppLocker from sending enforcement telemetry (blocked app names, hashes, publisher names) to Microsoft, protecting internal application inventory from cloud disclosure.",
                     Tags = ["applocker", "telemetry", "privacy", "microsoft", "application-control", "policy"],
@@ -1997,7 +1997,7 @@ internal static class PolicyAppControl
                 {
                     Id = "applocker-enable-appid-service",
                     Label = "Enable Application Identity Service for AppLocker",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description =
                         "Configures the Application Identity (AppIDSvc) service to start automatically, which is required for AppLocker enforcement.",
                     Tags = ["applocker", "appid", "service", "policy", "application-control"],
@@ -2014,7 +2014,7 @@ internal static class PolicyAppControl
                 {
                     Id = "applocker-enable-exe-auditing",
                     Label = "Enable AppLocker EXE Execution Auditing",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description = "Enables event log auditing for all AppLocker EXE allow and deny events for visibility without enforcement.",
                     Tags = ["applocker", "exe", "audit", "event-log", "policy"],
                     NeedsAdmin = true,
@@ -2030,7 +2030,7 @@ internal static class PolicyAppControl
                 {
                     Id = "applocker-block-user-rule-creation",
                     Label = "Block Standard Users from Creating AppLocker Exceptions",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description = "Prevents standard (non-administrator) users from creating AppLocker exception rules or publisher overrides.",
                     Tags = ["applocker", "user-rules", "policy", "application-control", "security"],
                     NeedsAdmin = true,
@@ -2046,7 +2046,7 @@ internal static class PolicyAppControl
                 {
                     Id = "applocker-enable-performance-logging",
                     Label = "Enable AppLocker Performance Event Logging",
-                    Category = "Security",
+                    Category = "Security — Application Restart",
                     Description = "Enables detailed performance telemetry logging for AppLocker rule evaluations to the event log.",
                     Tags = ["applocker", "performance", "logging", "policy", "diagnostics"],
                     NeedsAdmin = true,
@@ -2078,7 +2078,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-enable-wdac-event-logging",
                 Label = "Enable WDAC / Code Integrity Operational Event Log",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["wdac", "code integrity", "security", "audit", "event log"],
@@ -2114,7 +2114,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-block-vulnerable-driver-list",
                 Label = "Enable Microsoft Vulnerable Driver Blocklist",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["wdac", "security", "driver", "blocklist", "kernel"],
@@ -2129,7 +2129,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-enable-smart-app-control-policy",
                 Label = "Enable Smart App Control in Evaluate Mode",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Tags = ["wdac", "smart app control", "security", "application control"],
@@ -2147,7 +2147,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-enable-hvci-strict",
                 Label = "Enable Hypervisor-Protected Code Integrity (HVCI) Strict Mode",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["wdac", "hvci", "security", "hypervisor", "kernel"],
@@ -2170,7 +2170,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-enable-credential-guard",
                 Label = "Enable Windows Credential Guard",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["credential guard", "security", "lsa", "pass-the-hash", "vbs"],
@@ -2185,7 +2185,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-block-ms-store-unsigned-apps",
                 Label = "Block Unsigned Apps from Non-Store Sources (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["applocker", "security", "unsigned", "policy", "gpo"],
@@ -2208,7 +2208,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-disable-auto-play-allowlisting",
                 Label = "Disable AutoPlay for Non-Listed Devices",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["applocker", "security", "autoplay", "usb", "policy"],
@@ -2223,7 +2223,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-enable-lsa-protected-process",
                 Label = "Enable LSA Protected Process Light (PPL)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["lsa", "security", "credential", "protected process", "anti-tamper"],
@@ -2238,7 +2238,7 @@ internal static class PolicyAppControl
             {
                 Id = "apl-disable-office-macro-execution",
                 Label = "Block Office Macro Execution from Internet-Origin Files",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["office", "macro", "security", "applocker", "wdac", "policy"],
@@ -2283,7 +2283,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-camera-access",
                 Label = "Block All Apps from Accessing Camera (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2301,7 +2301,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-microphone-access",
                 Label = "Block All Apps from Accessing Microphone (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2319,7 +2319,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-location-access",
                 Label = "Block All Apps from Accessing Location (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2337,7 +2337,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-contacts-access",
                 Label = "Block All Apps from Accessing Contacts (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2354,7 +2354,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-calendar-access",
                 Label = "Block All Apps from Accessing Calendar (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2372,7 +2372,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-call-history-access",
                 Label = "Block All Apps from Accessing Call History (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2390,7 +2390,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-email-access",
                 Label = "Block All Apps from Accessing Email (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2408,7 +2408,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-documents-access",
                 Label = "Block All Apps from Accessing Documents Library (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2426,7 +2426,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-diagnostic-info",
                 Label = "Block Apps from Accessing Diagnostic Information (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2444,7 +2444,7 @@ internal static class PolicyAppControl
             {
                 Id = "aperm-deny-radio-access",
                 Label = "Block All Apps from Controlling Radios (GPO)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2472,7 +2472,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-notifications",
                 Label = "Policy: Force-Deny All UWP Apps Notification Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2491,7 +2491,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-account-info",
                 Label = "Policy: Force-Deny All UWP Apps Account Information Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2509,7 +2509,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-device-sync",
                 Label = "Policy: Deny UWP Apps Near-Device Sync (Bluetooth/NFC)",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2527,7 +2527,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-phone-calls",
                 Label = "Policy: Force-Deny All UWP Apps Phone Call Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2543,7 +2543,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-tasks",
                 Label = "Policy: Force-Deny All UWP Apps Task List Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2561,7 +2561,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-messaging",
                 Label = "Policy: Force-Deny All UWP Apps SMS / Messaging Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2577,7 +2577,7 @@ internal static class PolicyAppControl
             {
                 Id = "appp-deny-video-library",
                 Label = "Policy: Force-Deny All UWP Apps Video Library Access",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2603,7 +2603,7 @@ internal static class PolicyAppControl
             {
                 Id = "appprv2-deny-trusted-devices",
                 Label = "App Privacy: Block all UWP apps from accessing trusted devices",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 Description =
                     "Sets LetAppsAccessTrustedDevices=2 in AppPrivacy policy. Prevents all UWP apps from "
                     + "communicating with previously paired/trusted Bluetooth and USB devices.",
@@ -2618,7 +2618,7 @@ internal static class PolicyAppControl
             {
                 Id = "appprv2-deny-gaze-input",
                 Label = "App Privacy: Block all UWP apps from accessing gaze/eye-tracking input",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 Description =
                     "Sets LetAppsAccessGazeInput=2 in AppPrivacy policy. Prevents all UWP apps from "
                     + "reading gaze or eye-tracking data from supported hardware at machine policy level.",
@@ -2633,7 +2633,7 @@ internal static class PolicyAppControl
             {
                 Id = "appprv2-deny-activate-with-voice",
                 Label = "App Privacy: Block all UWP apps from background voice activation",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 Description =
                     "Sets LetAppsActivateWithVoice=2 in AppPrivacy policy. Prevents all UWP apps from "
                     + "using wake-word / voice activation to start from a background or suspended state.",
@@ -2648,7 +2648,7 @@ internal static class PolicyAppControl
             {
                 Id = "appprv2-deny-activate-with-voice-above-lock",
                 Label = "App Privacy: Block voice activation above the lock screen",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 Description =
                     "Sets LetAppsActivateWithVoiceAboveLock=2 in AppPrivacy policy. Prevents all UWP apps "
                     + "from responding to wake-word voice commands when the device is locked.",
@@ -2673,7 +2673,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-service",
                 Label = "Disable App Readiness Service",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2690,7 +2690,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-logging",
                 Label = "Disable App Readiness Logging",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2707,7 +2707,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-prelaunch",
                 Label = "Disable App Pre-Launch",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2724,7 +2724,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-prefetch",
                 Label = "Disable App Readiness Prefetch",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2741,7 +2741,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-telemetry",
                 Label = "Disable App Readiness Telemetry",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2758,7 +2758,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-readiness-score",
                 Label = "Disable App Readiness Score",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2775,7 +2775,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-zero-max-wait",
                 Label = "Set Max App Readiness Wait to Zero",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2792,7 +2792,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-first-signin-animation",
                 Label = "Disable First Sign-In Animation",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2809,7 +2809,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-registration-prompt",
                 Label = "Disable App Registration Prompt",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2826,7 +2826,7 @@ internal static class PolicyAppControl
             {
                 Id = "apprdy-disable-default-apps-choice",
                 Label = "Disable Default Apps Choice Screen",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2853,7 +2853,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-enforce-ipc-isolation-between-silos",
                 Label = "Enforce Inter-Process Communication Isolation Between Application Silos",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2870,7 +2870,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-restrict-silo-exit-control-flow",
                 Label = "Restrict Control Flow Exits from Application Silo to Host Environment",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2887,7 +2887,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-enable-silo-resource-monitoring",
                 Label = "Enable Advanced Resource Usage Monitoring for Application Silo Environments",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2904,7 +2904,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-enforce-silo-network-namespace",
                 Label = "Enforce Dedicated Network Namespace Isolation for Application Silos",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2921,7 +2921,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-block-silo-kernel-object-access",
                 Label = "Block Application Silo Access to Unauthorized Kernel Objects",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2938,7 +2938,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-restrict-silo-registry-scope",
                 Label = "Restrict Application Silo Registry Access to Silo-Scoped Registry Namespace",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2955,7 +2955,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-enforce-silo-security-event-logging",
                 Label = "Enforce Security Event Logging for Application Silo Policy Violations",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2972,7 +2972,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-block-cross-silo-token-inheritance",
                 Label = "Block Security Token Inheritance Across Application Silo Boundaries",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2989,7 +2989,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-restrict-silo-debug-capabilities",
                 Label = "Restrict Debugger Attachment Capabilities Within Application Silo Environments",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3006,7 +3006,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsilob-enforce-silo-identity-isolation",
                 Label = "Enforce Identity Isolation to Prevent Cross-Silo Identity Context Sharing",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3033,7 +3033,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-enable-silo-isolation",
                 Label = "Enable App Silo Process Isolation for Privileged Process Containers",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3050,7 +3050,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-restrict-silo-network-access",
                 Label = "Restrict Silo Network Access to Allowlisted Endpoints",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3067,7 +3067,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-block-silo-registry-writes",
                 Label = "Block Silo Processes from Writing to System Registry Hives",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3084,7 +3084,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-restrict-silo-filesystem-access",
                 Label = "Restrict Silo Processes to Designated File System Namespaces",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3101,7 +3101,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-enable-silo-audit-logging",
                 Label = "Enable Audit Logging for App Silo Isolation Events",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3118,7 +3118,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-restrict-silo-token-privileges",
                 Label = "Restrict Security Token Privileges for Silo Process Execution",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3135,7 +3135,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-enable-silo-integrity-monitoring",
                 Label = "Enable File Integrity Monitoring for App Silo Container Contents",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3152,7 +3152,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-restrict-silo-object-access",
                 Label = "Restrict Silo Access to Named Objects and Synchronization Primitives",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3169,7 +3169,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-set-silo-memory-limit",
                 Label = "Set Memory Usage Limits for App Silo Process Containers",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3186,7 +3186,7 @@ internal static class PolicyAppControl
             {
                 Id = "appsiloa-enable-silo-crash-reporting",
                 Label = "Enable Crash Reporting for App Silo Security Boundary Failure Analysis",
-                Category = "Security",
+                Category = "Security — Application Restart",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3217,7 +3217,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-enable-package-scripts",
                 Label = "Allow Scripts Inside App-V Packages",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "scripts", "virtualization", "packages", "policy"],
@@ -3233,7 +3233,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-block-high-cost-launch",
                 Label = "Block App-V Package Launch on Metered Connections",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "metered", "launch", "streaming", "cost"],
@@ -3249,7 +3249,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-require-admin-to-publish",
                 Label = "Require Admin Rights to Publish App-V Packages Globally",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "publish", "admin", "security", "policy"],
@@ -3265,7 +3265,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-autoload-previously-used",
                 Label = "Auto-Load Previously Used App-V Packages in Background",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "autoload", "background", "streaming", "performance"],
@@ -3281,7 +3281,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-disable-shared-content-store",
                 Label = "Disable App-V Shared Content Store Mode",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "content-store", "disk", "streaming", "cache"],
@@ -3298,7 +3298,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-enable-process-interop",
                 Label = "Enable App-V Process Interoperability",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "interop", "process", "integration", "virtual"],
@@ -3315,7 +3315,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-block-virtual-com-objects",
                 Label = "Block Virtual COM Object Creation from App-V",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "com", "virtual", "objects", "security"],
@@ -3331,7 +3331,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-enable-reporting",
                 Label = "Enable App-V Usage Reporting",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "reporting", "telemetry", "usage", "analytics"],
@@ -3347,7 +3347,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-reporting-interval-24h",
                 Label = "Set App-V Reporting Upload Interval to 24 Hours",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "reporting", "interval", "upload", "schedule"],
@@ -3363,7 +3363,7 @@ internal static class PolicyAppControl
             {
                 Id = "appv-streaming-timeout-120s",
                 Label = "Set App-V Streaming Connection Timeout to 120 Seconds",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["appv", "streaming", "timeout", "network", "performance"],
@@ -3389,7 +3389,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-disable-side-loading",
                 Label = "Disable App Side-Loading (AppX Side-loading Policy)",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3406,7 +3406,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-restrict-app-store-to-private",
                 Label = "Restrict Microsoft Store to Private Store Only",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3423,7 +3423,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-disable-automatic-updates",
                 Label = "Disable Automatic AppX Package Updates",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3440,7 +3440,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-require-package-signing",
                 Label = "Require Digital Signature for AppX Packages",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3457,7 +3457,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-block-consumer-apps",
                 Label = "Block Consumer Microsoft Apps from Store",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3474,7 +3474,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-disable-shared-user-app-updates",
                 Label = "Disable AppX Updates for All Users Context",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3491,7 +3491,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-enable-package-inventory",
                 Label = "Enable AppX Package Installation Inventory Reporting",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3508,7 +3508,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-disable-user-store-access",
                 Label = "Disable User Access to Microsoft Store",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3525,7 +3525,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-audit-app-installations",
                 Label = "Enable AppX Installation Audit Logging",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3542,7 +3542,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxbnd-block-non-store-apps",
                 Label = "Block Installation of Apps Not from Store or MDM",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3569,7 +3569,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-sideloading",
                 Label = "Disable AppX Sideloading",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3586,7 +3586,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-developer-mode",
                 Label = "Disable Developer Mode for AppX Installation",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3603,7 +3603,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-package-update",
                 Label = "Disable Automatic AppX Package Updates",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3620,7 +3620,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-optional-components",
                 Label = "Disable AppX Optional Package Installation",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3637,7 +3637,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-shared-pkg-container",
                 Label = "Disable AppX Shared Package Container",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3654,7 +3654,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-hosted-app",
                 Label = "Disable Hosted AppX Applications",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3671,7 +3671,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-dynamic-content",
                 Label = "Disable AppX Package Dynamic Content Loading",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3688,7 +3688,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-package-telemetry",
                 Label = "Disable AppX Packaging Telemetry",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3705,7 +3705,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-uap5",
                 Label = "Disable UAP5 AppX Protocol Extensions",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3722,7 +3722,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxpkg-disable-staged-removal",
                 Label = "Disable AppX Package Staged Removal Delay",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3755,7 +3755,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-block-non-admin-install",
                 Label = "Block Non-Admin UWP App Installation",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3773,7 +3773,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-restrict-deployment-to-system-volume",
                 Label = "Restrict AppX Deployment to System Volume Only",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3791,7 +3791,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-disable-store-auto-update",
                 Label = "Disable Automatic App Updates from Microsoft Store",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3809,7 +3809,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-block-elevated-msi-install",
                 Label = "Block Always-Install-Elevated MSI Packages",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3827,7 +3827,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-block-user-elevated-msi",
                 Label = "Block User-Level Always-Elevated MSI Install",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3845,7 +3845,7 @@ internal static class PolicyAppControl
             {
                 Id = "appx-disable-shared-local-app-data",
                 Label = "Disable Shared LocalAppData Between Users (AppX)",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3873,7 +3873,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-require-private-store",
                 Label = "AppX Provisioning Policy: Require Private Corporate Store Only",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Restricts the Microsoft Store app to only display and deliver apps from the organisation's private corporate store. "
                     + "This prevents employees from browsing and installing consumer apps via the public Microsoft Store on managed devices. "
@@ -3894,7 +3894,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-disable-store-auto-update",
                 Label = "AppX Provisioning Policy: Disable Store App Auto-Updates",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Prevents the Microsoft Store from automatically updating installed applications in the background. "
                     + "Uncontrolled auto-updates can introduce incompatible application versions or consume bandwidth during business hours. "
@@ -3915,7 +3915,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-block-consumer-provision",
                 Label = "AppX Provisioning Policy: Block Consumer Experience App Provisioning",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Prevents Windows from silently provisioning consumer apps (games, entertainment apps) for new user accounts during first logon. "
                     + "Windows periodically pushes consumer APPX packages to endpoints over the air without explicit user action. "
@@ -3936,7 +3936,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-disable-appx-deployment-service",
                 Label = "AppX Provisioning Policy: Restrict APPX Deployment to Admin Only",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Restricts APPX package deployment operations to administrator accounts only, preventing standard users from installing APPX packages. "
                     + "Standard user-initiated APPX installs bypass traditional software management tools and can install unauthorised applications. "
@@ -3957,7 +3957,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-disable-appinstaller",
                 Label = "AppX Provisioning Policy: Disable App Installer Protocol Handler",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Disables the ms-appinstaller:// URI protocol handler that allows websites to trigger APPX installations directly in a browser. "
                     + "This protocol handler has been exploited in supply chain attacks where malicious links trigger silent APPX payload delivery. "
@@ -3978,7 +3978,7 @@ internal static class PolicyAppControl
             {
                 Id = "appxprov-disable-packaged-com",
                 Label = "AppX Provisioning Policy: Disable Packaged COM Activation Bypass",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Prevents APPX-packaged COM servers from activating out-of-process components that bypass standard COM registration security. "
                     + "Packaged COM can be used to load protected app components in unprotected contexts, weakening the UWP security sandbox model. "
@@ -4010,7 +4010,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-hypervisor-code-integrity",
                     Label = "WDAC: Enable HVCI (Hypervisor-Protected Code Integrity)",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets HypervisorEnforcedCodeIntegrity=1 in DeviceGuard policy. Enables Hypervisor-Protected Code Integrity (HVCI, also called Memory Integrity). HVCI moves kernel code integrity checking into the secure virtual machine backed by the CPU hypervisor, making it impossible for even a kernel-level exploit to modify the code signing enforcement rules. Without HVCI, a kernel exploit that gains ring-0 execution can disable code integrity by patching the CI routines in memory. HVCI requires hardware-enforced virtualisation (SLAT, IOMMU) and may require drivers to be WHQL-compliant. Incompatible drivers cause BSODs.",
                     Tags = ["hvci", "memory-integrity", "hypervisor", "kernel", "code-signing"],
@@ -4028,7 +4028,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-user-mode-code-integrity",
                     Label = "WDAC: Enable User-Mode Code Integrity (UMCI)",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets UsermodeCodeIntegrityPolicyEnforcementMode=1 in DeviceGuard policy. Enables enforcement of WDAC (Windows Defender Application Control) policies in user mode. UMCI extends application whitelisting from kernel-mode drivers to user-mode processes — requiring all executables (.exe, .dll, .ps1, script hosts) to be signed by trusted publishers before they are permitted to run. Without UMCI, application control only blocks untrusted kernel drivers. UMCI is the primary mechanism for application whitelisting that stops malware, ransomware, and living-off-the-land (LOtL) binaries from executing in user space.",
                     Tags = ["umci", "application-control", "whitelisting", "user-mode", "wdac"],
@@ -4046,7 +4046,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-srp-exe-control",
                     Label = "WDAC: Enable Software Restriction Policies for Executable Control",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets DefaultLevel=0 in SrpV2 policy. Configures Software Restriction Policies (SRP) to Disallowed mode for executable types not explicitly whitelisted. SRP is the compatibility-layer predecessor to AppLocker and WDAC — it operates as a ring-3 policy enforcement mechanism. In Disallowed mode, all executables are blocked unless a rule explicitly permits them. While WDAC is preferred for modern deployments, SRP provides a fallback enforcement layer for scenarios where WDAC policy is not yet in place or for downlevel OS compatibility within a mixed fleet.",
                     Tags = ["srp", "software-restriction", "disallowed-mode", "application-control", "whitelisting"],
@@ -4064,7 +4064,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-wdac-policy-refresh",
                     Label = "WDAC: Enable Policy Refresh for WDAC Code Integrity Rules",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets EnablePolicyRefresh=1 in DeviceGuard policy. Enables the ability to refresh WDAC code integrity policies at runtime without rebooting. Policy refresh allows administrators to push updated WDAC policy files to devices and have the new rules take effect immediately for newly spawned processes, without requiring the device to restart. Without policy refresh, every WDAC policy update requires a reboot — making policy iteration and incident response much more disruptive in production environments. Refresh is a key operational enabler for WDAC managed environments.",
                     Tags = ["wdac", "policy-refresh", "runtime-update", "no-reboot", "operations"],
@@ -4082,7 +4082,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-ci-audit-event-logging",
                     Label = "WDAC: Enable Code Integrity Audit Event Logging",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets AuditCodeIntegrityPolicyEnabled=1 in DeviceGuard policy. Enables audit event logging for Code Integrity policy violations in audit mode. When a WDAC policy is in audit mode (not enforcement mode), code that would have been blocked is logged as an audit event in the Microsoft-Windows-CodeIntegrity/Operational event log. These events include the binary path, the hash, the signing information, and why the binary would have been blocked. Audit events are essential for building the allow-list before switching to enforcement mode — production traffic can be captured and used to build an accurate whitelist.",
                     Tags = ["wdac", "audit-mode", "event-logging", "code-integrity", "allow-list-building"],
@@ -4100,7 +4100,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-block-vulnerable-driver-loading",
                     Label = "WDAC: Enable Vulnerable Driver Blocklist via HVCI",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets MicrosoftVulnerableDriverBlocklistEnabled=1 in DeviceGuard policy. Enables the Microsoft-maintained Vulnerable Driver Blocklist, which is a WDAC policy that prevents known WHQL-signed but vulnerable kernel drivers from loading. Attackers use BYOVD (Bring Your Own Vulnerable Driver) attacks where they load a legitimately signed but exploitable kernel driver and then use its vulnerabilities to escalate to ring-0 and bypass HVCI. The blocklist is updated by Microsoft with newly discovered vulnerable drivers and is applied at the hypervisor layer when HVCI is active.",
                     Tags = ["vulnerable-driver", "byovd", "hvci", "blocklist", "kernel"],
@@ -4118,7 +4118,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacapp-enable-smart-app-control-evaluation",
                     Label = "WDAC: Enable Smart App Control Evaluation Mode",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Sets SmartAppControlState=2 in DeviceGuard policy. Sets Smart App Control (SAC) to evaluation mode. SAC uses an AI-based cloud intelligence service combined with WDAC to block malware and potentially unwanted applications without requiring a pre-configured policy. In evaluation mode, SAC silently evaluates whether enforcement mode is feasible without disrupting existing workflows — if no legitimate app blocking would occur, it transitions to enforcement mode automatically. Value 2 = evaluation, 1 = enforcement, 0 = off. Evaluation mode is safe to enable on existing devices without the risk of blocking legitimate software.",
                     Tags = ["smart-app-control", "sac", "ai", "evaluation-mode", "malware-prevention"],
@@ -4146,7 +4146,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-require-signed-drivers",
                 Label = "Require Signed Kernel Drivers",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4163,7 +4163,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-require-cross-cert-chain",
                 Label = "Require Cross-Certificate Validation for Drivers",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4180,7 +4180,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-disable-test-signing",
                 Label = "Block Test Signing Mode",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4197,7 +4197,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-require-kernel-ehashes",
                 Label = "Enable Enhanced Hash Algorithm for Driver Signing",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4214,7 +4214,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-enable-code-integrity-policy",
                 Label = "Enable Code Integrity Policy Enforcement",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4231,7 +4231,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-block-vulnerable-drivers",
                 Label = "Enable Microsoft Vulnerable Driver Blocklist",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4248,7 +4248,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-require-signed-scripts",
                 Label = "Require Signed Executable Scripts",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4265,7 +4265,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-enable-umci",
                 Label = "Enable User Mode Code Integrity (UMCI)",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4282,7 +4282,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-block-dll-from-temp",
                 Label = "Block Code Loading from Temporary Directories",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4299,7 +4299,7 @@ internal static class PolicyAppControl
             {
                 Id = "codesign-audit-code-integrity",
                 Label = "Enable Code Integrity Audit Logging",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4328,7 +4328,7 @@ internal static class PolicyAppControl
                 {
                     Id = "storepol-disable-store-in-shelf",
                     Label = "Disable Microsoft Store Suggestions in Taskbar (Shelf)",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Prevents the Microsoft Store from displaying app suggestions and promotions in the Windows taskbar shelf and Start menu recommended section, reducing promotional clutter on managed corporate desktops.",
                     Tags = ["store", "shelf", "taskbar", "suggestions", "policy"],
@@ -4345,7 +4345,7 @@ internal static class PolicyAppControl
                 {
                     Id = "storepol-disable-app-license-acquisition",
                     Label = "Disable Automatic App License Acquisition from Store",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Prevents applications from automatically acquiring new or updated licenses from the Microsoft Store License Service in the background, ensuring license state changes are predictable and do not occur without admin approval.",
                     Tags = ["store", "license", "auto-acquisition", "policy"],
@@ -4362,7 +4362,7 @@ internal static class PolicyAppControl
                 {
                     Id = "storepol-disable-store-update-background",
                     Label = "Disable Background App Update via Microsoft Store",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Prevents installed UWP apps from automatically updating in the background via the Store update service, ensuring app version changes go through controlled deployment channels.",
                     Tags = ["store", "auto-update", "background", "uwp", "policy"],
@@ -4379,7 +4379,7 @@ internal static class PolicyAppControl
                 {
                     Id = "storepol-disable-store-telemetry",
                     Label = "Disable Microsoft Store Telemetry to Microsoft",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Prevents the Microsoft Store client from sending browsing history, search queries, purchase activity, and app installation statistics to Microsoft.",
                     Tags = ["store", "telemetry", "privacy", "microsoft", "policy"],
@@ -4396,7 +4396,7 @@ internal static class PolicyAppControl
                 {
                     Id = "storepol-log-appx-install-events",
                     Label = "Log Appx Package Installation Events in Security Log",
-                    Category = "Security",
+                    Category = "Security — App Virtualization",
                     Description =
                         "Enables Security event log entries for every Appx/MSIX package installation, update, and removal event, providing a complete audit trail of UWP app deployments on the endpoint.",
                     Tags = ["store", "appx", "audit", "event-log", "install", "policy"],
@@ -4423,7 +4423,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-patch-install",
                 Label = "Prevent Users from Patching MSI Packages",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisablePatch=1 in Windows Installer policy. Prevents users from patching any MSI application by blocking the application of .msp patch files. Only administrators can apply patches. Stops untrusted patches from silently modifying installed applications.",
                 Tags = ["msi", "installer", "patch", "policy", "security"],
@@ -4437,7 +4437,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-source-browsing",
                 Label = "Prevent Users from Browsing Install Sources",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisableBrowse=1 in Windows Installer policy. Prevents the Windows Installer from allowing users to browse for an installation source (e.g., a different CD or network share) when a product is being repaired or re-installed. All installs must use the cached or registered source path.",
                 Tags = ["msi", "installer", "browse", "policy", "security"],
@@ -4451,7 +4451,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-restrict-user-installs",
                 Label = "Restrict MSI Installs to Elevated Users Only",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisableMSI=1 in Windows Installer policy. Restricts Windows Installer so that only administrators can install MSI packages (standard users receive an error). Value 0=allow all, 1=admins only, 2=block all MSI. Setting 1 prevents software installation by standard accounts.",
                 Tags = ["msi", "installer", "restrict", "policy", "security"],
@@ -4465,7 +4465,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-secure-transforms",
                 Label = "Secure MSI Transform Files in User Profile",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets TransformsSecure=1 in Windows Installer policy. Instructs the Windows Installer to store MSI transform (.mst) files in a secure location in the user profile rather than in the TEMP directory. Prevents other users from tampering with transform files used during product re-installation.",
                 Tags = ["msi", "installer", "transforms", "policy", "security"],
@@ -4479,7 +4479,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-scripting",
                 Label = "Disable Unsafe MSI Script Execution",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets SafeForScripting=0 in Windows Installer policy. Disables the ability for web-based content or scripts to silently invoke the Windows Installer COM object to install software. Prevents drive-by installations triggered by browser scripts or malicious web pages.",
                 Tags = ["msi", "installer", "scripting", "policy", "security"],
@@ -4493,7 +4493,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-enforce-upgrade-component-rules",
                 Label = "Enforce MSI Upgrade Component Rules",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets EnforceUpgradeComponentRules=1 in Windows Installer policy. Causes the Windows Installer to reject patches that would violate component rules during an upgrade sequence. Prevents improperly authored patches from corrupting installed applications by adding or removing component references outside of the product's authorised upgrade path.",
                 Tags = ["msi", "installer", "upgrade", "policy", "integrity"],
@@ -4507,7 +4507,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-limit-restore-checkpoints",
                 Label = "Limit System Restore Points During MSI Install",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets LimitSystemRestoreCheckpointing=1 in Windows Installer policy. Prevents the Windows Installer from creating a System Restore checkpoint before every package installation. Reduces System Restore disk space consumption and write activity on machines where MSI packages are frequently deployed.",
                 Tags = ["msi", "installer", "restore", "policy", "performance"],
@@ -4521,7 +4521,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-lockdown-browse-ui",
                 Label = "Restrict Browse UI in Lockdown Mode",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisableLockdownBrowseUI=1 in Windows Installer policy. When an MSI package runs in locked-down mode (elevated), this setting prevents the installer from displaying any file-browse dialogs that would let the user navigate the file system during setup. Closes a potential path-traversal risk in privileged installer contexts.",
                 Tags = ["msi", "installer", "lockdown", "policy", "security"],
@@ -4535,7 +4535,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-forbidden-patch",
                 Label = "Restrict Patching to Authorised Patch Lists",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisableForbidPatch=0 in Windows Installer policy. Ensures that patch policies (AllowedPatchList / ForbiddenPatchList) are honoured by the Windows Installer, so only administrator-approved patches can be applied to managed MSI products. Value 1 would disable the forbidden list enforcement.",
                 Tags = ["msi", "installer", "patch", "policy", "security"],
@@ -4549,7 +4549,7 @@ internal static class PolicyAppControl
             {
                 Id = "msipol-disable-media-source-fallback",
                 Label = "Disable MSI Source Fallback to Removable Media",
-                Category = "Security",
+                Category = "Security — App Virtualization",
                 Description =
                     "Sets DisableMedia=1 in Windows Installer policy. Prevents the Windows Installer from falling back to removable media (CD/DVD/USB) as an installation source when the cached or network source is unavailable. Stops users from introducing software from removable media during repair or re-installation.",
                 Tags = ["msi", "installer", "media", "policy", "security"],
@@ -4573,7 +4573,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-developer-mode",
                     Label = "Disable Windows Developer Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents enabling Windows Developer Mode, which allows sideloading of unsigned or developer-signed MSIX/AppX packages and activates various debug features. Reduces the attack surface on production endpoints. Default: toggle available to users. Recommended: 1.",
                     Tags = ["developer-mode", "sideloading", "appx", "security", "policy"],
@@ -4590,7 +4590,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-debuggable-package-install",
                     Label = "Block Installation of Debug-Flagged Packages",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents installation of MSIX/AppX packages compiled with the debuggable attribute. Debug-flagged packages may expose app internals to debugger attachment without normal authentication. Default: install allowed. Recommended: 1 on production machines.",
                     Tags = ["developer-mode", "debuggable", "appx", "package", "security", "policy"],
@@ -4607,7 +4607,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-test-signing",
                     Label = "Disable AppX Test Signing Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents Windows from entering AppX test-signing mode that allows packages signed with developer test certificates to execute. Only packages from the Microsoft Store or trusted enterprise signing chains may run. Default: test signing disabled by default on non-dev machines. Recommended: 1.",
                     Tags = ["developer-mode", "test-signing", "certificate", "appx", "security", "policy"],
@@ -4624,7 +4624,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-loopback-for-packages",
                     Label = "Disable AppX Network Loopback Exemption",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents packaged apps from using the network loopback (localhost 127.0.0.1), which is normally blocked by AppContainer isolation. Loopback exemption is a common developer workaround that weakens sandbox isolation. Default: loopback blocked by default. Recommended: 1 to lockdown on production.",
                     Tags = ["developer-mode", "loopback", "appcontainer", "sandbox", "network", "policy"],
@@ -4641,7 +4641,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-device-portal",
                     Label = "Disable Windows Device Portal",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Blocks enabling the Windows Device Portal (a web-based debug interface accessible over Wi-Fi/Ethernet when Developer Mode is on). Eliminates a remote code execution surface. Default: disabled unless Developer Mode is on. Recommended: 1.",
                     Tags = ["developer-mode", "device-portal", "remote-access", "web", "security", "policy"],
@@ -4658,7 +4658,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-diagnostics-tracking",
                     Label = "Block AppX Diagnostic Tracking",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Stops packaged apps from submitting debug diagnostics and crash telemetry to the Windows Debug & Diagnostics channel. Prevents app stability data from leaving the device. Default: tracking enabled. Recommended: 1 for data-sovereignty.",
                     Tags = ["developer-mode", "diagnostics", "tracking", "telemetry", "appx", "policy"],
@@ -4675,7 +4675,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-background-task-debug",
                     Label = "Block Background Task Debugger Attachment",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents debuggers from attaching to packaged app background task processes. Reduces risk of debugger-based runtime code injection targeting background agents. Default: not restricted. Recommended: 1 on production endpoints.",
                     Tags = ["developer-mode", "background-task", "debugger", "injection", "appx", "policy"],
@@ -4692,7 +4692,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-disable-fiddler-proxy-debug",
                     Label = "Block HTTP Debug Proxy for AppX Traffic",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents packaged apps from routing their HTTP/HTTPS traffic through a debugging proxy (such as Fiddler). AppContainer typically blocks proxy use; this policy reinforces that restriction. Default: proxy debug blocked. Recommended: 1.",
                     Tags = ["developer-mode", "proxy", "fiddler", "appcontainer", "appx", "policy"],
@@ -4709,7 +4709,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-enable-package-integrity-check",
                     Label = "Enforce AppX Package Integrity Check on Load",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables cryptographic integrity verification on packaged app binaries at load time. Detects and blocks tampered or patched AppX packages before execution. Default: integrity checks at install time only. Recommended: 1 for high-security deployments.",
                     Tags = ["developer-mode", "integrity", "signature", "appx", "anti-tamper", "policy"],
@@ -4726,7 +4726,7 @@ internal static class PolicyAppControl
                 {
                     Id = "padebug-log-sideload-attempts",
                     Label = "Audit Log All AppX Sideload Attempts",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Records all attempts to sideload (install from outside the Store) AppX/MSIX packages to the Security audit log. Provides forensic visibility into unauthorised package install attempts. Default: not audited. Recommended: 1.",
                     Tags = ["developer-mode", "sideload", "audit", "appx", "forensics", "policy"],
@@ -4753,7 +4753,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-push-to-install",
                 Label = "Disable Push-To-Install Service",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4774,7 +4774,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-remote-push",
                 Label = "Disable Remote Push App Delivery",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4795,7 +4795,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-auto-provisioning",
                 Label = "Disable Push-To-Install Auto Provisioning",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4816,7 +4816,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-device-management-push",
                 Label = "Disable Device Management Push Installs",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4838,7 +4838,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-store-push-notifications",
                 Label = "Disable Push-To-Install Store Notifications",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4859,7 +4859,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-install-telemetry",
                 Label = "Disable Push-To-Install Telemetry",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4880,7 +4880,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-require-admin-approval",
                 Label = "Require Admin Approval for Push-To-Install",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4901,7 +4901,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-unattended-push",
                 Label = "Disable Unattended Push-To-Install",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4922,7 +4922,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-cross-device-sync",
                 Label = "Disable Push-To-Install Cross-Device Sync",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4943,7 +4943,7 @@ internal static class PolicyAppControl
             {
                 Id = "pti-disable-push-service-wake",
                 Label = "Disable Push-To-Install Service Wake",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4976,7 +4976,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-block-policy-change",
                     Label = "Block User Changes to Smart App Control State",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents users from changing the Smart App Control state (evaluation / on / off) via Windows Security settings. The state set by the administrator via policy is locked in place.",
                     Tags = ["sac", "smart-app-control", "policy", "user-lock", "windows-11"],
@@ -4995,7 +4995,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-enable-enforcement-mode",
                     Label = "Set Smart App Control to Enforcement Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Forces Smart App Control into full Enforcement mode, blocking unsigned and reputation-negative apps from running. Moves the system out of Evaluation mode.",
                     Tags = ["sac", "smart-app-control", "enforcement", "app-block", "security"],
@@ -5015,7 +5015,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-disable-evaluation-mode",
                     Label = "Disable Smart App Control Evaluation Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents Windows from running Smart App Control in Evaluation mode, which silently collects data about apps that would be blocked by enforcement. Requires choosing explicit On or Off state.",
                     Tags = ["sac", "smart-app-control", "evaluation", "policy", "windows-11"],
@@ -5034,7 +5034,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-require-signed-publishers",
                     Label = "Require Signed Publishers for All Executable Content",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Configures Smart App Control to require a valid, traceable code-signing publisher certificate for all PE executables, MSI packages, and scripts. Unsigned content is blocked.",
                     Tags = ["sac", "smart-app-control", "code-signing", "publisher", "security"],
@@ -5054,7 +5054,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-block-malicious-script-execution",
                     Label = "Block Script Files Identified as Malicious by SAC",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables Smart App Control to block script execution (JS, VBS, PS1, CMD) when the script file or publisher is identified as malicious by the Microsoft Intelligent Security Graph.",
                     Tags = ["sac", "smart-app-control", "scripts", "malicious", "security"],
@@ -5073,7 +5073,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-audit-blocked-file-events",
                     Label = "Enable Audit Events for SAC-Blocked Files",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Configures Smart App Control to write an Windows event for every file that is blocked or audited, including the file hash, publisher, and reason for the block decision.",
                     Tags = ["sac", "smart-app-control", "audit", "event-log", "compliance"],
@@ -5092,7 +5092,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-disable-cloud-lookup",
                     Label = "Disable Smart App Control Cloud Reputation Lookup",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents SAC from sending file hashes and metadata to the Microsoft Intelligent Security Graph cloud service for reputation evaluation. SAC falls back to local developer-mode checks only.",
                     Tags = ["sac", "smart-app-control", "cloud", "privacy", "network-isolation"],
@@ -5112,7 +5112,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-extend-to-network-paths",
                     Label = "Apply Smart App Control to Network-Path Executables",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Extends Smart App Control enforcement to executables launched from UNC network paths and mapped drives, not just local storage. Prevents bypass by placing unsigned tools on a file share.",
                     Tags = ["sac", "smart-app-control", "network", "unc-path", "security"],
@@ -5132,7 +5132,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-block-lolbas-abuse",
                     Label = "Block Known LOLBAS Misuse via Smart App Control",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables additional Smart App Control rules that block known Living-off-the-Land Binaries and Scripts (LOLBAS) from being used in patterns typically associated with attackers (e.g., certutil download, regsvr32 scriptlet).",
                     Tags = ["sac", "smart-app-control", "lolbas", "living-off-land", "security"],
@@ -5152,7 +5152,7 @@ internal static class PolicyAppControl
                 {
                     Id = "sac-enable-intelligent-security-graph",
                     Label = "Enable Intelligent Security Graph Integration for SAC",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables the Microsoft Intelligent Security Graph (ISG) integration for Smart App Control, allowing real-time reputation data from the Microsoft cloud threat intelligence service to inform allow/deny decisions.",
                     Tags = ["sac", "smart-app-control", "isg", "cloud-intelligence", "security"],
@@ -5184,7 +5184,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-set-default-security-level-disallowed",
                     Label = "SRP Advanced: Set Default Security Level to Disallowed",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets DefaultLevel=0 in Safer\\CodeIdentifiers policy (Disallowed). Sets the Software Restriction Policy default security level to Disallowed — all software is blocked unless a specific rule permits it. This is the highest-restriction SRP configuration. In contrast to the default Unrestricted level (all software permitted unless explicitly blocked), Disallowed mode provides a default-deny application control stance. Combined with appropriate allow rules for legitimate applications, this prevents any unauthorised executable from running. This is the pre-AppLocker/pre-WDAC approach that still works for all Windows editions without WDAC infrastructure.",
                     Tags = ["srp", "disallowed", "default-deny", "application-control", "whitelist"],
@@ -5202,7 +5202,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-block-executable-from-temp-dirs",
                     Label = "SRP Advanced: Block Executables Running from Temp Directories",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets Level=0 (Disallowed) for a SRP path rule on %TEMP% and %LocalAppData%\\Temp. Malware frequently drops its first-stage payload into the user's Temp directory and executes from there because Temp directories are always user-writable and are rarely monitored or blocked by application control. Blocking executable launch from Temp directories is one of the most effective single controls to prevent drive-by-download malware and phishing payload execution — the majority of malware first-stage binaries that arrive via email attachment or browser download land in Temp.",
                     Tags = ["srp", "temp-directory", "malware-stage1", "drive-by", "exe-block"],
@@ -5220,7 +5220,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-skip-admin-from-srp",
                     Label = "SRP Advanced: Exempt Administrators from SRP Restrictions",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets PolicyScope=1 in Safer\\CodeIdentifiers policy. Configures Software Restriction Policies to apply only to standard users (non-administrators), exempting local administrator accounts from SRP restrictions. This is a pragmatic balance: local admins need to be able to run IT tools, deployment utilities, and diagnostic software that may not be in the SRP whitelist. Standard users (the majority of the workforce) are protected by default-deny SRP. Attackers who successfully elevate to admin circumvent SRP, but standard-user session compromise (the most common scenario) is blocked.",
                     Tags = ["srp", "admin-exempt", "policy-scope", "standard-users", "uac"],
@@ -5238,7 +5238,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-enable-drm-file-type-checking",
                     Label = "SRP Advanced: Enable DRM and Dangerous File Type Checking in SRP",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets ExecutableTypes=1 in Safer\\CodeIdentifiers policy. Enables Software Restriction Policy evaluation for a broader set of file types beyond .exe — including .dll, .ocx, .cpl, and other executable file extensions. Without this setting, SRP only checks .exe files. Attackers use .dll sideloading, .ocx files registered via regsvr32, and .cpl files opened via the Control Panel as stagers. Expanding SRP to cover all executable types significantly reduces the attack surface.",
                     Tags = ["srp", "dll-checking", "executable-types", "dll-sideloading", "cpl"],
@@ -5256,7 +5256,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-log-srp-policy-events",
                     Label = "SRP Advanced: Log All SRP Policy Evaluation Events",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets LogFileName set and verbose logging enabled via AuthenticodeEnabled=1 in Safer\\CodeIdentifiers policy. Enables SRP event logging, which records all policy evaluation decisions: every executable evaluated by SRP, whether it was permitted or blocked, which rule matched (or that the default level applied), and the full path to the evaluated binary. SRP event logs are written to the Application Event Log. This audit trail is essential for policy development (identifying what needs to be whitelisted before switching to Disallowed mode) and for detecting blocked attack attempts.",
                     Tags = ["srp", "logging", "audit", "event-log", "policy-development"],
@@ -5274,7 +5274,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-enable-applocker-dll-rules",
                     Label = "SRP Advanced: Enable AppLocker DLL Rule Enforcement",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets EnforceDLLRules=1 in AppLocker policy. Enables AppLocker DLL rule enforcement. By default, AppLocker only enforces rules for .exe, .msi, .ps1, and .appx files — it does not evaluate DLL loads unless explicitly enabled. Enabling DLL rules means AppLocker evaluates every DLL loaded by every process against the configured rule set, blocking known-bad or untrusted DLLs. This prevents DLL sideloading attacks (T1574.001) where a malicious DLL is placed in a directory from which a trusted executable loads it. DLL rule evaluation has performance overhead — most enterprises only enable it for high-security workloads.",
                     Tags = ["applocker", "dll-rules", "dll-sideloading", "enforcement", "application-control"],
@@ -5292,7 +5292,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-block-untrusted-fonts",
                     Label = "SRP Advanced: Block Untrusted Fonts from Loading in Kernel-Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets BlockUntrustedFonts=1 in System policy path under AppLocker. Enables the Untrusted Font Blocking feature that prevents untrusted fonts from being loaded by the Windows kernel font parsing code. Font parsing has historically been a major source of kernel privilege escalation vulnerabilities (CVE-2015-2426, CVE-2016-0180, etc.). When an untrusted font is loaded in kernel mode, any parsing vulnerability is immediately exploitable at ring-0. Blocking untrusted fonts means only fonts installed in the Windows Fonts directory are parsed in kernel mode — custom or downloaded fonts would need to be installed to system fonts.",
                     Tags = ["fonts", "kernel", "untrusted", "privilege-escalation", "cve-mitigation"],
@@ -5310,7 +5310,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-enable-applocker-audit-mode",
                     Label = "SRP Advanced: Enable AppLocker Audit-Only Mode for All Rule Collections",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets AuditAppLockerExe=1, AuditAppLockerScript=1 in AppLocker policy. Places AppLocker in audit mode for executable and script rule collections. In audit mode, AppLocker logs what it would have blocked without actually blocking anything. This is the essential first phase when building AppLocker policies for an environment — run in audit mode for 30–90 days, collect all events from the Microsoft-Windows-AppLocker/EXE and DLL, MSI and Script, and Packaged app-Deployment channels, and build allow rules from the audit events before switching to enforce mode.",
                     Tags = ["applocker", "audit-mode", "policy-development", "event-log", "deployment"],
@@ -5328,7 +5328,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-restrict-packaged-app-install",
                     Label = "SRP Advanced: Restrict MSIX/AppX Package Deployment to Signed Packages",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets AllowDevelopmentWithoutDevLicense=0 in AppLocker policy for packaged apps. Prevents unsigned MSIX/AppX packages (Developer Mode packages) from being installed and run on production machines. Developer Mode packages can be sideloaded from any source without going through the Microsoft Store signing process. An attacker who packages malware as an .msix file can install it silently on a machine with Developer Mode enabled, bypassing Store malware filtering. Restricting to signed packages only ensures all MSIX deployments go through a trusted signing infrastructure.",
                     Tags = ["msix", "appx", "developer-mode", "sideloading", "package-signing"],
@@ -5346,7 +5346,7 @@ internal static class PolicyAppControl
                 {
                     Id = "srpx-block-office-child-processes",
                     Label = "SRP Advanced: Block Office Applications from Creating Child Processes",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets BlockOfficeChildProcesses=1 in AppLocker policy. Implements an additional rule that prevents Microsoft Office applications (Word, Excel, PowerPoint, Outlook) from directly creating child processes (cmd.exe, powershell.exe, wscript.exe, etc.). This is a complementary enforcement layer to the identical Defender ASR rule and is enforced via AppLocker EXE rules. The vast majority of Office-spawning attacks (phishing macro + PowerShell download cradle) are blocked by preventing Office from creating child processes. This is one of the highest-fidelity attack detections with minimal false positives in enterprise environments.",
                     Tags = ["office", "child-process", "macro", "phishing", "applocker"],
@@ -5374,7 +5374,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-office-child",
                 Label = "ASR: Block Office Applications from Creating Child Processes",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5393,7 +5393,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-office-injection",
                 Label = "ASR: Block Office Applications from Injecting Code into Other Processes",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5411,7 +5411,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-obfuscated-scripts",
                 Label = "ASR: Block Execution of Obfuscated Scripts",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5431,7 +5431,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-lsass-dump",
                 Label = "ASR: Block Credential Stealing from LSASS",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5450,7 +5450,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-ransomware",
                 Label = "ASR: Advanced Protection Against Ransomware",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5470,7 +5470,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-email-executable",
                 Label = "ASR: Block Executable Content from Email Client and Webmail",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5489,7 +5489,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-wmi-persistence",
                 Label = "ASR: Block WMI Event Subscription Persistence",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5508,7 +5508,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-psexec-wmi",
                 Label = "ASR: Block Process Creations from PSExec and WMI Commands",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 4,
@@ -5528,7 +5528,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-usb-untrusted",
                 Label = "ASR: Block Untrusted and Unsigned Processes from USB",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5546,7 +5546,7 @@ internal static class PolicyAppControl
             {
                 Id = "wdac-asr-block-adobe-child",
                 Label = "ASR: Block Adobe Reader from Creating Child Processes",
-                Category = "Security",
+                Category = "Security — Packaged App Debug",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5577,7 +5577,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-disable-test-signing",
                     Label = "Disable Kernel Test Signing Mode (Block Development Bypass)",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents the kernel from loading drivers that are only test-signed (not production WHQL or EV-signed), closing the development bypass mode that allows unsigned driver loading without hardware attestation.",
                     Tags = ["wdac", "test-signing", "driver-signing", "kernel", "policy"],
@@ -5594,7 +5594,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-block-vulnerable-driver-loading",
                     Label = "Enable WDAC Vulnerable Driver Blocklist (Microsoft HVCI Blocklist)",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables the Microsoft-maintained vulnerable driver blocklist (applied via HVCI when memory integrity is on), preventing loading of known LOLBAS kernel drivers used for BYOVD (Bring Your Own Vulnerable Driver) kernel exploits.",
                     Tags = ["wdac", "vulnerable-driver", "byovd", "hvci", "blocklist", "policy"],
@@ -5611,7 +5611,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-require-whql-for-new-drivers",
                     Label = "Require WHQL Signature for New Kernel-Mode Drivers",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Configures code integrity to require WHQL (Windows Hardware Quality Lab) signatures on new kernel-mode drivers, blocking loading of drivers signed only with a self-signed or EV code signing certificate without WHQL attestation.",
                     Tags = ["wdac", "whql", "kernel-driver", "signing", "policy"],
@@ -5628,7 +5628,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-disable-dynamic-code-policy",
                     Label = "Set WDAC Dynamic Code Security Policy to Enforce Mode",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets the WDAC dynamic code policy to enforced mode, protecting dynamically generated code (JIT-compiled scripts, .NET, browsers) from injecting unsigned code pages that bypass static WDAC policy checks.",
                     Tags = ["wdac", "dynamic-code", "jit", "enforcement", "policy"],
@@ -5645,7 +5645,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-log-ci-failures",
                     Label = "Log Code Integrity Violation Events in CodeIntegrity Log",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables logging of code integrity block decisions in the Microsoft-Windows-CodeIntegrity/Operational event log channel, providing audit records of all executables and drivers blocked by WDAC or HVCI policy.",
                     Tags = ["wdac", "event-log", "audit", "ci-failure", "policy"],
@@ -5662,7 +5662,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-disable-debug-policy",
                     Label = "Disable WDAC Debug/Audit Mode (Enforce Kernel Debugging Disabled)",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents kernel debugging from being enabled on this system via bcdedit /debug, which would disable code integrity checks entirely, ensuring WDAC cannot be bypassed by attaching a kernel debugger.",
                     Tags = ["wdac", "kernel-debug", "debug-mode", "bypass", "policy"],
@@ -5679,7 +5679,7 @@ internal static class PolicyAppControl
                 {
                     Id = "wdacpol-disable-wdac-telemetry",
                     Label = "Disable WDAC Code Integrity Telemetry to Microsoft",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents WDAC and Windows Code Integrity from reporting blocked binary hashes, publisher names, violation rates, and policy effectiveness telemetry to Microsoft.",
                     Tags = ["wdac", "telemetry", "privacy", "microsoft", "policy"],
@@ -5706,7 +5706,7 @@ internal static class PolicyAppControl
                 {
                     Id = "winstadv-disable-msi-internet-sources",
                     Label = "Installer Adv: Disable MSI Package Installation from Internet Sources",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets DisableWebInstall=1 in Windows Installer policy. Prevents Windows Installer from downloading and installing MSI packages directly from internet URLs (http://, https://, ftp:// paths). Without this restriction, a shortcut or script can trigger an MSI download-and-install directly from an external web server. "
                         + "Internet-sourced MSI installation is an attack vector in phishing campaigns: a click on a malicious email attachment or web link can trigger a Windows Installer URL handler that downloads and executes a malicious MSI from an attacker-controlled server. The MSI runs with the context of the logged-in user and can contain PowerShell/VBScript custom actions. Modern LOLBins-based attacks use MSI download-and-run as a code execution mechanism that bypasses application whitelisting. Blocking internet MSI sources forces all installations to originate from approved internal sources (SCCM, Intune, network shares). ",
@@ -5725,7 +5725,7 @@ internal static class PolicyAppControl
                 {
                     Id = "winstadv-disable-advertised-shortcuts",
                     Label = "Installer Adv: Disable Advertised Shortcut Install-on-Demand to Prevent Elevation Abuse",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets DisableAdvertisedShortcuts=1 in Windows Installer policy. Disables the Windows Installer install-on-demand feature triggered by advertised shortcuts. Advertised shortcuts are MSI feature installation triggers — clicking an advertised shortcut to a feature that was not fully installed causes Windows Installer to complete the feature installation on demand, potentially with elevated privileges if the original product was installed elevated. "
                         + "Install-on-demand via advertised shortcut is a privilege escalation vector: if an MSI product was installed with elevated privileges and an advertised shortcut triggers on-demand installation of a not-yet-installed component, the Windows Installer service performs the installation at elevated privilege on behalf of the user. An attacker who can manipulate an advertised shortcut (via shortcut write access to a shared profile directory) can point it at a malicious MSI component ID — causing the Installer service to execute attacker-controlled code at SYSTEM privilege.",
@@ -5744,7 +5744,7 @@ internal static class PolicyAppControl
                 {
                     Id = "winstadv-disable-msi-in-locked-session",
                     Label = "Installer Adv: Block Elevated MSI Installs When Session is Locked",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets DisableLockdownInstall=1 in Windows Installer policy. Prevents elevation of Windows Installer packages when the user desktop is locked. Without this restriction, a standard user can trigger an elevated MSI installation (via RunAs or Invoke-Item) for a package that has a UI sequence, then lock their desktop — the Installer continues processing and a crafted DLL extraction step can write to system locations while the desktop is locked and unmonitored. "
                         + "Locked desktop MSI exploitation requires a multi-step attack: (1) trigger an elevated MSI with a crafted UI sequence, (2) lock the desktop before the custom action phase, (3) the custom action executes at SYSTEM during the locked desktop window delivering attacker payloads. This works because Windows Installer continues installation even while the session is locked (installation UI is suppressed but custom actions continue). DisableLockdownInstall=1 aborts any pending elevated installation when the desktop is locked.",
@@ -5773,7 +5773,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-disable-user-installs",
                     Label = "Restrict MSI Installation to Administrators",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents standard users from running Windows Installer packages, requiring administrator authorization for all MSI-based software installations.",
                     Tags = ["msi", "installer", "users", "admin", "policy"],
@@ -5791,7 +5791,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-deny-browsing-elevated-installs",
                     Label = "Deny Source Browsing During Elevated MSI Installs",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents elevated (lockdown) Windows Installer installations from browsing to an alternate source, closing a privilege escalation path where a user redirects an elevated install to a malicious package.",
                     Tags = ["msi", "installer", "browse", "lockdown", "elevation", "policy"],
@@ -5809,7 +5809,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-deny-media-elevated-installs",
                     Label = "Deny Removable Media Sources During Elevated MSI Installs",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents elevated (lockdown) Windows Installer installations from using removable media as an installation source, blocking disc- or USB-swap attacks on privileged installs.",
                     Tags = ["msi", "installer", "media", "usb", "lockdown", "elevation", "policy"],
@@ -5827,7 +5827,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-deny-patch-elevated-installs",
                     Label = "Deny Patching During Elevated MSI Installs",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents elevated (lockdown) Windows Installer installations from applying patches, ensuring patches cannot be injected during a privileged install session.",
                     Tags = ["msi", "installer", "patch", "lockdown", "elevation", "policy"],
@@ -5845,7 +5845,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-disable-patch-caching",
                     Label = "Disable MSI Patch File Caching",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Sets the maximum patch cache size to zero, preventing Windows Installer from caching patch files on disk and reclaiming storage consumed by stale .msp files.",
                     Tags = ["msi", "installer", "patch", "cache", "disk", "policy"],
@@ -5863,7 +5863,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-disable-user-control",
                     Label = "Disable User Control Over Installation Options",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Prevents users from overriding installation settings defined by system policy, ensuring enterprise MSI configurations remain authoritative and cannot be bypassed.",
                     Tags = ["msi", "installer", "control", "policy", "enterprise"],
@@ -5881,7 +5881,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-restrict-source-search-network",
                     Label = "Restrict MSI Source Search to Network Locations Only",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Configures Windows Installer to search only network locations (n) when resolving missing installation sources, preventing Installer from falling back to local drives or removable media.",
                     Tags = ["msi", "installer", "source", "network", "search", "policy"],
@@ -5899,7 +5899,7 @@ internal static class PolicyAppControl
                 {
                     Id = "msipl-enable-verbose-event-logging",
                     Label = "Enable Verbose MSI Event Logging",
-                    Category = "Security",
+                    Category = "Security — Packaged App Debug",
                     Description =
                         "Enables detailed Windows Installer event logging (voicewarmupx mode) to the Application event log, providing a comprehensive audit trail for all software install and remove operations.",
                     Tags = ["msi", "installer", "logging", "audit", "events", "policy"],
@@ -5927,7 +5927,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-wsh",
                 Label = "Disable Windows Script Host",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Blocks all WSH-based script execution (VBScript, JScript, CScript, WScript).",
                 Tags = ["script", "wsh", "security", "hardening"],
                 NeedsAdmin = true,
@@ -5943,7 +5943,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-remote-scripts",
                 Label = "Disable WSH Remote Script Execution",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents WSH from executing scripts that originate from remote (network) locations.",
                 Tags = ["script", "wsh", "remote", "security"],
                 NeedsAdmin = true,
@@ -5959,7 +5959,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-trustedcert-bypass",
                 Label = "Disable Trusted Certificate Script Bypass",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents scripts with a trusted code-signing certificate from bypassing the WSH Enabled=0 restriction.",
                 Tags = ["script", "wsh", "certificate", "security"],
                 NeedsAdmin = true,
@@ -5975,7 +5975,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-activex-in-scripts",
                 Label = "Block ActiveX Objects in WSH Scripts",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents WSH scripts from instantiating ActiveX/COM objects via CreateObject or GetObject.",
                 Tags = ["script", "wsh", "activex", "security"],
                 NeedsAdmin = true,
@@ -5991,7 +5991,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-embedded-scripts",
                 Label = "Block WSH Embedded Script Execution",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Disallows execution of scripts embedded inside other documents (e.g., HTML Application files).",
                 Tags = ["script", "wsh", "hta", "security"],
                 NeedsAdmin = true,
@@ -6007,7 +6007,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-wscript-host",
                 Label = "Disable WScript.exe Interactive Host",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents WScript.exe (GUI script host) from running scripts interactively.",
                 Tags = ["script", "wsh", "wscript", "security"],
                 NeedsAdmin = true,
@@ -6023,7 +6023,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-script-logging",
                 Label = "Enable WSH Script Execution Logging",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Enables audit logging of every script execution via WSH to the Application event log.",
                 Tags = ["script", "wsh", "logging", "audit"],
                 NeedsAdmin = true,
@@ -6039,7 +6039,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-script-ui",
                 Label = "Suppress WSH Interactive UI Prompts",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents scripts from displaying interactive dialog boxes (WScript.Echo, MsgBox).",
                 Tags = ["script", "wsh", "ui", "security"],
                 NeedsAdmin = true,
@@ -6055,7 +6055,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-legacy-vbscript",
                 Label = "Disable Legacy VBScript Engine via WSH",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Prevents the legacy VBScript engine from being loaded by WSH, mitigating known CVEs.",
                 Tags = ["script", "wsh", "vbscript", "security"],
                 NeedsAdmin = true,
@@ -6071,7 +6071,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsh-disable-cscript-host",
                 Label = "Disable CScript.exe Console Host",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description = "Restricts CScript.exe (the console WSH host) from executing scripts without administrator approval.",
                 Tags = ["script", "wsh", "cscript", "console"],
                 NeedsAdmin = true,
@@ -6097,7 +6097,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsfb-disable-store-purchase",
                 Label = "Windows Store For Business: Disable Store Purchases",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description =
                     "Prevents users from making paid purchases through the Microsoft Store. "
                     + "Without this policy, users can purchase apps, games, and media using personal or corporate payment methods. "
@@ -6118,7 +6118,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsfb-block-non-enterprise-apps",
                 Label = "Windows Store For Business: Block Non-Enterprise App Sideloading",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description =
                     "Prevents installation of non-enterprise (consumer) MSIX/AppX packages via sideloading or developer mode. "
                     + "Sideloading allows arbitrary package files to be deployed outside of Store or Intune validation. "
@@ -6139,7 +6139,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsfb-disable-store-implicit-access",
                 Label = "Windows Store For Business: Block Store Access for All Users",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description =
                     "Applies a machine-wide policy blocking all standard (non-admin) user accounts from accessing the Store. "
                     + "This complements user-scope Store restrictions by ensuring the policy is active for any user who logs onto the device. "
@@ -6160,7 +6160,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsfb-disable-in-app-purchases",
                 Label = "Windows Store For Business: Disable In-App Purchases",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description =
                     "Prevents in-app purchase (IAP) transactions within Store applications. "
                     + "Many free-to-download Store apps monetize via in-app purchases for premium content or subscriptions. "
@@ -6181,7 +6181,7 @@ internal static class PolicyAppControl
             {
                 Id = "wsfb-disable-gaming-store",
                 Label = "Windows Store For Business: Disable Gaming (Xbox) Store Content",
-                Category = "Security",
+                Category = "Security — Windows Script Host",
                 Description =
                     "Hides gaming-related content and Xbox app promotions within the Microsoft Store UX. "
                     + "On enterprise endpoints gaming content is irrelevant and can distract users from productivity applications. "
