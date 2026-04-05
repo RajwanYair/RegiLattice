@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.6.0] — 2026-04-05
+
+### Added
+
+- **Policy miscellaneous module 2** (`PolicyMisc2.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 657-661):
+  - `PolicyWindowsFeeds` (10) — Windows RSS/Atom Feeds platform: disable Windows Feeds, disable background sync, prevent feed subscription, prevent auto-discovery, lock feed list, block content download, block third-party feeds, disable reading pane, block enclosure (podcast) download, restrict feeds to HTTPS sources only
+  - `PolicyCompressedFolders` (10) — Compressed (ZIP/CAB) folder shell handler: disable ZIP virtual folder browsing, remove Extract All context menu, remove Compress to ZIP context menu, block network archive browsing, disable CAB browsing, block AutoRun inside archives, remove Send To Compressed Folder, enforce 512 MB archive size limit, disable archive preview handler in Reading Pane, require AV scan before opening archive content
+  - `PolicyWindowsChat` (10) — Teams consumer chat & Windows 11 Calling integration: hide Chat icon from taskbar, block consumer Teams, remove chat notification badge, suppress first-launch experience, block personal account linking, disable Windows Calling integration, prevent Calling service auto-start, block caller ID lookup, block cross-device chat history sync, block file transfer via consumer chat
+  - `PolicyTextInputExt` (10) — Extended text input & IME policies: disable hardware keyboard text prediction, lock text input settings from user override, disable hardware keyboard autocorrect, block feedback telemetry, block handwriting personalisation upload, block IME internet access, disable cloud IME candidates, block IME dictionary auto-update, disable IME typing telemetry, prevent touch keyboard auto-invoke in tablet mode
+  - `PolicySpeechInput` (10) — Speech recognition & voice access policies: disable online speech recognition, block always-on voice activation, block speech model updates, disable speech telemetry, disable Voice Typing (Win+H), disable Cortana voice interaction, block speech personalisation collection, prevent Voice Access auto-start, block online speech model download, disable speech recognition on lock screen
+
+### Stats
+
+- Tweaks: **9,440** (+50) | Categories: **116** (+5) | Modules: **155** (+5) | Tests: **3,376**
+
 ## [6.5.0] — 2026-04-05
 
 ### Added
