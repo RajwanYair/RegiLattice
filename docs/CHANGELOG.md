@@ -4,7 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [6.11.0] — 2026-04-05
+## [6.12.0] — 2026-04-05
+
+### Changed
+
+- **Mass dedup consolidation — 1,756 duplicate TweakDef blocks removed**:
+  DupDetector identified 932 groups of registry ops targeting the same `PATH\ValueName`.
+  Alphabetically-first module's tweak kept; all duplicates removed.
+  Net result: 8,853 → 7,189 tweaks (−1,664 net; −1,756 removed, ~92 already absent).
+
+- **Category consolidation** (26 → 23 categories):
+  - `"PowerShell"` → `"Developer"` (Developer.cs)
+  - `"Power"` → `"Performance"` (Power.cs)
+  - `"Explorer"` → `"System"` (Explorer.cs)
+  - `"Input"` → `"Peripherals"` (Input.cs)
+  - `"Windows Update"` → `"Maintenance"` (Maintenance.cs)
+  - `"Audio"` → `"Audio & Media"` (Audio.cs)
+
+- **File consolidation** (35 → 31 modules):
+  Merged PolicyLocation, PolicyDataCollection, PolicyWinRM, PolicyCredentialUI,
+  PolicyMediaPlayer into single `PolicyProvisions.cs`.
+
+- **ConflictDetector.cs**: Updated `sac-disable-hvci` → `vbs-enable-hvci` (kept ID after dedup).
+
+### Stats
+
+- Tweaks: **7,189** (was 8,853)
+- Categories: **23** (was 26)
+- Modules: **31** (was 35)
+- Tests: **3,050** (0 failures)
+
+
 
 ### Added
 
