@@ -151,3 +151,30 @@ public static class SmartScanService
         return $"{impact}, {safety} — {td.Category} tweak.";
     }
 }
+
+// ── Phase 1.7: TweakRecommendation — surface from TweakEngine.RecommendTweaks() ──────────────
+
+/// <summary>
+/// A single tweak recommendation returned by <see cref="TweakEngine.RecommendTweaks"/>.
+/// Wraps <see cref="ScanRecommendation"/> with a normalised 0–100 confidence score.
+/// </summary>
+public sealed class TweakRecommendation
+{
+    /// <summary>The recommended tweak.</summary>
+    public required TweakDef Tweak { get; init; }
+
+    /// <summary>
+    /// Normalised confidence score in the range 0–100.
+    /// Computed as <c>Min(PriorityScore × 4, 100)</c> where PriorityScore = ImpactScore × SafetyRating (max 25).
+    /// </summary>
+    public required int ConfidencePercent { get; init; }
+
+    /// <summary>Human-readable reason explaining why this tweak was recommended.</summary>
+    public required string Reason { get; init; }
+
+    /// <summary>
+    /// <c>true</c> when <see cref="TweakDef.ImpactScore"/> ≥ 4 AND <see cref="TweakDef.SafetyRating"/> ≥ 4.
+    /// Quick-win tweaks have both high impact and high safety — apply them first.
+    /// </summary>
+    public required bool IsQuickWin { get; init; }
+}

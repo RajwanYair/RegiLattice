@@ -4,6 +4,30 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.15.0] — 2026-04-06
+
+### Added — Phase 1.6 + 1.7: Custom Profile API & Recommendation Engine
+
+- **User-defined custom profile API (1.6)**: `TweakEngine` gains 9 wrapper methods
+  delegating to `UserProfileService`:
+  `UserProfiles()`, `GetUserProfile(name)`, `CreateUserProfile(name, desc, tweakIds)`,
+  `SaveUserProfile(profile)`, `UpdateUserProfile(name, tweakIds, desc?)`,
+  `RenameUserProfile(name, newName)`, `CloneUserProfile(name, newName)`,
+  `DeleteUserProfile(name)`, `ApplyUserProfile(name, forceCorp)`.
+  Custom profiles are JSON-persisted per-user under `%LOCALAPPDATA%\RegiLattice\profiles\`.
+
+- **Tweak recommendation engine (1.7)**: `TweakEngine.RecommendTweaks(maxResults, forceCorpSafe, statusMap)`
+  returns `IReadOnlyList<TweakRecommendation>` — prioritised suggestions enriched with
+  `ConfidencePercent` (0–100, normalised from `ImpactScore × SafetyRating × 4`) and
+  `IsQuickWin` flag. New `TweakRecommendation` sealed class added alongside `ScanRecommendation`
+  in `SmartScanService.cs`.
+
+#### Stats
+
+- Tests: 3,092 → **3,105** (+13 Phase 1.6/1.7 tests; 53 total Phase 1 tests in Phase1Tests.cs)
+- Tweaks: 7,189 (unchanged)
+- Categories: 122 (unchanged)
+
 ## [6.14.0] — 2026-04-05
 
 ### Added — Phase 1: Engine & Model Hardening
