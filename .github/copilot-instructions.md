@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-04-05 (v6.12.0, ~7,189 tweaks, 122 categories, 3,052 tests).
+> Last verified: 2026-04-05 (v6.13.0, ~7,189 tweaks, 122 categories, 3,052 tests).
 
 ## Companion Instruction Files
 
@@ -81,9 +81,9 @@ Rules:
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
 | Test     | xUnit 2.9.3 — 3,052 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 6.12.0                                                                   |
+| Version  | 6.13.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 7,189 across 122 categories (31 files)                                  |
+| Tweaks   | 7,189 across 122 categories (146 files)                                 |
 | Tests    | 3052 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
@@ -378,7 +378,7 @@ Projects: `RegiLattice.Core.Tests` (2,314 tests), `RegiLattice.CLI.Tests` (379 t
 
 ## Common Pitfalls
 
-> Full list of 47 hard-won lessons: see `.github/instructions/lessons-learned.instructions.md`.
+| Full list of hard-won lessons: see `.github/instructions/lessons-learned.instructions.md`.
 
 Top 5 most critical:
 
@@ -387,6 +387,8 @@ Top 5 most critical:
 - **`AppConfig.ConfigDir` not `DataRoot`**: The correct data-directory property is `ConfigDir`. `DataRoot` does **not exist** → `CS0117`.
 - **`get_errors` shows CSharpier diffs**: "Replace ⏎ with ..." diagnostics are formatter issues, not CS compiler errors. Only act on CS-prefixed errors.
 - **OneDrive CoreCompile cache lock**: If build fails with `"Building target 'CoreCompile' completely"`, delete `$env:TEMP\RegiLattice-build\RegiLattice.Core` and retry. Set `MSBUILDDISABLENODEREUSE=1`.
+- **Tweaks/ files are multi-class merged**: Before splitting a large file, run `Select-String -Pattern '^internal static (partial )?class \w+' SomeFile.cs`. Count > 1 = multi-class extraction (use `Split-MultiClass.ps1` in `.tmp/`). Count = 1 = partial class split (use `Split-Partials.ps1` in `.tmp/`).
+- **`--no-build` for GUI.Tests always fails**: `RegiLattice.GUI.Tests` requires the Windows SDK runtimepack DLLs copied by `dotnet build`. Always build before testing GUI.Tests — never use `--no-build` for that project alone.
 
 ## File-by-File Quick Ref
 
