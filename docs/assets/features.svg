@@ -14,7 +14,7 @@
 
   <!-- Card 1: Privacy -->
   <g filter="url(#cardShadow)">
-    <rect x="30" y="30" width="220" height="340" rx="12" fill="#313244"/>
+    <rect x="30" y="30" width="220" height="340" rx="12" fill="#316044"/>
     <rect x="30" y="30" width="220" height="4" rx="2" fill="#f38ba8"/>
     <text x="140" y="90" text-anchor="middle" font-size="36">&#x1F6E1;</text>
     <text x="140" y="130" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Privacy</text>
@@ -34,7 +34,7 @@
 
   <!-- Card 2: Performance -->
   <g filter="url(#cardShadow)">
-    <rect x="275" y="30" width="220" height="340" rx="12" fill="#313244"/>
+    <rect x="275" y="30" width="220" height="340" rx="12" fill="#316044"/>
     <rect x="275" y="30" width="220" height="4" rx="2" fill="#a6e3a1"/>
     <text x="385" y="90" text-anchor="middle" font-size="36">&#x26A1;</text>
     <text x="385" y="130" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Performance</text>
@@ -54,7 +54,7 @@
 
   <!-- Card 3: Security -->
   <g filter="url(#cardShadow)">
-    <rect x="520" y="30" width="220" height="340" rx="12" fill="#313244"/>
+    <rect x="520" y="30" width="220" height="340" rx="12" fill="#316044"/>
     <rect x="520" y="30" width="220" height="4" rx="2" fill="#89b4fa"/>
     <text x="630" y="90" text-anchor="middle" font-size="36">&#x1F512;</text>
     <text x="630" y="130" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Security</text>
@@ -74,7 +74,7 @@
 
   <!-- Card 4: Debloat -->
   <g filter="url(#cardShadow)">
-    <rect x="765" y="30" width="220" height="340" rx="12" fill="#313244"/>
+    <rect x="765" y="30" width="220" height="340" rx="12" fill="#316044"/>
     <rect x="765" y="30" width="220" height="4" rx="2" fill="#f9e2af"/>
     <text x="875" y="90" text-anchor="middle" font-size="36">&#x1F9F9;</text>
     <text x="875" y="130" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Debloat</text>
@@ -94,7 +94,7 @@
 
   <!-- Card 5: Developer -->
   <g filter="url(#cardShadow)">
-    <rect x="1010" y="30" width="160" height="340" rx="12" fill="#313244"/>
+    <rect x="1010" y="30" width="160" height="340" rx="12" fill="#316044"/>
     <rect x="1010" y="30" width="160" height="4" rx="2" fill="#b4befe"/>
     <text x="1090" y="90" text-anchor="middle" font-size="36">&#x1F6E0;</text>
     <text x="1090" y="130" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Dev Tools</text>

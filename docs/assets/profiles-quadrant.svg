@@ -16,7 +16,7 @@
   <text x="350" y="64" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#585b70">Category Coverage vs. Aggressiveness</text>
 
   <!-- Grid area -->
-  <rect x="100" y="80" width="500" height="360" rx="8" fill="#313244" stroke="#45475a" stroke-width="0.5"/>
+  <rect x="100" y="80" width="500" height="360" rx="8" fill="#316044" stroke="#45475a" stroke-width="0.5"/>
 
   <!-- Grid lines (horizontal) -->
   <line x1="100" y1="170" x2="600" y2="170" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>

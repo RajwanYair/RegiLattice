@@ -1,4 +1,4 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" width="900" height="200" viewBox="0 0 900 200">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="200" viewBox="0 0 900 200">
   <defs>
     <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#1e1e2e"/>
@@ -13,7 +13,7 @@
 
   <!-- Stat 1: Tweaks -->
   <g filter="url(#sh)" transform="translate(30, 30)">
-    <rect width="150" height="140" rx="10" fill="#313244"/>
+    <rect width="150" height="140" rx="10" fill="#316044"/>
     <rect width="150" height="3" rx="2" fill="#a6e3a1"/>
     <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#a6e3a1">7 189</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Tweaks</text>
@@ -23,7 +23,7 @@
 
   <!-- Stat 2: Categories -->
   <g filter="url(#sh)" transform="translate(205, 30)">
-    <rect width="150" height="140" rx="10" fill="#313244"/>
+    <rect width="150" height="140" rx="10" fill="#316044"/>
     <rect width="150" height="3" rx="2" fill="#89b4fa"/>
     <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#89b4fa">122</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Categories</text>
@@ -33,7 +33,7 @@
 
   <!-- Stat 3: Tests -->
   <g filter="url(#sh)" transform="translate(380, 30)">
-    <rect width="150" height="140" rx="10" fill="#313244"/>
+    <rect width="150" height="140" rx="10" fill="#316044"/>
     <rect width="150" height="3" rx="2" fill="#f9e2af"/>
     <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f9e2af">3 105</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Tests</text>
@@ -43,7 +43,7 @@
 
   <!-- Stat 4: Themes -->
   <g filter="url(#sh)" transform="translate(555, 30)">
-    <rect width="150" height="140" rx="10" fill="#313244"/>
+    <rect width="150" height="140" rx="10" fill="#316044"/>
     <rect width="150" height="3" rx="2" fill="#f38ba8"/>
     <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f38ba8">11</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Themes</text>
@@ -53,7 +53,7 @@
 
   <!-- Stat 5: Profiles -->
   <g filter="url(#sh)" transform="translate(730, 30)">
-    <rect width="140" height="140" rx="10" fill="#313244"/>
+    <rect width="140" height="140" rx="10" fill="#316044"/>
     <rect width="140" height="3" rx="2" fill="#b4befe"/>
     <text x="70" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#b4befe">5</text>
     <text x="70" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Profiles</text>

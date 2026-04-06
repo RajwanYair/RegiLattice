@@ -207,7 +207,7 @@ internal static class AppIcons
 
         // "R" letter
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("R", font, fgBrush, s / 2f, s / 2f - 1, sf);
 
         // Small key notch at bottom-right
@@ -229,7 +229,7 @@ internal static class AppIcons
         g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("S", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -268,7 +268,7 @@ internal static class AppIcons
         g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Consolas", 11f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("Py", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -286,7 +286,7 @@ internal static class AppIcons
         AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("C", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -304,7 +304,7 @@ internal static class AppIcons
         AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         using var font = new Font("Consolas", 12f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString(">_", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -322,7 +322,7 @@ internal static class AppIcons
         g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Segoe UI", 14f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("\U0001F527", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -498,7 +498,7 @@ internal static class AppIcons
         g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Segoe UI", 12f, FontStyle.Bold);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("?", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
@@ -729,7 +729,7 @@ internal static class AppIcons
                 // Single-character or short text glyph
                 using var font = glyph.Length <= 2 ? new Font("Segoe UI Emoji", 7f, FontStyle.Regular) : new Font("Consolas", 6f, FontStyle.Bold);
                 using var fgBrush = new SolidBrush(Color.White);
-                var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
                 g.DrawString(glyph, font, fgBrush, 8f, 8f, sf);
             }
             list.Images.Add(ci.ToString(), bmp);

@@ -120,7 +120,7 @@ internal sealed class SidebarNavControl : Control
         using var logoFont = new Font(AppTheme.Mono.FontFamily, 11f, FontStyle.Bold);
         using var logoTextBrush = new SolidBrush(AppTheme.Bg);
         var logoTextRect = new RectangleF(logoRect.X, logoRect.Y + 5, logoRect.Width, logoRect.Height);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("RL", logoFont, logoTextBrush, logoTextRect, sf);
 
         using var titleFont = new Font(AppTheme.Bold.FontFamily, 10f, FontStyle.Bold);

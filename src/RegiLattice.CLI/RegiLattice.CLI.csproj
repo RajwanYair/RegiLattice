@@ -6,6 +6,16 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <Authors>YairRajwan</Authors>
     <Description>RegiLattice CLI — Command-line interface for the native registry tweak engine.</Description>
+    <!-- Server GC: uses one heap per logical processor for higher throughput
+         on batch operations (apply-all, status-map, profile apply).
+         CLI is short-lived so the extra per-heap memory is reclaimed quickly. -->
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <!-- IL trimming (partial mode): only trims framework assemblies that
+         opted in via [assembly: IsTrimmable]. Reduces single-file EXE size
+         by 30-50%. WinForms blocks trimming, so this is CLI-only. -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
   </PropertyGroup>
 
   <ItemGroup>

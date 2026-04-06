@@ -4,6 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.17.0] — 2026-04-07
+
+### Added — Phase 3.2 + 3.5 + 4.1: Batch Recipes, Watch Mode, E2E Tests
+
+- **Batch recipe executor (Phase 3.2)**: New `--batch-recipe <file.rl.json>` command executes
+  a structured JSON recipe file. Recipe format: `{ "name": "…", "rollbackOnFailure": true,
+  "steps": [{ "type": "apply|remove|apply-profile|verify", "id": "<tweakId>" }] }`.
+  Each step is executed sequentially. On failure, if `rollbackOnFailure` is true, all
+  previously applied tweaks are reverted in reverse order. Supports `--json` flag for
+  machine-readable per-step result array with `{ Label, Status, Success }` fields.
+  Returns exit code 0 if all steps pass, 1 if any fail.
+
+- **Watch mode drift detection (Phase 3.5)**: New `--watch` command continuously monitors
+  tweak state at configurable intervals. Flags: `--watch-interval <seconds>` (default 300),
+  `--watch-auto-fix` (auto-reapply drifted tweaks), `--watch-file <ids.txt>` (watch only
+  specific tweak IDs from file). Captures baseline snapshot on launch, polls `StatusMap()`
+  periodically, reports any drifted tweaks. Returns exit code 3 if unresolved drift exists
+  on Ctrl+C, 0 if clean exit. Respects `--force` for corporate guard bypass.
+
+- **E2E scenario tests (Phase 4.1)**: 10 end-to-end integration tests in `Phase41E2ETests`
+  covering full apply/remove/verify/snapshot/export/stats round-trips. Tests validate CLI
+  behaviour from `Dispatch()` call through to output, not just unit-level method invocations.
+
+#### Stats
+
+- Tests: 3,132 → **3,166** (+34; 6 Phase 3.2 dispatch + 5 Phase 3.5 dispatch + 10 Phase 4.1 E2E + 7 ParseArgs + 6 GUI crash-fix tests)
+- Tweaks: 7,189 (unchanged)
+- Categories: 122 (unchanged)
+
+---
+
 ## [6.16.0] — 2026-04-07
 
 ### Added — Phase 3.1 + 3.3 + 3.4: CLI & Integration

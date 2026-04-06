@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-04-07 (v6.16.0, ~7,189 tweaks, 122 categories, 3,132 tests).
+> Last verified: 2026-04-07 (v6.17.0, ~7,189 tweaks, 122 categories, 3,166 tests).
 
 ## Companion Instruction Files
 
@@ -79,12 +79,12 @@ Rules:
 | -------- | ------------------------------------------------------------------------ |
 | Language | C# 13 / .NET 10.0-windows (x64)                                          |
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
-| Test     | xUnit 2.9.3 — 3,132 tests (0 failures)                                   |
+| Test     | xUnit 2.9.3 — 3,166 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 6.16.0                                                                   |
+| Version  | 6.17.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
 | Tweaks   | 7,189 across 122 categories (146 files)                                 |
-| Tests    | 3132 passing (0 consistent failures)                                     |
+| Tests    | 3160 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
 ## Git Workflow (IMPORTANT — STANDING RULE)
@@ -130,7 +130,7 @@ git push; git push --tags   # ← REQUIRED on every version bump
 
 > Full annotated solution tree: see `.github/instructions/workspace.instructions.md` — Solution Structure section.
 
-Key namespaces: `RegiLattice.Core` (engine + models + registry + tweak modules, 31 files), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 3,050 total.
+Key namespaces: `RegiLattice.Core` (engine + models + registry + tweak modules, 31 files), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 3,166 total.
 
 ### TweakDef Model
 
@@ -379,7 +379,7 @@ Canonical category slugs:
 
 > Full test file inventory and coverage targets: see `.github/instructions/testing.instructions.md` — Test File Structure section.
 
-Projects: `RegiLattice.Core.Tests` (2,314 tests), `RegiLattice.CLI.Tests` (379 tests), `RegiLattice.GUI.Tests` (357 tests). Total: 3,050.
+Projects: `RegiLattice.Core.Tests` (2,369 tests), `RegiLattice.CLI.Tests` (434 tests), `RegiLattice.GUI.Tests` (363 tests). Total: 3,166.
 
 ## Adding a New Tweak — Checklist
 

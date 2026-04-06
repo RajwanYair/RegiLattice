@@ -1677,7 +1677,9 @@ public partial class MainForm : Form
             string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
             Directory.CreateDirectory(dir);
             string path = Path.Combine(dir, "crash.log");
-            File.WriteAllText(path, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n{details}\n");
+            // Use the same detailed crash report builder as Program.ShowFatalError
+            // so every crash log includes GDI/USER handle counts and memory stats.
+            File.AppendAllText(path, Program.BuildDetailedCrashReport(details) + "\n");
         }
         catch (Exception)
         {

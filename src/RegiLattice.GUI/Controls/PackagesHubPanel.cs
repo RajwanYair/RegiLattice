@@ -172,7 +172,7 @@ internal sealed class PackagesHubPanel : Panel
         using var font = selected
             ? new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Bold)
             : new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Regular);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString(tab.Text, font, textBrush, r, sf);
     }
 

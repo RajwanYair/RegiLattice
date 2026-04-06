@@ -20,7 +20,7 @@
 
   <!-- Step 1: Define -->
   <g filter="url(#shadow)">
-    <rect x="30" y="70" width="140" height="90" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="2"/>
+    <rect x="30" y="70" width="140" height="90" rx="10" fill="#316044" stroke="#89b4fa" stroke-width="2"/>
     <circle cx="55" cy="90" r="12" fill="#89b4fa" opacity="0.2"/>
     <text x="55" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#89b4fa">1</text>
     <text x="75" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#89b4fa">Define</text>
@@ -33,7 +33,7 @@
 
   <!-- Step 2: Register -->
   <g filter="url(#shadow)">
-    <rect x="208" y="70" width="140" height="90" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="2"/>
+    <rect x="208" y="70" width="140" height="90" rx="10" fill="#316044" stroke="#a6e3a1" stroke-width="2"/>
     <circle cx="233" cy="90" r="12" fill="#a6e3a1" opacity="0.2"/>
     <text x="233" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#a6e3a1">2</text>
     <text x="255" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">Register</text>
@@ -46,7 +46,7 @@
 
   <!-- Step 3: DetectStatus -->
   <g filter="url(#shadow)">
-    <rect x="386" y="70" width="150" height="90" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="2"/>
+    <rect x="386" y="70" width="150" height="90" rx="10" fill="#316044" stroke="#f9e2af" stroke-width="2"/>
     <circle cx="411" cy="90" r="12" fill="#f9e2af" opacity="0.2"/>
     <text x="411" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#1e1e2e">3</text>
     <text x="435" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f9e2af">DetectStatus</text>
@@ -65,7 +65,7 @@
 
   <!-- Step 4a: Apply -->
   <g filter="url(#shadow)">
-    <rect x="588" y="56" width="120" height="50" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="2"/>
+    <rect x="588" y="56" width="120" height="50" rx="10" fill="#316044" stroke="#a6e3a1" stroke-width="2"/>
     <circle cx="613" cy="76" r="10" fill="#a6e3a1" opacity="0.2"/>
     <text x="613" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="12" fill="#a6e3a1">4a</text>
     <text x="640" y="80" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">Apply</text>
@@ -74,7 +74,7 @@
 
   <!-- Step 4b: Remove -->
   <g filter="url(#shadow)">
-    <rect x="588" y="132" width="140" height="50" rx="10" fill="#313244" stroke="#f38ba8" stroke-width="2"/>
+    <rect x="588" y="132" width="140" height="50" rx="10" fill="#316044" stroke="#f38ba8" stroke-width="2"/>
     <circle cx="613" cy="152" r="10" fill="#f38ba8" opacity="0.2"/>
     <text x="613" y="156" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="12" fill="#1e1e2e">4b</text>
     <text x="645" y="156" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f38ba8">Remove</text>
@@ -96,6 +96,6 @@
   </g>
 
   <!-- Footer -->
-  <rect x="30" y="210" width="840" height="28" rx="6" fill="#313244" stroke="#585b70" stroke-width="0.5"/>
+  <rect x="30" y="210" width="840" height="28" rx="6" fill="#316044" stroke="#585b70" stroke-width="0.5"/>
   <text x="450" y="230" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#cdd6f4">Define &#x2192; Register &#x2192; DetectStatus &#x2192; Apply / Remove &#x2192; TweakResult</text>
 </svg>

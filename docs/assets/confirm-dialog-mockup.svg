@@ -13,7 +13,7 @@
 
   <!-- Title bar -->
   <g filter="url(#shadow)">
-    <rect x="60" y="20" width="480" height="410" rx="12" fill="#313244" stroke="#89b4fa" stroke-width="2"/>
+    <rect x="60" y="20" width="480" height="410" rx="12" fill="#316044" stroke="#89b4fa" stroke-width="2"/>
     <!-- Window title bar -->
     <rect x="60" y="20" width="480" height="36" rx="12" fill="#45475a"/>
     <rect x="60" y="44" width="480" height="12" fill="#45475a"/>

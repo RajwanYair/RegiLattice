@@ -185,4 +185,25 @@ internal sealed class CliArgs
     // ── Phase 3.4 — interactive wizard ──────────────────────────────
     /// <summary>When true, launches the interactive profile setup wizard.</summary>
     public bool Wizard { get; set; }
+
+    // ── Phase 3.2 — batch recipe executor ───────────────────────────
+    /// <summary>
+    /// When non-null, reads a JSON recipe file (.rl.json) and executes its
+    /// named steps sequentially (apply, apply-profile, remove, verify).
+    /// Distinct from <see cref="BatchFile"/> which reads a flat ID list.
+    /// </summary>
+    public string? BatchRecipe { get; set; }
+
+    // ── Phase 3.5 — watch mode drift detection ───────────────────────
+    /// <summary>When true, continuously monitors applied tweaks for registry drift.</summary>
+    public bool Watch { get; set; }
+
+    /// <summary>Interval in seconds between drift-detection polls (default: 300).</summary>
+    public int WatchInterval { get; set; } = 300;
+
+    /// <summary>When true, automatically re-applies drifted tweaks instead of just logging.</summary>
+    public bool WatchAutoFix { get; set; }
+
+    /// <summary>When non-null, limits drift monitoring to the tweak IDs read from this file.</summary>
+    public string? WatchFile { get; set; }
 }

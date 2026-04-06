@@ -1821,4 +1821,74 @@ public sealed class BatchSubcmdParseTests
         Assert.True(a.Wizard);
         Assert.True(a.DryRun);
     }
+
+    // ── Phase 3.2 — --batch-recipe flag ──────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_BatchRecipe_SetsPath()
+    {
+        var a = Program.ParseArgs(["--batch-recipe", "my-recipe.rl.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("my-recipe.rl.json", a.BatchRecipe);
+    }
+
+    [Fact]
+    public void ParseArgs_BatchRecipe_CombinedWithDryRun_BothSet()
+    {
+        var a = Program.ParseArgs(["--batch-recipe", "r.json", "--dry-run"]);
+        Assert.NotNull(a);
+        Assert.Equal("r.json", a.BatchRecipe);
+        Assert.True(a.DryRun);
+    }
+
+    [Fact]
+    public void ParseArgs_BatchRecipe_MissingValue_ReturnsParsedAnyway()
+    {
+        // --batch-recipe with no following arg should not crash
+        var a = Program.ParseArgs(["--batch-recipe"]);
+        Assert.NotNull(a);
+    }
+
+    // ── Phase 3.5 — --watch flags ─────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Watch_SetsWatchTrue()
+    {
+        var a = Program.ParseArgs(["--watch"]);
+        Assert.NotNull(a);
+        Assert.True(a.Watch);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchInterval_SetsSeconds()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-interval", "60"]);
+        Assert.NotNull(a);
+        Assert.True(a.Watch);
+        Assert.Equal(60, a.WatchInterval);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchInternal_DefaultIs300()
+    {
+        var a = Program.ParseArgs(["--watch"]);
+        Assert.NotNull(a);
+        Assert.Equal(300, a.WatchInterval);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchAutoFix_SetsFlag()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-auto-fix"]);
+        Assert.NotNull(a);
+        Assert.True(a.WatchAutoFix);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchFile_SetsPath()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-file", "ids.txt"]);
+        Assert.NotNull(a);
+        Assert.Equal("ids.txt", a.WatchFile);
+    }
 }

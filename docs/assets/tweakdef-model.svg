@@ -17,7 +17,7 @@
 
   <!-- TweakDef class box -->
   <g filter="url(#shadow)">
-    <rect x="40" y="55" width="440" height="520" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="2"/>
+    <rect x="40" y="55" width="440" height="520" rx="10" fill="#316044" stroke="#89b4fa" stroke-width="2"/>
     <!-- Header -->
     <rect x="40" y="55" width="440" height="36" rx="10" fill="#45475a"/>
     <rect x="40" y="78" width="440" height="13" fill="#45475a"/>
@@ -54,7 +54,7 @@
 
   <!-- RegOp class box -->
   <g filter="url(#shadow)">
-    <rect x="560" y="55" width="340" height="260" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <rect x="560" y="55" width="340" height="260" rx="10" fill="#316044" stroke="#f9e2af" stroke-width="1.5"/>
     <rect x="560" y="55" width="340" height="36" rx="10" fill="#45475a"/>
     <rect x="560" y="78" width="340" height="13" fill="#45475a"/>
     <text x="730" y="79" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="16" fill="#f9e2af">RegOp</text>
@@ -75,7 +75,7 @@
 
   <!-- TweakKind enum -->
   <g filter="url(#shadow)">
-    <rect x="560" y="350" width="200" height="220" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+    <rect x="560" y="350" width="200" height="220" rx="10" fill="#316044" stroke="#a6e3a1" stroke-width="1.5"/>
     <rect x="560" y="350" width="200" height="36" rx="10" fill="#45475a"/>
     <rect x="560" y="373" width="200" height="13" fill="#45475a"/>
     <text x="580" y="369" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#xAB;enum&#xBB;</text>
@@ -92,7 +92,7 @@
 
   <!-- TweakScope enum -->
   <g filter="url(#shadow)">
-    <rect x="800" y="350" width="160" height="130" rx="10" fill="#313244" stroke="#b4befe" stroke-width="1.5"/>
+    <rect x="800" y="350" width="160" height="130" rx="10" fill="#316044" stroke="#b4befe" stroke-width="1.5"/>
     <rect x="800" y="350" width="160" height="36" rx="10" fill="#45475a"/>
     <rect x="800" y="373" width="160" height="13" fill="#45475a"/>
     <text x="820" y="369" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#xAB;enum&#xBB;</text>

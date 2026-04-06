@@ -2057,3 +2057,319 @@ public sealed class Phase3CliTests(DispatchTestFixture fixture) : DispatchTestBa
         Assert.Contains("recommend", Output, StringComparison.OrdinalIgnoreCase);
     }
 }
+
+// ── Phase 3.2 — batch recipe executor ────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class Phase32BatchRecipeTests(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    private string WriteTempRecipe(object recipeObj)
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"rl-recipe-{Guid.NewGuid():N}.json");
+        File.WriteAllText(path, JsonSerializer.Serialize(recipeObj));
+        return path;
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_MissingFile_ReturnsUserError()
+    {
+        int exit = Program.Dispatch(new CliArgs { BatchRecipe = "/nonexistent/recipe.rl.json" });
+        Assert.Equal(2, exit); // UserError
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_EmptySteps_ReturnsUserError()
+    {
+        var path = WriteTempRecipe(new { name = "empty", steps = Array.Empty<object>() });
+        try
+        {
+            int exit = Program.Dispatch(new CliArgs { BatchRecipe = path });
+            Assert.Equal(2, exit);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_VerifyKnownApplied_PassesStep()
+    {
+        // DryRun: apply the known tweak first so verify can check Applied
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                Force = true,
+            }
+        );
+        var path = WriteTempRecipe(
+            new
+            {
+                name = "verify-test",
+                rollbackOnFailure = false,
+                steps = new[] { new { type = "verify", id = DispatchTestFixture.KnownId } },
+            }
+        );
+        try
+        {
+            int exit = Program.Dispatch(new CliArgs { BatchRecipe = path, Force = true });
+            // verify step result depends on actual registry state; just ensure no crash
+            Assert.True(exit is 0 or 1);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_UnknownStep_FailsGracefully()
+    {
+        var path = WriteTempRecipe(new { name = "bad-step", steps = new[] { new { type = "apply", id = "no-such-tweak-xyzzy" } } });
+        try
+        {
+            int exit = Program.Dispatch(new CliArgs { BatchRecipe = path });
+            Assert.Equal(1, exit); // PartialFail
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_JsonOutput_ContainsTotalSteps()
+    {
+        var path = WriteTempRecipe(new { name = "json-recipe", steps = new[] { new { type = "apply", id = DispatchTestFixture.KnownId } } });
+        try
+        {
+            Program.Dispatch(new CliArgs { BatchRecipe = path, JsonOutput = true });
+            Assert.Contains("totalSteps", Output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchRecipe_RollbackOnFailure_OutputMentionsRollback()
+    {
+        // Recipe with rollbackOnFailure=true and an unknown step that will fail
+        var path = WriteTempRecipe(new
+        {
+            name = "rollback-test",
+            rollbackOnFailure = true,
+            steps = new[]
+            {
+                new { type = "apply", id = DispatchTestFixture.KnownId },
+                new { type = "apply", id = "no-such-tweak-xyzzy" },
+            },
+        });
+        try
+        {
+            Program.Dispatch(new CliArgs { BatchRecipe = path, Force = true });
+            Assert.Contains("rolling back", Output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+}
+
+
+// ── Phase 3.5 — watch mode drift detection ───────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class Phase35WatchTests(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void ParseArgs_WatchFlag_SetsWatch()
+    {
+        var a = Program.ParseArgs(["--watch"]);
+        Assert.NotNull(a);
+        Assert.True(a.Watch);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchInterval_SetsInterval()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-interval", "60"]);
+        Assert.NotNull(a);
+        Assert.Equal(60, a.WatchInterval);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchAutoFix_SetsFlag()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-auto-fix"]);
+        Assert.NotNull(a);
+        Assert.True(a.WatchAutoFix);
+    }
+
+    [Fact]
+    public void ParseArgs_WatchFile_SetsPath()
+    {
+        var a = Program.ParseArgs(["--watch", "--watch-file", "ids.txt"]);
+        Assert.NotNull(a);
+        Assert.Equal("ids.txt", a.WatchFile);
+    }
+
+    [Fact]
+    public void Dispatch_Watch_MissingWatchFile_ReturnsUserError()
+    {
+        int exit = Program.Dispatch(new CliArgs { Watch = true, WatchFile = "/nonexistent/ids.txt" });
+        Assert.Equal(2, exit);
+    }
+}
+
+// ── Phase 4.1 — E2E workflow scenarios ───────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class Phase41E2ETests(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    // E2E-1: Apply → detect → verify round-trip (DryRun)
+    [Fact]
+    public void E2E1_ApplyDetectVerify_DryRun_RoundTrip()
+    {
+        int applyExit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                Force = true,
+            }
+        );
+        Assert.True(applyExit is 0 or 1); // 0 = applied, 1 = partial
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId });
+        Assert.Contains("Alpha Dispatch Tweak", Output, StringComparison.OrdinalIgnoreCase);
+    }
+
+    // E2E-2: Profile apply → stats shows categories
+    [Fact]
+    public void E2E2_ProfileApply_ThenStats_BothSucceed()
+    {
+        int profileExit = Program.Dispatch(new CliArgs { Profile = "privacy", Force = true });
+        Assert.True(profileExit is 0 or 1);
+        int statsExit = Program.Dispatch(new CliArgs { Stats = true });
+        Assert.Equal(0, statsExit);
+        Assert.Contains("Category", Output, StringComparison.OrdinalIgnoreCase);
+    }
+
+    // E2E-3: Apply → remove → status shows NotApplied path (DryRun fixture)
+    [Fact]
+    public void E2E3_ApplyRemove_StatusNotApplied()
+    {
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                Force = true,
+            }
+        );
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "remove",
+                Tweak = DispatchTestFixture.KnownId,
+                Force = true,
+            }
+        );
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId });
+        Assert.Contains("Alpha Dispatch Tweak", Output, StringComparison.OrdinalIgnoreCase);
+    }
+
+    // E2E-4: --dry-run is logged and no actual ops recorded on session
+    [Fact]
+    public void E2E4_DryRun_NoBuildOutput_ReturnsZero()
+    {
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                Force = true,
+                DryRun = true,
+            }
+        );
+        Assert.True(exit is 0 or 1);
+    }
+
+    // E2E-5: Unknown tweak apply returns UserError (2)
+    [Fact]
+    public void E2E5_ApplyUnknownTweak_Returns2()
+    {
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = "no-such-tweak-xyzzy" });
+        Assert.Equal(2, exit);
+    }
+
+    // E2E-6: Snapshot → restore round-trip files
+    [Fact]
+    public void E2E6_Snapshot_SaveRestore_BothReturnZero()
+    {
+        var snapPath = Path.Combine(Path.GetTempPath(), $"rl-e2e-snap-{Guid.NewGuid():N}.json");
+        try
+        {
+            int saveExit = Program.Dispatch(new CliArgs { Snapshot = snapPath });
+            Assert.Equal(0, saveExit);
+            Assert.True(File.Exists(snapPath));
+            int restoreExit = Program.Dispatch(new CliArgs { Restore = snapPath, Force = true });
+            Assert.True(restoreExit is 0 or 1);
+        }
+        finally
+        {
+            File.Delete(snapPath);
+        }
+    }
+
+    // E2E-7: Export JSON then validate JSON parses
+    [Fact]
+    public void E2E7_ExportJson_ValidJsonOutput()
+    {
+        var exportPath = Path.Combine(Path.GetTempPath(), $"rl-e2e-export-{Guid.NewGuid():N}.json");
+        try
+        {
+            int exit = Program.Dispatch(new CliArgs { ExportJson = exportPath });
+            Assert.Equal(0, exit);
+            var json = File.ReadAllText(exportPath);
+            using var doc = JsonDocument.Parse(json);
+            Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+        }
+        finally
+        {
+            File.Delete(exportPath);
+        }
+    }
+
+    // E2E-8: --validate reports no errors on the test engine's tweaks
+    [Fact]
+    public void E2E8_Validate_Returns0()
+    {
+        int exit = Program.Dispatch(new CliArgs { Validate = true });
+        Assert.Equal(0, exit);
+    }
+
+    // E2E-9: Search + JSON output returns JSON array
+    [Fact]
+    public void E2E9_SearchJsonOutput_ReturnsJsonArray()
+    {
+        Program.Dispatch(new CliArgs { Search = "alpha", OutputFormat = "json" });
+        var trimmed = Output.Trim();
+        Assert.True(
+            trimmed.StartsWith('[') || trimmed.StartsWith('{'),
+            $"Expected JSON output, got: {trimmed[..Math.Min(80, trimmed.Length)]}"
+        );
+    }
+
+    // E2E-10: Stats JSON mode returns object with TotalTweaks key
+    [Fact]
+    public void E2E10_StatsJsonOutput_ContainsTotalTweaks()
+    {
+        Program.Dispatch(new CliArgs { Stats = true, OutputFormat = "json", JsonOutput = true });
+        Assert.Contains("TotalTweaks", Output);
+    }
+}

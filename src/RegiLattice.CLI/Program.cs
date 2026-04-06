@@ -189,6 +189,12 @@ internal static class Program
             return RunMenu(a.Force);
         if (a.Wizard)
             return RunWizard(a);
+        // Phase 3.2: batch recipe executor
+        if (a.BatchRecipe is not null)
+            return RunBatchRecipe(a);
+        // Phase 3.5: watch mode drift detection
+        if (a.Watch)
+            return RunWatch(a);
 
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null)
@@ -1779,6 +1785,306 @@ internal static class Program
 
     // ── Marketplace ────────────────────────────────────────────────────
 
+    // ── Phase 3.2: Batch Recipe Executor ────────────────────────────────────
+
+    private static int RunBatchRecipe(CliArgs a)
+    {
+        if (!File.Exists(a.BatchRecipe!))
+        {
+            Console.WriteLine($"\u274c Recipe file not found: {a.BatchRecipe}");
+            return ExitCodes.UserError;
+        }
+
+        BatchRecipe? recipe;
+        try
+        {
+            var json = File.ReadAllText(a.BatchRecipe!);
+            recipe = JsonSerializer.Deserialize<BatchRecipe>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"\u274c Cannot parse recipe: {ex.Message}");
+            return ExitCodes.UserError;
+        }
+        if (recipe is null || recipe.Steps is null || recipe.Steps.Count == 0)
+        {
+            Console.WriteLine("\u274c Recipe has no steps.");
+            return ExitCodes.UserError;
+        }
+
+        Console.WriteLine($"\U0001f511 Running recipe: {recipe.Name ?? Path.GetFileNameWithoutExtension(a.BatchRecipe)}");
+        Console.WriteLine($"   {recipe.Steps.Count} steps | rollback-on-failure: {recipe.RollbackOnFailure}");
+        Console.WriteLine();
+
+        var stepResults = new List<RecipeStepResult>();
+        var appliedIds = new List<string>(); // for rollback
+        bool failed = false;
+
+        foreach (var step in recipe.Steps)
+        {
+            string label = step.Type?.ToLowerInvariant() switch
+            {
+                "apply" => $"apply  {step.Id}",
+                "remove" => $"remove {step.Id}",
+                "apply-profile" => $"apply-profile {step.Profile}",
+                "verify" => $"verify {step.Id}",
+                _ => $"unknown step type '{step.Type}'",
+            };
+
+            Console.Write($"  [{stepResults.Count + 1:D2}] {label} ... ");
+            string status;
+            bool stepOk = true;
+
+            try
+            {
+                switch (step.Type?.ToLowerInvariant())
+                {
+                    case "apply":
+                    {
+                        var td = _engine.GetTweak(step.Id ?? "");
+                        if (td is null)
+                        {
+                            status = "SKIP (unknown id)";
+                            stepOk = false;
+                            break;
+                        }
+                        var res = _engine.Apply(td, forceCorp: a.Force);
+                        if (res == TweakResult.Applied)
+                            appliedIds.Add(td.Id);
+                        status = res.ToString();
+                        stepOk = res is TweakResult.Applied or TweakResult.NotApplied;
+                        break;
+                    }
+                    case "remove":
+                    {
+                        var td = _engine.GetTweak(step.Id ?? "");
+                        if (td is null)
+                        {
+                            status = "SKIP (unknown id)";
+                            stepOk = false;
+                            break;
+                        }
+                        var res = _engine.Remove(td, forceCorp: a.Force);
+                        status = res.ToString();
+                        stepOk = res is TweakResult.NotApplied or TweakResult.Applied;
+                        break;
+                    }
+                    case "apply-profile":
+                    {
+                        if (string.IsNullOrWhiteSpace(step.Profile))
+                        {
+                            status = "SKIP (no profile)";
+                            stepOk = false;
+                            break;
+                        }
+                        var results = _engine.ApplyProfile(step.Profile, forceCorp: a.Force);
+                        int ok2 = results.Count(kv => kv.Value == TweakResult.Applied);
+                        status = $"{ok2}/{results.Count} applied";
+                        appliedIds.AddRange(results.Where(kv => kv.Value == TweakResult.Applied).Select(kv => kv.Key));
+                        stepOk = true;
+                        break;
+                    }
+                    case "verify":
+                    {
+                        var td = _engine.GetTweak(step.Id ?? "");
+                        if (td is null)
+                        {
+                            status = "FAIL (unknown id)";
+                            stepOk = false;
+                            break;
+                        }
+                        var res = _engine.DetectStatus(td);
+                        status = res == TweakResult.Applied ? "PASS" : $"FAIL ({res})";
+                        stepOk = res == TweakResult.Applied;
+                        break;
+                    }
+                    default:
+                        status = $"SKIP (unknown type '{step.Type}')";
+                        stepOk = false;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                status = $"ERROR: {ex.Message}";
+                stepOk = false;
+            }
+
+            string icon = stepOk ? "\u2705" : "\u274c";
+            Console.WriteLine($"{icon} {status}");
+            stepResults.Add(new RecipeStepResult(label, status, stepOk));
+
+            if (!stepOk)
+            {
+                failed = true;
+                if (recipe.RollbackOnFailure)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("  \u21a9 Step failed — rolling back applied tweaks");
+                    for (int ri = appliedIds.Count - 1; ri >= 0; ri--)
+                    {
+                        var rtd = _engine.GetTweak(appliedIds[ri]);
+                        if (rtd is not null)
+                        {
+                            var rres = _engine.Remove(rtd, forceCorp: a.Force);
+                            Console.WriteLine($"     \u21a9 rollback {appliedIds[ri]}: {rres}");
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        Console.WriteLine();
+        int successCount = stepResults.Count(r => r.Success);
+        if (a.JsonOutput)
+        {
+            Console.WriteLine(
+                JsonSerializer.Serialize(
+                    new
+                    {
+                        recipe = recipe.Name,
+                        totalSteps = stepResults.Count,
+                        successCount,
+                        failureCount = stepResults.Count - successCount,
+                        rolledBack = recipe.RollbackOnFailure && failed,
+                        steps = stepResults.Select(r => new
+                        {
+                            r.Label,
+                            r.Status,
+                            r.Success,
+                        }),
+                    },
+                    new JsonSerializerOptions { WriteIndented = true }
+                )
+            );
+        }
+        else
+        {
+            Console.WriteLine($"  Results: {successCount}/{stepResults.Count} steps succeeded.");
+            if (recipe.RollbackOnFailure && failed)
+                Console.WriteLine("  \u21a9 Rollback completed.");
+        }
+
+        return failed ? ExitCodes.PartialFail : ExitCodes.Success;
+    }
+
+    // ── Phase 3.5: Watch Mode Drift Detection ───────────────────────────────
+
+    private static int RunWatch(CliArgs a)
+    {
+        // Resolve monitored tweak list
+        List<TweakDef> targets;
+        if (a.WatchFile is not null)
+        {
+            var ids = LoadIdsFromFile(a.WatchFile, out string loadErr);
+            if (ids is null)
+            {
+                Console.WriteLine($"\u274c {loadErr}");
+                return ExitCodes.UserError;
+            }
+            targets = ids.Select(id => _engine.GetTweak(id.Trim())).Where(td => td is not null).Select(td => td!).ToList();
+        }
+        else
+        {
+            // Monitor all tweaks that have detection ops
+            targets = _engine.AllTweaks().Where(td => td.DetectOps.Count > 0 || td.DetectAction is not null).ToList();
+        }
+
+        if (targets.Count == 0)
+        {
+            Console.WriteLine("\u274c No monitorable tweaks found (need DetectOps or DetectAction).");
+            return ExitCodes.UserError;
+        }
+
+        int interval = Math.Max(5, a.WatchInterval);
+        Console.WriteLine($"\U0001f440 Watching {targets.Count} tweaks for drift (interval: {interval}s)");
+        Console.WriteLine($"   Auto-fix: {(a.WatchAutoFix ? "enabled" : "disabled")} | Press Ctrl+C to stop");
+        Console.WriteLine();
+
+        // Capture baseline: run initial status pass
+        var baseline = _engine.StatusMap(parallel: true, ids: targets.Select(t => t.Id).ToList());
+        Console.WriteLine($"  Baseline captured at {DateTime.Now:HH:mm:ss}: {baseline.Count(kv => kv.Value == TweakResult.Applied)} applied.");
+
+        bool anyUnresolvedDrift = false;
+        using var cts = new System.Threading.CancellationTokenSource();
+        Console.CancelKeyPress += (_, e) =>
+        {
+            e.Cancel = true;
+            cts.Cancel();
+        };
+
+        while (!cts.Token.IsCancellationRequested)
+        {
+            try
+            {
+                Task.Delay(TimeSpan.FromSeconds(interval), cts.Token).GetAwaiter().GetResult();
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
+
+            var current = _engine.StatusMap(parallel: true, ids: targets.Select(t => t.Id).ToList());
+            var drifted = new List<(string id, TweakResult was, TweakResult now)>();
+
+            foreach (var kv in current)
+            {
+                if (!baseline.TryGetValue(kv.Key, out var prev))
+                    continue;
+                if (prev != kv.Value)
+                    drifted.Add((kv.Key, prev, kv.Value));
+            }
+
+            if (drifted.Count == 0)
+            {
+                Console.WriteLine($"  [{DateTime.Now:HH:mm:ss}] No drift detected.");
+                continue;
+            }
+
+            Console.WriteLine($"  [{DateTime.Now:HH:mm:ss}] \u26a0\ufe0f {drifted.Count} tweak(s) drifted:");
+            foreach (var (id, was, now) in drifted)
+            {
+                Console.WriteLine($"    {id}: {was} \u2192 {now}");
+                if (a.WatchAutoFix && now != TweakResult.Applied && was == TweakResult.Applied)
+                {
+                    var td = _engine.GetTweak(id);
+                    if (td is not null)
+                    {
+                        var res = _engine.Apply(td, forceCorp: a.Force);
+                        string fixIcon = res == TweakResult.Applied ? "\u2705" : "\u274c";
+                        Console.WriteLine($"    {fixIcon} auto-fix {id}: {res}");
+                        if (res == TweakResult.Applied)
+                            baseline[id] = TweakResult.Applied;
+                        else
+                            anyUnresolvedDrift = true;
+                    }
+                }
+                else if (now != was)
+                {
+                    anyUnresolvedDrift = true;
+                }
+            }
+
+            // Update baseline to current observed state (for non-auto-fix runs)
+            if (!a.WatchAutoFix)
+            {
+                foreach (var (id, _, now) in drifted)
+                    baseline[id] = now;
+            }
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("  Watch stopped.");
+        if (anyUnresolvedDrift)
+        {
+            Console.WriteLine("  \u274c Unresolved drift detected. Exiting with code 3.");
+            return ExitCodes.DriftDetected;
+        }
+        Console.WriteLine("  \u2705 No unresolved drift.");
+        return ExitCodes.Success;
+    }
+
     private static int RunMarketplace(CliArgs a)
     {
         return a.Marketplace?.ToLowerInvariant() switch
@@ -3133,6 +3439,28 @@ internal static class Program
                     p.Wizard = true;
                     break;
 
+                // ── Phase 3.2 – batch recipe executor ─────────────────────────
+                case "--batch-recipe":
+                    if (++i < args.Length)
+                        p.BatchRecipe = args[i];
+                    break;
+
+                // ── Phase 3.5 – watch mode drift detection ─────────────────────
+                case "--watch":
+                    p.Watch = true;
+                    break;
+                case "--watch-interval":
+                    if (++i < args.Length && int.TryParse(args[i], out var watchSec))
+                        p.WatchInterval = watchSec;
+                    break;
+                case "--watch-auto-fix":
+                    p.WatchAutoFix = true;
+                    break;
+                case "--watch-file":
+                    if (++i < args.Length)
+                        p.WatchFile = args[i];
+                    break;
+
                 default:
                     // Positional: mode, then tweak
                     if (p.Mode is null && arg is "apply" or "remove" or "status" or "update")
@@ -3174,4 +3502,34 @@ internal static class ExitCodes
 
     /// <summary>Corporate network guard blocked the operation. Use --force to override.</summary>
     public const int CorpGuardBlocked = 4;
+
+    /// <summary>Watch mode detected registry drift that was not auto-fixed.</summary>
+    public const int DriftDetected = 3;
 }
+
+// ── Phase 3.2: Batch recipe DTOs ─────────────────────────────────────────────
+
+/// <summary>Root document for a .rl.json batch recipe file.</summary>
+internal sealed class BatchRecipe
+{
+    public string? Name { get; set; }
+    public string? Author { get; set; }
+    public bool RollbackOnFailure { get; set; }
+    public List<BatchRecipeStep>? Steps { get; set; }
+}
+
+/// <summary>One step inside a batch recipe.</summary>
+internal sealed class BatchRecipeStep
+{
+    /// <summary>Step type: "apply", "remove", "apply-profile", or "verify".</summary>
+    public string? Type { get; set; }
+
+    /// <summary>Tweak ID for apply/remove/verify steps.</summary>
+    public string? Id { get; set; }
+
+    /// <summary>Profile name for apply-profile steps.</summary>
+    public string? Profile { get; set; }
+}
+
+/// <summary>Result of a single recipe step execution.</summary>
+internal sealed record RecipeStepResult(string Label, string Status, bool Success);

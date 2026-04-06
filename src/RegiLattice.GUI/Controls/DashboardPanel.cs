@@ -185,13 +185,13 @@ internal sealed class DashboardPanel : Panel
         // Value
         using var valFont = new Font(AppTheme.Bold.FontFamily, 22f, FontStyle.Bold);
         using var valBrush = new SolidBrush(accent);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString(value, valFont, valBrush, new RectangleF(r.Left + 10, r.Top + 10, r.Width - 14, r.Height * 0.6f), sf);
 
         // Label
         using var lblFont = new Font(AppTheme.Bold.FontFamily, 8.5f, FontStyle.Regular);
         using var lblBrush = new SolidBrush(AppTheme.FgDim);
-        var lsf = new StringFormat { Alignment = StringAlignment.Center };
+        using var lsf = new StringFormat { Alignment = StringAlignment.Center };
         g.DrawString(label, lblFont, lblBrush, new RectangleF(r.Left, r.Top + r.Height * 0.62f, r.Width, r.Height * 0.38f), lsf);
     }
 
@@ -215,7 +215,7 @@ internal sealed class DashboardPanel : Panel
         // Center text
         using var pctFont = new Font(AppTheme.Bold.FontFamily, 16f, FontStyle.Bold);
         using var pctBrush = new SolidBrush(score.Color);
-        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString(score.Label, pctFont, pctBrush, r, sf);
     }
 

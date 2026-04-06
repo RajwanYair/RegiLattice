@@ -178,12 +178,32 @@ internal sealed class ToolVersionsDialog : Form
         AppTheme.Apply3D(this);
     }
 
+    // ── Pre-allocated context menu items (avoids GDI handle leak on every right-click) ──
+    private readonly ToolStripMenuItem _miTitle = new("📎 How to install") { Enabled = false };
+    private readonly ToolStripSeparator _miSep = new();
+    private readonly ToolStripMenuItem _miCopy = new("📋 Copy install command");
+    private readonly ToolStripMenuItem _miDocs = new("🌐 Open download page");
+    private string? _capturedCmd;
+    private string? _capturedUrl;
+
     private void BuildContextMenu()
     {
         _lstTools.ContextMenuStrip = _ctxMenu;
+        _ctxMenu.Items.AddRange([_miTitle, _miSep, _miCopy, _miDocs]);
+
+        _miCopy.Click += (_, _) =>
+        {
+            if (_capturedCmd is not null)
+                Clipboard.SetText(_capturedCmd);
+        };
+        _miDocs.Click += (_, _) =>
+        {
+            if (_capturedUrl is not null)
+                Process.Start(new ProcessStartInfo(_capturedUrl) { UseShellExecute = true });
+        };
+
         _ctxMenu.Opening += (_, e) =>
         {
-            _ctxMenu.Items.Clear();
             if (_lstTools.SelectedItems.Count == 0)
             {
                 e.Cancel = true;
@@ -204,23 +224,11 @@ internal sealed class ToolVersionsDialog : Form
                 e.Cancel = true;
                 return;
             }
-            var miTitle = new ToolStripMenuItem($"📎 How to install {toolName}") { Enabled = false };
-            _ctxMenu.Items.Add(miTitle);
-            _ctxMenu.Items.Add(new ToolStripSeparator());
-            if (cmd is not null)
-            {
-                var miCopy = new ToolStripMenuItem("📋 Copy install command");
-                string capturedCmd = cmd;
-                miCopy.Click += (_, _) => Clipboard.SetText(capturedCmd);
-                _ctxMenu.Items.Add(miCopy);
-            }
-            if (url is not null)
-            {
-                var miDocs = new ToolStripMenuItem("🌐 Open download page");
-                string capturedUrl = url;
-                miDocs.Click += (_, _) => Process.Start(new ProcessStartInfo(capturedUrl) { UseShellExecute = true });
-                _ctxMenu.Items.Add(miDocs);
-            }
+            _miTitle.Text = $"📎 How to install {toolName}";
+            _capturedCmd = cmd;
+            _capturedUrl = url;
+            _miCopy.Visible = cmd is not null;
+            _miDocs.Visible = url is not null;
         };
     }
 

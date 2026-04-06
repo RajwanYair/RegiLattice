@@ -16,9 +16,9 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 | Project                  | Tests     | Covers                                                                                                                                                                         |
 | ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `RegiLattice.Core.Tests` | 2,369+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
-| `RegiLattice.CLI.Tests`  | 406+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
-| `RegiLattice.GUI.Tests`  | 357+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **3,132+**|                                                                                                                                                                                |
+| `RegiLattice.CLI.Tests`  | 434+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
+| `RegiLattice.GUI.Tests`  | 363+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
+| **Total**                | **3,166+**|                                                                                                                                                                                |
 
 ## Running Tests
 

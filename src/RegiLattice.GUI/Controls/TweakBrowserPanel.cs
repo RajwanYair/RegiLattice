@@ -255,7 +255,7 @@ internal sealed class TweakBrowserPanel : Panel
         using var font = isSelected
             ? new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Bold)
             : new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Regular);
-        var sf = new StringFormat { LineAlignment = StringAlignment.Center };
+        using var sf = new StringFormat { LineAlignment = StringAlignment.Center };
         e.Graphics.DrawString(e.Node?.Text ?? "", font, textBrush, new RectangleF(r.X + 8, r.Y, r.Width - 8, r.Height), sf);
     }
 
