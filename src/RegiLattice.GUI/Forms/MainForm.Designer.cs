@@ -568,22 +568,36 @@ partial class MainForm
         _listContextMenu = new ContextMenuStrip();
         var ctxApply = new ToolStripMenuItem("Apply Selected");
         var ctxRemove = new ToolStripMenuItem("Remove Selected");
+        var ctxToggleFav = new ToolStripMenuItem("\u2B50 Toggle Favorite");
         var ctxCopyId = new ToolStripMenuItem("Copy ID");
         var ctxCopyKeys = new ToolStripMenuItem("Copy Registry Keys");
+        var ctxCopyRegPath = new ToolStripMenuItem("Copy Registry Path");
+        var ctxOpenRegedit = new ToolStripMenuItem("Open in Registry Editor");
+        var ctxShowDeps = new ToolStripMenuItem("Show Dependencies\u2026");
+        var ctxViewHistory = new ToolStripMenuItem("View History\u2026");
         var ctxSelAll = new ToolStripMenuItem("Select All");
         var ctxDeselAll = new ToolStripMenuItem("Deselect All");
         _listContextMenu.Items.AddRange(new ToolStripItem[]
         {
             ctxApply, ctxRemove,
             new ToolStripSeparator(),
-            ctxCopyId, ctxCopyKeys,
+            ctxToggleFav,
+            new ToolStripSeparator(),
+            ctxCopyId, ctxCopyKeys, ctxCopyRegPath, ctxOpenRegedit,
+            new ToolStripSeparator(),
+            ctxShowDeps, ctxViewHistory,
             new ToolStripSeparator(),
             ctxSelAll, ctxDeselAll,
         });
         ctxApply.Click += async (_, _) => await ApplySelectedAsync();
         ctxRemove.Click += async (_, _) => await RemoveSelectedAsync();
+        ctxToggleFav.Click += (_, _) => OnCtxToggleFavorite();
         ctxCopyId.Click += (_, _) => CopySelectedId();
         ctxCopyKeys.Click += (_, _) => CopySelectedRegistryKeys();
+        ctxCopyRegPath.Click += (_, _) => OnCtxCopyRegPath();
+        ctxOpenRegedit.Click += (_, _) => OnCtxOpenInRegedit();
+        ctxShowDeps.Click += (_, _) => OnCtxShowDependencies();
+        ctxViewHistory.Click += (_, _) => OnCtxViewHistory();
         ctxSelAll.Click += (_, _) => SelectAllListItems();
         ctxDeselAll.Click += (_, _) => DeselectAllListItems();
         _listView.ContextMenuStrip = _listContextMenu;

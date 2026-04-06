@@ -6,7 +6,7 @@
 
   <groupId>com.rajwanyair</groupId>
   <artifactId>regilattice</artifactId>
-  <version>6.17.0</version>
+  <version>6.18.0</version>
   <packaging>pom</packaging>
 
   <name>RegiLattice</name>

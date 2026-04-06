@@ -2364,6 +2364,121 @@ public partial class MainForm : Form
         node.Text = $"{icon} {category}  ({applied}/{count})";
     }
 
+    // ── Phase 2.2 — Global keyboard shortcuts ─────────────────────────────
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+        switch (keyData)
+        {
+            case Keys.F1:
+                new KeyboardShortcutsDialog().Show(this);
+                return true;
+            case Keys.F5:
+                _ = RefreshStatusAsync();
+                return true;
+            case Keys.Control | Keys.F:
+                _searchBox.Select();
+                _searchBox.Focus();
+                return true;
+            case Keys.Control | Keys.L:
+                ToggleLogPanel();
+                return true;
+            case Keys.Escape when _searchBox.Text.Length > 0:
+                _searchBox.Text = "";
+                return true;
+        }
+        return base.ProcessCmdKey(ref msg, keyData);
+    }
+
+    // ── Phase 2.5 — Enhanced context menu handlers ─────────────────────────
+    private void OnCtxToggleFavorite()
+    {
+        if (_listView.FocusedItem?.Tag is not TweakDef td)
+            return;
+        bool isFav = Favorites.Toggle(td.Id);
+        AppendLog(isFav ? $"\u2B50 Added to favorites: {td.Id}" : $"\u2606 Removed from favorites: {td.Id}");
+    }
+
+    private void OnCtxCopyRegPath()
+    {
+        if (_listView.FocusedItem?.Tag is not TweakDef td)
+            return;
+        var paths = td.ApplyOps.Select(o => o.Path).Distinct().ToList();
+        if (paths.Count == 0)
+            paths = td.RegistryKeys.ToList();
+        if (paths.Count > 0)
+            Clipboard.SetText(string.Join(Environment.NewLine, paths));
+    }
+
+    private void OnCtxOpenInRegedit()
+    {
+        if (_listView.FocusedItem?.Tag is not TweakDef td)
+            return;
+        string? path = td.ApplyOps.Select(o => o.Path).FirstOrDefault()
+            ?? td.RegistryKeys.FirstOrDefault();
+        if (path is null)
+            return;
+
+        // Normalize abbreviated hive names for Registry Editor
+        string regPath = path
+            .Replace("HKCU\\", "HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase)
+            .Replace("HKLM\\", "HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase);
+
+        // Set LastKey so regedit opens at the correct path
+        try
+        {
+            Microsoft.Win32.Registry.SetValue(
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit",
+                "LastKey",
+                regPath
+            );
+        }
+        catch { /* non-critical */ }
+
+        System.Diagnostics.Process.Start(
+            new System.Diagnostics.ProcessStartInfo("regedit.exe") { UseShellExecute = true }
+        );
+    }
+
+    private void OnCtxShowDependencies()
+    {
+        if (_listView.FocusedItem?.Tag is not TweakDef td)
+            return;
+        var deps = _engine.ResolveDependencies(td.Id);
+        if (deps.Count <= 1)
+        {
+            MessageBox.Show("This tweak has no dependencies.", "Dependencies", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        string depList = string.Join(
+            "\n  \u2192 ",
+            deps.Where(d => d.Id != td.Id).Select(d => $"{d.Id} ({d.Label})")
+        );
+        MessageBox.Show(
+            $"Dependencies for '{td.Label}':\n\n  \u2192 {depList}",
+            "Dependencies",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information
+        );
+    }
+
+    private void OnCtxViewHistory()
+    {
+        if (_listView.FocusedItem?.Tag is not TweakDef td)
+            return;
+        var history = TweakHistory.ForTweak(td.Id);
+        if (history.Count == 0)
+        {
+            MessageBox.Show("No history found for this tweak.", "History", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        var sb = new StringBuilder();
+        sb.AppendLine($"History for '{td.Label}' ({td.Id}):");
+        sb.AppendLine();
+        foreach (var entry in history.Take(20))
+            sb.AppendLine($"  [{entry.Timestamp}]  {entry.Action}  \u2192  {entry.Result}");
+        MessageBox.Show(sb.ToString(), "Tweak History", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
     private async void OnApplyClicked(object? sender, EventArgs e) => await ApplySelectedAsync();
 
     private async void OnRemoveClicked(object? sender, EventArgs e) => await RemoveSelectedAsync();

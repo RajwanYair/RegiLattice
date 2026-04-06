@@ -4,6 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.18.0] — 2026-04-06
+
+### Added — Phase 2.2 + Phase 2.5: Keyboard Shortcuts & Enhanced Context Menu
+
+- **Keyboard shortcuts (Phase 2.2)**: `ProcessCmdKey` override in MainForm handles five
+  global shortcuts: F1 opens the new `KeyboardShortcutsDialog` (non-modal cheatsheet with
+  19 shortcuts in 4 groups, filterable search bar), F5 refreshes tweak status, Ctrl+F
+  focuses the search box, Ctrl+L toggles the log panel, Escape clears the search box.
+
+- **KeyboardShortcutsDialog**: New dialog in `Forms/KeyboardShortcutsDialog.cs` (174 lines).
+  Lists all keyboard shortcuts in a themed 3-column ListView (Keys / Action / Group).
+  Filterable by typing in the filter box. Closes with Escape or OK button. Non-modal so
+  the main window remains interactive while it is open.
+
+- **Enhanced context menu (Phase 2.5)**: `_listContextMenu` expanded from 6 to 11 items with
+  logical separator groups:
+  - Apply / Remove
+  - ⭐ Toggle Favorite (adds/removes from `Favorites`, appends ⭐/🗑 log line)
+  - Copy ID / Copy Registry Keys / Copy Registry Path / Open in Registry Editor
+  - Show Dependencies… (`TweakEngine.ResolveDependencies` → MessageBox with dep chain)
+  - View History… (`TweakHistory.ForTweak` → MessageBox showing apply/remove log per tweak)
+  - Select All / Deselect All
+
+#### Stats
+
+- Tests: 3,166 → **3,190** (+24; Phase2Tests.cs: 24 new Core tests for ctx menu, Favorites, TweakHistory, RegOp, ResolveDependencies)
+- Tweaks: 7,189 (unchanged)
+- Categories: 122 (unchanged)
+
+---
+
 ## [6.17.0] — 2026-04-07
 
 ### Added — Phase 3.2 + 3.5 + 4.1: Batch Recipes, Watch Mode, E2E Tests

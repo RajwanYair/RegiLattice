@@ -109,7 +109,7 @@
     <!-- Tests pill -->
     <rect x="610" y="430" width="160" height="36" rx="18" fill="#316044"/>
     <text x="627" y="454" font-size="13" font-weight="600" fill="#f9e2af">&#x2605;</text>
-    <text x="643" y="454" font-size="14" font-weight="600" fill="#cdd6f4">3 166 Tests</text>
+    <text x="643" y="454" font-size="14" font-weight="600" fill="#cdd6f4">3 190 Tests</text>
 
     <!-- Themes pill -->
     <rect x="790" y="430" width="155" height="36" rx="18" fill="#316044"/>
