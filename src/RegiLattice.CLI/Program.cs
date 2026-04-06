@@ -867,7 +867,10 @@ internal static class Program
         var list = results.ToList();
         if (list.Count == 0)
         {
-            Console.WriteLine($"No tweaks matching '{a.Search}'.");
+            if (a.OutputFormat == "json")
+                Console.WriteLine("[]");
+            else
+                Console.WriteLine($"No tweaks matching '{a.Search}'.");
             return 0;
         }
 
