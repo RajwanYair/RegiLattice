@@ -175,6 +175,10 @@ internal static class Program
             return RunExportGpo(a.ExportGpo);
         if (a.ExportIntune is not null)
             return RunExportIntune(a.ExportIntune);
+        if (a.ExportAnsible is not null)
+            return RunExportAnsible(a.ExportAnsible);
+        if (a.ExportDsc is not null)
+            return RunExportDsc(a.ExportDsc);
         if (a.GeneratePsModule)
             return RunGeneratePsModule(a.PsModuleOutput);
         if (a.HtmlReport is not null)
@@ -2657,6 +2661,42 @@ internal static class Program
         }
     }
 
+    // ── Ansible Export ────────────────────────────────────────────────────
+
+    private static int RunExportAnsible(string outputPath)
+    {
+        Console.WriteLine("Exporting Ansible win_regedit playbook\u2026");
+        try
+        {
+            AnsibleExporter.Export(_engine, outputPath);
+            Console.WriteLine(Green($"\u2705  Ansible YAML exported to: {outputPath}"));
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
+    // ── DSC Export ────────────────────────────────────────────────────────
+
+    private static int RunExportDsc(string outputPath)
+    {
+        Console.WriteLine("Exporting PowerShell DSC configuration\u2026");
+        try
+        {
+            DscExporter.Export(_engine, outputPath);
+            Console.WriteLine(Green($"\u2705  DSC .ps1 exported to: {outputPath}"));
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
     // ── PowerShell Module Generation ─────────────────────────────────────
 
     // ── HTML report ──────────────────────────────────────────────────────
@@ -3330,6 +3370,14 @@ internal static class Program
                 case "--export-intune":
                     if (++i < args.Length)
                         p.ExportIntune = args[i];
+                    break;
+                case "--export-ansible":
+                    if (++i < args.Length)
+                        p.ExportAnsible = args[i];
+                    break;
+                case "--export-dsc":
+                    if (++i < args.Length)
+                        p.ExportDsc = args[i];
                     break;
                 case "--new-pack":
                     if (++i < args.Length)

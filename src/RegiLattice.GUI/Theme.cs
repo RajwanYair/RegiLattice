@@ -299,14 +299,23 @@ internal static class AppTheme
         prevSmallBold.Dispose();
     }
 
-    // ── Theme API ──────────────────────────────────────────────────────────
-    internal static string[] AvailableThemes() => [.. Themes.Keys];
+    // ── User themes ────────────────────────────────────────────────────────
+    /// <summary>User-defined JSON themes loaded from <c>%LOCALAPPDATA%\RegiLattice\themes\*.json</c>.</summary>
+    private static readonly Dictionary<string, ThemeDef> _userThemes = new(StringComparer.OrdinalIgnoreCase);
+    private static FileSystemWatcher? _themeWatcher;
 
-    internal static string CurrentThemeName() => Themes.FirstOrDefault(kv => kv.Value == _current).Key ?? "catppuccin-mocha";
+    // ── Theme API ──────────────────────────────────────────────────────────
+    internal static string[] AvailableThemes() => [.. Themes.Keys, .. _userThemes.Keys];
+
+    internal static string CurrentThemeName() =>
+        Themes.FirstOrDefault(kv => kv.Value == _current).Key ?? _userThemes.FirstOrDefault(kv => kv.Value == _current).Key ?? "catppuccin-mocha";
+
+    /// <summary>Returns <c>true</c> if <paramref name="name"/> refers to a user-defined JSON theme.</summary>
+    internal static bool IsUserTheme(string name) => _userThemes.ContainsKey(name);
 
     internal static void SetTheme(string name)
     {
-        if (Themes.TryGetValue(name, out var def))
+        if (Themes.TryGetValue(name, out var def) || _userThemes.TryGetValue(name, out def))
             _current = def;
     }
 
@@ -329,6 +338,147 @@ internal static class AppTheme
     internal static event Action? ThemeChanged;
 
     internal static void RaiseThemeChanged() => ThemeChanged?.Invoke();
+
+    // ── User Theme JSON Loading ─────────────────────────────────────────────
+    /// <summary>Raised when a user theme JSON file fails to parse. Arg = descriptive message.</summary>
+    internal static event Action<string>? UserThemeLoadError;
+
+    /// <summary>
+    /// Load all <c>*.json</c> user theme files from <c>%LOCALAPPDATA%\RegiLattice\themes\</c>
+    /// and install a <see cref="FileSystemWatcher"/> for live hot-reload.
+    /// Invalid files are silently skipped; <see cref="UserThemeLoadError"/> fires per error.
+    /// Safe to call multiple times — the watcher is created only once.
+    /// </summary>
+    internal static void LoadUserThemes()
+    {
+        string themesDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "themes");
+        if (!Directory.Exists(themesDir))
+            return;
+
+        foreach (string file in Directory.GetFiles(themesDir, "*.json"))
+            TryRegisterUserTheme(file);
+
+        if (_themeWatcher is null)
+        {
+            _themeWatcher = new FileSystemWatcher(themesDir, "*.json")
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime,
+                EnableRaisingEvents = true,
+            };
+            _themeWatcher.Changed += (_, e) =>
+            {
+                System.Threading.Thread.Sleep(80);
+                TryRegisterUserTheme(e.FullPath);
+            };
+            _themeWatcher.Created += (_, e) =>
+            {
+                System.Threading.Thread.Sleep(80);
+                TryRegisterUserTheme(e.FullPath);
+            };
+            _themeWatcher.Deleted += (_, e) =>
+            {
+                _userThemes.Remove($"user:{Path.GetFileNameWithoutExtension(e.FullPath)}");
+                RaiseThemeChanged();
+            };
+            _themeWatcher.Renamed += (_, e) =>
+            {
+                _userThemes.Remove($"user:{Path.GetFileNameWithoutExtension(e.OldFullPath)}");
+                TryRegisterUserTheme(e.FullPath);
+            };
+        }
+    }
+
+    private static void TryRegisterUserTheme(string filePath)
+    {
+        try
+        {
+            string json = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
+            ThemeDef? def = TryParseUserTheme(json);
+            if (def is null)
+            {
+                UserThemeLoadError?.Invoke($"[Theme] Skipping '{Path.GetFileName(filePath)}': missing required 'name' or colour fields.");
+                return;
+            }
+            _userThemes[$"user:{Path.GetFileNameWithoutExtension(filePath)}"] = def;
+            RaiseThemeChanged();
+        }
+        catch (IOException) { }
+        catch (UnauthorizedAccessException) { }
+        catch (System.Text.Json.JsonException ex)
+        {
+            UserThemeLoadError?.Invoke($"[Theme] JSON error in '{Path.GetFileName(filePath)}': {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Parse a user theme JSON string into a <see cref="ThemeDef"/>.
+    /// Returns <c>null</c> if required fields (<c>name</c>, <c>background</c>, <c>text</c>) are absent.
+    /// </summary>
+    internal static ThemeDef? TryParseUserTheme(string json)
+    {
+        var opts = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true, AllowTrailingCommas = true };
+        UserThemeJson? data = System.Text.Json.JsonSerializer.Deserialize<UserThemeJson>(json, opts);
+        if (data is null || string.IsNullOrWhiteSpace(data.Name))
+            return null;
+        if (string.IsNullOrWhiteSpace(data.Background) || string.IsNullOrWhiteSpace(data.Text))
+            return null;
+
+        Color bg = Hex(data.Background);
+        Color surface = Hex(data.Surface ?? data.Background);
+        Color fg = Hex(data.Text);
+        Color fgDim = Hex(data.TextSecondary ?? DimHex(data.Text, 0.65f));
+        Color accent = Hex(data.Accent ?? data.Primary ?? "#89b4fa");
+        Color green = Hex(data.Secondary ?? data.Success ?? "#a6e3a1");
+        Color red = Hex(data.Error ?? "#f38ba8");
+        Color yellow = Hex(data.Warning ?? "#f9e2af");
+        Color success = Hex(data.Success ?? data.Secondary ?? "#a6e3a1");
+        Color surface2 = Hex(data.Surface2 ?? BlendHex(data.Surface ?? data.Background, data.Text, 0.15f));
+        Color overlay = Hex(data.Overlay ?? BlendHex(data.Background, data.Surface ?? data.Background, 0.4f));
+        Color info = Hex(data.Info ?? data.Accent ?? data.Primary ?? "#89dceb");
+
+        return new ThemeDef(
+            Name: data.Name,
+            Bg: bg,
+            Surface: surface,
+            Surface2: surface2,
+            Fg: fg,
+            FgDim: fgDim,
+            Accent: accent,
+            Green: green,
+            Red: red,
+            Yellow: yellow,
+            Overlay: overlay,
+            Success: success,
+            Danger: red,
+            Info: info
+        );
+    }
+
+    private static Color Hex(string hex)
+    {
+        ReadOnlySpan<char> s = hex.AsSpan().TrimStart('#');
+        if (s.Length == 6 && int.TryParse(s, System.Globalization.NumberStyles.HexNumber, null, out int rgb))
+            return Color.FromArgb((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF);
+        if (s.Length == 8 && int.TryParse(s, System.Globalization.NumberStyles.HexNumber, null, out int argb))
+            return Color.FromArgb((argb >> 24) & 0xFF, (argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF);
+        return Color.Gray;
+    }
+
+    private static string DimHex(string hex, float factor)
+    {
+        Color c = Hex(hex);
+        return $"#{(int)(c.R * factor):X2}{(int)(c.G * factor):X2}{(int)(c.B * factor):X2}";
+    }
+
+    private static string BlendHex(string hex1, string hex2, float t)
+    {
+        Color c1 = Hex(hex1);
+        Color c2 = Hex(hex2);
+        int r = (int)(c1.R + (c2.R - c1.R) * t);
+        int g = (int)(c1.G + (c2.G - c1.G) * t);
+        int b = (int)(c1.B + (c2.B - c1.B) * t);
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
 
     // ── Helpers ────────────────────────────────────────────────────────────
     /// <summary>Recursively apply theme colours to a control tree.</summary>
@@ -541,4 +691,56 @@ internal static class AppTheme
         btn.FlatAppearance.BorderSize = 1;
         btn.FlatAppearance.BorderColor = Color.FromArgb(80, 255, 255, 255);
     }
+}
+
+// ── User Theme JSON deserialization model ──────────────────────────────────
+
+/// <summary>De-serialisation target for user-defined theme JSON files placed in
+/// <c>%LOCALAPPDATA%\RegiLattice\themes\*.json</c>.</summary>
+internal sealed class UserThemeJson
+{
+    [System.Text.Json.Serialization.JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [System.Text.Json.Serialization.JsonPropertyName("isDark")]
+    public bool IsDark { get; set; } = true;
+
+    [System.Text.Json.Serialization.JsonPropertyName("background")]
+    public string? Background { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("surface")]
+    public string? Surface { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("surface2")]
+    public string? Surface2 { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("text")]
+    public string? Text { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("textSecondary")]
+    public string? TextSecondary { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("accent")]
+    public string? Accent { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("primary")]
+    public string? Primary { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("secondary")]
+    public string? Secondary { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("success")]
+    public string? Success { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("warning")]
+    public string? Warning { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("overlay")]
+    public string? Overlay { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("info")]
+    public string? Info { get; set; }
 }

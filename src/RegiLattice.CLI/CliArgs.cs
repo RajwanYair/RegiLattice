@@ -206,4 +206,11 @@ internal sealed class CliArgs
 
     /// <summary>When non-null, limits drift monitoring to the tweak IDs read from this file.</summary>
     public string? WatchFile { get; set; }
+
+    // ── Phase 3.6 — enhanced export formats ─────────────────────────
+    /// <summary>When non-null, exports all Registry/GroupPolicy tweaks as Ansible win_regedit YAML to this path.</summary>
+    public string? ExportAnsible { get; set; }
+
+    /// <summary>When non-null, exports all Registry/GroupPolicy tweaks as a PowerShell DSC .ps1 script to this path.</summary>
+    public string? ExportDsc { get; set; }
 }

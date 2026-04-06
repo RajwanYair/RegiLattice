@@ -4,6 +4,53 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.20.0] — 2026-04-06
+
+### Added — Phase 2.6 + Phase 3.6: Custom User Themes & Enhanced Export Formats
+
+#### Phase 2.6 — Custom User Theme JSON Loading
+
+- **User-defined JSON themes**: Place `*.json` files in `%LOCALAPPDATA%\RegiLattice\themes\`
+  to add custom colour themes. Files are loaded at startup and appear in the theme selector
+  prefixed `user:<filename>`.
+
+- **Hot-reload**: A `FileSystemWatcher` monitors the themes directory and re-loads themes
+  when files are created, modified, renamed, or deleted — no restart needed.
+
+- **JSON schema**: Requires `name`, `background`, and `text`; all other fields are optional
+  with sensible defaults. Supports: `surface`, `surface2`, `textSecondary`, `accent`,
+  `primary`, `secondary`, `success`, `warning`, `error`, `overlay`, `info`, `isDark`.
+
+- **`AppTheme.LoadUserThemes()`**: New public API — call once at startup (e.g. in
+  `MainForm.Load`). Error details surface via the new `UserThemeLoadError` event (invalid JSON
+  or missing required fields are silently skipped; the event fires with a message per bad file).
+
+- **`AppTheme.TryParseUserTheme(string json)`**: Parses a user theme JSON string into a
+  `ThemeDef` record; returns null on failure. Available for tooling and unit tests.
+
+- **`AppTheme.IsUserTheme(name)`**: Returns `true` for `user:*` keys so the UI can show a
+  "Remove" button for user themes without affecting built-in palettes.
+
+#### Phase 3.6 — Ansible and DSC Export Formats
+
+- **`AnsibleExporter.Build/Export`**: Generates an Ansible `win_regedit` task-list YAML
+  playbook for all `Registry` and `GroupPolicy`-kind tweaks. Paths normalised to
+  `HKLM:\...` / `HKCU:\...` format. Value types mapped to Ansible's `dword`, `qword`,
+  `string`, `expandstring`, `multistring`, `binary` names.
+
+- **`DscExporter.Build/Export`**: Generates a PowerShell DSC Configuration script (`.ps1`)
+  using `PSDscResources\Registry` resources for all applicable tweaks. Includes an
+  `Import-DscResource` block, `Node localhost` scope, and auto-invoke at end of file.
+
+- **CLI `--export-ansible <path>`**: Export all tweaks as an Ansible YAML playbook.
+- **CLI `--export-dsc <path>`**: Export all tweaks as a PowerShell DSC script.
+
+#### Stats
+
+- Tweaks: 7,189 · Categories: 122 · Modules: 146 · Tests: 2,421
+
+---
+
 ## [6.19.0] — 2026-04-06
 
 ### Added — Phase 2.3 + 2.4: Risk Confirmation Dialog & Batch ETA
