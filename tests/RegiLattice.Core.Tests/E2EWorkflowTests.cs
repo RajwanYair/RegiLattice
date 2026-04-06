@@ -101,7 +101,6 @@ public sealed class E2EWorkflowTests : IDisposable
     {
         // Use a small subset to keep the test fast
         var tweaks = _engine.AllTweaks()
-            .Where(t => t.Category == 
             .Where(t => t.Category == "Performance")
             .Take(10)
             .ToList();
@@ -138,12 +137,13 @@ public sealed class E2EWorkflowTests : IDisposable
             DetectOps = [RegOp.CheckDword(
                 @"HKEY_CURRENT_USER\SOFTWARE\RegiLattice\E2ETest",
                 "DryValue", 42)],
-        };[tweak]);
+        };
+        engine.Register([tweak]);
 
         engine.Apply(tweak, requireAdmin: false, forceCorp: false);
 
         // DryRun must record the op (DryOps is an int count)
-        Assert.True(session.DryOps > 0, "Expected DryRun to capture at least one ope at least one op");
+        Assert.True(session.DryOps > 0, "Expected DryRun to capture at least one op");
     }
 
     // ── Scenario 5 — Snapshot create / restore round-trip ────────────────────
@@ -152,7 +152,12 @@ public sealed class E2EWorkflowTests : IDisposable
     public void Scenario5_SnapshotRoundTrip_SaveAndRestore_FileCreated()
     {
         var snapshotPath = Path.Combine(_tmpDir, "snapshot.json");
-        _engine.SaveSnapshot(snapshotPath);
+
+        // Pass a pre-built stub status so SaveSnapshot skips live StatusMap() registry reads
+        // (which are very slow on Intune filter-driver machines — ~7k registry reads).
+        var stubStatus = _engine.AllTweaks()
+            .ToDictionary(t => t.Id, _ => TweakResult.Unknown);
+        _engine.SaveSnapshot(snapshotPath, stubStatus);
 
         Assert.True(File.Exists(snapshotPath), "Snapshot file was not created");
         Assert.True(new FileInfo(snapshotPath).Length > 0, "Snapshot file is empty");
@@ -204,7 +209,7 @@ public sealed class E2EWorkflowTests : IDisposable
 
         // All DependsOn IDs should be in the resolved chain
         foreach (var depId in dependent.DependsOn)
-            Assert.Contains(resolved, t => t.Id == depI t.Id == depId);
+            Assert.Contains(resolved, t => t.Id == depId);
     }
 
     // ── Scenario 8 — CorporateGuard blocks unsafe tweaks when enabled ─────────
@@ -235,7 +240,7 @@ public sealed class E2EWorkflowTests : IDisposable
                     @"HKEY_LOCAL_MACHINE\SOFTWARE\RegiLattice\CorpTest",
                     "Value", 1)],
             };
-            corpEngine.Register([unsafeTweak]k]);
+            corpEngine.Register([unsafeTweak]);
 
             var result = corpEngine.Apply(unsafeTweak, requireAdmin: false, forceCorp: false);
             Assert.Equal(TweakResult.SkippedCorp, result);
@@ -265,8 +270,7 @@ public sealed class E2EWorkflowTests : IDisposable
         Assert.Null(ex);
 
         var all = freshEngine.AllTweaks();
-        Assert.True(all.Count >= 7000,
-            $"Expected ≥7,000 tweaks after RegisterBuiltins; got {all.Count}");
+        Assert.True(all.Count >= 7249, $"Expected ≥7,249 tweaks after RegisterBuiltins; got {all.Count}");
         Assert.True(freshEngine.Categories().Count >= 100,
             $"Expected ≥100 categories; got {freshEngine.Categories().Count}");
     }
@@ -318,14 +322,13 @@ public sealed class ConcurrentSafetyTests : IDisposable
         foreach (var result in results)
         {
             Assert.NotNull(result);
-            Assert.Equal(ids.Count, r
-            Assert.NotNull(result);
             Assert.Equal(ids.Count, result.Count);
         }
     }
 
     // ── 5 concurrent ApplyBatch with DryRun — no corruption ──────────────────
-async Task Concurrent_ApplyBatch_5Parallel_NoCorruption()
+    [Fact]
+    public async Task Concurrent_ApplyBatch_5Parallel_NoCorruption()
     {
         const int concurrency = 5;
 
@@ -349,14 +352,12 @@ async Task Concurrent_ApplyBatch_5Parallel_NoCorruption()
         {
             Assert.NotNull(result);
             Assert.Equal(tweaks.Count, result.Count);
-            Assert.All(rrrency, results.Length);
-        foreach (var result in results)
-        {
-            Assert.NotNull(result);
-            Assert.Equal(tweaks.Count, result.Count);
             Assert.All(result.Values, r => Assert.True(Enum.IsDefined(r)));
         }
-    }async Task Concurrent_MixedReadAndApply_NoException()
+    }
+
+    [Fact]
+    public async Task Concurrent_MixedReadAndApply_NoException()
     {
         var tweaks = _engine.AllTweaks()
             .Where(t => t.Category == "Performance")
@@ -371,12 +372,6 @@ async Task Concurrent_ApplyBatch_5Parallel_NoCorruption()
                 return _engine.Search("cpu");
             })
         );
-
-        var applyTasks = Enumerable.Range(0, 3).Select(_ =>
-            Task.Run(() => _engine.ApplyBatch(tweaks, forceCorp: false, parallel: false))
-        );
-
-        await Task.When
 
         var applyTasks = Enumerable.Range(0, 3).Select(_ =>
             Task.Run(() => _engine.ApplyBatch(tweaks, forceCorp: false, parallel: false))

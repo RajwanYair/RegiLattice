@@ -4,6 +4,33 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.22.0] — 2026-04-06
+
+### Added — Phase 5 Sprint: 8 New Security Modules (+80 Tweaks)
+
+#### New Tweak Modules
+
+- **SecurityWDAG.cs** — 10 tweaks (`wdag-*`): Windows Defender Application Guard policy (clipboard, printing, camera mic, network isolation, enterprise mode, persistence, idle timer, file trust, URL rendering, developer mode)
+- **SecurityPrinterHardening.cs** — 10 tweaks (`prtharden-*`): Windows Print Spooler hardening (disable remote printing, block client-side rendering, restrict driver install, disable SMB printing, limit unauthenticated access, block internet print, point-and-print restrictions, disable fax service, enforce driver signing, disable PrintNightmare vector)
+- **SecurityLsaHardening.cs** — 10 tweaks (`lsaharden-*`): LSA process protection (enable PPL, disable WDigest, enable LSASS audit, block RPC, disable remote registry admin, restrict guest accounts, restrict anonymous access, disable LM auth, enforce NTLMv2, restrict LSA anonymous)
+- **SecurityMsiHardening.cs** — 10 tweaks (`msiinst-*`): Windows Installer lockdown (disable elevated per-user installs, disable admin always install elevated, require signed packages, disable roll-back for elevated, disable automatic updates for MSI, remove cached patches, enforce minimum auth level, block MSIX sideloading, require store-signed apps, disable unsigned package install)
+- **SecurityTimeService.cs** — 10 tweaks (`ntpsec-*`): W32Time / NTP hardening (enforce NTP synchronisation, set primary NTP server, MaxPosPhaseCorrection, MaxNegPhaseCorrection, announce as reliable source, disable VM timesync, enable NTP response logging, block unauthenticated peers, restrict peer discovery broadcast, enable secure time providers)
+- **SecurityWinRMHardening.cs** — 10 tweaks (`winrmsec-*`): WinRM security policy (disable WinRM client, require Kerberos auth, disable unencrypted traffic, disable CredSSP, disable Negotiate auth, block basic auth over HTTP, require HTTPS listener, disable server-side basic auth, enforce max shell memory, disable running as local account)
+- **SecurityCredentialGuard.cs** — 10 tweaks (`credguard-*`): Credential Guard and VBS (enable VBS, enable Credential Guard UEFI lock, disable WDigest cleartext, enable Remote Credential Guard, block NTLM default/saved/fresh creds, enable restricted admin RDP, require TPM for credentials)
+- **SecurityIEZones.cs** — 10 tweaks (`iezone-*`): IE Zone security policy (Restricted Zone: block ActiveX, unsafe ActiveX, active scripting, clipboard script, frame nav, subframe cross-domain, enable popup blocker; Intranet Zone: block ActiveX install, clipboard script, cross-domain nav)
+
+#### Fixed
+
+- **Scenario5 snapshot hang**: `SnapshotManager.Save` / `TweakEngine.SaveSnapshot` now accept an optional `cachedStatus` parameter (matching the pattern used by `ExportJson`) — avoids live `StatusMap()` reads on 7,000+ tweaks which hung for > 2 min on Intune filter-driver machines
+- Repaired 8 pre-existing corruption sites in `E2EWorkflowTests.cs` (duplicate/truncated fragments from a prior edit session)
+
+#### Stats
+
+- Tweaks: 7,189 → **7,269** (+80)
+- Tests: 2,434 → **2,434** (snapshot fix adds 0 net new tests; E2E count unchanged)
+
+---
+
 ## [6.21.0] — 2026-04-06
 
 ### Added — Phase 4.1 + Phase 4.6: E2E Workflow Tests & Concurrent Safety Tests

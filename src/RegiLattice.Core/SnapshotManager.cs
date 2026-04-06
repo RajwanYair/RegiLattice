@@ -17,9 +17,13 @@ public sealed class SnapshotManager
     }
 
     /// <summary>Save the current status of all tweaks to a JSON snapshot file.</summary>
-    public void Save(string path)
+    /// <param name="cachedStatus">
+    /// Optional pre-computed status map. Pass to skip live <see cref="TweakEngine.StatusMap"/> registry
+    /// reads (slow on managed/Intune machines with filter drivers over large tweak sets).
+    /// </param>
+    public void Save(string path, Dictionary<string, TweakResult>? cachedStatus = null)
     {
-        var status = _engine.StatusMap();
+        var status = cachedStatus ?? _engine.StatusMap();
         var snapshot = status.ToDictionary(kv => kv.Key, kv => kv.Value.ToString().ToLowerInvariant());
         var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         File.WriteAllText(path, json);

@@ -679,7 +679,8 @@ public sealed class TweakEngine
     private SnapshotManager? _snapshotManager;
     private SnapshotManager Snapshots => _snapshotManager ??= new SnapshotManager(this);
 
-    public void SaveSnapshot(string path) => Snapshots.Save(path);
+    public void SaveSnapshot(string path, Dictionary<string, TweakResult>? cachedStatus = null)
+        => Snapshots.Save(path, cachedStatus);
 
     public Dictionary<string, string> LoadSnapshot(string path) => SnapshotManager.Load(path);
 
