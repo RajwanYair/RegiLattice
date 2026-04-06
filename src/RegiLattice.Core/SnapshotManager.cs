@@ -21,7 +21,7 @@ public sealed class SnapshotManager
     {
         var status = _engine.StatusMap();
         var snapshot = status.ToDictionary(kv => kv.Key, kv => kv.Value.ToString().ToLowerInvariant());
-        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         File.WriteAllText(path, json);
     }
 

@@ -14,6 +14,12 @@
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <!-- WFO1000 root fix: Form result properties are annotated with
          [DesignerSerializationVisibility(Hidden)] — no NoWarn suppression needed. -->
+    <!-- Workstation GC with background collection (default for WinExe): lower
+         latency than Server GC, better for interactive GUI with short pauses. -->
+    <GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
+    <!-- DATAS (Dynamic Adaptation To Application Sizes): auto-adjusts GC heap
+         budget based on actual allocation patterns. Reduces working set for
+         idle states while scaling up during batch operations. -->
   </PropertyGroup>
 
   <ItemGroup>

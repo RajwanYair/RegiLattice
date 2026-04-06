@@ -1,4 +1,5 @@
 using System.Text.Json;
+using RegiLattice.Core;
 
 namespace RegiLattice.Core.Services;
 
@@ -87,7 +88,7 @@ public static class Favorites
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         IReadOnlyList<string> snapshot = All();
-        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
         await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
     }
@@ -186,7 +187,7 @@ public static class Favorites
     {
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
         var sorted = data.OrderBy(id => id, StringComparer.OrdinalIgnoreCase).ToList();
-        var json = JsonSerializer.Serialize(sorted, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(sorted, JsonOptions.Indented);
         File.WriteAllText(FilePath, json);
     }
 }

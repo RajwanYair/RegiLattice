@@ -22,7 +22,7 @@ internal sealed class ToolsHubPanel : Panel
     // ── Construction ───────────────────────────────────────────────────────
     internal ToolsHubPanel()
     {
-        SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
         // Header
         var header = new Label

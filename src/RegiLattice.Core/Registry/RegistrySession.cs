@@ -6,6 +6,9 @@ using System.Text.Json;
 using Microsoft.Win32;
 using RegiLattice.Core.Models;
 
+// Import parent namespace for JsonOptions
+using RegiLattice.Core;
+
 namespace RegiLattice.Core.Registry;
 
 /// <summary>
@@ -192,7 +195,7 @@ public sealed class RegistrySession
             snapshot[keyPath] = values;
         }
 
-        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         File.WriteAllText(backupPath, json);
         WriteLog($"BACKUP [{label}] → {backupPath}");
         return backupPath;

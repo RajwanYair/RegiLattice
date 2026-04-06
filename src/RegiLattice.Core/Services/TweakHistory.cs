@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using RegiLattice.Core;
 using RegiLattice.Core.Models;
 
 namespace RegiLattice.Core.Services;
@@ -205,7 +206,7 @@ public static class TweakHistory
         lock (Lock)
             snapshot = LoadList().ToList();
 
-        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
         await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
     }
@@ -237,7 +238,7 @@ public static class TweakHistory
     private static void Save(List<HistoryEntry> data)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(data, JsonOptions.Indented);
         File.WriteAllText(FilePath, json);
     }
 }

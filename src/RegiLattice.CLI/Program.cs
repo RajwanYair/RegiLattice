@@ -314,7 +314,7 @@ internal static class Program
                 .Profiles.Select(p => new ProfileInfo(p.Name, p.Description, _engine.TweaksForProfile(p.Name).Count, "builtin"))
                 .Concat(UserProfileService.GetProfiles().Select(p => new ProfileInfo(p.Name, p.Description, p.TweakIds.Count, "user")))
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(allProfiles, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(allProfiles, JsonOptions.Indented));
             return 0;
         }
 
@@ -353,7 +353,7 @@ internal static class Program
                 TweakCount = up.TweakIds.Count,
                 CreatedAt = up.CreatedAt.ToUniversalTime().ToString("o"),
             });
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
             return 0;
         }
 
@@ -500,7 +500,7 @@ internal static class Program
                 CategoryCounts = byCat.Keys.Order()
                     .ToDictionary(cat => cat, cat => byCat[cat].Count),
             };
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
             return 0;
         }
 
@@ -556,7 +556,7 @@ internal static class Program
         if (a.OutputFormat == "json")
         {
             var dict = byCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
-            Console.WriteLine(JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(dict, JsonOptions.Indented));
         }
         else
         {
@@ -680,7 +680,7 @@ internal static class Program
                     return new { category = cat, tweaks };
                 })
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(report, JsonOptions.Indented));
         }
         else
         {
@@ -732,7 +732,7 @@ internal static class Program
                     Status = kv.Value.ToString(),
                     Label = _engine.GetTweak(kv.Key)?.Label,
                 });
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
             return 0;
         }
 
@@ -836,7 +836,7 @@ internal static class Program
                     t.CorpSafe,
                 })
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
         }
         else
         {
@@ -890,7 +890,7 @@ internal static class Program
                     t.Tags,
                 })
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
         }
         else
         {
@@ -1091,7 +1091,7 @@ internal static class Program
                 DryRun = _session.DryRun,
                 Results = results.Select(kv => new { Id = kv.Key, Status = kv.Value.ToString() }).ToList(),
             };
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
         }
         else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{results.Count} tweaks would be applied ({_session.DryOps} ops skipped).");
@@ -1532,7 +1532,7 @@ internal static class Program
                 Status = result.ToString(),
                 DryRun = _session.DryRun,
             };
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
         }
         else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {td.Label} — {result} ({_session.DryOps} ops skipped).");
@@ -1799,7 +1799,7 @@ internal static class Program
         try
         {
             var json = File.ReadAllText(a.BatchRecipe!);
-            recipe = JsonSerializer.Deserialize<BatchRecipe>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            recipe = JsonSerializer.Deserialize<BatchRecipe>(json, JsonOptions.CaseInsensitive);
         }
         catch (Exception ex)
         {
@@ -1955,7 +1955,7 @@ internal static class Program
                             r.Success,
                         }),
                     },
-                    new JsonSerializerOptions { WriteIndented = true }
+                    JsonOptions.Indented
                 )
             );
         }

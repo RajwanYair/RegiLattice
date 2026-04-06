@@ -47,6 +47,12 @@ public sealed class PackIndex
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
+    private static readonly JsonSerializerOptions s_jsonWriteOptions = new()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
+
     /// <summary>Deserialise an index.json string into a PackIndex.</summary>
     public static PackIndex? FromJson(string json)
     {
@@ -56,7 +62,7 @@ public sealed class PackIndex
     /// <summary>Serialise this index to a JSON string.</summary>
     public string ToJson()
     {
-        return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        return JsonSerializer.Serialize(this, s_jsonWriteOptions);
     }
 
     /// <summary>

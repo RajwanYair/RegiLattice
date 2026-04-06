@@ -412,7 +412,7 @@ internal sealed class PackCreatorDialog : BaseDialog
             pack.Sha256,
             TweakIds = _selectedIds.AsReadOnly(),
         };
-        return JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(obj, JsonOptions.Indented);
     }
 
     private void RefreshJsonPreview()

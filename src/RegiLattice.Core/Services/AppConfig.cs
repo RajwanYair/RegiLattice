@@ -300,7 +300,7 @@ public sealed class AppConfig
     {
         path ??= DefaultConfigPath;
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(this, JsonOptions.Indented);
         File.WriteAllText(path, json);
     }
 }

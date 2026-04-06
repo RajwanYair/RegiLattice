@@ -432,7 +432,7 @@ internal sealed class TweakCardRow : Panel
         Height = CardHeight;
 
         // Bottom divider
-        SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
+        SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
     }
 
     protected override void OnPaint(PaintEventArgs e)

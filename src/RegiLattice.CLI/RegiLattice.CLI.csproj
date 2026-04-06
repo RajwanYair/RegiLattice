@@ -16,6 +16,11 @@
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>partial</TrimMode>
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <!-- Invariant globalization: the CLI uses ordinal string comparisons
+         throughout and has no locale-dependent formatting of user-facing
+         text beyond fixed English output. Stripping ICU saves ~3 MB and
+         removes the ICU data file dependency from the single-file bundle. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>

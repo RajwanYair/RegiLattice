@@ -1750,7 +1750,7 @@ public partial class MainForm : Form
         if (dlg.ShowDialog(this) != DialogResult.OK)
             return;
 
-        string json = JsonSerializer.Serialize(tweaks.Select(t => t.Id).ToList(), new JsonSerializerOptions { WriteIndented = true });
+        string json = JsonSerializer.Serialize(tweaks.Select(t => t.Id).ToList(), JsonOptions.Indented);
         File.WriteAllText(dlg.FileName, json, Encoding.UTF8);
         AppendLog($"Exported {tweaks.Count} IDs to {dlg.FileName}");
         SetStatus($"Exported {tweaks.Count} ID(s) to JSON.");

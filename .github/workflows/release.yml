@@ -42,11 +42,8 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
           restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Restore
-        run: dotnet restore RegiLattice.sln
-
       - name: Build Release
-        run: dotnet build RegiLattice.sln -c Release --no-restore
+        run: dotnet build RegiLattice.sln -c Release
 
       # Run test projects individually (not as solution) to guarantee sequential
       # execution and prevent shared-file races between Core.Tests and GUI.Tests.

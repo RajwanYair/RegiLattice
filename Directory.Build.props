@@ -102,6 +102,18 @@
          uses System.Text.Json). Disabling hardens against deserialization
          attacks and lets the linker trim the formatter code. -->
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+
+    <!-- Startup hooks are a diagnostic/testing mechanism — not needed in
+         release binaries. Disabling removes the hook discovery overhead. -->
+    <StartupHookSupport>false</StartupHookSupport>
+
+    <!-- EventSource tracing infrastructure — not used by this project.
+         Disabling removes ETW event-pipe initialization at startup. -->
+    <EventSourceSupport>false</EventSourceSupport>
+
+    <!-- Optimize for speed over size in Release. Enables aggressive inlining,
+         loop optimizations, and larger method bodies in R2R pre-compilation. -->
+    <OptimizationPreference>Speed</OptimizationPreference>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true' and '$(IsTestProject)' == 'true'">

@@ -40,11 +40,8 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
           restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Restore
-        run: dotnet restore RegiLattice.sln
-
       - name: Build
-        run: dotnet build RegiLattice.sln -c Release --no-restore
+        run: dotnet build RegiLattice.sln -c Release
 
       - name: Check for vulnerable NuGet packages
         shell: pwsh
@@ -151,9 +148,6 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
           restore-keys: ${{ runner.os }}-nuget-
-
-      - name: Restore
-        run: dotnet restore RegiLattice.sln
 
       - name: Install dotnet-stryker
         run: dotnet tool restore

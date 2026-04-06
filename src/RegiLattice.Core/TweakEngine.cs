@@ -730,7 +730,7 @@ public sealed class TweakEngine
                 t.Description,
             })
             .ToList();
-        var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(list, JsonOptions.Indented);
         File.WriteAllText(path, json);
     }
 

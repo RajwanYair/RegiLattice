@@ -141,7 +141,7 @@ public static class Analytics
     private static void Save(AnalyticsData data)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(data, JsonOptions.Indented);
         File.WriteAllText(FilePath, json);
     }
 }
@@ -216,7 +216,7 @@ public static class Ratings
     private static void Save(Dictionary<string, TweakRating> data)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(data, JsonOptions.Indented);
         const int maxRetries = 5;
         for (int attempt = 0; attempt < maxRetries; attempt++)
         {
