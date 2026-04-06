@@ -185,7 +185,7 @@ internal sealed class BootTimeAnalyzerDialog : BaseDialog
                         slow.Add(new DegradedProcess(System.IO.Path.GetFileName(proc), delay, ev.TimeCreated.Value.ToLocalTime()));
                 }
             }
-            catch { }
+            catch (Exception) { }
         }
 
         boots = [.. boots.TakeLast(20).OrderBy(b => b.Time)];

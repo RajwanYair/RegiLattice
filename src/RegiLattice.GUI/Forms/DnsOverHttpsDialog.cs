@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.Versioning;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using RegiLattice.Core;
+using RegiLattice.Core.Registry;
 
 namespace RegiLattice.GUI.Forms;
 
@@ -186,10 +186,10 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
     {
         try
         {
-            using var key = Registry.LocalMachine.OpenSubKey(DnsClientPath);
-            return key?.GetValue("DohTemplate") as string;
+            var session = new RegistrySession();
+            return session.ReadString(@"HKEY_LOCAL_MACHINE\" + DnsClientPath, "DohTemplate");
         }
-        catch
+        catch (Exception)
         {
             return null;
         }
@@ -220,11 +220,9 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
 
         try
         {
-            using var key = Registry.LocalMachine.CreateSubKey(DnsClientPath, writable: true);
-
-            // Set DoH template and enable automatic upgrade
-            key.SetValue("DohTemplate", provider.Template, RegistryValueKind.String);
-            key.SetValue("EnableAutoDoh", 2, RegistryValueKind.DWord); // 2 = automatic
+            var session = new RegistrySession();
+            session.SetString(@"HKEY_LOCAL_MACHINE\" + DnsClientPath, "DohTemplate", provider.Template);
+            session.SetDword(@"HKEY_LOCAL_MACHINE\" + DnsClientPath, "EnableAutoDoh", 2); // 2 = automatic
 
             _statusLabel.Text = $"✓ Configured DoH: {provider.Name} ({provider.Template})";
             PopulateProviders(); // refresh status
@@ -244,12 +242,9 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
         }
         try
         {
-            using var key = Registry.LocalMachine.OpenSubKey(DnsClientPath, writable: true);
-            if (key != null)
-            {
-                key.DeleteValue("DohTemplate", throwOnMissingValue: false);
-                key.DeleteValue("EnableAutoDoh", throwOnMissingValue: false);
-            }
+            var session = new RegistrySession();
+            session.DeleteValue(@"HKEY_LOCAL_MACHINE\" + DnsClientPath, "DohTemplate");
+            session.DeleteValue(@"HKEY_LOCAL_MACHINE\" + DnsClientPath, "EnableAutoDoh");
             _statusLabel.Text = "DoH disabled — reverted to standard DNS.";
             PopulateProviders();
         }

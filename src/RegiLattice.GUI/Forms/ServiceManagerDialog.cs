@@ -502,7 +502,7 @@ internal sealed class ServiceManagerDialog : BaseDialog
                             ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Disabled).GetAwaiter().GetResult();
                             changed++;
                         }
-                        catch
+                        catch (Exception)
                         { /* service may not exist */
                         }
                     }
@@ -513,7 +513,7 @@ internal sealed class ServiceManagerDialog : BaseDialog
                             ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Manual).GetAwaiter().GetResult();
                             changed++;
                         }
-                        catch { }
+                        catch (Exception) { }
                     }
                 },
                 _cts.Token

@@ -280,7 +280,6 @@ internal static class Boot
                     || stdout.Contains("not loaded", StringComparison.OrdinalIgnoreCase);
             },
         },
-        // ── Restored stubs with real operations ──────────────────
 
         new TweakDef
         {

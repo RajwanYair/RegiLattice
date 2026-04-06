@@ -740,7 +740,6 @@ internal static class Clipboard
             RemoveOps = [RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\*\shell\OpenWithNotepad")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\*\shell\OpenWithNotepad", "", "Open with Notepad")],
         },
-        // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef
         {

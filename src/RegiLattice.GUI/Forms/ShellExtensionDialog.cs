@@ -170,7 +170,7 @@ internal sealed class ShellExtensionDialog : BaseDialog
                 if (!string.IsNullOrEmpty(val))
                     return val;
             }
-            catch { }
+            catch (Exception) { }
         }
         return "(unknown)";
     }

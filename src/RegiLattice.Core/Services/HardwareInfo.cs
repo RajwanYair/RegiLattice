@@ -90,7 +90,7 @@ public static class HardwareInfo
                 {
                     action();
                 }
-                catch { }
+                catch (Exception) { }
             })
             {
                 IsBackground = true,
@@ -103,9 +103,9 @@ public static class HardwareInfo
 
         Thread[] wmiThreads =
         [
-            WmiThread(() => cpu = DetectCpu()),
-            WmiThread(() => gpus = DetectGpus()),
-            WmiThread(() => disk = DetectDisk()),
+            WmiThread(() => cpu = DetectCpuCore()),
+            WmiThread(() => gpus = DetectGpusCore()),
+            WmiThread(() => disk = DetectDiskCore()),
             WmiThread(() => hasHyperV = CheckHyperV()),
             WmiThread(() => hasWsl = CheckWsl()),
             WmiThread(() => hasTpm = CheckTpm()),
@@ -271,7 +271,25 @@ public static class HardwareInfo
             () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims"))
         );
 
+    /// <summary>
+    /// Detects CPU info via WMI. Safe to call from any thread — WMI runs on a
+    /// background MTA thread to prevent COM STA pump threads blocking process exit.
+    /// </summary>
     public static CpuInfo DetectCpu()
+    {
+        CpuInfo? result = null;
+        var t = new Thread(() => { try { result = DetectCpuCore(); } catch (Exception) { } }) { IsBackground = true, Name = "RL-WmiCpu" };
+        t.SetApartmentState(ApartmentState.MTA);
+        t.Start();
+        t.Join(10_000);
+        return result ?? new CpuInfo(
+            Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown",
+            Environment.ProcessorCount / 2,
+            Environment.ProcessorCount,
+            RuntimeInformation.ProcessArchitecture.ToString());
+    }
+
+    private static CpuInfo DetectCpuCore()
     {
         var name = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown";
         int physical = 0,
@@ -294,7 +312,21 @@ public static class HardwareInfo
         return new CpuInfo(name, Math.Max(1, physical), logical, RuntimeInformation.ProcessArchitecture.ToString());
     }
 
+    /// <summary>
+    /// Detects GPU info via WMI. Safe to call from any thread — WMI runs on a
+    /// background MTA thread to prevent COM STA pump threads blocking process exit.
+    /// </summary>
     public static IReadOnlyList<GpuInfo> DetectGpus()
+    {
+        IReadOnlyList<GpuInfo>? result = null;
+        var t = new Thread(() => { try { result = DetectGpusCore(); } catch (Exception) { } }) { IsBackground = true, Name = "RL-WmiGpu" };
+        t.SetApartmentState(ApartmentState.MTA);
+        t.Start();
+        t.Join(10_000);
+        return result ?? [new GpuInfo("Unknown", "", 0)];
+    }
+
+    private static IReadOnlyList<GpuInfo> DetectGpusCore()
     {
         var list = new List<GpuInfo>();
         try
@@ -307,7 +339,7 @@ public static class HardwareInfo
                 list.Add(new GpuInfo(obj["Name"]?.ToString() ?? "Unknown", obj["DriverVersion"]?.ToString() ?? "", (int)(ram / 1024 / 1024)));
             }
         }
-        catch { }
+        catch (Exception) { }
         return list.Count > 0 ? list : [new GpuInfo("Unknown", "", 0)];
     }
 
@@ -320,7 +352,21 @@ public static class HardwareInfo
         return new MemoryInfo(0, 0);
     }
 
+    /// <summary>
+    /// Detects disk info via WMI. Safe to call from any thread — WMI runs on a
+    /// background MTA thread to prevent COM STA pump threads blocking process exit.
+    /// </summary>
     public static DiskInfo DetectDisk()
+    {
+        DiskInfo? result = null;
+        var t = new Thread(() => { try { result = DetectDiskCore(); } catch (Exception) { } }) { IsBackground = true, Name = "RL-WmiDisk" };
+        t.SetApartmentState(ApartmentState.MTA);
+        t.Start();
+        t.Join(10_000);
+        return result ?? new DiskInfo("C:", 0, 0, false);
+    }
+
+    private static DiskInfo DetectDiskCore()
     {
         try
         {
@@ -328,7 +374,7 @@ public static class HardwareInfo
             bool isSsd = false;
             try
             {
-                var storageScope = new ManagementScope(@"\\.\.root\Microsoft\Windows\Storage");
+                var storageScope = new ManagementScope(@"\\.\root\Microsoft\Windows\Storage");
                 storageScope.Options.Timeout = TimeSpan.FromSeconds(5);
                 var storageOpts = new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(5) };
                 using var searcher = new ManagementObjectSearcher(
@@ -336,12 +382,20 @@ public static class HardwareInfo
                     new ObjectQuery("SELECT MediaType FROM MSFT_PhysicalDisk"),
                     storageOpts
                 );
-                // This WMI class is only on Win8+
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    // MediaType: 3 = HDD, 4 = SSD, 5 = SCM; 0 = Unknown
+                    if (Convert.ToInt32(obj["MediaType"] ?? 0) == 4)
+                    {
+                        isSsd = true;
+                        break;
+                    }
+                }
             }
-            catch { }
+            catch (Exception) { }
             return new DiskInfo("C:", (int)(drive.TotalSize / 1024 / 1024 / 1024), (int)(drive.AvailableFreeSpace / 1024 / 1024 / 1024), isSsd);
         }
-        catch
+        catch (Exception)
         {
             return new DiskInfo("C:", 0, 0, false);
         }
@@ -384,7 +438,7 @@ public static class HardwareInfo
             foreach (var obj in searcher.Get())
                 return Convert.ToBoolean(obj["HypervisorPresent"]);
         }
-        catch { }
+        catch (Exception) { }
         return false;
     }
 
@@ -395,7 +449,7 @@ public static class HardwareInfo
             using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss");
             return key is not null;
         }
-        catch
+        catch (Exception)
         {
             return false;
         }
@@ -405,14 +459,14 @@ public static class HardwareInfo
     {
         try
         {
-            var tpmScope = new ManagementScope(@"\\.\.root\CIMv2\Security\MicrosoftTpm");
+            var tpmScope = new ManagementScope(@"\\.\root\CIMv2\Security\MicrosoftTpm");
             tpmScope.Options.Timeout = TimeSpan.FromSeconds(5);
             var tpmOpts = new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(5) };
             using var searcher = new ManagementObjectSearcher(tpmScope, new ObjectQuery("SELECT IsActivated_InitialValue FROM Win32_Tpm"), tpmOpts);
             foreach (var obj in searcher.Get())
                 return Convert.ToBoolean(obj["IsActivated_InitialValue"]);
         }
-        catch { }
+        catch (Exception) { }
         return false;
     }
 

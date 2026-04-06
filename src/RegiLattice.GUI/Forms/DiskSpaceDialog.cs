@@ -242,7 +242,7 @@ internal sealed class DiskSpaceDialog : BaseDialog
                         {
                             return f.Length;
                         }
-                        catch
+                        catch (Exception)
                         {
                             return 0L;
                         }
@@ -251,7 +251,7 @@ internal sealed class DiskSpaceDialog : BaseDialog
             if (!IsDisposed)
                 _lblTempSize.Text = $"  TEMP folder ({tempPath}): {FormatBytes(bytes)}";
         }
-        catch { }
+        catch (Exception) { }
     }
 
     private async Task CleanTempAsync()
@@ -269,7 +269,7 @@ internal sealed class DiskSpaceDialog : BaseDialog
                     fi.Delete();
                     deleted++;
                 }
-                catch { }
+                catch (Exception) { }
             }
             foreach (var di in new DirectoryInfo(tempPath).EnumerateDirectories())
             {
@@ -278,7 +278,7 @@ internal sealed class DiskSpaceDialog : BaseDialog
                     di.Delete(recursive: true);
                     deleted++;
                 }
-                catch { }
+                catch (Exception) { }
             }
         });
         _statusLabel.Text = $"Cleaned {deleted} item(s) from TEMP.";

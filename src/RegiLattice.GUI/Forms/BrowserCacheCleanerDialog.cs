@@ -235,7 +235,7 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
                                     File.Delete(f);
                                 }
                             }
-                            catch { }
+                            catch (Exception) { }
                         }
                         // Chromium favicons and visited links
                         foreach (string extra in new[] { "Visited Links", "Favicons" })
@@ -249,7 +249,7 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
                                     File.Delete(ef);
                                 }
                             }
-                            catch { }
+                            catch (Exception) { }
                         }
                     }
 
@@ -269,11 +269,11 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
                                     File.Delete(f);
                                 }
                             }
-                            catch { }
+                            catch (Exception) { }
                         }
                     }
                 }
-                catch
+                catch (Exception)
                 {
                     // Skip locked files (browser may still be running)
                 }
@@ -324,7 +324,7 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             {
                 File.Delete(file);
             }
-            catch { }
+            catch (Exception) { }
         }
         foreach (string dir in Directory.GetDirectories(path))
         {
@@ -332,7 +332,7 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             {
                 Directory.Delete(dir, recursive: true);
             }
-            catch { }
+            catch (Exception) { }
         }
     }
 

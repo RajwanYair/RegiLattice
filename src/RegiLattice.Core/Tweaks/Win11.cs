@@ -241,7 +241,6 @@ internal static class Win11
                 ),
             ],
         },
-        // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef
         {

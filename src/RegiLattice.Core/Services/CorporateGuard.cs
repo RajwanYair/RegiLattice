@@ -77,7 +77,7 @@ public static class CorporateGuard
             if (GetComputerNameExW(2, buffer, ref size) && buffer.Length > 0)
                 return true;
         }
-        catch { }
+        catch (Exception) { }
 
         // Fallback: check registry for domain membership
         try
@@ -126,7 +126,7 @@ public static class CorporateGuard
                         return true;
                 }
             }
-            catch { }
+            catch (Exception) { }
         }
         return false;
     }
@@ -140,7 +140,7 @@ public static class CorporateGuard
             if (key is not null)
                 return true;
         }
-        catch { }
+        catch (Exception) { }
 
         // Check for Intune MDM enrollment
         try
@@ -149,7 +149,7 @@ public static class CorporateGuard
             if (key is not null && key.GetSubKeyNames().Length > 0)
                 return true;
         }
-        catch { }
+        catch (Exception) { }
 
         return false;
     }

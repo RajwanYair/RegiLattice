@@ -1679,25 +1679,39 @@ internal static class Program
         Console.WriteLine("  " + new string('=', 42));
         Console.WriteLine();
 
-        // Q1: primary use
-        Console.WriteLine("  1. What is this machine\u2019s primary use?");
-        Console.WriteLine("     [1] Office / Business     [2] Gaming");
-        Console.WriteLine("     [3] Personal / Home       [4] Server / Headless");
-        Console.WriteLine("     [5] Developer Workstation");
-        Console.Write("  Choice [1-5]: ");
-        int useChoice = int.TryParse(Console.ReadLine()?.Trim(), out var u) ? u : 1;
+        // In dry-run mode skip all interactive prompts and use default values.
+        int useChoice,
+            privChoice;
+        bool isCorp;
+        if (a.DryRun)
+        {
+            Console.WriteLine("  [Dry-run mode — skipping interactive prompts, using defaults]");
+            useChoice = 1;
+            privChoice = 2;
+            isCorp = false;
+        }
+        else
+        {
+            // Q1: primary use
+            Console.WriteLine("  1. What is this machine\u2019s primary use?");
+            Console.WriteLine("     [1] Office / Business     [2] Gaming");
+            Console.WriteLine("     [3] Personal / Home       [4] Server / Headless");
+            Console.WriteLine("     [5] Developer Workstation");
+            Console.Write("  Choice [1-5]: ");
+            useChoice = int.TryParse(Console.ReadLine()?.Trim(), out var u) ? u : 1;
 
-        // Q2: privacy importance
-        Console.WriteLine();
-        Console.WriteLine("  2. How important is privacy to you?");
-        Console.WriteLine("     [1] Not important    [2] Moderate    [3] Maximum");
-        Console.Write("  Choice [1-3]: ");
-        int privChoice = int.TryParse(Console.ReadLine()?.Trim(), out var pv) ? pv : 2;
+            // Q2: privacy importance
+            Console.WriteLine();
+            Console.WriteLine("  2. How important is privacy to you?");
+            Console.WriteLine("     [1] Not important    [2] Moderate    [3] Maximum");
+            Console.Write("  Choice [1-3]: ");
+            privChoice = int.TryParse(Console.ReadLine()?.Trim(), out var pv) ? pv : 2;
 
-        // Q3: corporate device
-        Console.WriteLine();
-        Console.Write("  3. Is this a managed corporate device? [y/N]: ");
-        bool isCorp = Console.ReadLine()?.Trim().Equals("y", StringComparison.OrdinalIgnoreCase) == true;
+            // Q3: corporate device
+            Console.WriteLine();
+            Console.Write("  3. Is this a managed corporate device? [y/N]: ");
+            isCorp = Console.ReadLine()?.Trim().Equals("y", StringComparison.OrdinalIgnoreCase) == true;
+        }
 
         // Score each profile
         var scores = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
@@ -2756,6 +2770,10 @@ internal static class Program
 
     private static bool Confirm(string label)
     {
+        // Skip interactive prompt in dry-run mode — nothing destructive happens,
+        // so blocking on stdin would hang tests and non-interactive pipelines.
+        if (_session.DryRun)
+            return true;
         Console.Write($"{label}? [y/N] ");
         var response = Console.ReadLine()?.Trim();
         return response is "y" or "Y" or "yes" or "Yes";

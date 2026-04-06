@@ -314,7 +314,6 @@ internal static class Explorer
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
             ],
         },
-        // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef
         {
