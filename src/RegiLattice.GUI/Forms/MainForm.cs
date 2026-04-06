@@ -1246,9 +1246,38 @@ public partial class MainForm : Form
 
         bool force = _forceCheck.Checked;
 
+        // Phase 2.3 — show risk-confirmation dialog for dangerous tweaks (skip when Force is checked)
+        if (!force)
+        {
+            var approved = new List<TweakDef>(selected.Count);
+            foreach (var td in selected)
+            {
+                if (ConfirmApplyDialog.ShouldConfirm(td))
+                {
+                    bool proceed = ConfirmApplyDialog.ShowConfirm(this, td);
+                    if (!proceed)
+                    {
+                        AppendLog($"⊘ Skipped (user cancelled risk warning): {td.Label} ({td.Id})");
+                        continue;
+                    }
+                }
+                approved.Add(td);
+            }
+            selected = approved;
+            if (selected.Count == 0)
+            {
+                SetStatus("No tweaks applied — all cancelled at risk-confirmation step.");
+                return;
+            }
+        }
+
         // Show log panel so user can watch execution progress
         if (!_logPanel.Visible)
             _logPanel.Visible = true;
+
+        // Phase 2.4 — pre-compute batch ETA for progress display
+        int totalEtaMs = _engine.CalculateBatchEtaMs(selected.Select(t => t.Id));
+        var batchSw = System.Diagnostics.Stopwatch.StartNew();
 
         SetBusy(true, $"Applying {selected.Count} tweak(s)...", totalSteps: selected.Count);
         try
@@ -1264,7 +1293,15 @@ public partial class MainForm : Form
                         Invoke(() =>
                         {
                             AppendLog($"[{progress}/{selected.Count}] Applying: {td.Label} ({td.Id})");
-                            _progressLabel.Text = $"Applying {progress}/{selected.Count}: {td.Label}";
+                            // Phase 2.4: show ETA alongside progress
+                            int elapsedMs = (int)batchSw.ElapsedMilliseconds;
+                            int remainingMs = Math.Max(0, totalEtaMs - elapsedMs);
+                            string eta = remainingMs > 60_000
+                                ? $"~{remainingMs / 60_000}m {(remainingMs % 60_000) / 1_000}s remaining"
+                                : remainingMs > 1_000
+                                    ? $"~{remainingMs / 1_000}s remaining"
+                                    : "< 1s remaining";
+                            _progressLabel.Text = $"Applying {progress}/{selected.Count}: {td.Label}  [{eta}]";
                             SetProgress(progress);
                         });
                         var r = _engine.Apply(td, forceCorp: force);

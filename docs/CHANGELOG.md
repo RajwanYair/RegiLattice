@@ -4,6 +4,38 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.19.0] — 2026-04-06
+
+### Added — Phase 2.3 + 2.4: Risk Confirmation Dialog & Batch ETA
+
+- **Risk-confirmation dialog (Phase 2.3)**: `ConfirmApplyDialog` is shown before applying
+  tweaks with `SafetyRating ≤ 3` or dangerous flags (`DeletesKey`, `RequiresReboot`,
+  `AffectsSecurity`, `PotentialDataLoss`). Displays category/safety/impact metadata, a
+  colour-coded risk badge panel, formatted registry operations preview (first 10 ops), and
+  "Apply Anyway" / "Cancel" buttons. Force-check bypasses all confirmation dialogs.
+
+- **`ConfirmApplyThreshold` service (Phase 2.3)**: Pure-logic Core class with
+  `ShouldConfirm(TweakDef)`, `SafetyRatingThreshold` (3) and `ConfirmationFlags` constants.
+  Fully testable without any WinForms dependency.
+
+- **`TweakDef.EstimatedApplyTimeMs` (Phase 2.4)**: Computed property returning estimated
+  apply time in milliseconds based on `TweakKind` — Registry/GroupPolicy=50ms,
+  FileConfig=200ms, ScheduledTask/PowerShell=500ms, SystemCommand=1 000ms,
+  ServiceControl=2 000ms, PackageManager=3 000ms.
+
+- **`TweakEngine.CalculateBatchEtaMs` (Phase 2.4)**: Sums `EstimatedApplyTimeMs` across a
+  batch of tweak IDs. Unknown IDs are skipped silently; duplicate IDs are counted per
+  occurrence.
+
+- **Batch progress ETA display (Phase 2.4)**: `ApplySelectedAsync` progress label now shows
+  `"Applying X/Y: Label  [~Zs remaining]"` using a `Stopwatch` and static ETA estimates.
+
+#### Stats
+
+- Tests: 3,190 → **3,218** (+28 Phase 2.3/2.4 tests)
+- Tweaks: 7,189 (unchanged)
+- Categories: 122 (unchanged)
+
 ## [6.18.0] — 2026-04-06
 
 ### Added — Phase 2.2 + Phase 2.5: Keyboard Shortcuts & Enhanced Context Menu

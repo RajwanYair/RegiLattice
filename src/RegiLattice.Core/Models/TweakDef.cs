@@ -242,6 +242,25 @@ public sealed class TweakDef
     /// <summary>Whether this tweak has any operations defined (not a stub).</summary>
     public bool HasOperations => ApplyOps.Count > 0 || ApplyAction is not null;
 
+    /// <summary>
+    /// Estimated time in milliseconds to apply or remove this tweak, derived from <see cref="Kind"/>.
+    /// Used by the GUI batch-progress ETA calculator (Phase 2.4).
+    /// Registry/GroupPolicy = 50 ms, FileConfig = 200 ms, ScheduledTask/PowerShell = 500 ms,
+    /// SystemCommand = 1 000 ms, ServiceControl = 2 000 ms, PackageManager = 3 000 ms.
+    /// </summary>
+    public int EstimatedApplyTimeMs => Kind switch
+    {
+        TweakKind.Registry => 50,
+        TweakKind.GroupPolicy => 50,
+        TweakKind.FileConfig => 200,
+        TweakKind.ScheduledTask => 500,
+        TweakKind.PowerShell => 500,
+        TweakKind.SystemCommand => 1_000,
+        TweakKind.ServiceControl => 2_000,
+        TweakKind.PackageManager => 3_000,
+        _ => 100,
+    };
+
     /// <summary>Cached scope, computed from RegistryKeys.</summary>
     public TweakScope Scope => _scope ??= ComputeScope();
     private TweakScope? _scope;

@@ -35,7 +35,7 @@
   <g filter="url(#sh)" transform="translate(380, 30)">
     <rect width="150" height="140" rx="10" fill="#316044"/>
     <rect width="150" height="3" rx="2" fill="#f9e2af"/>
-    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f9e2af">3 190</text>
+    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f9e2af">3 218</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Tests</text>
     <text x="75" y="100" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#585b70">xUnit &#x2022; 0 failures</text>
     <text x="75" y="125" text-anchor="middle" font-size="28">&#x2705;</text>

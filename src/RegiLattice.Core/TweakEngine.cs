@@ -750,6 +750,25 @@ public sealed class TweakEngine
 
     public IReadOnlyList<TweakDef> Dependents(string tweakId) => DependencyResolver.Dependents(tweakId, _allTweaks);
 
+    // ── Phase 2.4: Batch ETA calculator ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Returns the estimated total apply time in milliseconds for a batch of tweak IDs.
+    /// Uses <see cref="TweakDef.EstimatedApplyTimeMs"/> per tweak. Unknown IDs are skipped silently.
+    /// Duplicate IDs are counted once per occurrence.
+    /// </summary>
+    public int CalculateBatchEtaMs(IEnumerable<string> ids)
+    {
+        int total = 0;
+        foreach (string id in ids)
+        {
+            var td = GetTweak(id);
+            if (td is not null)
+                total += td.EstimatedApplyTimeMs;
+        }
+        return total;
+    }
+
     // ── Batch operations with progress ──────────────────────────────────
 
     /// <summary>
