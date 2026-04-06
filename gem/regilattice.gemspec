@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors       = ['Yair Rajwan']
   s.email         = []
   s.summary       = 'RegiLattice — Windows registry tweak toolkit'
-  s.description   = '7,189 curated Windows 10/11 registry tweaks across 23 categories. ' \
+  s.description   = '7,189 curated Windows 10/11 registry tweaks across 122 categories. ' \
                     'Debloat, privacy, performance, security, and more. GUI + CLI.'
   s.homepage      = 'https://github.com/RajwanYair/RegiLattice'
   s.license       = 'MIT'

@@ -5,7 +5,7 @@
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v6.16.0/RegiLattice-v6.16.0-win-x64.zip",
+            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v6.17.0/RegiLattice-v6.17.0-win-x64.zip",
             "hash": "0000000000000000000000000000000000000000000000000000000000000000"
         }
     },

@@ -16,16 +16,72 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 | `MINOR` | New tweaks, new features, new dialogs/services |
 | `MAJOR` | Breaking API changes, architectural overhauls |
 
-## Files to Update (all 4 version properties must stay in sync)
+## Files to Update (31-item checklist — see full details in `lessons-learned.instructions.md`)
 
-| File | Property / Pattern |
-|------|--------------------|
-| `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| `installer/Package.wxs` | `Version="X.Y.Z"` (inside `<Package ...>`) |
-| `README.md` | `version-X.Y.Z` badge + download link |
-| `docs/CHANGELOG.md` | New `## [X.Y.Z] — YYYY-MM-DD` section |
-| `CHANGELOG.md` (root stub) | Same latest entry for GitHub community health |
-| `.github/copilot-instructions.md` | `Version` and `Tests` rows in Quick Facts table |
+> The canonical checklist with all 28 files + 3 external actions lives in
+> `.github/instructions/lessons-learned.instructions.md` (section "stats.svg Uses
+> Space-Separated Thousands"). Always reference that as the source of truth.
+
+### Group A — Version properties (EVERY version bump)
+
+| # | File | Property / Pattern |
+|---|------|--------------------|
+| 1 | `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| 2 | `installer/Package.wxs` | `Version="X.Y.Z"` (inside `<Package ...>`) |
+
+### Group B — SVG graphics (when counts change)
+
+| # | File | What changes |
+|---|------|----|
+| 3 | `docs/assets/stats.svg` | Tweaks + categories + tests (space-separated thousands) |
+| 4 | `docs/assets/banner.svg` | Tweaks · categories · tests · themes · profiles |
+| 5 | `docs/assets/features.svg` | Per-category tweak count badges |
+| 6 | `docs/assets/architecture.svg` | Tweaks count · module class count |
+| 7 | `docs/assets/how-it-works.svg` | Tweaks count in Browse step |
+| 8 | `docs/assets/project-structure.svg` | File count · tweak count · category count |
+| 9 | `docs/assets/solution-overview.svg` | File count · tweak count |
+|10 | `docs/assets/readme-architecture.svg` | Category · tweak · module file counts |
+
+### Group C — Documentation & instruction files
+
+| # | File | What changes |
+|---|------|----|
+|11 | `README.md` | Version badge, test badge, download link, description, features, diagram counts |
+|12 | `CHANGELOG.md` (root stub) | Latest version entry summary |
+|13 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
+|14 | `docs/Development.md` | Header "Last updated" date + version |
+|15 | `docs/Roadmap.md` | Baseline counts if changed |
+|16 | `.github/copilot-instructions.md` | Header, version table, tweak/category/module/test counts |
+|17 | `.github/instructions/workspace.instructions.md` | Tweaks/module count in `Tweaks/` directory comment |
+|18 | `.github/instructions/lessons-learned.instructions.md` | Header date + version + counts |
+|19 | `.github/instructions/testing.instructions.md` | Test project counts table (Core/CLI/GUI/Total) |
+|20 | `.github/agents/regilattice.agent.md` | "Current state" line: tweak/category/module/test counts |
+
+### Group D — Package registry manifests (version + description counts)
+
+| # | File | What changes |
+|---|------|----|
+|21 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
+|22 | `scoop/regilattice.json` | `version`, `url`, `hash`, description counts |
+|23 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
+|24 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
+|25 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
+|26 | `npm/package.json` | `version`, `description` counts |
+|27 | `maven/pom.xml` | `<version>`, `<description>` counts |
+|28 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
+
+### Group E — Derived files (update AFTER release build)
+
+| # | File | What changes |
+|---|------|----|
+|29 | `gem/lib/regilattice/version.rb` | `VERSION` string |
+|30 | `Dockerfile` | `LABEL` description counts |
+
+### Group F — External (post-push)
+
+| # | Action | What changes |
+|---|--------|----|
+|31 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
 
 ## Step-by-Step Release Process
 

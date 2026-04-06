@@ -1239,29 +1239,71 @@ a thousands separator: `5 025`, `5 075` — **not** `5025`, `5075`.
 all markdown and SVG files to use this format. `replace_string_in_file` against the SVG
 must match the exact format including the space.
 
-**What to update on each version bump (16 files, listed in order)**:
+**What to update on each version bump (28 files, listed in order)**:
 
 > **Count fields across ALL files**: tweaks · categories · modules · tests · themes (11) · profiles (5) · pkg-managers (5)
 > Themes, profiles, and pkg-manager counts ONLY change when those features are added/removed — not on every bump.
 
-| File                                                | What changes                                                                                          |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `docs/assets/stats.svg`                             | Tweaks count + categories count (space-separated thousands e.g. `9 240`)                             |
-| `docs/assets/banner.svg`                            | Tweaks count · categories count · tests count · themes count · profiles count                        |
-| `docs/assets/features.svg`                          | Per-category tweak count badges (Privacy, Performance, Security, Debloat, Dev Tools)                 |
-| `docs/assets/architecture.svg`                      | Tweaks count in TweakDef Modules box · module class count                                             |
-| `docs/assets/how-it-works.svg`                      | Tweaks count in Browse step                                                                           |
-| `Directory.Build.props`                             | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| `installer/Package.wxs`                             | `Version="X.Y.Z"` (no `.0` suffix here)                                                               |
-| `README.md`                                         | Badge, download link, description line, features bullet, diagram counts, test count, module count     |
-| `.github/copilot-instructions.md`                   | Header line, version table row, tweaks/categories/modules/tests row                                   |
-| `.github/instructions/workspace.instructions.md`    | Tweaks/module class count in `Tweaks/` directory comment                                              |
-| `docs/CHANGELOG.md`                                 | Prepend new `## [X.Y.Z]` section with Stats line                                                      |
-| `chocolatey/regilattice.nuspec`                     | `<version>`, `<summary>`, description counts                                                          |
-| `scoop/regilattice.json`                            | `version`, `url` (both under `architecture.64bit` and `autoupdate`), description                      |
-| `winget/RegiLattice.RegiLattice.yaml`               | `PackageVersion`                                                                                      |
-| `winget/RegiLattice.RegiLattice.installer.yaml`     | `PackageVersion`, `InstallerUrl`                                                                      |
-| `winget/RegiLattice.RegiLattice.locale.en-US.yaml`  | `PackageVersion`, `ShortDescription`, `Description` counts                                            |
+**Group A — Version properties (EVERY version bump)**:
+
+| # | File                                                | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 1 | `Directory.Build.props`                             | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| 2 | `installer/Package.wxs`                             | `Version="X.Y.Z"` (no `.0` suffix here)                                                               |
+
+**Group B — SVG graphics (when tweak/category/test/module counts change)**:
+
+| # | File                                                | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 3 | `docs/assets/stats.svg`                             | Tweaks count + categories count + tests count (space-separated thousands e.g. `7 189`)               |
+| 4 | `docs/assets/banner.svg`                            | Tweaks count · categories count · tests count · themes count · profiles count                        |
+| 5 | `docs/assets/features.svg`                          | Per-category tweak count badges (Privacy, Performance, Security, Debloat, Dev Tools)                 |
+| 6 | `docs/assets/architecture.svg`                      | Tweaks count in TweakDef Modules box · module class count                                             |
+| 7 | `docs/assets/how-it-works.svg`                      | Tweaks count in Browse step                                                                           |
+| 8 | `docs/assets/project-structure.svg`                 | Summary line: file count · tweak count · category count                                               |
+| 9 | `docs/assets/solution-overview.svg`                 | Core engine metrics: file count · tweak count                                                         |
+|10 | `docs/assets/readme-architecture.svg`               | Summary text: category count · tweak count · module file count                                        |
+
+**Group C — Documentation & instruction files**:
+
+| # | File                                                | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|11 | `README.md`                                         | Version badge, test badge, download link, description line, features bullet, diagram counts, module count |
+|12 | `CHANGELOG.md` (root stub)                          | Latest version entry summary                                                                          |
+|13 | `docs/CHANGELOG.md`                                 | Prepend new `## [X.Y.Z]` section with Stats line                                                      |
+|14 | `docs/Development.md`                               | Header "Last updated" date + version                                                                  |
+|15 | `docs/Roadmap.md`                                   | Baseline counts (tweaks · categories · files · tests · themes) if they changed                         |
+|16 | `.github/copilot-instructions.md`                   | Header line, version table row, tweaks/categories/modules/tests row                                   |
+|17 | `.github/instructions/workspace.instructions.md`    | Tweaks/module class count in `Tweaks/` directory comment                                              |
+|18 | `.github/instructions/lessons-learned.instructions.md` | Header date + version + tweak/category/test counts                                                 |
+|19 | `.github/instructions/testing.instructions.md`      | Test project counts table (Core/CLI/GUI/Total)                                                        |
+|20 | `.github/agents/regilattice.agent.md`               | "Current state" line: tweak/category/module/test counts                                               |
+
+**Group D — Package registry manifests (version + description counts)**:
+
+| # | File                                                | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|21 | `chocolatey/regilattice.nuspec`                     | `<version>`, `<summary>`, description counts                                                          |
+|22 | `scoop/regilattice.json`                            | `version`, `url` (both under `architecture.64bit` and `autoupdate`), description                      |
+|23 | `winget/RegiLattice.RegiLattice.yaml`               | `PackageVersion`                                                                                      |
+|24 | `winget/RegiLattice.RegiLattice.installer.yaml`     | `PackageVersion`, `InstallerUrl`                                                                      |
+|25 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml`  | `PackageVersion`, `ShortDescription`, `Description` counts                                            |
+|26 | `npm/package.json`                                  | `version`, `description` counts                                                                       |
+|27 | `maven/pom.xml`                                     | `<version>`, `<description>` counts                                                                   |
+|28 | `powershell/RegiLattice.psd1`                       | `ModuleVersion`                                                                                       |
+
+**Group E — Derived files (version in filename/URL, update AFTER release build)**:
+
+| # | File                                                | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|29 | `gem/lib/regilattice/version.rb`                    | `VERSION` string                                                                                      |
+|30 | `Dockerfile`                                        | `LABEL` description counts                                                                            |
+
+**Group F — External (post-push, after CI publishes release)**:
+
+| # | Action                                              | What changes                                                                                          |
+| - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|31 | GitHub About sidebar                                | `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."` — update tweak count       |
 
 **Release artifact naming convention (from v6.2.0 onward)** — all EXE, MSI, and MSIX files
 include the version tag in their filename. The `release.yml` "Rename artifacts for release" step
