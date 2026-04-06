@@ -345,6 +345,16 @@ internal sealed class TweakBrowserPanel : Panel
     }
 
     private void OnInfoRequested(TweakDef td) => TweakInfoRequested?.Invoke(td);
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _debounce.Stop();
+            _debounce.Dispose();
+        }
+        base.Dispose(disposing);
+    }
 }
 
 /// <summary>

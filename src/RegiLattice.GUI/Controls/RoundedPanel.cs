@@ -15,6 +15,8 @@ public sealed class RoundedPanel : Panel
     private int _borderWidth = 1;
     private float _tintAlpha = 0f; // 0 = solid BackColor, >0 = tinted
     private Color _tintColor = Color.White;
+    private Region? _cachedRegion;
+    private Size _lastRegionSize;
 
     // ── Properties ─────────────────────────────────────────────────────────
     /// <summary>Corner radius in pixels (default 10).</summary>
@@ -121,12 +123,25 @@ public sealed class RoundedPanel : Panel
             g.DrawPath(pen, path);
         }
 
-        // Clip child controls to rounded region — dispose old Region to prevent GDI leak
+        // Clip child controls to rounded region — only recreate when size changes.
+        if (_cachedRegion is null || _lastRegionSize != Size)
+        {
+            _cachedRegion?.Dispose();
+            _cachedRegion = new Region(path);
+            _lastRegionSize = Size;
+        }
         var oldRegion = Region;
-        Region = new Region(path);
+        Region = _cachedRegion.Clone();
         oldRegion?.Dispose();
 
         base.OnPaint(e);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            _cachedRegion?.Dispose();
+        base.Dispose(disposing);
     }
 
     // ── Helper ─────────────────────────────────────────────────────────────

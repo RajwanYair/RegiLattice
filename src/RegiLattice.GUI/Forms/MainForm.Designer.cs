@@ -137,8 +137,15 @@ partial class MainForm
     // ── Dispose ────────────────────────────────────────────────────────────
     protected override void Dispose(bool disposing)
     {
-        if (disposing && components is not null)
-            components.Dispose();
+        if (disposing)
+        {
+            _searchDebounceTimer.Dispose();
+            _profileScheduleTimer.Dispose();
+            _catScoreTip.Dispose();
+            _listItemTip.Dispose();
+            _cts.Dispose();
+            components?.Dispose();
+        }
         base.Dispose(disposing);
     }
 

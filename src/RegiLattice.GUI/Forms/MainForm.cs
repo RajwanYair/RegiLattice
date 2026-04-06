@@ -237,6 +237,11 @@ public partial class MainForm : Form
 
         _trayIcon.Visible = false;
         _cts.Cancel();
+
+        // Unsubscribe control events to break reference cycles before disposal.
+        _sidebar.ItemSelected -= OnSidebarNavSelected;
+        _treeView.NodeMouseHover -= OnTreeNodeScoreHover;
+
         base.OnFormClosing(e);
     }
 

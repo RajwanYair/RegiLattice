@@ -99,18 +99,16 @@ public sealed class AppIconsTests
     }
 
     [Fact]
-    public void InvalidateCache_OldBitmaps_StillAccessible()
+    public void InvalidateCache_OldBitmaps_AreDisposed()
     {
         // Capture a reference to the old bitmap (like a ToolStripMenuItem.Image would)
         var oldBmp = AppIcons.PipMenuBitmap;
 
         AppIcons.InvalidateCache();
 
-        // The old bitmap must NOT be disposed — FrameDimensionsList access must not throw.
-        // This is the exact operation that crashed before the fix.
-        var dims = oldBmp.FrameDimensionsList;
-        Assert.NotNull(dims);
-        Assert.NotEmpty(dims);
+        // Old bitmaps are now properly disposed to prevent GDI handle leaks.
+        // Callers must reassign menu images after InvalidateCache().
+        Assert.Throws<ArgumentException>(() => _ = oldBmp.FrameDimensionsList);
     }
 
     [Fact]

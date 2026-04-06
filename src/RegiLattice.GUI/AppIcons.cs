@@ -88,16 +88,16 @@ internal static class AppIcons
 
     /// <summary>Invalidate the cache (call after theme change).</summary>
     /// <remarks>
-    /// Icons are disposed immediately (form icons are reassigned right after).
-    /// Bitmap entries are NOT disposed here because ToolStripMenuItem.Image may
-    /// still reference them. The caller must reassign menu images; old bitmaps
-    /// become unreferenced and are collected by GC/finalizer.
+    /// Both icons and bitmaps are disposed immediately to prevent GDI handle leaks.
+    /// Callers must reassign any ToolStripMenuItem.Image references after this call.
     /// </remarks>
     internal static void InvalidateCache()
     {
         foreach (var icon in _cache.Values)
             icon.Dispose();
         _cache.Clear();
+        foreach (var bmp in _bmpCache.Values)
+            bmp.Dispose();
         _bmpCache.Clear();
     }
 
@@ -561,7 +561,8 @@ internal static class AppIcons
         using var pen = new Pen(Color.White, 2f) { EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor };
         int cx = s / 2;
         g.DrawLine(pen, cx, s - 6, cx, 5);
-        g.DrawLine(new Pen(Color.White, 1.5f), s / 4, s - 5, s - s / 4, s - 5);
+        using var baseLine = new Pen(Color.White, 1.5f);
+        g.DrawLine(baseLine, s / 4, s - 5, s - s / 4, s - 5);
     }
 
     // ── Menu bitmap accessors for new icons ─────────────────────────────
@@ -931,7 +932,8 @@ internal static class AppIcons
                 cy + (int)((r + 2) * Math.Sin(a2))
             );
         }
-        g.FillEllipse(new SolidBrush(AppTheme.Bg), cx - ir + 1, cy - ir + 1, (ir - 1) * 2, (ir - 1) * 2);
+        using var centerBrush = new SolidBrush(AppTheme.Bg);
+        g.FillEllipse(centerBrush, cx - ir + 1, cy - ir + 1, (ir - 1) * 2, (ir - 1) * 2);
     }
 
     /// <summary>Import icon: green downward arrow into a tray.</summary>

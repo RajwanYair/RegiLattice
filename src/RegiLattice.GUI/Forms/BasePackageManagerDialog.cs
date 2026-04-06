@@ -96,7 +96,11 @@ internal abstract class BasePackageManagerDialog : Form
             if (_prereqMet)
                 await RefreshAsync();
         };
-        FormClosed += (_, _) => _cts.Cancel();
+        FormClosed += (_, _) =>
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+        };
     }
 
     // ── Layout ────────────────────────────────────────────────────────────

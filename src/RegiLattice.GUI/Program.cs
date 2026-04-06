@@ -171,6 +171,33 @@ internal static class Program
             sb.AppendLine("(handle/memory stats unavailable)");
         }
 
+        // GC generation counts and memory pressure
+        try
+        {
+            sb.AppendLine($"GC Gen0 colls: {GC.CollectionCount(0):N0}");
+            sb.AppendLine($"GC Gen1 colls: {GC.CollectionCount(1):N0}");
+            sb.AppendLine($"GC Gen2 colls: {GC.CollectionCount(2):N0}");
+            var gcInfo = GC.GetGCMemoryInfo();
+            sb.AppendLine($"GC HeapSize  : {gcInfo.HeapSizeBytes / (1024 * 1024):N0} MB");
+            sb.AppendLine($"GC Finalize Q: {gcInfo.FinalizationPendingCount:N0} pending");
+        }
+        catch
+        {
+            sb.AppendLine("(GC details unavailable)");
+        }
+
+        // Thread pool stats — helps diagnose deadlocks and thread exhaustion
+        try
+        {
+            ThreadPool.GetAvailableThreads(out int workerAvail, out int ioAvail);
+            ThreadPool.GetMaxThreads(out int workerMax, out int ioMax);
+            sb.AppendLine($"ThreadPool   : workers {workerMax - workerAvail}/{workerMax}, IO {ioMax - ioAvail}/{ioMax}");
+        }
+        catch
+        {
+            sb.AppendLine("(thread pool stats unavailable)");
+        }
+
         // Open forms and total control count — helps identify control/handle leaks
         try
         {
@@ -184,6 +211,22 @@ internal static class Program
         catch
         {
             sb.AppendLine("(form/control stats unavailable)");
+        }
+
+        // Loaded assemblies — helps diagnose version conflicts and plugin issues
+        try
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            sb.AppendLine($"Loaded asms  : {assemblies.Length}");
+            foreach (var asm in assemblies)
+            {
+                var name = asm.GetName();
+                sb.AppendLine($"  {name.Name} {name.Version}");
+            }
+        }
+        catch
+        {
+            sb.AppendLine("(assembly list unavailable)");
         }
     }
 
