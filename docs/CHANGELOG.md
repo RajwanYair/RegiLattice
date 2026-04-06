@@ -4,6 +4,36 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.21.0] — 2026-04-06
+
+### Added — Phase 4.1 + Phase 4.6: E2E Workflow Tests & Concurrent Safety Tests
+
+#### New Tests
+
+- **Phase 4.1 — 10 E2E Workflow Scenarios** (`E2EWorkflowTests.cs`):
+  - Scenario 1: Full apply → detect → remove lifecycle in DryRun mode
+  - Scenario 2: Privacy profile batch apply returns populated results dict
+  - Scenario 3: ApplyBatch then RemoveBatch — result counts match tweak list size
+  - Scenario 4: DryRun session captures ops without writing to registry
+  - Scenario 5: Snapshot round-trip — SaveSnapshot / LoadSnapshot file verified
+  - Scenario 6: ExportJson with stub status cache — file created, valid JSON structure
+  - Scenario 7: Dependency chain — ResolveDependencies returns TweakDef list with all DependsOn satisfied
+  - Scenario 8: CorporateGuard blocks CorpSafe=false tweaks when StubCorporate=true
+  - Scenario 9: ValidateTweaks on full builtin set returns zero errors
+  - Scenario 10: RegisterBuiltins loads ≥7,000 tweaks, ≥100 categories, no exception
+- **Phase 4.6 — 3 Concurrent Safety Tests** (`ConcurrentSafetyTests` class):
+  - 10 concurrent StatusMap calls on 20 Registry/GroupPolicy tweaks — no deadlock
+  - 5 concurrent ApplyBatch calls on Privacy tweaks in DryRun — no corruption
+  - Mixed concurrent reads + apply — AllTweaks/Categories/Search alongside ApplyBatch, no exception
+- All 13 tests use `[Collection("E2E-Sequential")]` for clean sequential isolation with `CorporateGuard.StubCorporate = false`
+
+#### Stats
+
+- Tests: 2,421 → **2,434** (+13)
+- Tweaks: 7,189 (unchanged)
+
+---
+
 ## [6.20.0] — 2026-04-06
 
 ### Added — Phase 2.6 + Phase 3.6: Custom User Themes & Enhanced Export Formats
