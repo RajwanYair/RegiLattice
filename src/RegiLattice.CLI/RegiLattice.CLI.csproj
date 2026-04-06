@@ -15,12 +15,17 @@
          by 30-50%. WinForms blocks trimming, so this is CLI-only. -->
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>partial</TrimMode>
-    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <!-- Invariant globalization: the CLI uses ordinal string comparisons
          throughout and has no locale-dependent formatting of user-facing
          text beyond fixed English output. Stripping ICU saves ~3 MB and
          removes the ICU data file dependency from the single-file bundle. -->
     <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Keep reflection-based JSON enabled at runtime: PublishTrimmed=true
+         causes the SDK to inject IsReflectionEnabledByDefault=false into
+         runtimeconfig.json, but RegiLattice.Core services (Analytics, etc.)
+         still use reflection-based JsonSerializer. CLI's own calls are all
+         source-gen via CliJsonContext — this switch only affects Core. -->
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
   <ItemGroup>

@@ -314,7 +314,7 @@ internal static class Program
                 .Profiles.Select(p => new ProfileInfo(p.Name, p.Description, _engine.TweaksForProfile(p.Name).Count, "builtin"))
                 .Concat(UserProfileService.GetProfiles().Select(p => new ProfileInfo(p.Name, p.Description, p.TweakIds.Count, "user")))
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(allProfiles, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(allProfiles, CliJsonContext.Default.ListProfileInfo));
             return 0;
         }
 
@@ -346,14 +346,12 @@ internal static class Program
         var profiles = UserProfileService.GetProfiles();
         if (a.OutputFormat == "json")
         {
-            var data = profiles.Select(up => new
-            {
+            var data = profiles.Select(up => new UserProfileDto(
                 up.Name,
                 up.Description,
-                TweakCount = up.TweakIds.Count,
-                CreatedAt = up.CreatedAt.ToUniversalTime().ToString("o"),
-            });
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+                up.TweakIds.Count,
+                up.CreatedAt.ToUniversalTime().ToString("o"))).ToList();
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.ListUserProfileDto));
             return 0;
         }
 
@@ -480,7 +478,7 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = new
+            var data = new StatsReportDto
             {
                 TotalTweaks = tweaks.Count,
                 Categories = byCat.Count,
@@ -500,7 +498,7 @@ internal static class Program
                 CategoryCounts = byCat.Keys.Order()
                     .ToDictionary(cat => cat, cat => byCat[cat].Count),
             };
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.StatsReportDto));
             return 0;
         }
 
@@ -556,7 +554,7 @@ internal static class Program
         if (a.OutputFormat == "json")
         {
             var dict = byCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
-            Console.WriteLine(JsonSerializer.Serialize(dict, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(dict, CliJsonContext.Default.DictionaryStringInt32));
         }
         else
         {
@@ -670,17 +668,15 @@ internal static class Program
                             || (filterStatus == "enabled" && smap.GetValueOrDefault(t.Id) == TweakResult.Applied)
                             || (filterStatus == "disabled" && smap.GetValueOrDefault(t.Id) == TweakResult.NotApplied)
                         )
-                        .Select(t => new
-                        {
+                        .Select(t => new CategoryReportTweakDto(
                             t.Id,
                             t.Label,
-                            status = smap.GetValueOrDefault(t.Id).ToString(),
-                        })
+                            smap.GetValueOrDefault(t.Id).ToString()))
                         .ToList();
-                    return new { category = cat, tweaks };
+                    return new CategoryReportDto(cat, tweaks);
                 })
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(report, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(report, CliJsonContext.Default.ListCategoryReportDto));
         }
         else
         {
@@ -726,13 +722,9 @@ internal static class Program
         if (a.OutputFormat == "json")
         {
             var data = smap.OrderBy(kv => kv.Key)
-                .Select(kv => new
-                {
-                    Id = kv.Key,
-                    Status = kv.Value.ToString(),
-                    Label = _engine.GetTweak(kv.Key)?.Label,
-                });
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+                .Select(kv => new TweakStatusDto(kv.Key, kv.Value.ToString(), _engine.GetTweak(kv.Key)?.Label))
+                .ToList();
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.ListTweakStatusDto));
             return 0;
         }
 
@@ -827,16 +819,14 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = list.Select(t => new
-                {
+            var data = list.Select(t => new TweakListItemDto(
                     t.Id,
                     t.Label,
                     t.Category,
                     t.NeedsAdmin,
-                    t.CorpSafe,
-                })
+                    t.CorpSafe))
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.ListTweakListItemDto));
         }
         else
         {
@@ -882,15 +872,13 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = list.Select(t => new
-                {
+            var data = list.Select(t => new TweakSearchItemDto(
                     t.Id,
                     t.Label,
                     t.Category,
-                    t.Tags,
-                })
+                    t.Tags))
                 .ToList();
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.ListTweakSearchItemDto));
         }
         else
         {
@@ -1083,15 +1071,14 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = new
-            {
-                Profile = a.Profile,
-                Applied = ok,
-                Total = results.Count,
-                DryRun = _session.DryRun,
-                Results = results.Select(kv => new { Id = kv.Key, Status = kv.Value.ToString() }).ToList(),
-            };
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+            var data = new ProfileApplyResultDto(
+                a.Profile!,
+                ok,
+                results.Count,
+                _session.DryRun,
+                results.Select(kv => new TweakResultItemDto(kv.Key, kv.Value.ToString())).ToList()
+            );
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.ProfileApplyResultDto));
         }
         else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{results.Count} tweaks would be applied ({_session.DryOps} ops skipped).");
@@ -1171,12 +1158,12 @@ internal static class Program
             // Support both ["id1","id2"] and {"tweaks":["id1","id2"]} formats
             try
             {
-                ids = JsonSerializer.Deserialize<List<string>>(raw);
+                ids = JsonSerializer.Deserialize(raw, CliJsonContext.Default.ListString);
             }
             catch
             {
-                var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw);
-                ids = dict?["tweaks"].Deserialize<List<string>>();
+                var dict = JsonSerializer.Deserialize(raw, CliJsonContext.Default.DictionaryStringJsonElement);
+                ids = dict?["tweaks"].Deserialize(CliJsonContext.Default.ListString);
             }
         }
         catch (Exception ex)
@@ -1353,9 +1340,9 @@ internal static class Program
             try
             {
                 if (raw.StartsWith('['))
-                    return JsonSerializer.Deserialize<List<string>>(raw) ?? [];
+                    return JsonSerializer.Deserialize(raw, CliJsonContext.Default.ListString) ?? [];
 
-                var doc = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw);
+                var doc = JsonSerializer.Deserialize(raw, CliJsonContext.Default.DictionaryStringJsonElement);
                 if (doc is null)
                 {
                     error = "Empty JSON object.";
@@ -1366,7 +1353,7 @@ internal static class Program
                 foreach (var key in new[] { "applied", "tweaks", "ids" })
                 {
                     if (doc.TryGetValue(key, out var el) && el.ValueKind == JsonValueKind.Array)
-                        return el.Deserialize<List<string>>() ?? [];
+                        return el.Deserialize(CliJsonContext.Default.ListString) ?? [];
                 }
 
                 // SnapshotManager native format: { "tweak-id": "applied"|"notapplied"|... }
@@ -1406,16 +1393,8 @@ internal static class Program
         var status = _engine.DetectStatus(td);
         if (a.OutputFormat == "json")
         {
-            var obj = new
-            {
-                Id = td.Id,
-                Label = td.Label,
-                Category = td.Category,
-                Status = status.ToString(),
-                NeedsAdmin = td.NeedsAdmin,
-                CorpSafe = td.CorpSafe,
-            };
-            Console.WriteLine(JsonSerializer.Serialize(obj));
+            var obj = new TweakDetailDto(td.Id, td.Label, td.Category, status.ToString(), td.NeedsAdmin, td.CorpSafe);
+            Console.WriteLine(JsonSerializer.Serialize(obj, CliJsonContext.Default.TweakDetailDto));
         }
         else
         {
@@ -1500,7 +1479,12 @@ internal static class Program
             if (targetMet)
             {
                 if (a.OutputFormat == "json")
-                    Console.WriteLine(JsonSerializer.Serialize(new { td.Id, Skipped = true, Reason = "already-in-target-state", Status = curStatus.ToString() }));
+                    Console.WriteLine(
+                        JsonSerializer.Serialize(
+                            new TweakSkipDto(td.Id, true, "already-in-target-state", curStatus.ToString()),
+                            CliJsonContext.Default.TweakSkipDto
+                        )
+                    );
                 else
                     Console.WriteLine($"Skipped: '{td.Id}' is already {(isApply ? "applied" : "removed")}.");
                 return 0;
@@ -1524,15 +1508,13 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = new
-            {
+            var data = new TweakActionDto(
                 td.Id,
                 td.Label,
-                Mode = a.Mode,
-                Status = result.ToString(),
-                DryRun = _session.DryRun,
-            };
-            Console.WriteLine(JsonSerializer.Serialize(data, JsonOptions.Indented));
+                a.Mode!,
+                result.ToString(),
+                _session.DryRun);
+            Console.WriteLine(JsonSerializer.Serialize(data, CliJsonContext.Default.TweakActionDto));
         }
         else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {td.Label} — {result} ({_session.DryOps} ops skipped).");
@@ -1799,7 +1781,7 @@ internal static class Program
         try
         {
             var json = File.ReadAllText(a.BatchRecipe!);
-            recipe = JsonSerializer.Deserialize<BatchRecipe>(json, JsonOptions.CaseInsensitive);
+            recipe = JsonSerializer.Deserialize(json, CliJsonContext.Default.BatchRecipe);
         }
         catch (Exception ex)
         {
@@ -1941,21 +1923,16 @@ internal static class Program
         {
             Console.WriteLine(
                 JsonSerializer.Serialize(
-                    new
+                    new BatchRecipeResultDto
                     {
-                        recipe = recipe.Name,
-                        totalSteps = stepResults.Count,
-                        successCount,
-                        failureCount = stepResults.Count - successCount,
-                        rolledBack = recipe.RollbackOnFailure && failed,
-                        steps = stepResults.Select(r => new
-                        {
-                            r.Label,
-                            r.Status,
-                            r.Success,
-                        }),
+                        Recipe = recipe.Name,
+                        TotalSteps = stepResults.Count,
+                        SuccessCount = successCount,
+                        FailureCount = stepResults.Count - successCount,
+                        RolledBack = recipe.RollbackOnFailure && failed,
+                        Steps = stepResults,
                     },
-                    JsonOptions.Indented
+                    CliJsonContext.Default.BatchRecipeResultDto
                 )
             );
         }
