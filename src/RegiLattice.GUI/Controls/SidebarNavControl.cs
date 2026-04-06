@@ -177,7 +177,7 @@ internal sealed class SidebarNavControl : Control
             using var accentBadgeBrush = new SolidBrush(AppTheme.Accent);
             AppTheme.FillRoundedRect(g, accentBadgeBrush, Rectangle.Round(new RectangleF(bx, by, bw, bh)), 8);
             using var badgeBrush = new SolidBrush(AppTheme.Bg);
-            var bsf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            using var bsf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
             g.DrawString(item.Badge, badgeFont, badgeBrush, new RectangleF(bx, by, bw, bh), bsf);
         }
     }

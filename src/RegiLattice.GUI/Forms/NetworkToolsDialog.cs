@@ -16,6 +16,7 @@ namespace RegiLattice.GUI.Forms;
 internal sealed class NetworkToolsDialog : BaseDialog
 {
     private readonly TabControl _tabs;
+    private static ToolTip? _sharedTip;
 
     // DNS tab controls
     private readonly ComboBox _adapterCombo;
@@ -533,6 +534,8 @@ internal sealed class NetworkToolsDialog : BaseDialog
     {
         _cts.Cancel();
         _cts.Dispose();
+        _sharedTip?.Dispose();
+        _sharedTip = null;
         base.OnFormClosed(e);
     }
 
@@ -563,7 +566,9 @@ internal sealed class NetworkToolsDialog : BaseDialog
             TextAlign = ContentAlignment.MiddleLeft,
             Padding = new Padding(4, 0, 0, 0),
         };
-        new ToolTip().SetToolTip(btn, tooltip);
+        // Use a shared ToolTip to avoid leaking a USER handle per button
+        _sharedTip ??= new ToolTip();
+        _sharedTip.SetToolTip(btn, tooltip);
         return btn;
     }
 

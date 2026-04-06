@@ -7,6 +7,8 @@ namespace RegiLattice.GUI;
 
 internal static class Program
 {
+    private static readonly Stopwatch s_uptime = Stopwatch.StartNew();
+
     [STAThread]
     static void Main(string[] args)
     {
@@ -91,6 +93,7 @@ internal static class Program
         var sb = new System.Text.StringBuilder(2048);
         sb.AppendLine($"═══ RegiLattice Crash Report ═══");
         sb.AppendLine($"Timestamp : {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
+        sb.AppendLine($"Uptime    : {s_uptime.Elapsed:hh\\:mm\\:ss\\.fff}");
         sb.AppendLine($"Version   : {typeof(TweakEngine).Assembly.GetName().Version}");
         sb.AppendLine($"OS        : {Environment.OSVersion} ({RuntimeInformation.OSArchitecture})");
         sb.AppendLine($"CLR       : {RuntimeInformation.FrameworkDescription}");
@@ -107,6 +110,7 @@ internal static class Program
         var sb = new System.Text.StringBuilder(2048);
         sb.AppendLine($"═══ RegiLattice Crash Report ═══");
         sb.AppendLine($"Timestamp : {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
+        sb.AppendLine($"Uptime    : {s_uptime.Elapsed:hh\\:mm\\:ss\\.fff}");
         sb.AppendLine($"Version   : {typeof(TweakEngine).Assembly.GetName().Version}");
         sb.AppendLine($"OS        : {Environment.OSVersion} ({RuntimeInformation.OSArchitecture})");
         sb.AppendLine($"CLR       : {RuntimeInformation.FrameworkDescription}");
@@ -154,8 +158,8 @@ internal static class Program
             int userHandles = GetGuiResources(proc.Handle, 1); // GR_USEROBJECTS
             int gdiPeak = GetGuiResources(proc.Handle, 2);     // GR_GDIOBJECTS_PEAK
             int userPeak = GetGuiResources(proc.Handle, 4);    // GR_USEROBJECTS_PEAK
-            sb.AppendLine($"GDI handles  : {gdiHandles:N0} (peak: {gdiPeak:N0})");
-            sb.AppendLine($"USER handles : {userHandles:N0} (peak: {userPeak:N0})");
+            sb.AppendLine($"GDI handles  : {gdiHandles:N0} (peak: {gdiPeak:N0}) [limit: 10,000]");
+            sb.AppendLine($"USER handles : {userHandles:N0} (peak: {userPeak:N0}) [limit: 10,000]");
             sb.AppendLine($"Total handles: {proc.HandleCount:N0}");
             sb.AppendLine($"Threads      : {proc.Threads.Count}");
             sb.AppendLine($"WorkingSet   : {proc.WorkingSet64 / (1024 * 1024):N0} MB");
@@ -166,6 +170,29 @@ internal static class Program
         {
             sb.AppendLine("(handle/memory stats unavailable)");
         }
+
+        // Open forms and total control count — helps identify control/handle leaks
+        try
+        {
+            int formCount = Application.OpenForms.Count;
+            int controlCount = 0;
+            foreach (Form f in Application.OpenForms)
+                controlCount += CountControls(f);
+            sb.AppendLine($"Open forms   : {formCount}");
+            sb.AppendLine($"Total ctrls  : {controlCount:N0}");
+        }
+        catch
+        {
+            sb.AppendLine("(form/control stats unavailable)");
+        }
+    }
+
+    private static int CountControls(Control c)
+    {
+        int count = 1;
+        foreach (Control child in c.Controls)
+            count += CountControls(child);
+        return count;
     }
 
     /// <summary>

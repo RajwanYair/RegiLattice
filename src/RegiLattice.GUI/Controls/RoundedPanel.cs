@@ -121,8 +121,10 @@ public sealed class RoundedPanel : Panel
             g.DrawPath(pen, path);
         }
 
-        // Clip child controls to rounded region
+        // Clip child controls to rounded region — dispose old Region to prevent GDI leak
+        var oldRegion = Region;
         Region = new Region(path);
+        oldRegion?.Dispose();
 
         base.OnPaint(e);
     }

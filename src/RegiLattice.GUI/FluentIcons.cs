@@ -111,7 +111,10 @@ internal static class FluentIcons
         try
         {
             var f = new Font(family, size, GraphicsUnit.Pixel);
-            return f.Name == family ? f : null;
+            if (f.Name == family)
+                return f;
+            f.Dispose();
+            return null;
         }
         catch
         {
