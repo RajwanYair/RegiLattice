@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.24.0] — 2026-04-07
+
+### Added — Phase 5.3 Accessibility (remaining) + Phase 5.5 Developer Modules (+80 tweaks, +8 modules)
+
+- `MagnifierAdvanced.cs` — 10 Screen Magnifier advanced configuration tweaks (`magnif-*`)
+- `LiveCaptions.cs` — 10 Windows 11 Live Captions feature tweaks (`lcap-*`, MinBuild=22621)
+- `EyeControlSettings.cs` — 10 Eye Control / gaze input tweaks (`eyectrl-*`)
+- `VoiceAccessControl.cs` — 10 Windows 11 Voice Access tweaks (`voiacc-*`, MinBuild=22621)
+- `WinDbgSettings.cs` — 10 Windows Debugger / crash dump / WER tweaks (`windbg-*`)
+- `WSLAdvanced.cs` — 10 WSL 2 advanced registry tweaks (`wsladv-*`)
+- `GitCredManager.cs` — 10 Git Credential Manager registry tweaks (`gitcm-*`)
+- `ContainerRuntime.cs` — 10 Windows Container / Sandbox policy tweaks (`cntr-*`)
+
+### Stats
+
+- Tweaks: 7,429 (+80) across 122 categories
+- Modules: 170 files (+8)
+- Tests: 3,230 (2,434 Core + 434 CLI + 362 GUI), 0 failures
+
 ## [6.23.0] — 2026-04-07
 
 ### Added — Phase 5.2 Gaming Performance + Phase 5.3 Accessibility (+80 tweaks, +8 modules)

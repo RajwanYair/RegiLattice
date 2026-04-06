@@ -75,7 +75,7 @@
   <g filter="url(#shadow)">
     <rect x="570" y="280" width="150" height="50" rx="8" fill="#316044" stroke="#a6e3a1" stroke-width="1.2"/>
     <text x="645" y="304" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6e3a1">Tweaks/</text>
-    <text x="645" y="320" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">146 files &#x2022; 7 189 tweaks</text>
+    <text x="645" y="320" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">170 files &#x2022; 7 429 tweaks</text>
   </g>
 
   <!-- Plugins -->
