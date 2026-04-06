@@ -85,11 +85,26 @@ internal static class SsdOptimization
             SideEffects = "Risk of data loss on sudden power failure without UPS.",
             ApplyAction = _ =>
                 ShellRunner.RunPowerShell(
-                    "Get-Disk | Where-Object { $_.BusType -ne 'USB' } | ForEach-Object { "
-                        + "Set-StorageSetting -NewDiskPolicy OnlineAll -ErrorAction SilentlyContinue }"
+                    "Get-PhysicalDisk | Where-Object { $_.BusType -ne 'USB' } "
+                        + "| ForEach-Object { "
+                        + "try { Set-PhysicalDisk -UniqueId $_.UniqueId -WriteCacheEnabled $true -ErrorAction Stop } "
+                        + "catch { } }"
                 ),
-            RemoveAction = _ => { },
-            DetectAction = () => false,
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-PhysicalDisk | Where-Object { $_.BusType -ne 'USB' } "
+                        + "| ForEach-Object { "
+                        + "try { Set-PhysicalDisk -UniqueId $_.UniqueId -WriteCacheEnabled $false -ErrorAction Stop } "
+                        + "catch { } }"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "$d = Get-PhysicalDisk | Where-Object { $_.BusType -ne 'USB' } | Select-Object -First 1; "
+                        + "if (!$d) { $false } else { $d.WriteCacheEnabled -eq $true }"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
         },
         new TweakDef
         {

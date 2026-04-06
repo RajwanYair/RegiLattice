@@ -211,16 +211,42 @@ internal static class UserAccount
             ApplyAction = dryRun =>
             {
                 if (!dryRun)
-                    ShellRunner.Run(
-                        "secedit",
-                        ["/configure", "/db", "secedit.sdb", "/cfg", "%windir%\\inf\\defltbase.inf", "/areas", "SECURITYPOLICY", "/quiet"]
+                    ShellRunner.RunPowerShell(
+                        "$nl = [System.Environment]::NewLine; "
+                            + "$inf = \"[Unicode]${nl}Unicode=yes${nl}[System Access]${nl}PasswordComplexity = 1${nl}\"; "
+                            + "$path = \"$env:TEMP\\rl_pwcomplex_on.inf\"; "
+                            + "[System.IO.File]::WriteAllText($path, $inf, [System.Text.Encoding]::Unicode); "
+                            + "secedit /configure /db \"$env:TEMP\\secpol.sdb\" /cfg $path /areas SECURITYPOLICY /quiet; "
+                            + "Remove-Item $path -ErrorAction SilentlyContinue"
                     );
             },
-            RemoveAction = _ => { },
+            RemoveAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.RunPowerShell(
+                        "$nl = [System.Environment]::NewLine; "
+                            + "$inf = \"[Unicode]${nl}Unicode=yes${nl}[System Access]${nl}PasswordComplexity = 0${nl}\"; "
+                            + "$path = \"$env:TEMP\\rl_pwcomplex_off.inf\"; "
+                            + "[System.IO.File]::WriteAllText($path, $inf, [System.Text.Encoding]::Unicode); "
+                            + "secedit /configure /db \"$env:TEMP\\secpol.sdb\" /cfg $path /areas SECURITYPOLICY /quiet; "
+                            + "Remove-Item $path -ErrorAction SilentlyContinue"
+                    );
+            },
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.Run("secedit", ["/export", "/cfg", "%temp%\\rl_secedit.cfg", "/quiet"]);
-                return stdout.Contains("PasswordComplexity = 1", StringComparison.OrdinalIgnoreCase);
+                var cfgPath = Path.Combine(Path.GetTempPath(), "rl_secedit_export.cfg");
+                ShellRunner.Run("secedit", ["/export", "/cfg", cfgPath, "/quiet"]);
+                if (!File.Exists(cfgPath))
+                    return false;
+                try
+                {
+                    var content = File.ReadAllText(cfgPath, System.Text.Encoding.Unicode);
+                    return content.Contains("PasswordComplexity = 1", StringComparison.OrdinalIgnoreCase);
+                }
+                finally
+                {
+                    File.Delete(cfgPath);
+                }
             },
         },
         new TweakDef

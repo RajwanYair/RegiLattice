@@ -272,13 +272,40 @@ internal static class DiskCleanup
             Tags = ["cleanup", "disk", "recycle-bin"],
             ApplyAction = _ =>
                 ShellRunner.RunPowerShell(
-                    "$shell = New-Object -ComObject Shell.Application; "
-                        + "$rb = $shell.Namespace(10); "
-                        + "# Note: Recycle Bin size is stored per-drive in the registry "
-                        + "Set-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume' -Name 'NukeOnDelete' -Value 0 -ErrorAction SilentlyContinue"
+                    "Get-WmiObject Win32_Volume -Filter \"DriveType=3\" -ErrorAction SilentlyContinue "
+                        + "| Where-Object DriveLetter "
+                        + "| ForEach-Object { "
+                        + "$id = $_.DeviceID.TrimEnd('\\').Split('{')[1].TrimEnd('}').ToUpper(); "
+                        + "$mb = [math]::Round($_.Capacity / 1048576 * 0.05); "
+                        + "$p = \"HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume\\$id\"; "
+                        + "if (!(Test-Path $p)) { New-Item $p -Force | Out-Null }; "
+                        + "Set-ItemProperty $p -Name MaxCapacity -Value $mb -ErrorAction SilentlyContinue }"
                 ),
-            RemoveAction = _ => { },
-            DetectAction = () => false,
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-WmiObject Win32_Volume -Filter \"DriveType=3\" -ErrorAction SilentlyContinue "
+                        + "| Where-Object DriveLetter "
+                        + "| ForEach-Object { "
+                        + "$id = $_.DeviceID.TrimEnd('\\').Split('{')[1].TrimEnd('}').ToUpper(); "
+                        + "$mb = [math]::Round($_.Capacity / 1048576 * 0.10); "
+                        + "$p = \"HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume\\$id\"; "
+                        + "if (!(Test-Path $p)) { New-Item $p -Force | Out-Null }; "
+                        + "Set-ItemProperty $p -Name MaxCapacity -Value $mb -ErrorAction SilentlyContinue }"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "$v = Get-WmiObject Win32_Volume -Filter \"DriveType=3\" -ErrorAction SilentlyContinue "
+                        + "| Where-Object DriveLetter | Select-Object -First 1; "
+                        + "if (!$v) { $false; return }; "
+                        + "$id = $v.DeviceID.TrimEnd('\\').Split('{')[1].TrimEnd('}').ToUpper(); "
+                        + "$fivePct = [math]::Round($v.Capacity / 1048576 * 0.05); "
+                        + "$p = \"HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume\\$id\"; "
+                        + "$cur = (Get-ItemProperty -Path $p -Name MaxCapacity -ErrorAction SilentlyContinue)?.MaxCapacity; "
+                        + "(($cur -ne $null) -and ($cur -le [math]::Round($fivePct * 1.1)))"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
         },
         // ── Sprint 41 additions ────────────────────────────────────────────
 
