@@ -36,81 +36,51 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: |
                   $tag = "${{ github.event.release.tag_name }}"
+                  $dir = "$env:TEMP\regilattice-smoke"
+                  New-Item -ItemType Directory -Force $dir | Out-Null
                   Write-Host "Downloading CLI EXE for release $tag"
+                  # Pattern matches versioned filename: RegiLatticeCLI-vX.Y.Z-win-x64.exe
                   gh release download $tag `
                       --repo "${{ github.repository }}" `
-                      --pattern "RegiLatticeCLI.exe" `
-                      --dir "$env:TEMP\regilattice-smoke"
-                  Write-Host "Download complete."
-                  Get-ChildItem "$env:TEMP\regilattice-smoke"
+                      --pattern "*CLI*-win-x64.exe" `
+                      --dir $dir
+                  # Locate the downloaded EXE regardless of version suffix
+                  $script:exe = Get-ChildItem $dir -Filter "*CLI*-win-x64.exe" | Select-Object -First 1 -ExpandProperty FullName
+                  if (-not $script:exe) { Write-Error "CLI EXE not found in $dir"; exit 1 }
+                  Write-Host "Downloaded: $script:exe"
 
-            - name: Smoke — --help
+            - name: Smoke — all commands
+              # Consolidated from 6 separate steps to reduce per-step runner overhead (~10s each).
               shell: pwsh
               run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  & $exe --help
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--help returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
-                  }
-                  Write-Host "--help OK (exit 0)"
+                  $exe = Get-ChildItem "$env:TEMP\regilattice-smoke" -Filter "*CLI*-win-x64.exe" |
+                             Select-Object -First 1 -ExpandProperty FullName
+                  if (-not $exe) { Write-Error "CLI EXE not found"; exit 1 }
 
-            - name: Smoke — --list-profiles
-              shell: pwsh
-              run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  & $exe --list-profiles
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--list-profiles returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
+                  $cmds = @(
+                      @{ Args = @("--help");            Name = "--help"             },
+                      @{ Args = @("--list-profiles");   Name = "--list-profiles"    },
+                      @{ Args = @("--show-categories"); Name = "--show-categories"  },
+                      @{ Args = @("--validate");        Name = "--validate"         },
+                      @{ Args = @("--stats");           Name = "--stats"            },
+                      @{ Args = @("--list","--dry-run"); Name = "--list --dry-run"  }
+                  )
+                  $failed = @()
+                  foreach ($cmd in $cmds) {
+                      Write-Host "--- $($cmd.Name) ---"
+                      & $exe @($cmd.Args) 2>&1 | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" }
+                      if ($LASTEXITCODE -ne 0) {
+                          Write-Host "FAIL: $($cmd.Name) exited $LASTEXITCODE"
+                          $failed += $cmd.Name
+                      } else {
+                          Write-Host "OK (exit 0)"
+                      }
                   }
-                  Write-Host "--list-profiles OK (exit 0)"
-
-            - name: Smoke — --show-categories
-              shell: pwsh
-              run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  & $exe --show-categories
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--show-categories returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
+                  if ($failed.Count -gt 0) {
+                      Write-Error "Failed commands: $($failed -join ', ')"
+                      exit 1
                   }
-                  Write-Host "--show-categories OK (exit 0)"
-
-            - name: Smoke — --validate
-              shell: pwsh
-              run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  & $exe --validate
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--validate returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
-                  }
-                  Write-Host "--validate OK (exit 0)"
-
-            - name: Smoke — --stats
-              shell: pwsh
-              run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  & $exe --stats
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--stats returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
-                  }
-                  Write-Host "--stats OK (exit 0)"
-
-            - name: Smoke — --dry-run --list (first 5 lines)
-              shell: pwsh
-              run: |
-                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
-                  $output = & $exe --list --dry-run 2>&1
-                  if ($LASTEXITCODE -ne 0) {
-                      Write-Error "--list --dry-run returned exit code $LASTEXITCODE"
-                      exit $LASTEXITCODE
-                  }
-                  $output | Select-Object -First 5 | ForEach-Object { Write-Host $_ }
-                  Write-Host "... (truncated)"
-                  Write-Host "--list --dry-run OK (exit 0)"
+                  Write-Host "All smoke commands passed."
 
             - name: Write Smoke Summary
               if: always()
@@ -125,15 +95,9 @@ jobs:
                   $body  = @"
                   ## $icon Smoke Tests — $tag on $os
 
-                  | Step  | Result |
-                  |-------|--------|
-                  | --help | Ran |
-                  | --list-profiles | Ran |
-                  | --show-categories | Ran |
-                  | --validate | Ran |
-                  | --stats | Ran |
-                  | --list --dry-run | Ran |
+                  | Commands tested | --help, --list-profiles, --show-categories, --validate, --stats, --list --dry-run |
+                  |---|---|
+                  | **Overall status** | $status |
 
-                  **Overall status**: $status
                   "@
                   $body | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append

@@ -4,6 +4,35 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.23.0] — 2026-04-07
+
+### Added — Phase 5.2 Gaming Performance + Phase 5.3 Accessibility (+80 tweaks, +8 modules)
+
+- `GamingDirectStorage.cs` — 10 DirectStorage/NVMe latency tweaks (`dxstore-*`)
+- `GamingVariableRefreshRate.cs` — 10 VRR/adaptive-sync tweaks (`vrr-*`)
+- `GamingLatencyTuning.cs` — 10 ultra-low-latency gaming tweaks (`glatency-*`)
+- `GamingGPUPower.cs` — 10 GPU power management and TDR tweaks (`gpupwr-*`)
+- `GamingNetworkOpt.cs` — 10 gaming network optimisation tweaks (`gamenet-*`)
+- `GamingAudioOpt.cs` — 10 MMCSS/audio gaming latency tweaks (`gamaudio-*`)
+- `AccessibilityMotor.cs` — 10 motor/input accessibility tweaks (`accmotor-*`)
+- `AccessibilityVisual.cs` — 10 visual/display accessibility tweaks (`accvisual-*`)
+
+### Changed — CI Workflow Optimisation
+
+- ci.yml: mutation testing moved from every-push-to-main to weekly schedule + manual only (biggest cost saving)
+- ci.yml: removed redundant coverage artifact upload (Codecov is the single source of truth)
+- ci.yml: Stryker report artifact only uploaded on failure
+- ci.yml: `paths-ignore` added to push/PR triggers (skip docs-only changes)
+- release.yml: `--no-build` added to all 3 test steps (already built in prior step)
+- smoke.yml: download pattern fixed from `RegiLatticeCLI.exe` → `*CLI*-win-x64.exe` (was silently failing)
+- smoke.yml: 6 separate smoke steps consolidated to 1 PowerShell loop
+
+### Stats
+
+- Tweaks: 7,349 (+80) across 122 categories
+- Modules: 162 files (+8)
+- Tests: 3,230 (2,434 Core + 434 CLI + 362 GUI), 0 failures
+
 ## [6.22.0] — 2026-04-06
 
 ### Added — Phase 5 Sprint: 8 New Security Modules (+80 Tweaks)

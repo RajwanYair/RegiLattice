@@ -3,8 +3,23 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - "docs/assets/**"
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - "docs/assets/**"
+  schedule:
+    # Run mutation testing weekly (Monday 04:00 UTC) to avoid burning minutes on every push
+    - cron: "0 4 * * 1"
   workflow_dispatch:
 
 concurrency:
@@ -82,13 +97,6 @@ jobs:
           --collect:"XPlat Code Coverage"
           --logger "console;verbosity=minimal"
 
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: coverage-report
-          path: "**/coverage.cobertura.xml"
-          if-no-files-found: warn
-
       - name: Validate TweakDef integrity
         # Runs --validate to catch duplicate IDs, broken DependsOn, circular deps,
         # and ImpactScore/SafetyRating out-of-range errors before merging.
@@ -121,15 +129,14 @@ jobs:
           | **Run** | [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |
           | **Triggered by** | \`${{ github.event_name }}\` |
 
-          Coverage report is available as a run artifact.
           Codecov dashboard: https://codecov.io/gh/${{ github.repository }}
           "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8
 
   mutation-testing:
-    # Mutation testing is expensive (~15 min). Run only on main-branch pushes,
-    # not on every PR. Uses dotnet-stryker with the stryker-config.json at root.
+    # Mutation testing is expensive (~15 min on windows-latest).
+    # Run only on the weekly schedule or manual dispatch — NOT on every push to main.
     needs: build-and-test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 45
     env:
@@ -188,7 +195,8 @@ jobs:
           Write-Host "::endgroup::"
 
       - name: Upload Stryker HTML report
-        if: always()
+        # Only upload on failure — the HTML report is large and is only needed for debugging
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: stryker-report
