@@ -277,12 +277,11 @@ When bumping:
 6. **Update all SVG graphics** — every version bump where counts change MUST update the SVG files in `docs/assets/`:
     - `stats.svg` — tweaks + categories + tests (space-separated thousands: `7 189`)
     - `banner.svg` — tweaks, categories, tests, themes, profiles
-    - `architecture.svg` — tweaks count in TweakDef Modules box
+    - `architecture.svg` — stats badge + category pills: tweak count · category count · module file count
     - `how-it-works.svg` — tweaks count in Browse step
     - `features.svg` — per-category tweak counts (if categories changed)
     - `project-structure.svg` — file count · tweak count · category count
     - `solution-overview.svg` — file count · tweak count
-    - `readme-architecture.svg` — category · tweak · module file counts
     ```powershell
     # Quick bulk-replace for SVGs (run after counts change):
     (Get-Content "docs\assets\stats.svg") -replace 'OLD_TWEAK_COUNT', 'NEW_TWEAK_COUNT' | Set-Content "docs\assets\stats.svg"

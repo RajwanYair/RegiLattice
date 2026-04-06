@@ -36,52 +36,51 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 | 3 | `docs/assets/stats.svg` | Tweaks + categories + tests (space-separated thousands) |
 | 4 | `docs/assets/banner.svg` | Tweaks · categories · tests · themes · profiles |
 | 5 | `docs/assets/features.svg` | Per-category tweak count badges |
-| 6 | `docs/assets/architecture.svg` | Tweaks count · module class count |
+| 6 | `docs/assets/architecture.svg` | Stats badge + category pills: tweak count · category count · module file count |
 | 7 | `docs/assets/how-it-works.svg` | Tweaks count in Browse step |
 | 8 | `docs/assets/project-structure.svg` | File count · tweak count · category count |
 | 9 | `docs/assets/solution-overview.svg` | File count · tweak count |
-|10 | `docs/assets/readme-architecture.svg` | Category · tweak · module file counts |
 
 ### Group C — Documentation & instruction files
 
 | # | File | What changes |
 |---|------|----|
-|11 | `README.md` | Version badge, test badge, download link, description, features, diagram counts |
-|12 | `CHANGELOG.md` (root stub) | Latest version entry summary |
-|13 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
-|14 | `docs/Development.md` | Header "Last updated" date + version |
-|15 | `docs/Roadmap.md` | Baseline counts if changed |
-|16 | `.github/copilot-instructions.md` | Header, version table, tweak/category/module/test counts |
-|17 | `.github/instructions/workspace.instructions.md` | Tweaks/module count in `Tweaks/` directory comment |
-|18 | `.github/instructions/lessons-learned.instructions.md` | Header date + version + counts |
-|19 | `.github/instructions/testing.instructions.md` | Test project counts table (Core/CLI/GUI/Total) |
-|20 | `.github/agents/regilattice.agent.md` | "Current state" line: tweak/category/module/test counts |
+|10 | `README.md` | Version badge, test badge, download link, description, features, diagram counts |
+|11 | `CHANGELOG.md` (root stub) | Latest version entry summary |
+|12 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
+|13 | `docs/Development.md` | Header "Last updated" date + version |
+|14 | `docs/Roadmap.md` | Baseline counts if changed |
+|15 | `.github/copilot-instructions.md` | Header, version table, tweak/category/module/test counts |
+|16 | `.github/instructions/workspace.instructions.md` | Tweaks/module count in `Tweaks/` directory comment |
+|17 | `.github/instructions/lessons-learned.instructions.md` | Header date + version + counts |
+|18 | `.github/instructions/testing.instructions.md` | Test project counts table (Core/CLI/GUI/Total) |
+|19 | `.github/agents/regilattice.agent.md` | "Current state" line: tweak/category/module/test counts |
 
 ### Group D — Package registry manifests (version + description counts)
 
 | # | File | What changes |
 |---|------|----|
-|21 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
-|22 | `scoop/regilattice.json` | `version`, `url`, `hash`, description counts |
-|23 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
-|24 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
-|25 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
-|26 | `npm/package.json` | `version`, `description` counts |
-|27 | `maven/pom.xml` | `<version>`, `<description>` counts |
-|28 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
+|20 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
+|21 | `scoop/regilattice.json` | `version`, `url`, `hash`, description counts |
+|22 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
+|23 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
+|24 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
+|25 | `npm/package.json` | `version`, `description` counts |
+|26 | `maven/pom.xml` | `<version>`, `<description>` counts |
+|27 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
 
 ### Group E — Derived files (update AFTER release build)
 
 | # | File | What changes |
 |---|------|----|
-|29 | `gem/lib/regilattice/version.rb` | `VERSION` string |
-|30 | `Dockerfile` | `LABEL` description counts |
+|28 | `gem/lib/regilattice/version.rb` | `VERSION` string |
+|29 | `Dockerfile` | `LABEL` description counts |
 
 ### Group F — External (post-push)
 
 | # | Action | What changes |
 |---|--------|----|
-|31 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
+|30 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
 
 ## Step-by-Step Release Process
 

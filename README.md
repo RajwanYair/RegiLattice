@@ -85,10 +85,6 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture — Core, GUI, CLI, Tweaks, Registry" width="100%"/>
 </p>
 
-<p align="center">
-  <img src="docs/assets/readme-architecture.svg" alt="RegiLattice Architecture — CLI, GUI, Core Engine, 122 Categories, Registry" width="100%"/>
-</p>
-
 ## How It Works
 
 <p align="center">
