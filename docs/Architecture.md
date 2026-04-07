@@ -19,7 +19,7 @@ Three projects share `RegiLattice.Core` as the single source of truth for tweak 
 ---
 <p align="center">
   <img src="assets/data-flow.svg" alt="Data Flow — Apply Tweak sequence diagram" width="100%"/>
-</p>align="center">
+<p align="center">
   <img src="assets/profiles-quadrant.svg" alt="Built-in Profiles — quadrant chart" width="100%"/>
 </p>
 

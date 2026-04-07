@@ -1,7 +1,7 @@
 # API Reference
 
 > Reference for the RegiLattice C# public API.
-> Last verified: 2026-03-31 · v6.0.0
+> Last verified: 2026-04-07 · v6.24.0
 
 ---
 
@@ -117,7 +117,7 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `Register` | `(TweakDef td)` | Register a single tweak (throws on duplicate ID) |
-| `RegisterBuiltins` | `()` | Register all 228 built-in tweak modules |
+| `RegisterBuiltins` | `()` | Register all 170 built-in tweak modules (7,429 tweaks) |
 | `AllTweaks` | `() -> IReadOnlyList<TweakDef>` | All registered tweaks |
 | `GetTweak` | `(string id) -> TweakDef?` | Look up by ID |
 

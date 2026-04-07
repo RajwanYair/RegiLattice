@@ -74,7 +74,7 @@ another process.
 
 **Fix:**
 - Try switching themes via the theme selector dropdown.
-- 4 themes available: Catppuccin Mocha (default), Catppuccin Latte, Nord, Dracula.
+- 11 themes available: Catppuccin Mocha (default), Catppuccin Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk.
 
 ## CLI Issues
 
