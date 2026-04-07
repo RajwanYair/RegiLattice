@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-07 (v6.24.0, C# 13 / .NET 10.0-windows, ~7,429 tweaks, 122 categories, 3,230 tests)
+> Last updated: 2026-04-07 (v6.25.0, C# 13 / .NET 10.0-windows, ~7,479 tweaks, 127 categories, 3,230 tests)
 
 ---
 
@@ -1635,7 +1635,8 @@ Version history:
 | v6.22.0 | 8 | +80 | 672–679 (SecurityWDAG/Printer/LSA/MSI/NTP/WinRM/CredGuard/IEZones; fix SnapshotManager.Save() live StatusMap() hang via optional cachedStatus param) |
 | v6.23.0 | 8 | +80 | 680–687 (GamingDirectStorage/VRR/LatencyTuning/GPUPower/NetworkOpt/AudioOpt/AccessibilityMotor/AccessibilityVisual; CI paths-ignore + weekly mutation tests; fix 3 broken ApplyAction impls; 7,349 tweaks) |
 | v6.24.0 | 8 | +80 | — (Phase 5.3 Accessibility remaining + Phase 5.5 Developer: MagnifierAdvanced/LiveCaptions/EyeControlSettings/VoiceAccessControl/WinDbgSettings/WSLAdvanced/GitCredManager/ContainerRuntime) |
-**Current version**: v6.24.0 — 7,429 tweaks, 122 categories, 170 files (31 original + 139 extracted/split). Run full gap analysis on all three phases before creating any new module.
+| v6.25.0 | 5 | +50 | — (Phase 5.4 Energy & Battery Management: BatterySaver/ChargingOptimization/StandbyStates/CPUPowerStates/DisplayPower; 7,479 tweaks, 127 categories, 175 modules) |
+**Current version**: v6.25.0 — 7,479 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 

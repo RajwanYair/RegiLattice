@@ -179,7 +179,7 @@
   </g>
   <g filter="url(#shadow)">
     <rect x="915" y="440" width="145" height="42" rx="12" fill="#316044" stroke="#94e2d5" stroke-width="1.2"/>
-    <text x="987" y="466" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#94e2d5">... +114 more</text>
+    <text x="987" y="466" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#94e2d5">... +119 more</text>
   </g>
 
   <!-- Dashed lines: Tweaks -> Engine -->
@@ -189,7 +189,7 @@
   <!-- ===== STATS BADGE ===== -->
   <g filter="url(#shadow)">
     <rect x="40" y="502" width="1020" height="44" rx="10" fill="#316044" stroke="#585b70" stroke-width="1"/>
-    <text x="550" y="530" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="13" fill="#cdd6f4">122 Categories &#x2022; 7 429 Tweaks &#x2022; 170 Module Files &#x2022; 11 Themes &#x2022; 5 Profiles &#x2022; Fully Declarative &amp; Reversible</text>
+    <text x="550" y="530" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="13" fill="#cdd6f4">127 Categories &#x2022; 7 479 Tweaks &#x2022; 175 Module Files &#x2022; 11 Themes &#x2022; 5 Profiles &#x2022; Fully Declarative &amp; Reversible</text>
   </g>
 
   <!-- ===== LEGEND ===== -->
@@ -213,5 +213,5 @@
   </g>
 
   <!-- Version credit -->
-  <text x="1060" y="620" text-anchor="end" font-family="'Cascadia Code', monospace" font-size="10" fill="#45475a">RegiLattice v6.19.0</text>
+  <text x="1060" y="620" text-anchor="end" font-family="'Cascadia Code', monospace" font-size="10" fill="#45475a">RegiLattice v6.25.0</text>
 </svg>

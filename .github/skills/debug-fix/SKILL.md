@@ -76,8 +76,8 @@ CS8132: Cannot deconstruct a tuple of N elements into M variables
 Settings file provided does not conform to required format. An XML comment cannot
 contain '--', and '-' cannot be the last character. Line NN, position PP.
 ```
-**Fix**: Remove any `--flag-syntax` (double hyphen) from XML comment text inside `.runsettings`.  
-XML 1.0 prohibits `--` anywhere inside `<!-- ... -->` content (the delimiters themselves are fine).  
+**Fix**: Remove any `--flag-syntax` (double hyphen) from XML comment text inside `.runsettings`.
+XML 1.0 prohibits `--` anywhere inside `<!-- ... -->` content (the delimiters themselves are fine).
 ```xml
 <!-- ❌ BAD — "--" in comment content is fatal in .NET SDK 10.0.201+ -->
 <!-- Equivalent to passing --blame-hang-timeout 30s on the CLI -->
@@ -100,8 +100,8 @@ dotnet test tests/RegiLattice.GUI.Tests/... --no-build --settings tests/.runsett
 
 ### PublishTrimmed → IL2026 (48+ errors)
 **Symptom**: `IL2026 Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access...`
-**Fix**: Remove `<PublishTrimmed>true</PublishTrimmed>` from any project referencing `RegiLattice.Core`.  
-Core services use `System.Text.Json` reflection-based serialization and cannot be safely trimmed  
+**Fix**: Remove `<PublishTrimmed>true</PublishTrimmed>` from any project referencing `RegiLattice.Core`.
+Core services use `System.Text.Json` reflection-based serialization and cannot be safely trimmed
 without migrating all of them to source-generation contexts first.
 ```xml
 <!-- ❌ BAD — causes 48 IL2026 errors on CLI self-contained publish -->

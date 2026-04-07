@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.25.0] — 2026-04-07
+
+### Added — Phase 5.4: Energy & Battery Management (+50 tweaks, +5 modules)
+
+- `BatterySaver.cs` — 10 Battery saver threshold, auto-dim, hibernate, wake-on-pattern tweaks (`batt-*`)
+- `ChargingOptimization.cs` — 10 Expose battery level/action settings in Power Options UI (`chrg-*`)
+- `StandbyStates.cs` — 10 Connected Standby, hybrid sleep, wake timers, S1/S2 states (`standby-*`)
+- `CPUPowerStates.cs` — 10 CPU min/max state, boost mode, EPP, core parking, perf policies (`cpupwr-*`)
+- `DisplayPower.cs` — 10 Display timeout, adaptive dimming/brightness, display-required policy (`dispwr-*`)
+
+### Stats
+
+- Tweaks: 7,479 (+50) across 127 categories
+- Modules: 175 files (+5)
+- Tests: 3,230 (2,434 Core + 434 CLI + 362 GUI), 0 failures
+
 ## [6.24.0] — 2026-04-07
 
 ### Added — Phase 5.3 Accessibility (remaining) + Phase 5.5 Developer Modules (+80 tweaks, +8 modules)
