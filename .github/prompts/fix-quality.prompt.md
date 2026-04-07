@@ -9,9 +9,13 @@ Fix all quality issues in: `${file}`
 
 ## Quality Gate (MUST achieve before done)
 
+- **0 build fatals** — no fatal MSBuild or compiler errors
 - **0 build warnings** — `TreatWarningsAsErrors=true` is global; every warning is a build error
 - **0 build errors**
-- **No suppressions allowed** — `#pragma warning disable`, `[SuppressMessage]`, `// NOSONAR` are **FORBIDDEN** — fix the root cause instead
+- **No suppressions or waivers allowed** — the following are **FORBIDDEN** — fix the root cause instead:
+  - `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA`
+  - `// ReSharper disable` / `// NOLINT` / `// csharpier-ignore` / `// coverage: ignore`
+  - `// HACK:` (when used to bypass a quality check)
 - **No TODO / FIXME comments** — open a GitHub Issue instead; note it in the commit footer
 
 ## What to Fix

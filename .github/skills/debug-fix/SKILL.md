@@ -71,6 +71,45 @@ CS8132: Cannot deconstruct a tuple of N elements into M variables
 **Symptom**: Tweak applies but has no effect
 **Fix**: Verify the registry path and value name against Windows docs; check `EnableAutoDoh` values (`2`=auto, `3`=enforce)
 
+### CRLF in .runsettings XML Comment Breaks Test Run
+```
+Settings file provided does not conform to required format. An XML comment cannot
+contain '--', and '-' cannot be the last character. Line NN, position PP.
+```
+**Fix**: Remove any `--flag-syntax` (double hyphen) from XML comment text inside `.runsettings`.  
+XML 1.0 prohibits `--` anywhere inside `<!-- ... -->` content (the delimiters themselves are fine).  
+```xml
+<!-- ❌ BAD — "--" in comment content is fatal in .NET SDK 10.0.201+ -->
+<!-- Equivalent to passing --blame-hang-timeout 30s on the CLI -->
+
+<!-- ✅ GOOD -->
+<!-- Equivalent to passing the blame-hang-timeout 30s flag on the CLI -->
+```
+
+### `--no-build` for GUI.Tests Fails Silently
+**Symptom**: `"An assembly specified in the application dependencies manifest was not found: runtimepack.Microsoft.Windows.SDK.NET.Ref"`
+**Fix**: Never use `--no-build` for `RegiLattice.GUI.Tests`. The Windows SDK runtime packs are only
+copy-staged during `dotnet build`; `--no-build` skips that and the test host crashes before any test runs.
+```powershell
+# ✅ CORRECT — let the test step do its own incremental build
+dotnet test tests/RegiLattice.GUI.Tests/... --settings tests/.runsettings
+
+# ❌ BROKEN — missing runtime pack DLLs
+dotnet test tests/RegiLattice.GUI.Tests/... --no-build --settings tests/.runsettings
+```
+
+### PublishTrimmed → IL2026 (48+ errors)
+**Symptom**: `IL2026 Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access...`
+**Fix**: Remove `<PublishTrimmed>true</PublishTrimmed>` from any project referencing `RegiLattice.Core`.  
+Core services use `System.Text.Json` reflection-based serialization and cannot be safely trimmed  
+without migrating all of them to source-generation contexts first.
+```xml
+<!-- ❌ BAD — causes 48 IL2026 errors on CLI self-contained publish -->
+<PublishTrimmed>true</PublishTrimmed>
+
+<!-- ✅ GOOD — omit entirely; InvariantGlobalization=true is still safe to keep -->
+```
+
 ## Verification Commands
 
 ```powershell
@@ -88,10 +127,11 @@ dotnet build RegiLattice.sln -c Debug 2>&1 | Select-String "error|warning"
 
 - **PowerShell only** — no bash/Unix commands ever
 - **Always DryRun in tests**: `new RegistrySession { DryRun = true }`
-- **Fix root cause** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` are **BUGS not fixes** — forbidden
+- **Fix root cause** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// ReSharper disable` / `// NOLINT` are **BUGS not fixes** — all forbidden
 - **One concern per fix commit** — don't clean up unrelated code in a bug-fix commit
-- **0 warnings policy** — `TreatWarningsAsErrors=true` is global; every build must produce 0 warnings
+- **0 fatals, 0 warnings policy** — `TreatWarningsAsErrors=true` is global; every build must produce 0 fatals, 0 errors, and 0 warnings
 - **No TODO/FIXME** — if the fix requires follow-up, open a GitHub Issue instead
+- **No inline waivers** — `// csharpier-ignore`, `// coverage: ignore`, `// HACK:` (to bypass checks) are equally forbidden
 
 ## Forbidden Patterns
 
@@ -102,7 +142,14 @@ These patterns are **never acceptable** — fix the root cause instead:
 #pragma warning disable CS8602
 [SuppressMessage("Category", "Rule")]
 // NOSONAR
+// NCA
 // ReSharper disable ...
+// NOLINT
+
+// ❌ FORBIDDEN — inline quality gate waivers
+// csharpier-ignore
+// coverage: ignore
+// HACK: (to bypass a quality gate)
 
 // ❌ FORBIDDEN — deferred work
 // TODO: handle null case

@@ -37,6 +37,17 @@ When the compiler or analyzer emits a diagnostic, **fix the root cause**. The fo
 // NOSONAR
 // NCA
 // ReSharper disable ...
+// NOLINT
+// HACK: (used to sidestep a quality check)
+```
+
+**Inline quality gate waivers are also forbidden** — they are indistinguishable from suppressions:
+
+```csharp
+// ❌ FORBIDDEN — lint ignore / bypass comments
+// csharpier-ignore
+// dotnet-stryker-exclude
+// coverage: ignore
 ```
 
 **Resolution patterns** (fix instead of suppress):
@@ -266,6 +277,8 @@ public async Task<string> ExportJsonAsync(string path)
 - Don't catch `Exception` without re-throwing or explicit justification
 - Don't use `#pragma warning disable` — fix the root cause instead
 - Don't use `[SuppressMessage(...)]` — fix the root cause instead
+- Don't use `// NOSONAR`, `// NCA`, `// ReSharper disable`, `// NOLINT`, or any inline suppression/waiver pattern
 - Don't leave `TODO` or `FIXME` comments — complete the work or open a GitHub Issue
 - Don't use `null!` to suppress CS8618 — use `required` + `init` or assign a real default
 - Don't use `!` (null-forgiving) unless the value is provably non-null at that point
+- Don't skip tests with `[Fact(Skip=...)]` or `[Theory(Skip=...)]` — fix the test or the code it tests

@@ -17,10 +17,11 @@ Selection: `${selection}`
 ### Build Quality Gate
 
 - [ ] Build produces **0 fatals, 0 errors, 0 warnings** (`TreatWarningsAsErrors=true`)
-- [ ] No `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` suppressions
+- [ ] No `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// ReSharper disable` / `// NOLINT` suppressions
+- [ ] No inline quality gate waivers (`// csharpier-ignore`, `// coverage: ignore`, `// HACK:` to bypass checks)
 - [ ] No `TODO` or `FIXME` comments (open GitHub Issues instead)
 - [ ] No `[Fact(Skip=...)]` or `[Theory(Skip=...)]` in tests
-- [ ] Core test coverage ≥90% for new/changed code
+- [ ] Core test coverage ≥90% for new/changed code (prefer ≥95%)
 
 ### Security (OWASP Top 10)
 

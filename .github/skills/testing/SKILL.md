@@ -124,15 +124,15 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## Coverage Targets
 
-| Component         | Target  | Notes                      |
-| ----------------- | ------- | -------------------------- |
-| TweakDef model    | **100%** | Pure data                  |
-| TweakEngine       | **90%+** | Core business logic        |
-| RegistrySession   | **85%+** | Use DryRun for write paths |
-| Services          | **90%+** | All deterministic logic    |
-| GUI theme records | **90%+** | Pure data                  |
-| GUI Forms         | **60%+** | UI hard to unit test       |
-| **Overall Core**  | **≥90%** | **Codecov gate enforced — PR below threshold is blocked** |
+| Component         | Minimum  | Preferred | Notes                      |
+| ----------------- | -------- | --------- | -------------------------- |
+| TweakDef model    | **100%** | **100%**  | Pure data                  |
+| TweakEngine       | **90%+** | **95%+**  | Core business logic        |
+| RegistrySession   | **85%+** | **92%+**  | Use DryRun for write paths |
+| Services          | **90%+** | **95%+**  | All deterministic logic    |
+| GUI theme records | **90%+** | **95%+**  | Pure data                  |
+| GUI Forms         | **60%+** | **75%+**  | UI hard to unit test       |
+| **Overall Core**  | **≥90%** | **≥95%**  | **Codecov gate enforced — PR below threshold is blocked** |
 
 ## Quality Gate — Non-Negotiable
 
@@ -140,13 +140,15 @@ Every test run must satisfy ALL conditions before committing:
 
 | Gate | Requirement |
 |------|-------------|
+| Build fatals | **0** — hard CI fail |
 | Build warnings | **0** — `TreatWarningsAsErrors=true`; any warning is a build error |
 | Build errors | **0** — hard fail |
 | Test failures | **0** — all 3,230+ tests must pass |
 | Skipped tests | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` are **FORBIDDEN** |
-| Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` in test code **FORBIDDEN** |
+| Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// NOLINT` in test code **FORBIDDEN** |
+| Waivers / lint ignores | **0** — `// csharpier-ignore`, `// coverage: ignore`, `// HACK:` etc. equally forbidden |
 | TODO / FIXME in tests | **0** — open a GitHub Issue instead |
-| Line coverage (Core) | **≥90%** — Codecov enforced; drop below gate = block |
+| Line coverage (Core) | **≥90%** minimum — **≥95% preferred** — Codecov enforced; drop below gate = block |
 
 ```powershell
 # Verify quality gate locally before every commit:
@@ -154,6 +156,35 @@ dotnet build RegiLattice.sln -c Release -m:1   # must print: 0 Error(s), 0 Warni
 dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
 dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
 dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
+```
+
+## Flaky Test Prevention
+
+### Timestamp stripping
+```csharp
+// ❌ BAD — DateTime.Now called twice can straddle a second
+Assert.Equal(gen.Build(map), File.ReadAllText(path));
+
+// ✅ GOOD
+static string StripTs(string s) =>
+    Regex.Replace(s, @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}", "TIMESTAMP");
+Assert.Equal(StripTs(gen.Build(map)), StripTs(File.ReadAllText(path)));
+```
+
+### Performance budget comments
+```csharp
+// ✅ Required — document tweak count + expected baseline so future changes are deliberate
+// Budget: 150ms — ~7,000 tweaks with synonym expansion; ~60ms on dev machine.
+Assert.True(sw.ElapsedMilliseconds < 150, $"Search took {sw.ElapsedMilliseconds}ms");
+```
+
+### CorporateGuard isolation
+```csharp
+public sealed class MyFixture : IDisposable
+{
+    public MyFixture() => CorporateGuard.StubCorporate = false; // bypass Intune WMI
+    public void Dispose() => CorporateGuard.StubCorporate = null;
+}
 ```
 
 ## Intentionally Untested (external tools required)

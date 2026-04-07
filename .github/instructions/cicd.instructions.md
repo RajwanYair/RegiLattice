@@ -42,6 +42,31 @@ to GitHub Releases as soon as the version is tagged.
 - Run on both push to main and pull_request
 - Windows-only project — run on `windows-latest`
 
+## Canonical Action Versions (verified 2026-04-07)
+
+> **Before adding or bumping any action, verify the version exists on the action's GitHub releases page.**
+> Pinning a non-existent version silently fails the CI step.
+
+| Action | Stable Version |
+|--------|---------------|
+| `actions/checkout` | `@v6` |
+| `actions/setup-dotnet` | `@v5` |
+| `actions/cache` | `@v5` |
+| `actions/upload-artifact` | `@v7` |
+| `codecov/codecov-action` | `@v6` |
+| `github/codeql-action/init` | `@v4` |
+| `github/codeql-action/analyze` | `@v4` |
+| `github/codeql-action/upload-sarif` | `@v4` |
+| `actions/dependency-review-action` | `@v4` |
+| `actions/labeler` | `@v6` |
+| `actions/github-script` | `@v8` |
+| `actions/stale` | `@v10` |
+
+```powershell
+# Verify a version exists before pinning:
+gh release list --repo actions/upload-artifact --limit 5
+```
+
 ## Standard .NET CI Workflow Pattern
 
 ```yaml
@@ -50,6 +75,12 @@ name: CI
 on:
     push:
         branches: [main]
+        paths-ignore:
+            - 'docs/**'
+            - '**.md'
+            - '**.svg'
+            - '**.txt'
+            - '.github/instructions/**'
     pull_request:
         branches: [main]
 
@@ -59,16 +90,19 @@ permissions:
 jobs:
     build-and-test:
         runs-on: windows-latest
+        env:
+            MSBUILDDISABLENODEREUSE: 1
+            FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
-            - uses: actions/setup-dotnet@v4
+            - uses: actions/setup-dotnet@v5
               with:
                   dotnet-version: "10.0.x"
 
             - name: Cache NuGet
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: ~/.nuget/packages
                   key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
@@ -78,19 +112,26 @@ jobs:
               run: dotnet restore RegiLattice.sln
 
             - name: Build
-              run: dotnet build RegiLattice.sln -c Release --no-restore
+              run: dotnet build RegiLattice.sln -c Release --no-restore --verbosity minimal
 
-            - name: Test with coverage
-              run: dotnet test RegiLattice.sln -c Release --no-build --collect:"XPlat Code Coverage" --logger "console;verbosity=normal"
+            # Run each project individually to avoid cross-assembly file-write races
+            - name: Test (Core)
+              run: dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --collect:"XPlat Code Coverage" --logger "console;verbosity=normal"
+
+            - name: Test (CLI)
+              run: dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+
+            - name: Test (GUI)
+              run: dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
 
             - name: Upload coverage artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: coverage-report
                   path: "**/coverage.cobertura.xml"
 
             - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v5
+              uses: codecov/codecov-action@v6
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
                   files: "**/coverage.cobertura.xml"
@@ -100,11 +141,14 @@ jobs:
         needs: build-and-test
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         runs-on: windows-latest
+        env:
+            MSBUILDDISABLENODEREUSE: 1
+            FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
-            - uses: actions/setup-dotnet@v4
+            - uses: actions/setup-dotnet@v5
               with:
                   dotnet-version: "10.0.x"
 
@@ -115,7 +159,7 @@ jobs:
                   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 
             - name: Upload artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               with:
                   name: RegiLattice-win-x64
                   path: src/RegiLattice.GUI/bin/Release/net10.0-windows/win-x64/publish/
@@ -204,13 +248,17 @@ Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green a
 ## CI Best Practices
 
 - **NuGet cache**: key on `.csproj` hash to invalidate on dependency changes
-- **Build once, test from build**: use `--no-build` in test step after `dotnet build`
+- **Build once, test without `--no-build`**: omit `--no-build` to let each test step do a fast incremental build — safer than relying on a prior Build step to produce all DLLs, especially for GUI.Tests which requires Windows SDK runtime packs
 - **Per-project test runs — MANDATORY**: NEVER use `dotnet test RegiLattice.sln`. Always run each
   test project individually (Core → CLI → GUI). `dotnet test RegiLattice.sln` spawns Core.Tests and
   GUI.Tests concurrently as separate processes, both writing to the same `compliance-history.json`
   file, causing non-deterministic failures. See `tests/.runsettings` MaxCpuCount note.
-- **Codecov**: use `codecov-action@v5`; set `fail_ci_if_error: false`
+- **`MSBUILDDISABLENODEREUSE: 1`**: Set at job level in every CI job — prevents MSBuild worker nodes from holding file locks across builds on the OneDrive-hosted workspace (MSB3492)
+- **`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true`**: Set at job level — ensures JS-based actions (checkout, cache, codecov) run on Node 24 without deprecation warnings
+- **`paths-ignore` for docs-only changes**: Add to `on.push` to avoid a full build/test run when only `.md`, `.svg`, `.txt`, or instruction files changed
+- **Codecov**: use `codecov-action@v6`; set `fail_ci_if_error: false`
 - **Windows-only**: no matrix needed — single `windows-latest` runner
 - **Self-contained publish**: `-r win-x64 --self-contained true -p:PublishSingleFile=true`
-- **Stryker mutation testing**: runs from `src/RegiLattice.Core/` directory with `STRYKER_BUILD=1`; explicit `<TargetFramework>` required in Core and Core.Tests .csproj files for Buildalyzer compatibility
+- **Stryker mutation testing**: runs from `src/RegiLattice.Core/` directory with `STRYKER_BUILD=1`; explicit `<TargetFramework>` required in Core and Core.Tests .csproj files for Buildalyzer compatibility; move to **weekly schedule** (cron) to avoid adding ~15 min per push
 - **`dotnet build` verbosity**: NEVER use `-q`/`--verbosity quiet` — causes question-build aborts; use no flag or `--verbosity minimal`
+- **Action version verification**: verify every action version exists before committing — a non-existent tag silently fails the step
