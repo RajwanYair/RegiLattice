@@ -1,30 +1,33 @@
 {
   "recommendations": [
-    // ── C# / .NET core tooling ──────────────────────────────────────
+    // ── C# / .NET core tooling (open source: MIT/Apache) ────────────
     "ms-dotnettools.csharp",
     "ms-dotnettools.csdevkit",
     "csharpier.csharpier-vscode",
-    // ── AI / Copilot ────────────────────────────────────────────────
+    // ── AI / coding assistants ──────────────────────────────────────
+    // OSS-first: Continue supports Ollama, LM Studio, any OpenAI-compatible backend
+    "continue.continue",
+    // Vendor alternative (if GitHub Copilot subscription is active):
     "github.copilot",
     "github.copilot-chat",
-    // ── Git & source control ────────────────────────────────────────
+    // ── Git & source control (open source: MIT) ─────────────────────
     "eamodio.gitlens",
-    "gitkraken.gitkraken-authentication",
-    // ── PowerShell ──────────────────────────────────────────────────
+    "mhutchie.git-graph",
+    // ── PowerShell (open source: MIT) ───────────────────────────────
     "ms-vscode.powershell",
-    // ── GitHub Actions / CI ─────────────────────────────────────────
+    // ── GitHub Actions / CI (open source: MIT) ──────────────────────
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
-    // ── Code quality & diagnostics ──────────────────────────────────
+    // ── Code quality & diagnostics (open source: MIT) ───────────────
     "usernamehw.errorlens",
     "gruntfuggly.todo-tree",
-    // ── YAML / Markdown ─────────────────────────────────────────────
+    // ── YAML / Markdown (open source: MIT / Apache) ─────────────────
     "redhat.vscode-yaml",
     "bierner.markdown-mermaid",
     "davidanson.vscode-markdownlint",
-    // ── Coverage / Test visualization ────────────────────────────────
+    // ── Coverage / Test visualization (open source: MIT) ────────────
     "ryanluker.vscode-coverage-gutters",
-    // ── XML ─────────────────────────────────────────────────────────
+    // ── XML (open source: EPL) ───────────────────────────────────────
     "redhat.vscode-xml"
   ]
 }

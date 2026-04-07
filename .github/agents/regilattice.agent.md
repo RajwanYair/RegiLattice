@@ -82,6 +82,20 @@ All new classes are `sealed` unless inheritance is explicitly needed.
 
 Never write to the real registry in tests. Always use `RegistrySession { DryRun = true }`.
 
+### Prefer Open-Source Tools
+
+When suggesting tools, libraries, MCP servers, or CLI utilities — **prefer open-source
+solutions first**. Recommend vendor/proprietary alternatives only when no capable OSS
+option exists. OSS-first examples for this project:
+
+| Task | OSS-first choice | Vendor alternative |
+|------|------------------|--------------------|
+| AI coding assistant | `continue.continue` (Apache 2.0, any LLM backend) | GitHub Copilot |
+| Git visualization | `mhutchie.git-graph` (MIT) | GitKraken |
+| Test framework | xUnit (Apache 2.0) | ✓ already in use |
+| Build | MSBuild / dotnet CLI (MIT) | ✓ already in use |
+| MCP servers | `@modelcontextprotocol/*` (MIT) | ✓ already in use |
+
 ### Zero-Warning Policy — HARD BLOCK
 
 Every build must produce **0 fatals, 0 errors, 0 warnings**. `TreatWarningsAsErrors=true` is
