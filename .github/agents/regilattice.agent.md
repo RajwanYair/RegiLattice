@@ -19,17 +19,30 @@ tools:
     - mcp_filesystem_read_text_file
     - mcp_filesystem_read_multiple_files
     - mcp_filesystem_list_directory
+    - mcp_filesystem_directory_tree
     - mcp_filesystem_search_files
+    - mcp_filesystem_write_file
+    - mcp_filesystem_edit_file
     - mcp_github_get_issue
     - mcp_github_create_issue
     - mcp_github_list_issues
     - mcp_github_search_code
+    - mcp_github_get_pull_request
+    - mcp_github_list_pull_requests
+    - mcp_github_create_pull_request
+    - mcp_github_list_commits
     - mcp_gitkraken_git_status
     - mcp_gitkraken_git_add_or_commit
     - mcp_gitkraken_git_push
     - mcp_gitkraken_git_log_or_diff
     - mcp_gitkraken_git_branch
+    - mcp_gitkraken_git_blame
+    - mcp_project-docs_read_text_file
+    - mcp_project-docs_read_multiple_files
+    - mcp_project-docs_list_directory
+    - mcp_project-docs_search_files
     - vscode_askQuestions
+    - vscode_listCodeUsages
 ---
 
 # RegiLattice Development Agent
@@ -292,7 +305,19 @@ Use dedicated Copilot/MCP tools before falling back to shell commands:
 | Git status/commit | `mcp_gitkraken_git_*` tools | `git` in terminal |
 | Run tests | `runTests` tool | `dotnet test` in terminal |
 | Build/lint errors | `get_errors` | `dotnet build` in terminal |
-| GitHub issues | `mcp_github_*` tools | `gh` CLI |
+| GitHub issues/PRs | `mcp_github_*` tools | `gh` CLI |
+| Persist cross-session facts | `memory` (built-in) — create/view memories | — |
+| Complex multi-step reasoning | Use sequential thinking via `sequential-thinking` MCP | — |
+
+### MCP Servers Active in This Workspace
+
+| Server | Type | Purpose |
+|--------|------|---------|
+| `github` | HTTP remote | Official GitHub Copilot MCP — repos, issues, PRs, code search (Copilot OAuth, no PAT) |
+| `filesystem` | stdio (OSS) | Full workspace read/write — all `mcp_filesystem_*` tools |
+| `project-docs` | stdio (OSS) | `.github/` + `docs/` scoped read/write — all `mcp_project-docs_*` tools |
+| `memory` | stdio (OSS) | Persistent knowledge graph — store project facts across sessions in `.github/mcp-memory.jsonl` |
+| `sequential-thinking` | stdio (OSS) | Explicit multi-step reasoning for complex debugging and sprint planning |
 
 ## Response Style
 

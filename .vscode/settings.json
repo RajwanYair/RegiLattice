@@ -145,10 +145,23 @@
     "git": true,
     "pwsh": true
   },
-  // Agent auto-approve safe read-only operations
+  // Agent request budget — allow complex multi-file/multi-tool agent sessions
   "chat.agent.maxRequests": 80,
   // Copilot next-edit suggestions (inline code suggestions while editing)
   "github.copilot.nextEditSuggestions.enabled": true,
+  // ── VS Code 1.99+ MCP & agent mode settings ─────────────────────────────
+  // Auto-start MCP servers when mcp.json changes (no manual restart needed)
+  "chat.mcp.autoStart": true,
+  // Auto-discover MCP configs from Claude Desktop and other MCP-aware apps
+  "chat.mcp.discovery.enabled": true,
+  // Tool-based edit mode: model calls tools to make file edits (same engine as agent mode).
+  // Enables seamless mode-switching mid-conversation. Requires a tool-calling model.
+  "chat.edits2.enabled": true,
+  // Thinking tool: gives the agent an explicit reasoning step between tool calls.
+  // Improves performance on complex tasks (debugging 7k-tweak chains, sprint planning).
+  "github.copilot.chat.agent.thinkingTool": true,
+  // Semantic text search results surfaced in chat via #searchResults tool
+  "github.copilot.chat.search.semanticTextResults": true,
   // ── Testing ─────────────────────────────────────────────────────────
   "dotnet.unitTests.runSettingsPath": "tests/.runsettings"
 }

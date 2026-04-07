@@ -1,21 +1,33 @@
 {
-  "inputs": [
-    {
-      "type": "promptString",
-      "id": "github-token",
-      "description": "GitHub Personal Access Token for MCP server",
-      "password": true
-    }
-  ],
+  // ── Shared env vars injected into every stdio server ───────────────────────
+  // Keep proxy vars, SSL overrides, and PATH in one place.
+  // Referenced by each server below via "env" spread pattern.
+  //
+  // Servers:
+  //  github            — Official GitHub remote MCP (type: http, uses Copilot OAuth — no PAT needed)
+  //  filesystem        — Workspace-root read/write via @modelcontextprotocol/server-filesystem (MIT)
+  //  project-docs      — .github + docs read/write via @modelcontextprotocol/server-filesystem (MIT)
+  //  memory            — Persistent knowledge graph via @modelcontextprotocol/server-memory (MIT)
+  //  sequential-think  — Chain-of-thought reasoning via @modelcontextprotocol/server-sequential-thinking (MIT)
   "servers": {
+    // ── GitHub (remote HTTP — official Copilot MCP endpoint, VS Code 1.99+) ──
+    // Uses GitHub Copilot OAuth — no Personal Access Token required.
+    // Provides: repos, issues, PRs, code search, file content, commits, branches.
+    // Reference: https://api.githubcopilot.com/mcp
     "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp"
+    },
+
+    // ── Filesystem — full workspace access (MIT: @modelcontextprotocol/server-filesystem) ──
+    "filesystem": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-github"
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}",
         "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
         "HTTP_PROXY": "${env:HTTP_PROXY}",
         "HTTPS_PROXY": "${env:HTTPS_PROXY}",
@@ -27,19 +39,8 @@
         "npm_config_strict_ssl": "false"
       }
     },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${workspaceFolder}"
-      ],
-      "env": {
-        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
-        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-        "npm_config_strict_ssl": "false"
-      }
-    },
+
+    // ── Project docs — .github + docs directory access (MIT: @modelcontextprotocol/server-filesystem) ──
     "project-docs": {
       "command": "npx",
       "args": [
@@ -50,6 +51,59 @@
       ],
       "env": {
         "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "HTTP_PROXY": "${env:HTTP_PROXY}",
+        "HTTPS_PROXY": "${env:HTTPS_PROXY}",
+        "http_proxy": "${env:HTTP_PROXY}",
+        "https_proxy": "${env:HTTPS_PROXY}",
+        "NO_PROXY": "localhost,127.0.0.1,::1",
+        "no_proxy": "localhost,127.0.0.1,::1",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "npm_config_strict_ssl": "false"
+      }
+    },
+
+    // ── Memory — persistent cross-session knowledge graph (MIT: @modelcontextprotocol/server-memory) ──
+    // Stores project facts (tweak module map, known pitfalls, sprint state) that survive
+    // across chat sessions. Persisted to .github/mcp-memory.jsonl (gitignored).
+    // Tools: create_entities, create_relations, search_nodes, open_nodes, read_graph
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "${workspaceFolder}\\.github\\mcp-memory.jsonl",
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "HTTP_PROXY": "${env:HTTP_PROXY}",
+        "HTTPS_PROXY": "${env:HTTPS_PROXY}",
+        "http_proxy": "${env:HTTP_PROXY}",
+        "https_proxy": "${env:HTTPS_PROXY}",
+        "NO_PROXY": "localhost,127.0.0.1,::1",
+        "no_proxy": "localhost,127.0.0.1,::1",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "npm_config_strict_ssl": "false"
+      }
+    },
+
+    // ── Sequential thinking — structured multi-step reasoning (MIT: @modelcontextprotocol/server-sequential-thinking) ──
+    // Enables the agent to break complex tasks (e.g. debugging a 7k-tweak registration
+    // chain, sprint planning) into explicit reasoning steps with backtracking support.
+    // Tool: sequentialthinking
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "HTTP_PROXY": "${env:HTTP_PROXY}",
+        "HTTPS_PROXY": "${env:HTTPS_PROXY}",
+        "http_proxy": "${env:HTTP_PROXY}",
+        "https_proxy": "${env:HTTPS_PROXY}",
+        "NO_PROXY": "localhost,127.0.0.1,::1",
+        "no_proxy": "localhost,127.0.0.1,::1",
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "npm_config_strict_ssl": "false"
       }

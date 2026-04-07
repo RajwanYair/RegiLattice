@@ -53,6 +53,9 @@ htmlcov/
 **/StrykerOutput/
 mutation-report*/
 
+# ── MCP memory server knowledge graph (auto-generated, not source-controlled) ──
+.github/mcp-memory.jsonl
+
 # ── Benchmark results ────────────────────────────────────────────────────────
 BenchmarkDotNet.Artifacts/
 # ── Profiling data ───────────────────────────────────────────
