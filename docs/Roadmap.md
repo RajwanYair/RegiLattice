@@ -66,7 +66,7 @@ public sealed class BatchResult
 **Layer**: TweakEngine
 **Priority**: P0 — Critical
 
-`StatusMap(parallel: true)` spawns parallel detection across 7,189 tweaks but has no
+`StatusMap(parallel: true)` spawns parallel detection across 7,429 tweaks but has no
 cancellation mechanism. On slow machines or under heavy WMI load, detection can take
 30+ seconds with no way for the GUI to cancel. Same applies to `ApplyBatch()`,
 `RemoveBatch()`, `Search()`, and `ValidateTweaks()`.
@@ -652,7 +652,7 @@ silently degrade sprint-over-sprint.
 
 **Deliverable**: Establish baselines and enforce in CI:
 
-| Benchmark | Baseline (7,189 tweaks) | Budget | Action if exceeded |
+| Benchmark | Baseline (7,429 tweaks) | Budget | Action if exceeded |
 |-----------|------------------------|--------|-------------------|
 | `RegisterBuiltins()` | ~200ms | 500ms | CI warning |
 | `Search("telemetry")` | ~60ms | 150ms | CI warning |
@@ -704,7 +704,7 @@ GUI tests cover only Theme, AppIcons, PackageNameValidation, and ExecutableValid
   10, verify state consistency.
 - **Profile wizard logic**: Test the scoring algorithm (hardware profile → recommended
   profile) without the dialog.
-- **Search integration**: Feed 7,189 tweaks into search logic, verify relevance
+- **Search integration**: Feed 7,429 tweaks into search logic, verify relevance
   ranking (Phase 1.5).
 - **Dashboard data provider**: Test `HealthScoreService` calculations, category
   breakdown aggregation.

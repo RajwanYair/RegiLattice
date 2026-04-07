@@ -9,8 +9,8 @@ report security vulnerabilities responsibly.
 
 | Version | Supported |
 |---------|-----------|
-| 5.x (latest) | ✅ Active security fixes |
-| < 5.0 | ❌ No longer supported |
+| 6.x (latest) | ✅ Active security fixes |
+| < 6.0 | ❌ No longer supported |
 | 1.x (Python) | ❌ Archived — no fixes |
 
 ---
@@ -87,10 +87,12 @@ and structured logging.
 
 ### P/Invoke Minimised
 
-Only 2 P/Invoke calls in the entire codebase:
+Only 4 P/Invoke calls in the entire codebase:
 
 - `GetComputerNameExW` — AD domain detection (CorporateGuard)
 - `GlobalMemoryStatusEx` — RAM detection (HardwareInfo)
+- `GetSystemTimes` — CPU usage measurement (SystemMonitor)
+- `GlobalMemoryStatusEx` — live memory monitoring (SystemMonitor)
 
 ### Least Privilege
 
