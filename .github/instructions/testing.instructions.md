@@ -189,15 +189,19 @@ reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -repor
 
 ### Coverage Targets
 
-| Component          | Target   | Actual (v5.0.0) | Notes                        |
-| ------------------ | -------- | --------------- | ---------------------------- |
-| TweakDef model     | 95%+     | 100%            | Pure logic, fully testable   |
-| TweakEngine        | 90%+     | 87%             | Core business logic          |
-| RegistrySession    | 80%+     | 70%             | DryRun mode for safe testing |
-| Services           | 85%+     | 60–85%          | Mock P/Invoke and WMI        |
-| GUI (Theme)        | 90%+     | 90%+            | Theme records are pure data  |
-| GUI (Forms)        | 60%+     | 60%+            | WinForms hard to unit test   |
-| **Overall (Core)** | **80%+** | **94.9% line**  | 56.8% branch                 |
+> **Target: ≥90% line coverage on all testable components. Prefer higher. Branch coverage at 60%+.**
+> Any PR that drops line coverage below 90% on `RegiLattice.Core.Tests` must be accompanied by a
+> documented justification. Coverage regressions from the baseline are treated as build failures.
+
+| Component          | Target    | Notes                                                        |
+| ------------------ | --------- | ------------------------------------------------------------ |
+| TweakDef model     | **100%**  | Pure logic, fully testable with declarative assertions       |
+| TweakEngine        | **90%+**  | Core business logic — all public API paths must be tested   |
+| RegistrySession    | **85%+**  | DryRun mode enables safe testing of all write/read paths     |
+| Services           | **90%+**  | All services with deterministic logic must have full tests   |
+| GUI (Theme)        | **90%+**  | Theme records are pure data with no external dependencies    |
+| GUI (Forms)        | **60%+**  | WinForms UI event handling is hard to unit test              |
+| **Overall (Core)** | **≥90%** | **Line coverage gate enforced in CI via Codecov threshold**  |
 
 ### Coverage by TweakKind
 
@@ -223,6 +227,28 @@ These components require external tools, network, or system state that cannot be
 - `PackManager` async methods — require network + filesystem
 - `CorporateGuard` P/Invoke paths — environment-dependent (26% from WMI/registry paths)
 
+## Build Quality Gate — Non-Negotiable
+
+Every test run and every CI build must meet these conditions before merging:
+
+| Gate                   | Requirement                                                          |
+| ---------------------- | -------------------------------------------------------------------- |
+| Build warnings         | **0** — `TreatWarningsAsErrors=true`; any warning blocks CI            |
+| Build errors           | **0** — hard fail                                                     |
+| Test failures          | **0** — all 3,230+ tests must pass                                    |
+| Skipped tests          | **0** — `[Fact(Skip=...)]` and `[Theory(Skip=...)]` are forbidden       |
+| Inline suppressions    | **0** — `#pragma warning disable` / `[SuppressMessage]` are forbidden  |
+| TODO / FIXME in tests  | **0** — open a GitHub Issue instead                                   |
+| Line coverage (Core)   | **≥90%** — Codecov enforced; PR dropped below gate = block           |
+
+```powershell
+# Verify the full quality gate locally before every commit:
+dotnet build RegiLattice.sln -c Release   # must print 0 Error(s), 0 Warning(s)
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 60s
+```
+
 ## What NOT to Do in Tests
 
 - Don't test implementation details — test behaviour
@@ -233,3 +259,6 @@ These components require external tools, network, or system state that cannot be
 - Don't create real registry keys in tests — use `DryRun = true` on RegistrySession
 - Don't create actual WinForms windows in CI — test data models and logic only
 - Don't use `Assert.True(condition)` when a specific assertion exists (e.g., `Assert.Equal`, `Assert.Contains`)
+- Don't use `[Fact(Skip=...)]` or `[Theory(Skip=...)]` — fix the test or the code it tests; skips are forbidden
+- Don't use `#pragma warning disable` in test code — all warnings must be fixed
+- Don't use inline assertion workarounds (`Assert.Equal(expected, actual)` inverted) to hide test logic errors

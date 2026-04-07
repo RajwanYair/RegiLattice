@@ -88,5 +88,37 @@ dotnet build RegiLattice.sln -c Debug 2>&1 | Select-String "error|warning"
 
 - **PowerShell only** — no bash/Unix commands ever
 - **Always DryRun in tests**: `new RegistrySession { DryRun = true }`
-- **Fix root cause** — if a compiler warning is suppressed with `#pragma`, that is a bug not a fix
+- **Fix root cause** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` are **BUGS not fixes** — forbidden
 - **One concern per fix commit** — don't clean up unrelated code in a bug-fix commit
+- **0 warnings policy** — `TreatWarningsAsErrors=true` is global; every build must produce 0 warnings
+- **No TODO/FIXME** — if the fix requires follow-up, open a GitHub Issue instead
+
+## Forbidden Patterns
+
+These patterns are **never acceptable** — fix the root cause instead:
+
+```csharp
+// ❌ FORBIDDEN — suppression without fixing
+#pragma warning disable CS8602
+[SuppressMessage("Category", "Rule")]
+// NOSONAR
+// ReSharper disable ...
+
+// ❌ FORBIDDEN — deferred work
+// TODO: handle null case
+// FIXME: crashes here
+
+// ❌ FORBIDDEN — skipped tests
+[Fact(Skip = "not implemented")]
+[Theory(Skip = "flaky")]
+```
+
+When the compiler emits a diagnostic, **fix the root cause**:
+
+| Warning | Fix |
+|---------|-----|
+| CS8602 nullable dereference | Add `?.` / `?? throw` / null check |
+| CS8618 uninitialized | Use `required init` or assign default `= ""` / `= []` |
+| CA1852 unsealed class | Add `sealed` keyword |
+| CS0168 unused variable | Remove variable or use it in logging |
+| CA1416 platform compat | Add `[SupportedOSPlatform("windows")]` |

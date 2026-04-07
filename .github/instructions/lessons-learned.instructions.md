@@ -59,10 +59,15 @@ pre-built binaries from the Build step" is only safe if:
 2. The Build step output paths exactly match what `dotnet test` expects
 3. No test DLL was skipped, failed to copy, or went to a different path
 
-**In this project (v6.1.0)**: `dotnet build RegiLattice.sln -c Release` was confirmed to
+**In this project (v6.1.0 and v6.22.0/v6.23.0)**: `dotnet build RegiLattice.sln -c Release` was confirmed to
 build Core.Tests but NOT CLI.Tests (reason unclear — possibly a race condition with a
 running `testhost` holding the Core DLL locked, preventing CLI.Tests from being built).
 Test(Core) passed with `--no-build`, Test(CLI) failed with "DLL not found."
+
+> **Recurrence (v6.22.0/v6.23.0)**: This same failure resurfaced in the `release.yml`
+> workflow. The `ci.yml` had already been fixed in v6.1.0, but `release.yml` still carried
+> `--no-build` on its three test steps. Removing `--no-build` from **all** test steps in
+> both `ci.yml` and `release.yml` is the permanent fix.
 
 **Fix**: Remove `--no-build` from all test steps. Without it, `dotnet test ... --no-restore`
 performs an incremental build (near-instant if deps are already built) before running tests.
@@ -1353,6 +1358,166 @@ workspace directory but may start in history-picker state (no output for 4–5 s
 
 ---
 
+## `PublishTrimmed` Breaks Reflection-Based Services in RegiLattice.Core
+
+Setting `<PublishTrimmed>true</PublishTrimmed>` in any project that references `RegiLattice.Core`
+produces **48+ IL2026 trim-analysis errors** during self-contained publish. The root cause is
+that `RegiLattice.Core` uses `System.Text.Json` reflection-based serialization in at least 9 services:
+`Analytics`, `AppConfig`, `Favorites`, `TweakHistory`, `PackManager`, `PipManager`, `PluginSandbox`,
+`ComplianceHistory`, `StartupManager`.
+
+**Error form**: `IL2026 Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access ...`
+
+**Why the wrong fix was tried**: `CliJsonContext.cs` already provides a source-generation `JsonSerializerContext`
+for the CLI's own dispatch results. It was assumed this would make the whole project trim-safe.
+But a source-gen context in the CLI project does NOT cover types serialized in Core services —
+those still hit the reflection path.
+
+```xml
+<!-- ❌ BAD — causes 48 IL2026 errors on CLI self-contained publish -->
+<PublishTrimmed>true</PublishTrimmed>
+<TrimMode>partial</TrimMode>
+<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+
+<!-- ✅ CORRECT — remove all three; EXE is slightly larger but all services work -->
+<!-- (no entry needed — just omit these elements entirely from the csproj) -->
+```
+
+**Rule**: Do NOT add `<PublishTrimmed>true</PublishTrimmed>` to any project that references
+`RegiLattice.Core`. To enable trimming, every service in Core that uses `JsonSerializer` would
+need to be migrated to source-generation contexts first — a major refactor.
+
+**Note**: `<InvariantGlobalization>true</InvariantGlobalization>` is safe to keep — it saves
+ICU bundle size without affecting reflection or serialization.
+
+**Found in**: v6.23.0 release — CLI EXE build failed with 48 trim errors. Fixed by removing
+the three trim-related elements from `RegiLattice.CLI.csproj`.
+
+---
+
+## SnapshotManager.Save() Calls Live StatusMap() — Hangs on 7k+ Tweaks
+
+`TweakEngine.SaveSnapshot()` (and `SnapshotManager.Save()`) originally called `StatusMap()` synchronously
+inside the save path to embed live tweak detections. With 7,000+ tweaks this takes 30+ seconds
+and caused the `Scenario5_SnapshotRoundTrip` E2E test to hang.
+
+**Where it manifested**: The Phase 4.1 E2E test called `engine.SaveSnapshot(path)` mid-test.
+At 7,189 tweaks × ~4ms average detection time = ~28s blocking call.
+
+**Fix pattern** (same as `ExportJson` which already supports this):
+```csharp
+// ❌ BAD — triggers live StatusMap() on all 7k+ tweaks inside Save()
+engine.SaveSnapshot("snapshot.json");
+
+// ✅ GOOD — pass the UI layer's already-computed status map
+var cached = engine.StatusMap(parallel: true);   // computed once, reused everywhere
+engine.SaveSnapshot("snapshot.json", cachedStatus: cached);
+engine.ExportJson("export.json", cachedStatus: cached);   // same pattern
+```
+
+The `cachedStatus` parameter is optional (`IReadOnlyDictionary<string, TweakResult>?`).
+When `null`, the method falls back to live detection (backward compatible).
+
+**Rule**: Any Core method that computes or persists "current status of all tweaks" should:
+1. Accept an optional `cachedStatus` parameter
+2. Use `cachedStatus ?? engine.StatusMap(parallel: true)` internally
+3. The UI/CLI layer pre-computes status once and passes it to all downstream calls
+
+**Found in**: v6.22.0 — `Scenario5_SnapshotRoundTrip` E2E test was hanging.
+
+---
+
+## PowerShell `ApplyAction` Scripts Must Be Validated Before Committing
+
+Three complex `ApplyAction` delegates were found to be silently broken in v6.23.0, having
+compiled and even passed registration without errors but failing at runtime:
+
+### 1. Embedded `#` comment breaks a PS inline script string
+
+```csharp
+// ❌ BAD — '#' inside a double-quoted PS string terminates the expression
+ApplyAction = (_) => ShellRunner.RunPowerShell(
+    "$shell = New-Object -ComObject Shell.Application  # this comment breaks execution")
+
+// ✅ GOOD — put the comment on its own line BEFORE the code
+ApplyAction = (_) => ShellRunner.RunPowerShell(
+    "# Get Recycle Bin via Shell.Application\n$shell = New-Object -ComObject Shell.Application")
+```
+
+### 2. secedit full-template reset instead of targeted INF
+
+`uac-enforce-password-complexity` called `secedit /configure /db secedit.sdb /cfg %windir%\inf\defltbase.inf`
+which applies the **entire Windows default security template** (resetting all password and account policies).
+Only `PasswordComplexity=1` was needed.
+
+**Fix**: Write a minimal INF file containing only the targeted setting, then call `secedit /configure` on it.
+
+```powershell
+# ✅ CORRECT — minimal targeted secedit INF
+$inf = "[Unicode]`nUnicode=yes`n[System Access]`nPasswordComplexity = 1"
+$tmp = "$env:TEMP\pwdcmplx.inf"; $inf | Set-Content $tmp -Encoding Unicode
+secedit /configure /db "$env:TEMP\secedit_temp.sdb" /cfg $tmp /quiet
+```
+
+### 3. Wrong Storage API (subsystem policy vs per-disk write caching)
+
+`ssd-enable-write-caching` called `Set-StorageSetting -NewDiskPolicy OnlineAll` which is a
+**disk initialization policy** (whether new disks come online automatically), not disk write cache control.
+
+**Fix**: Use `Get-PhysicalDisk | Set-PhysicalDisk -WriteCacheEnabled $true` (per-disk granularity).
+
+### Prevention rules
+
+- **Validate inline PS scripts separately** before embedding them in `ApplyAction` — paste into a PS prompt and verify execution.
+- **Validate `DetectAction` reads the right output** — if a tool writes to a file (not stdout), `DetectAction` must read from that file, not `process.StandardOutput`.
+- **Search for the exact cmdlet** that controls the specific setting before coding the tweak — Windows has many cmdlets with similar names that do different things (`Set-StorageSetting` ≠ `Set-PhysicalDisk`).
+- **Prefer RegOp-only tweaks** where possible — declarative ops are statically verifiable and far less likely to have hidden bugs.
+
+**Found in**: v6.23.0 — systematic review of non-registry TweakKind implementations.
+
+---
+
+## CI Mutation Testing — Move to Weekly Schedule to Avoid Per-Push Overhead
+
+Running `dotnet-stryker` mutation tests on every push to `main` adds ~15 minutes per CI
+run (7,000+ tweaks × mutation round-trips). For a single-dev repository with frequent
+commits this makes the feedback loop impractical.
+
+**Fix**: Move mutation testing from `on: push` to a weekly cron schedule in `ci.yml`:
+
+```yaml
+# ❌ SLOW — mutations run on every push to main (~15 extra minutes)
+on:
+  push:
+    branches: [main]
+
+# ✅ FAST — mutations run weekly on Sunday night
+on:
+  schedule:
+    - cron: '0 2 * * 0'   # 02:00 UTC Sunday
+  workflow_dispatch:        # keep manual trigger
+```
+
+**Also**: Add `paths-ignore` to the main CI workflow for docs-only changes to avoid rebuilding
+and testing when only `.md`, `.svg`, or `.txt` files changed:
+
+```yaml
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.svg'
+      - '**.txt'
+      - '.github/instructions/**'
+```
+
+**Found in**: v6.23.0 — CI run took 30+ minutes per push due to mutation testing. Weekly
+schedule reduces per-push CI time from ~30 min to ~5–8 min.
+
+---
+
 ## Policy Module 5×10 Cadence — Standing Pattern
 
 The current expansion pattern for each MINOR version bump is:
@@ -1460,6 +1625,15 @@ Version history:
 | v6.11.0 | 5 | +50 | 667–671 (PolicyLocation/PolicyDataCollection/PolicyWinRM/PolicyCredentialUI/PolicyMediaPlayer) |
 | v6.12.0 | 0 | -1,664 | — (mass dedup: removed 1,756 duplicate TweakDef blocks, kept alphabetically-first module; 8,853→7,189 tweaks; 26→23 categories; 35→31 modules) |
 | v6.13.0 | 0 | 0 | — (file split: 31 merged tweak files → 146 individual files via multi-class extraction + partial class splits; no tweak count change) |
+| v6.14.0 | 0 | 0 | — (Phase 1 Engine Hardening: TweakRisk flags, search relevance ranking, CancellationToken batch support, TransactionalBatchResult, RegistrySession.ExecuteWithDiff; 7,189 tweaks, 3,092 tests) |
+| v6.15.0 | 0 | 0 | — (Phase 1.6+1.7: custom profile API (9 TweakEngine methods + UserProfileService), recommendation engine (TweakRecommendation.ConfidencePercent + IsQuickWin); 3,105 tests) |
+| v6.16.0 | 0 | 0 | — (Phase 3.1/3.3/3.4: CLI --json output, conditional apply flags, interactive wizard; fix: --json mode outputs [] for no results; 3,105 tests) |
+| v6.18.0 | 0 | 0 | — (Phase 2.2+2.5: KeyboardShortcutsDialog (19 shortcuts/4 groups), context menu 6→11 items (Favorite/CopyRegPath/OpenRegedit/Dependencies/History); +24 Core tests; 3,190 total) |
+| v6.19.0 | 0 | 0 | — (Phase 2.3+2.4: risk confirmation dialog (ConfirmApplyDialog + ConfirmApplyThreshold), batch ETA (TweakDef.EstimatedApplyTimeMs per-kind); +28 tests; 3,218 total) |
+| v6.20.0 | 0 | 0 | — (Phase 2.6+3.6: user JSON themes with FileSystemWatcher hot-reload, Ansible win_regedit YAML + DSC .ps1 export; 2,421 tests) |
+| v6.21.0 | 0 | 0 | — (Phase 4.1+4.6: 13 E2E+concurrent tests — full lifecycle, profiles, DryRun, snapshots, JSON export, dep chain, CorporateGuard, concurrent StatusMap/ApplyBatch; 2,434 tests total) |
+| v6.22.0 | 8 | +80 | 672–679 (SecurityWDAG/Printer/LSA/MSI/NTP/WinRM/CredGuard/IEZones; fix SnapshotManager.Save() live StatusMap() hang via optional cachedStatus param) |
+| v6.23.0 | 8 | +80 | 680–687 (GamingDirectStorage/VRR/LatencyTuning/GPUPower/NetworkOpt/AudioOpt/AccessibilityMotor/AccessibilityVisual; CI paths-ignore + weekly mutation tests; fix 3 broken ApplyAction impls; 7,349 tweaks) |
 | v6.24.0 | 8 | +80 | — (Phase 5.3 Accessibility remaining + Phase 5.5 Developer: MagnifierAdvanced/LiveCaptions/EyeControlSettings/VoiceAccessControl/WinDbgSettings/WSLAdvanced/GitCredManager/ContainerRuntime) |
 **Current version**: v6.24.0 — 7,429 tweaks, 122 categories, 170 files (31 original + 139 extracted/split). Run full gap analysis on all three phases before creating any new module.
 

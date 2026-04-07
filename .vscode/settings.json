@@ -140,8 +140,15 @@
   "chat.promptFiles": true,
   "chat.agent.enabled": true,
   "github.copilot.chat.agent.terminal.allowList": {
-    "Remove-Item": true
+    "Remove-Item": true,
+    "dotnet": true,
+    "git": true,
+    "pwsh": true
   },
+  // Agent auto-approve safe read-only operations
+  "chat.agent.maxRequests": 80,
+  // Copilot next-edit suggestions (inline code suggestions while editing)
+  "github.copilot.nextEditSuggestions.enabled": true,
   // ── Testing ─────────────────────────────────────────────────────────
   "dotnet.unitTests.runSettingsPath": "tests/.runsettings"
 }

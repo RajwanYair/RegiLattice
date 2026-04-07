@@ -10,9 +10,9 @@ argument-hint: "What to test (e.g. 'TweakEngine.Search', 'new service class', 'C
 
 | Project                         | Tests | Covers                                                                                                                                      |
 | ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/RegiLattice.Core.Tests/` | 2,102+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
-| `tests/RegiLattice.CLI.Tests/`  | 301+   | CLI argument parsing, ConsoleColorizer                                                                                                      |
-| `tests/RegiLattice.GUI.Tests/`  | 339+   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
+| `tests/RegiLattice.Core.Tests/` | 2,434+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
+| `tests/RegiLattice.CLI.Tests/`  | 434+   | CLI argument parsing, ConsoleColorizer                                                                                                      |
+| `tests/RegiLattice.GUI.Tests/`  | 362+   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
 
 ## Naming Convention
 
@@ -124,14 +124,37 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## Coverage Targets
 
-| Component         | Target | Notes                      |
-| ----------------- | ------ | -------------------------- |
-| TweakDef model    | 100%   | Pure data                  |
-| TweakEngine       | 90%+   | Core business logic        |
-| RegistrySession   | 80%+   | Use DryRun for write paths |
-| Services          | 85%+   | Mock P/Invoke/WMI          |
-| GUI theme records | 90%+   | Pure data                  |
-| GUI Forms         | 60%+   | UI hard to unit test       |
+| Component         | Target  | Notes                      |
+| ----------------- | ------- | -------------------------- |
+| TweakDef model    | **100%** | Pure data                  |
+| TweakEngine       | **90%+** | Core business logic        |
+| RegistrySession   | **85%+** | Use DryRun for write paths |
+| Services          | **90%+** | All deterministic logic    |
+| GUI theme records | **90%+** | Pure data                  |
+| GUI Forms         | **60%+** | UI hard to unit test       |
+| **Overall Core**  | **≥90%** | **Codecov gate enforced — PR below threshold is blocked** |
+
+## Quality Gate — Non-Negotiable
+
+Every test run must satisfy ALL conditions before committing:
+
+| Gate | Requirement |
+|------|-------------|
+| Build warnings | **0** — `TreatWarningsAsErrors=true`; any warning is a build error |
+| Build errors | **0** — hard fail |
+| Test failures | **0** — all 3,230+ tests must pass |
+| Skipped tests | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` are **FORBIDDEN** |
+| Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` in test code **FORBIDDEN** |
+| TODO / FIXME in tests | **0** — open a GitHub Issue instead |
+| Line coverage (Core) | **≥90%** — Codecov enforced; drop below gate = block |
+
+```powershell
+# Verify quality gate locally before every commit:
+dotnet build RegiLattice.sln -c Release -m:1   # must print: 0 Error(s), 0 Warning(s)
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
+```
 
 ## Intentionally Untested (external tools required)
 

@@ -14,6 +14,14 @@ Selection: `${selection}`
 
 ## Review Checklist
 
+### Build Quality Gate
+
+- [ ] Build produces **0 fatals, 0 errors, 0 warnings** (`TreatWarningsAsErrors=true`)
+- [ ] No `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` suppressions
+- [ ] No `TODO` or `FIXME` comments (open GitHub Issues instead)
+- [ ] No `[Fact(Skip=...)]` or `[Theory(Skip=...)]` in tests
+- [ ] Core test coverage ≥90% for new/changed code
+
 ### Security (OWASP Top 10)
 
 - [ ] No hardcoded credentials, tokens, or API keys
@@ -40,7 +48,7 @@ Selection: `${selection}`
 - [ ] Immutable models (`sealed record` or `sealed class` with `required init`)
 - [ ] Enums used for constants (not magic strings/numbers)
 - [ ] Configuration loaded from JSON/env, not hardcoded
-- [ ] P/Invoke minimized — only 2 allowed calls in codebase
+- [ ] P/Invoke minimized — only 4 allowed calls in codebase (GetComputerNameExW, GlobalMemoryStatusEx ×2, GetSystemTimes)
 
 ### Testing
 

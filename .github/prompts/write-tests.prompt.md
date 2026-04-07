@@ -20,8 +20,12 @@ Follow `.github/instructions/testing.instructions.md`. Generate tests that:
 2. **Use Arrange-Act-Assert** pattern
 3. **Use `[Fact]` and `[Theory]`** with `[InlineData]` for parameterized tests
 4. **Mock external dependencies** — use `RegistrySession { DryRun = true }` for registry tests
-5. **Target 90%+ coverage** for the code under test
+5. **Target ≥90% line coverage** for the code under test
 6. **Follow naming convention**: `MethodName_Scenario_ExpectedResult`
+7. **Never use `[Fact(Skip=...)]` or `[Theory(Skip=...)]`** — fix the code instead
+8. **No `#pragma warning disable`** in test files — fix root cause
+9. **No TODO / FIXME** in test code — open a GitHub Issue instead
+10. **`Assert.NotNull(result)` before accessing** any nullable return value
 
 ## Test Structure
 

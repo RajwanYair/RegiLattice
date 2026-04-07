@@ -7,6 +7,13 @@ description: "Fix build warnings, nullable issues, and code quality problems in 
 
 Fix all quality issues in: `${file}`
 
+## Quality Gate (MUST achieve before done)
+
+- **0 build warnings** — `TreatWarningsAsErrors=true` is global; every warning is a build error
+- **0 build errors**
+- **No suppressions allowed** — `#pragma warning disable`, `[SuppressMessage]`, `// NOSONAR` are **FORBIDDEN** — fix the root cause instead
+- **No TODO / FIXME comments** — open a GitHub Issue instead; note it in the commit footer
+
 ## What to Fix
 
 ### 1. Nullable Reference Warnings

@@ -14,6 +14,56 @@ applyTo: "**/*.cs"
 - **Nullable**: `#nullable enable` — treat all nullable warnings as errors
 - **Implicit usings**: enabled via `<ImplicitUsings>enable</ImplicitUsings>`
 
+## Zero-Warning Policy — Non-Negotiable
+
+> **Every warning is an error. The build must produce 0 fatals, 0 errors, 0 warnings.**
+
+`Directory.Build.props` sets `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>` globally (except Stryker mutation builds). This is a **hard policy** — not aspirational. CI fails on any new warning.
+
+```xml
+<!-- Already in Directory.Build.props — do not remove or weaken -->
+<TreatWarningsAsErrors Condition="'$(STRYKER_BUILD)' != '1'">true</TreatWarningsAsErrors>
+```
+
+### Fix at Source — Never Suppress
+
+When the compiler or analyzer emits a diagnostic, **fix the root cause**. The following suppression mechanisms are **absolutely forbidden**:
+
+```csharp
+// ❌ FORBIDDEN — suppresses without fixing
+#pragma warning disable CS8602
+#pragma warning disable
+[SuppressMessage("Category", "Rule")]
+// NOSONAR
+// NCA
+// ReSharper disable ...
+```
+
+**Resolution patterns** (fix instead of suppress):
+
+| Warning | Fix instead of suppress |
+| ------- | ----------------------- |
+| CS8600 / CS8602 nullable | Add `!` null-forgiving only if provably non-null; otherwise add null check or propagate nullability |
+| CS8618 uninitialized property | Use `required` + `init`, or assign `= ""` / `= []` default; never `null!` |
+| CA1416 platform compat | Annotate with `[SupportedOSPlatform("windows")]`; move to the GUI project which targets `net10.0-windows10.0.19041.0` |
+| CS0168 unused variable | Remove the variable; if a catch clause needs it for logging, use `ex` and log it |
+| CS8604 dereferencing nullable | Add `?? throw new InvalidOperationException(...)` or guard with `if (x is null)` |
+
+### No TODO / FIXME in Committed Code
+
+Every `TODO` or `FIXME` comment represents **incomplete work** that will silently age. They are forbidden in committed code.
+
+```csharp
+// ❌ FORBIDDEN — deferred work with no action plan
+// TODO: handle the case where registry key doesn't exist
+// FIXME: this crashes when called from a background thread
+
+// ✅ CORRECT — fix the issue now or open a tracked GitHub Issue
+// The TweakEngine is thread-safe via _lock; callers on background threads are safe.
+```
+
+**If work is genuinely deferred**: open a GitHub Issue, reference it in the commit, and describe the scope in the PR body. No inline reminders in code.
+
 ## Type System — Non-Negotiable
 
 Every public member must have explicit types. Use nullable annotations:
@@ -214,3 +264,8 @@ public async Task<string> ExportJsonAsync(string path)
 - Don't leave `Console.WriteLine` in library code — use structured logging
 - Don't use `string.Format` — use interpolated strings
 - Don't catch `Exception` without re-throwing or explicit justification
+- Don't use `#pragma warning disable` — fix the root cause instead
+- Don't use `[SuppressMessage(...)]` — fix the root cause instead
+- Don't leave `TODO` or `FIXME` comments — complete the work or open a GitHub Issue
+- Don't use `null!` to suppress CS8618 — use `required` + `init` or assign a real default
+- Don't use `!` (null-forgiving) unless the value is provably non-null at that point

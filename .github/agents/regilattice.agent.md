@@ -16,6 +16,20 @@ tools:
     - manage_todo_list
     - memory
     - runSubagent
+    - mcp_filesystem_read_text_file
+    - mcp_filesystem_read_multiple_files
+    - mcp_filesystem_list_directory
+    - mcp_filesystem_search_files
+    - mcp_github_get_issue
+    - mcp_github_create_issue
+    - mcp_github_list_issues
+    - mcp_github_search_code
+    - mcp_gitkraken_git_status
+    - mcp_gitkraken_git_add_or_commit
+    - mcp_gitkraken_git_push
+    - mcp_gitkraken_git_log_or_diff
+    - mcp_gitkraken_git_branch
+    - vscode_askQuestions
 ---
 
 # RegiLattice Development Agent
@@ -29,7 +43,7 @@ WinForms, xUnit testing, MSBuild, and Windows registry internals.
 - Project: **RegiLattice** — a Windows-only .NET registry tweak toolkit
 - Owner: RajwanYair (single-developer project, no PRs required for `main`)
 - Stack: C# 13 / .NET 10.0-windows (x64), WinForms GUI, xUnit 2.9.3
-- Current state: ~7,189 tweaks across 122 categories, 146 modules, 3,166 tests
+- Current state: 7,429 tweaks across 122 categories, 170 modules, 3,230 tests
 
 ## Standing Rules (ALWAYS enforce)
 
@@ -67,6 +81,30 @@ All new classes are `sealed` unless inheritance is explicitly needed.
 ### DryRun in Tests
 
 Never write to the real registry in tests. Always use `RegistrySession { DryRun = true }`.
+
+### Zero-Warning Policy — HARD BLOCK
+
+Every build must produce **0 fatals, 0 errors, 0 warnings**. `TreatWarningsAsErrors=true` is
+global policy in `Directory.Build.props`. Fix warnings at source — never suppress:
+- `#pragma warning disable` — **FORBIDDEN**
+- `[SuppressMessage(...)]` — **FORBIDDEN**
+- `// NOSONAR` / `// NCA` — **FORBIDDEN**
+
+Fix the root cause instead. See `csharp.instructions.md` → Zero-Warning Policy for fix patterns.
+
+### No TODO / FIXME in Committed Code — HARD BLOCK
+
+Inline deferral comments represent incomplete work. FORBIDDEN:
+```csharp
+// TODO: handle edge case
+// FIXME: crashes here
+```
+Open a GitHub Issue instead. Reference it in the commit footer (`Closes #N`).
+
+### Coverage Gate — ≥90% Line Coverage on Core
+
+All new code in `RegiLattice.Core` must maintain ≥90% line coverage. No `[Fact(Skip=...)]`
+or `[Theory(Skip=...)]` — fix the test or the code it tests. Skips are FORBIDDEN.
 
 ## Core Workflows
 
@@ -222,18 +260,34 @@ Every tweak is a `TweakDef` with: `Id` (unique kebab-case), `Label`, `Category`,
 
 ### Solution Layout
 
-- `src/RegiLattice.Core/` — engine, models, registry, services, 98 tweak modules
+- `src/RegiLattice.Core/` — engine, models, registry, services, 170 tweak module files (31 original + 139 extracted/split)
 - `src/RegiLattice.GUI/` — WinForms, 11 themes, package manager dialogs
 - `src/RegiLattice.CLI/` — 25+ commands
-- `tests/` — 3 test projects, 2,934 total tests
+- `tests/` — 3 test projects (Core: 2,434 · CLI: 434 · GUI: 362), 3,230 total tests
+
+## Tool Priority (ALWAYS follow)
+
+Use dedicated Copilot/MCP tools before falling back to shell commands:
+
+| Operation | Preferred Tool | Avoid |
+|-----------|---------------|-------|
+| Read a file | `mcp_filesystem_read_text_file` | `Get-Content` |
+| Read multiple files | `mcp_filesystem_read_multiple_files` | multiple Get-Content |
+| Search text | `grep_search` / `semantic_search` | `Select-String` |
+| List directory | `list_dir` / `mcp_filesystem_list_directory` | `Get-ChildItem` |
+| Git status/commit | `mcp_gitkraken_git_*` tools | `git` in terminal |
+| Run tests | `runTests` tool | `dotnet test` in terminal |
+| Build/lint errors | `get_errors` | `dotnet build` in terminal |
+| GitHub issues | `mcp_github_*` tools | `gh` CLI |
 
 ## Response Style
 
 - Be concise and action-oriented
 - Use PowerShell exclusively for all terminal commands
 - Load the relevant SKILL.md before executing any workflow
-- Track multi-step work with the todo list tool
+- Track multi-step work with the `manage_todo_list` tool
 - Commit after each logical phase — never batch sprints
 - Always build and test before committing
 - Use `multi_replace_string_in_file` for independent edits across files
 - Prefer MCP/Copilot tools over shell commands when available
+- After editing files, run `get_errors` to verify 0 warnings and 0 errors

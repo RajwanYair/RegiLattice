@@ -87,6 +87,19 @@ Rules:
 | Tests    | 3,230 passing (0 consistent failures)                                    |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
+## Build Quality Standards — Non-Negotiable
+
+| Standard                | Requirement                                                            |
+| ----------------------- | ---------------------------------------------------------------------- |
+| Build fatals            | **0** — hard CI fail                                                   |
+| Build errors            | **0** — hard CI fail                                                   |
+| Build warnings          | **0** — `TreatWarningsAsErrors=true` in `Directory.Build.props`        |
+| Test failures           | **0** — all 3,230+ tests must pass                                     |
+| Skipped tests           | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` forbidden            |
+| Warning suppressions    | **0** — `#pragma warning disable` / `[SuppressMessage]` forbidden; fix at source |
+| TODO / FIXME comments   | **0** — open a GitHub Issue instead; no inline deferrals               |
+| Line coverage (Core)    | **≥90%** — Codecov threshold enforced; PR below gate is blocked        |
+
 ## Git Workflow (IMPORTANT — STANDING RULE)
 
 > **This mandate applies to EVERY session without exception.**
@@ -404,6 +417,8 @@ Top 5 most critical:
 - **OneDrive CoreCompile cache lock**: If build fails with `"Building target 'CoreCompile' completely"`, delete `$env:TEMP\RegiLattice-build\RegiLattice.Core` and retry. Set `MSBUILDDISABLENODEREUSE=1`.
 - **Tweaks/ files are multi-class merged**: Before splitting a large file, run `Select-String -Pattern '^internal static (partial )?class \w+' SomeFile.cs`. Count > 1 = multi-class extraction (use `Split-MultiClass.ps1` in `.tmp/`). Count = 1 = partial class split (use `Split-Partials.ps1` in `.tmp/`).
 - **`--no-build` for GUI.Tests always fails**: `RegiLattice.GUI.Tests` requires the Windows SDK runtimepack DLLs copied by `dotnet build`. Always build before testing GUI.Tests — never use `--no-build` for that project alone.
+- **No warning suppressions**: `TreatWarningsAsErrors=true` is global policy. Never use `#pragma warning disable`, `[SuppressMessage]`, `// NOSONAR`, or any other inline suppression — fix the root cause instead.
+- **No TODO/FIXME in committed code**: Inline deferral comments represent incomplete work. Open a GitHub Issue instead; reference it in the commit footer (`Closes #N`).
 
 ## File-by-File Quick Ref
 

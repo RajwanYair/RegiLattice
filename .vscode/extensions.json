@@ -1,15 +1,30 @@
 {
   "recommendations": [
+    // ── C# / .NET core tooling ──────────────────────────────────────
     "ms-dotnettools.csharp",
     "ms-dotnettools.csdevkit",
     "csharpier.csharpier-vscode",
-    "ms-vscode.powershell",
+    // ── AI / Copilot ────────────────────────────────────────────────
+    "github.copilot",
     "github.copilot-chat",
-    "redhat.vscode-yaml",
-    "github.vscode-github-actions",
+    // ── Git & source control ────────────────────────────────────────
     "eamodio.gitlens",
-    "gruntfuggly.todo-tree",
+    "gitkraken.gitkraken-authentication",
+    // ── PowerShell ──────────────────────────────────────────────────
+    "ms-vscode.powershell",
+    // ── GitHub Actions / CI ─────────────────────────────────────────
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    // ── Code quality & diagnostics ──────────────────────────────────
     "usernamehw.errorlens",
-    "bierner.markdown-mermaid"
+    "gruntfuggly.todo-tree",
+    // ── YAML / Markdown ─────────────────────────────────────────────
+    "redhat.vscode-yaml",
+    "bierner.markdown-mermaid",
+    "davidanson.vscode-markdownlint",
+    // ── Coverage / Test visualization ────────────────────────────────
+    "ryanluker.vscode-coverage-gutters",
+    // ── XML ─────────────────────────────────────────────────────────
+    "redhat.vscode-xml"
   ]
 }

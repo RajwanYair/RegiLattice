@@ -63,7 +63,7 @@ new TweakDef
 
 - **Verbatim strings**: Always use `@"HKEY_..."` — never bare strings (escape sequence bug)
 - **HasOperations gate**: `TweakEngine.Register()` silently skips tweaks with no `ApplyOps` and no `ApplyAction`
-- **Unique IDs across ALL 665 modules** — duplicates throw `ArgumentException` at startup
+- **Unique IDs across ALL 170 modules** — duplicates throw `ArgumentException` at startup
 - **Registry path format**: Full hive names preferred (`HKEY_LOCAL_MACHINE\...`); abbreviations (`HKLM\...`) also accepted
 - **Duplicate scan before writing**:
   ```powershell
@@ -81,3 +81,23 @@ new TweakDef
 | `power` | Power | | `explorer` | Explorer |
 
 Full slug table in `.github/copilot-instructions.md`.
+
+## Post-Add Quality Gate
+
+After adding tweaks, verify all quality gates pass before committing:
+
+```powershell
+# 1. Build — must produce 0 fatals, 0 errors, 0 warnings
+dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Debug
+
+# 2. Run Core tests — must be 0 failures, 0 skipped
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
+
+# 3. Check for duplicate IDs (catches new duplicates the build won't)
+Select-String -Pattern 'Id = "' -Path src/RegiLattice.Core/Tweaks/*.cs |
+    ForEach-Object { ($_ -replace '.*Id = "([^"]+)".*','$1') } |
+    Group-Object | Where-Object Count -gt 1
+```
+
+The build **will throw** `ArgumentException` at registration if any ID is duplicated — but the
+duplicate ID check above catches conflicts before the build does.

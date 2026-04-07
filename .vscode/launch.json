@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build: Solution (Debug)",
-      "program": "${workspaceFolder}/src/RegiLattice.GUI/bin/Debug/net10.0-windows/RegiLattice.GUI.exe",
+      "program": "${env:TEMP}/RegiLattice-build/RegiLattice.GUI/bin/Debug/net10.0-windows/RegiLattice.GUI.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
@@ -18,7 +18,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build: Solution (Release)",
-      "program": "${workspaceFolder}/src/RegiLattice.GUI/bin/Release/net10.0-windows/RegiLattice.GUI.exe",
+      "program": "${env:TEMP}/RegiLattice-build/RegiLattice.GUI/bin/Release/net10.0-windows/RegiLattice.GUI.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
@@ -26,12 +26,12 @@
       "justMyCode": true
     },
     {
-      "name": "RegiLattice: CLI (list)",
+      "name": "RegiLattice: CLI (--list)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build: Solution (Debug)",
-      "program": "${workspaceFolder}/src/RegiLattice.CLI/bin/Debug/net10.0-windows/RegiLattice.dll",
-      "args": ["list"],
+      "program": "${env:TEMP}/RegiLattice-build/RegiLattice.CLI/bin/Debug/net10.0-windows/RegiLattice.CLI.dll",
+      "args": ["--list"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "integratedTerminal",
@@ -42,20 +42,68 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build: Solution (Debug)",
-      "program": "${workspaceFolder}/src/RegiLattice.CLI/bin/Debug/net10.0-windows/RegiLattice.dll",
-      "args": ["apply", "${input:tweakId}", "--yes"],
+      "program": "${env:TEMP}/RegiLattice-build/RegiLattice.CLI/bin/Debug/net10.0-windows/RegiLattice.CLI.dll",
+      "args": ["apply", "${input:tweakId}", "--dry-run"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "integratedTerminal",
       "justMyCode": true
     },
     {
-      "name": "Tests: Debug All",
+      "name": "RegiLattice: CLI (search)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "${env:TEMP}/RegiLattice-build/RegiLattice.CLI/bin/Debug/net10.0-windows/RegiLattice.CLI.dll",
+      "args": ["--search", "${input:searchQuery}"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Tests: Debug Core",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build: Solution (Debug)",
       "program": "dotnet",
-      "args": ["test", "RegiLattice.sln", "--no-build"],
+      "args": ["test", "tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj", "--no-build", "--settings", "tests/.runsettings", "--logger", "console;verbosity=normal"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Tests: Debug CLI",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "dotnet",
+      "args": ["test", "tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj", "--no-build", "--settings", "tests/.runsettings", "--logger", "console;verbosity=normal"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Tests: Debug GUI",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "dotnet",
+      "args": ["test", "tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj", "--settings", "tests/.runsettings", "--logger", "console;verbosity=normal"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Tests: Debug by Filter",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "dotnet",
+      "args": ["test", "tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj", "--no-build", "--filter", "FullyQualifiedName~${input:testFilter}", "--logger", "console;verbosity=normal"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "integratedTerminal",
@@ -67,6 +115,16 @@
       "id": "tweakId",
       "type": "promptString",
       "description": "Tweak ID to apply (e.g. priv-disable-telemetry, ai-disable-copilot)"
+    },
+    {
+      "id": "searchQuery",
+      "type": "promptString",
+      "description": "Search query (e.g. telemetry, gaming, privacy)"
+    },
+    {
+      "id": "testFilter",
+      "type": "promptString",
+      "description": "Test name filter (e.g. TweakEngine, Search_)"
     }
   ]
 }
