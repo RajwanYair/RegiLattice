@@ -12,7 +12,7 @@ namespace RegiLattice.Core;
 /// </summary>
 public static class ShellRunner
 {
-    /// <summary>Run a process with explicit argument list.</summary>
+    /// <summary>Run a process with explicit argument list. Kills the process if <paramref name="ct"/> is cancelled.</summary>
     public static async Task<(int ExitCode, string StdOut, string StdErr)> RunAsync(
         string fileName,
         IEnumerable<string> args,
@@ -38,7 +38,15 @@ public static class ShellRunner
         proc.Start();
         var stdoutTask = proc.StandardOutput.ReadToEndAsync(ct);
         var stderrTask = proc.StandardError.ReadToEndAsync(ct);
-        await proc.WaitForExitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await proc.WaitForExitAsync(ct).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            try { proc.Kill(entireProcessTree: true); } catch (InvalidOperationException) { }
+            return (-1, string.Empty, "timeout");
+        }
         return (proc.ExitCode, await stdoutTask.ConfigureAwait(false), await stderrTask.ConfigureAwait(false));
     }
 
@@ -46,10 +54,34 @@ public static class ShellRunner
     public static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(string script, CancellationToken ct = default) =>
         RunAsync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], ct);
 
-    /// <summary>Synchronous wrapper for RunAsync (used by TweakDef delegates).</summary>
-    public static (int ExitCode, string StdOut, string StdErr) Run(string fileName, IEnumerable<string> args) =>
-        RunAsync(fileName, args).GetAwaiter().GetResult();
+    /// <summary>
+    /// Synchronous wrapper for RunAsync (used by TweakDef delegates).
+    /// Kills the process after <paramref name="timeoutMs"/> milliseconds (default 10 s).
+    /// </summary>
+    public static (int ExitCode, string StdOut, string StdErr) Run(string fileName, IEnumerable<string> args, int timeoutMs = 10_000)
+    {
+        using var cts = new CancellationTokenSource(timeoutMs);
+        try
+        {
+            return RunAsync(fileName, args, cts.Token).GetAwaiter().GetResult();
+        }
+        catch (OperationCanceledException)
+        {
+            return (-1, string.Empty, "timeout");
+        }
+    }
 
-    /// <summary>Synchronous wrapper for RunPowerShellAsync.</summary>
-    public static (int ExitCode, string StdOut, string StdErr) RunPowerShell(string script) => RunPowerShellAsync(script).GetAwaiter().GetResult();
+    /// <summary>Synchronous wrapper for RunPowerShellAsync (default 30 s timeout).</summary>
+    public static (int ExitCode, string StdOut, string StdErr) RunPowerShell(string script, int timeoutMs = 30_000)
+    {
+        using var cts = new CancellationTokenSource(timeoutMs);
+        try
+        {
+            return RunPowerShellAsync(script, cts.Token).GetAwaiter().GetResult();
+        }
+        catch (OperationCanceledException)
+        {
+            return (-1, string.Empty, "timeout");
+        }
+    }
 }

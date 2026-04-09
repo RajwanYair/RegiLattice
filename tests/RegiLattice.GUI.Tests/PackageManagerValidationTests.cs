@@ -108,14 +108,15 @@ public sealed class PackageManagerValidationTests
         Assert.False(info.IsInstalled);
     }
 
-    // Integration test — spawns 16 real processes; excluded from normal test runs.
-    [Fact(Skip = "Integration: spawns 16 real processes to detect installed tool versions. Run manually only.")]
+    // Budget: 60s — spawns 16 parallel process checks; all return quickly even when
+    // tools are not installed (gracefully returns ToolInfo with IsInstalled=false).
+    [Fact]
     public async Task ToolVersionChecker_CheckAll_ReturnsResults()
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
         var results = await ToolVersionChecker.CheckAllAsync(cts.Token);
         Assert.NotEmpty(results);
-        Assert.Equal(16, results.Count);
+        Assert.Equal(16, results.Count); // 16 entries in CheckAllAsync — update if tool list changes
         Assert.All(results, r => Assert.NotNull(r.Name));
     }
 
