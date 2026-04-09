@@ -153,7 +153,12 @@
   // Auto-start MCP servers when mcp.json changes (no manual restart needed)
   "chat.mcp.autoStart": true,
   // Auto-discover MCP configs from Claude Desktop and other MCP-aware apps
-  "chat.mcp.discovery.enabled": true,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-global": true,
+    "cursor-workspace": true
+  },
   // Tool-based edit mode: model calls tools to make file edits (same engine as agent mode).
   // Enables seamless mode-switching mid-conversation. Requires a tool-calling model.
   "chat.edits2.enabled": true,

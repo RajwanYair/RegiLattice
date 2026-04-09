@@ -27,7 +27,7 @@
     <text x="60" y="168" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">RegistrySession &#x2022; CorporateGuard</text>
     <text x="60" y="184" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">14 Services &#x2022; Plugins</text>
     <rect x="60" y="196" width="270" height="22" rx="4" fill="#45475a"/>
-    <text x="195" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-weight="700" font-size="11" fill="#a6e3a1">170 Files &#x2022; 7 429 Tweaks &#x2022; 122 Categories</text>
+    <text x="195" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-weight="700" font-size="11" fill="#a6e3a1">175 Files &#x2022; 7 518 Tweaks &#x2022; 127 Categories</text>
   </g>
 
   <!-- GUI -->
@@ -48,7 +48,7 @@
   </g>
 
   <!-- ===== TESTS Column ===== -->
-  <text x="420" y="74" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">&#x1F9EA; tests/ &#x2014; 3 230 xUnit tests</text>
+  <text x="420" y="74" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">&#x1F9EA; tests/ &#x2014; 3 239 xUnit tests</text>
 
   <!-- Core.Tests -->
   <g filter="url(#shadow)">

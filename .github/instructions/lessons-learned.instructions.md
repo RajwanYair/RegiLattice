@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-07 (v6.25.0, C# 13 / .NET 10.0-windows, ~7,479 tweaks, 127 categories, 3,230 tests)
+> Last updated: 2026-04-09 (v6.26.0, C# 13 / .NET 10.0-windows, ~7,518 tweaks, 127 categories, 3,239 tests)
 
 ---
 
@@ -1636,7 +1636,8 @@ Version history:
 | v6.23.0 | 8 | +80 | 680–687 (GamingDirectStorage/VRR/LatencyTuning/GPUPower/NetworkOpt/AudioOpt/AccessibilityMotor/AccessibilityVisual; CI paths-ignore + weekly mutation tests; fix 3 broken ApplyAction impls; 7,349 tweaks) |
 | v6.24.0 | 8 | +80 | — (Phase 5.3 Accessibility remaining + Phase 5.5 Developer: MagnifierAdvanced/LiveCaptions/EyeControlSettings/VoiceAccessControl/WinDbgSettings/WSLAdvanced/GitCredManager/ContainerRuntime) |
 | v6.25.0 | 5 | +50 | — (Phase 5.4 Energy & Battery Management: BatterySaver/ChargingOptimization/StandbyStates/CPUPowerStates/DisplayPower; 7,479 tweaks, 127 categories, 175 modules) |
-**Current version**: v6.25.0 — 7,479 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
+| v6.26.0 | 3 | +39 | Sprint 688 — 3 new Office GP security modules (PolicyOfficeWord/PolicyOfficeExcel/PolicyOfficeOutlook) + PolicyWindowsSearch expanded 1→10 tweaks; deleted 3 empty stubs; 7,518 tweaks, 127 categories, 175 modules |
+**Current version**: v6.26.0 — 7,518 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 

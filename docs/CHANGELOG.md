@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.26.0] — 2026-04-09
+
+### Added — Sprint 688: Office GP Security + Windows Search hardening (+39 tweaks, +3 modules)
+
+- `PolicyWindowsSearch.cs` — expanded 1 → 10 tweaks: Windows Search GP hardening (block remote query, disable web search, safe-search, prevent email/attachment/Outlook indexing, diacritics, language detection) (`wsepol-*`)
+- `PolicyOfficeWord.cs` — 10 new tweaks: MS Word GP security hardening (VBA block, ActiveX disable, extension hardening, network macro exec block, OM access denial, Protected View controls, file block for Word 97) (`offword-pol-*`)
+- `PolicyOfficeExcel.cs` — 10 new tweaks: MS Excel GP security hardening (VBA block, ActiveX disable, extension hardening, workbook link warnings, Protected View, file block for XL4 macros) (`offxls-pol-*`)
+- `PolicyOfficeOutlook.cs` — 10 new tweaks: MS Outlook GP security hardening (security level, OM guard, min encryption bits, VBA warnings, invalid signature warn, add-in customization block, external content block, OOM address/send-mail prompts) (`offolt-pol-*`)
+
+### Removed
+
+- `PolicyAppPrivacy.cs`, `PolicyEventLogAudit.cs`, `PolicySyncSettings.cs` — empty stub modules (0 tweaks), replaced by dedicated implementations in earlier sprints
+
+### Stats
+
+- Tweaks: 7,518 (+39) across 127 categories
+- Modules: 175 files (net unchanged — 3 stubs deleted + 3 new)
+- Tests: 3,239 (2,442 Core + 434 CLI + 363 GUI), 0 failures
+
 ## [6.25.0] — 2026-04-07
 
 ### Added — Phase 5.4: Energy & Battery Management (+50 tweaks, +5 modules)

@@ -6,11 +6,11 @@
 
   <groupId>com.rajwanyair</groupId>
   <artifactId>regilattice</artifactId>
-  <version>6.25.0</version>
+  <version>6.26.0</version>
   <packaging>pom</packaging>
 
   <name>RegiLattice</name>
-  <description>Windows registry tweak toolkit — 7,479 curated tweaks across 127 categories. GUI + CLI for Windows 10/11.</description>
+  <description>Windows registry tweak toolkit — 7,518 curated tweaks across 127 categories. GUI + CLI for Windows 10/11.</description>
   <url>https://github.com/RajwanYair/RegiLattice</url>
 
   <licenses>

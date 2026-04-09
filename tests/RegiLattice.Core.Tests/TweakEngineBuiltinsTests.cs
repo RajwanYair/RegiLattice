@@ -1586,6 +1586,12 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     [InlineData("sbpol-", "WindowsSandbox")]
     [InlineData("hvcon-", "HyperVContainer")]
     [InlineData("wsl2adv-", "Wsl2Advanced")]
+    // Windows Search Policy (Sprint 688 expansion)
+    [InlineData("wsepol-", "PolicyWindowsSearch")]
+    // Office Group Policy security (Sprint 688 new modules)
+    [InlineData("offword-pol-", "PolicyOfficeWord")]
+    [InlineData("offxls-pol-", "PolicyOfficeExcel")]
+    [InlineData("offolt-pol-", "PolicyOfficeOutlook")]
     public void Module_RegistersAtLeastOneTweak(string idPrefix, string moduleName)
     {
         int count = _engine.AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
@@ -1668,6 +1674,12 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     [InlineData("sbpol-", "WindowsSandbox")]
     [InlineData("hvcon-", "HyperVContainer")]
     [InlineData("wsl2adv-", "Wsl2Advanced")]
+    // Windows Search Policy (Sprint 688 expansion — 10 tweaks)
+    [InlineData("wsepol-", "PolicyWindowsSearch")]
+    // Office Group Policy security (Sprint 688 new modules — 10 tweaks each)
+    [InlineData("offword-pol-", "PolicyOfficeWord")]
+    [InlineData("offxls-pol-", "PolicyOfficeExcel")]
+    [InlineData("offolt-pol-", "PolicyOfficeOutlook")]
     public void Module_RegistersAtLeastTenTweaks(string idPrefix, string moduleName)
     {
         int count = _engine.AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
@@ -1766,6 +1778,11 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
             "sbpol-",
             "hvcon-",
             "wsl2adv-",
+            // Sprint 688
+            "wsepol-",
+            "offword-pol-",
+            "offxls-pol-",
+            "offolt-pol-",
         ];
 
         var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
@@ -1828,6 +1845,8 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
             "inetprt-",
             "wsdprt-",
             "ippevy-",
+            // Sprint 688 (HKLM only — wsepol uses HKLM; office pol use HKCU so excluded)
+            "wsepol-",
         ];
 
         var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
@@ -1920,6 +1939,11 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
             "sbpol-",
             "hvcon-",
             "wsl2adv-",
+            // Sprint 688
+            "wsepol-",
+            "offword-pol-",
+            "offxls-pol-",
+            "offolt-pol-",
         ];
 
         var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
