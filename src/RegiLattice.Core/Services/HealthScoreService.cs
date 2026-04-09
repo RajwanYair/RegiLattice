@@ -258,4 +258,50 @@ public sealed class HealthScoreService
         var after = Compute(simulated);
         return (before, after);
     }
+
+    // ── Per-category breakdown (Phase 6.2) ──────────────────────────────
+
+    /// <summary>
+    /// Computes a per-category health score for every category in the engine.
+    /// Score = applied_count / total_count × 100.
+    /// Sorted alphabetically by category name.
+    /// </summary>
+    /// <param name="statusMap">
+    /// The output of <see cref="TweakEngine.StatusMap"/>.
+    /// Pass an empty dictionary for a preview with all tweaks assumed not applied.
+    /// </param>
+    public IReadOnlyList<CategoryHealthScore> CategoryHealthScores(IReadOnlyDictionary<string, TweakResult> statusMap)
+    {
+        ArgumentNullException.ThrowIfNull(statusMap);
+
+        var byCategory = _engine
+            .AllTweaks()
+            .GroupBy(t => t.Category, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var results = new List<CategoryHealthScore>(byCategory.Count);
+        foreach (var group in byCategory)
+        {
+            int total = group.Count();
+            int applied = group.Count(td => statusMap.TryGetValue(td.Id, out var r) && r == TweakResult.Applied);
+            int score = total == 0 ? 0 : (int)Math.Round(applied * 100.0 / total);
+            int remaining = total - applied;
+            string rec =
+                remaining == 0 ? "All tweaks applied" : $"Apply {remaining} more tweak{(remaining == 1 ? "" : "s")} to optimize this category";
+            results.Add(new CategoryHealthScore(group.Key, score, applied, total, rec));
+        }
+        return results;
+    }
 }
+
+/// <summary>
+/// Per-category health score breakdown produced by
+/// <see cref="HealthScoreService.CategoryHealthScores"/>.
+/// </summary>
+/// <param name="Category">Category name.</param>
+/// <param name="Score">0–100 percentage of applied tweaks in this category.</param>
+/// <param name="AppliedCount">Number of tweaks currently applied.</param>
+/// <param name="TotalCount">Total number of tweaks in the category.</param>
+/// <param name="Recommendation">Short human-readable recommendation string.</param>
+public sealed record CategoryHealthScore(string Category, int Score, int AppliedCount, int TotalCount, string Recommendation);

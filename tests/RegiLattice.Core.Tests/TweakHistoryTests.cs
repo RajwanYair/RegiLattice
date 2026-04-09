@@ -278,4 +278,89 @@ public sealed class TweakHistoryTests : IDisposable
                 File.Delete(path);
         }
     }
+
+    // ── Phase 6.1 — Audit Logging (Username / MachineName / SessionId) ──
+
+    [Fact]
+    public void Record_PopulatesUsername()
+    {
+        TweakHistory.Record("audit-test", "apply", "Applied");
+        var entry = TweakHistory.All()[0];
+        Assert.Equal(Environment.UserName, entry.Username);
+    }
+
+    [Fact]
+    public void Record_PopulatesMachineName()
+    {
+        TweakHistory.Record("audit-test", "apply", "Applied");
+        var entry = TweakHistory.All()[0];
+        Assert.Equal(Environment.MachineName, entry.MachineName);
+    }
+
+    [Fact]
+    public void Record_SameProcess_SharesSessionId()
+    {
+        TweakHistory.Record("first", "apply", "Applied");
+        TweakHistory.Record("second", "apply", "Applied");
+        var all = TweakHistory.All();
+        Assert.Equal(all[0].SessionId, all[1].SessionId);
+    }
+
+    [Fact]
+    public void Record_SessionId_IsEightCharHex()
+    {
+        TweakHistory.Record("session-check", "apply", "Applied");
+        var entry = TweakHistory.All()[0];
+        Assert.NotNull(entry.SessionId);
+        Assert.Equal(8, entry.SessionId!.Length);
+        Assert.True(
+            System.Text.RegularExpressions.Regex.IsMatch(entry.SessionId, "^[0-9a-f]{8}$"),
+            $"SessionId '{entry.SessionId}' is not 8-char lowercase hex"
+        );
+    }
+
+    [Fact]
+    public void ExportCsv_WritesHeaderAndAllFields()
+    {
+        TweakHistory.RecordApply("csv-tweak-a", TweakResult.Applied);
+
+        var path = Path.Combine(Path.GetTempPath(), $"rl-hist-{Guid.NewGuid()}.csv");
+        try
+        {
+            TweakHistory.ExportCsv(path);
+            Assert.True(File.Exists(path));
+            var lines = File.ReadAllLines(path);
+            Assert.True(lines.Length >= 2, "CSV should have a header and at least one data row");
+            Assert.Contains("Timestamp", lines[0]);
+            Assert.Contains("TweakId", lines[0]);
+            Assert.Contains("Username", lines[0]);
+            Assert.Contains("MachineName", lines[0]);
+            Assert.Contains("SessionId", lines[0]);
+            Assert.Contains("csv-tweak-a", lines[1]);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ExportCsv_EmptyHistory_WritesOnlyHeader()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"rl-hist-{Guid.NewGuid()}.csv");
+        try
+        {
+            TweakHistory.ExportCsv(path);
+            var lines = File.ReadAllLines(path);
+            // Header line only (may include trailing empty line from AppendLine)
+            Assert.True(lines.Length >= 1);
+            Assert.Contains("Timestamp", lines[0]);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
 }

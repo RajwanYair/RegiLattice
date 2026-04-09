@@ -4,6 +4,41 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.27.0] — 2026-04-09
+
+### Added — Phase 6.1–6.3: Services & Intelligence
+
+#### 6.1 Enterprise Audit Logging (`TweakHistory`)
+
+- `HistoryEntry` now captures `Username`, `MachineName`, and `SessionId` (8-char hex per-process GUID) for every recorded tweak operation.
+- New `TweakHistory.ExportCsv(string filePath)` method exports a SIEM-compatible 7-column CSV: `Timestamp,TweakId,Action,Result,Username,MachineName,SessionId`.
+- Backward-compatible: old `history.json` files from v6.26.0 and earlier deserialise cleanly — new fields use `[JsonIgnore(Condition = WhenWritingDefault)]`.
+
+#### 6.2 Per-Category Health Score Breakdown (`HealthScoreService`)
+
+- New `HealthScoreService.CategoryHealthScores(IReadOnlyDictionary<string, TweakResult> statusMap)` returns `IReadOnlyList<CategoryHealthScore>` — one entry per category, score 0–100, applied/total counts, and an actionable recommendation string.
+- New `CategoryHealthScore` sealed record (sibling type in `RegiLattice.Core.Services` namespace).
+
+#### 6.3 Enhanced Conflict Detection (`ConflictDetector`)
+
+- New `ConflictDetector.DetectRegistryConflicts(IEnumerable<TweakDef> tweaks)` dynamically scans all `RegOp.SetValue` operations to find tweaks writing to the same registry path+name with different values.
+- New `ConflictSeverity` enum: `Info` (same value, redundant), `Warning` (different values, order-dependent), `Critical` (opposing 0/1 binary values — tweaks cancel each other out).
+- New `RegistryConflict` readonly record struct with TweakIdA/B, RegistryPath, ValueName, ValueA/B, Severity.
+
+### Fixed
+
+- `tests/.runsettings`: removed `HangTimeout="30000"` attribute from `CollectDumpOnTestSessionHang` — was producing two non-fatal `Data collector 'Blame' message: …HangTimeout is not valid` warnings on every `dotnet test` invocation with .NET SDK 10.0.201+. Primary hang-protection is now solely `TestSessionTimeout` (2000 s).
+
+### Tests
+
+- +20 new tests covering all Phase 6 additions: audit fields (Username/MachineName/SessionId), session ID format/stability, CSV export, category health scores (6 variants), and registry conflict detection (7 variants).
+
+### Stats
+
+- Tweaks: **7,518** (unchanged) across **127** categories
+- Modules: **175** files (unchanged)
+- Tests: **3,259** (+20 Phase 6 tests over v6.26.0's 3,239), 0 failures, 0 warnings
+
 ## [6.26.0] — 2026-04-09
 
 ### Added — Sprint 688: Office GP Security + Windows Search hardening (+39 tweaks, +3 modules)

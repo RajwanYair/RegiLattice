@@ -1429,6 +1429,84 @@ public sealed class TweakDefPropertyTests
         var partialScore = svc.Compute(privacyOnly);
         Assert.Equal((partialScore.Privacy + partialScore.Performance + partialScore.Security + partialScore.Stability) / 4, partialScore.Overall);
     }
+
+    // ── Phase 6.2 — CategoryHealthScores ─────────────────────────────────────
+
+    [Fact]
+    public void CategoryHealthScores_ReturnsOneEntryPerCategory()
+    {
+        var svc = new HealthScoreService(_engine);
+        var allTweaks = _engine.AllTweaks();
+        var expectedCategories = allTweaks.Select(t => t.Category).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+
+        var scores = svc.CategoryHealthScores(new Dictionary<string, TweakResult>());
+
+        Assert.Equal(expectedCategories, scores.Count);
+    }
+
+    [Fact]
+    public void CategoryHealthScores_ScoreRange_ZeroToHundred()
+    {
+        var svc = new HealthScoreService(_engine);
+        var scores = svc.CategoryHealthScores(new Dictionary<string, TweakResult>());
+
+        Assert.All(scores, s => Assert.InRange(s.Score, 0, 100));
+    }
+
+    [Fact]
+    public void CategoryHealthScores_EmptyStatusMap_AllScoresAreZero()
+    {
+        var svc = new HealthScoreService(_engine);
+        var scores = svc.CategoryHealthScores(new Dictionary<string, TweakResult>());
+
+        Assert.All(scores, s => Assert.Equal(0, s.Score));
+    }
+
+    [Fact]
+    public void CategoryHealthScores_AllApplied_AllScoresAreHundred()
+    {
+        var svc = new HealthScoreService(_engine);
+        var allApplied = _engine.AllTweaks().ToDictionary(t => t.Id, _ => TweakResult.Applied);
+
+        var scores = svc.CategoryHealthScores(allApplied);
+
+        Assert.All(scores, s => Assert.Equal(100, s.Score));
+    }
+
+    [Fact]
+    public void CategoryHealthScores_SortedAlphabetically()
+    {
+        var svc = new HealthScoreService(_engine);
+        var scores = svc.CategoryHealthScores(new Dictionary<string, TweakResult>());
+
+        var names = scores.Select(s => s.Category).ToList();
+        var sorted = names.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
+        Assert.Equal(sorted, names);
+    }
+
+    [Fact]
+    public void CategoryHealthScores_AppliedCount_NeverExceedsTotalCount()
+    {
+        var svc = new HealthScoreService(_engine);
+        var allApplied = _engine.AllTweaks().ToDictionary(t => t.Id, _ => TweakResult.Applied);
+        var scores = svc.CategoryHealthScores(allApplied);
+
+        Assert.All(scores, s => Assert.True(s.AppliedCount <= s.TotalCount, $"{s.Category}: applied {s.AppliedCount} > total {s.TotalCount}"));
+    }
+
+    [Fact]
+    public void CategoryHealthScores_AllApplied_RecommendationSaysAllApplied()
+    {
+        var svc = new HealthScoreService(_engine);
+        var firstCategory = _engine.Categories().First();
+        var tweaksInCat = _engine.TweaksByCategory()[firstCategory];
+        var statusMap = tweaksInCat.ToDictionary(t => t.Id, _ => TweakResult.Applied);
+
+        var scores = svc.CategoryHealthScores(statusMap);
+        var entry = scores.First(s => s.Category.Equals(firstCategory, StringComparison.OrdinalIgnoreCase));
+
+        Assert.Equal("All tweaks applied", entry.Recommendation);
+    }
 }
 
 // ── merged from TweakDefBranchCoverageTests.cs ──────────────────────────────────

@@ -1,12 +1,43 @@
 // RegiLattice.Core — Services/ConflictDetector.cs
 // Static registry of known-conflicting tweak pairs with human-readable reasons.
 // Usage: ConflictDetector.Detect(selectedIds) → list of (id1, id2, reason) triples.
+// Phase 6.3: DetectRegistryConflicts() dynamically finds registry-op overlaps.
 
 #nullable enable
+
+using RegiLattice.Core.Models;
+
 namespace RegiLattice.Core.Services;
 
 /// <summary>Describes a detected conflict between two tweaks.</summary>
 public readonly record struct TweakConflict(string Id1, string Id2, string Reason);
+
+/// <summary>Severity of a dynamically detected registry conflict.</summary>
+public enum ConflictSeverity
+{
+    /// <summary>Two tweaks write the same value — redundant but harmless.</summary>
+    Info,
+
+    /// <summary>Two tweaks write different values to the same key; apply order matters.</summary>
+    Warning,
+
+    /// <summary>Two tweaks write directly opposing values (e.g., enable vs disable same feature).</summary>
+    Critical,
+}
+
+/// <summary>
+/// A conflict detected by scanning <see cref="TweakDef.ApplyOps"/> for
+/// overlapping registry paths and value names across different tweaks.
+/// </summary>
+public readonly record struct RegistryConflict(
+    string TweakIdA,
+    string TweakIdB,
+    string RegistryPath,
+    string ValueName,
+    string ValueA,
+    string ValueB,
+    ConflictSeverity Severity
+);
 
 /// <summary>
 /// Detects known-conflicting tweak pairs in a set of IDs.
@@ -346,4 +377,93 @@ public static class ConflictDetector
 
     /// <summary>All statically registered conflict pairs (for test enumeration).</summary>
     public static IReadOnlyList<TweakConflict> AllConflicts => _known;
+
+    // ── Dynamic registry-op conflict detection (Phase 6.3) ────────────────
+
+    /// <summary>
+    /// Scans the <see cref="TweakDef.ApplyOps"/> of every supplied tweak and
+    /// returns pairs that write to the same <c>Path\ValueName</c> with different
+    /// values.
+    /// <para>
+    /// Severity is classified as:
+    /// <list type="bullet">
+    ///   <item><see cref="ConflictSeverity.Critical"/> — opposing integer values (e.g., 0 vs 1, enable vs disable).</item>
+    ///   <item><see cref="ConflictSeverity.Warning"/> — same path/name but different non-opposing values.</item>
+    ///   <item><see cref="ConflictSeverity.Info"/> — same path/name with identical values (redundant).</item>
+    /// </list>
+    /// </para>
+    /// </summary>
+    /// <param name="tweaks">The set of tweaks to scan (typically all registered tweaks).</param>
+    public static IReadOnlyList<RegistryConflict> DetectRegistryConflicts(IEnumerable<TweakDef> tweaks)
+    {
+        ArgumentNullException.ThrowIfNull(tweaks);
+
+        // Build index: normalised "PATH\NAME" -> list of (tweakId, value-as-string)
+        var index = new Dictionary<string, List<(string TweakId, string Value)>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var td in tweaks)
+        {
+            foreach (var op in td.ApplyOps)
+            {
+                if (op.Kind != RegOpKind.SetValue)
+                    continue;
+                if (string.IsNullOrEmpty(op.Name))
+                    continue;
+
+                string key = $"{op.Path}\\{op.Name}";
+                if (!index.TryGetValue(key, out var list))
+                {
+                    list = [];
+                    index[key] = list;
+                }
+                list.Add((td.Id, op.Value?.ToString() ?? ""));
+            }
+        }
+
+        var results = new List<RegistryConflict>();
+
+        foreach (var (compositeKey, entries) in index)
+        {
+            if (entries.Count < 2)
+                continue;
+
+            // Split composite key back into path and name.
+            int lastSlash = compositeKey.LastIndexOf('\\');
+            string path = compositeKey[..lastSlash];
+            string name = compositeKey[(lastSlash + 1)..];
+
+            // Emit a conflict for every unique ordered pair.
+            for (int i = 0; i < entries.Count - 1; i++)
+            {
+                for (int j = i + 1; j < entries.Count; j++)
+                {
+                    var (idA, valA) = entries[i];
+                    var (idB, valB) = entries[j];
+
+                    if (string.Equals(idA, idB, StringComparison.OrdinalIgnoreCase))
+                        continue; // same tweak (multi-op) — skip
+
+                    var severity = ClassifySeverity(valA, valB);
+                    results.Add(new RegistryConflict(idA, idB, path, name, valA, valB, severity));
+                }
+            }
+        }
+
+        return results;
+    }
+
+    private static ConflictSeverity ClassifySeverity(string valA, string valB)
+    {
+        if (string.Equals(valA, valB, StringComparison.OrdinalIgnoreCase))
+            return ConflictSeverity.Info;
+
+        // Check for direct integer opposites (0 vs 1, 1 vs 0).
+        if (int.TryParse(valA, out int a) && int.TryParse(valB, out int b))
+        {
+            if ((a == 0 && b == 1) || (a == 1 && b == 0))
+                return ConflictSeverity.Critical;
+        }
+
+        return ConflictSeverity.Warning;
+    }
 }

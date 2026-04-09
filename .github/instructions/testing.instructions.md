@@ -18,7 +18,7 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 | `RegiLattice.Core.Tests` | 2,442+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
 | `RegiLattice.CLI.Tests`  | 434+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
 | `RegiLattice.GUI.Tests`  | 363+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **3,239+**|                                                                                                                                                                                |
+| **Total**                | **3,259+**|                                                                                                                                                                                |
 
 ## Running Tests
 
@@ -237,7 +237,7 @@ Every test run and every CI build must meet these conditions before merging:
 | Build fatals           | **0** — hard CI fail                                                                  |
 | Build errors           | **0** — hard CI fail                                                                  |
 | Build warnings         | **0** — `TreatWarningsAsErrors=true`; any warning blocks CI                           |
-| Test failures          | **0** — all 3,239+ tests must pass                                                    |
+| Test failures          | **0** — all 3,259+ tests must pass                                                    |
 | Skipped tests          | **0** — `[Fact(Skip=...)]` and `[Theory(Skip=...)]` are forbidden                    |
 | Inline suppressions    | **0** — `#pragma warning disable`, `[SuppressMessage]`, `// NOSONAR`, `// NCA`,      |
 |                        |           `// ReSharper disable`, `// NOLINT` — all forbidden; fix root cause instead |

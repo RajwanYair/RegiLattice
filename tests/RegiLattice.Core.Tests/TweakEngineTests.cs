@@ -3488,4 +3488,84 @@ public sealed class ConflictDetectorTests
         var conflict = ConflictDetector.Detect([IdA, IdB]).Single();
         Assert.True(conflict.Reason.Length >= 10, $"Conflict reason '{conflict.Reason}' is too short to be descriptive.");
     }
+
+    // ── Phase 6.3 — DetectRegistryConflicts ──────────────────────────────
+
+    private static TweakDef MakeSetDword(string id, string path, string name, int value) =>
+        new()
+        {
+            Id = id,
+            Label = id,
+            Category = "Test",
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ApplyOps = [RegOp.SetDword(path, name, value)],
+            RemoveOps = [RegOp.DeleteValue(path, name)],
+            DetectOps = [RegOp.CheckDword(path, name, value)],
+        };
+
+    [Fact]
+    public void DetectRegistryConflicts_NoDuplicatePaths_ReturnsEmpty()
+    {
+        var tweaks = new[] { MakeSetDword("a", @"HKCU\Software\A", "Val", 1), MakeSetDword("b", @"HKCU\Software\B", "Val", 0) };
+        var conflicts = ConflictDetector.DetectRegistryConflicts(tweaks);
+        Assert.Empty(conflicts);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_SamePathSameValue_ReturnsInfo()
+    {
+        var tweaks = new[] { MakeSetDword("a", @"HKCU\Software\Test", "Enable", 1), MakeSetDword("b", @"HKCU\Software\Test", "Enable", 1) };
+        var conflicts = ConflictDetector.DetectRegistryConflicts(tweaks);
+        Assert.Single(conflicts);
+        Assert.Equal(ConflictSeverity.Info, conflicts[0].Severity);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_SamePathDifferentNonBinaryValue_ReturnsWarning()
+    {
+        var tweaks = new[] { MakeSetDword("a", @"HKCU\Software\Test", "Timeout", 30), MakeSetDword("b", @"HKCU\Software\Test", "Timeout", 60) };
+        var conflicts = ConflictDetector.DetectRegistryConflicts(tweaks);
+        Assert.Single(conflicts);
+        Assert.Equal(ConflictSeverity.Warning, conflicts[0].Severity);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_SamePathOpposingBinary_ReturnsCritical()
+    {
+        var tweaks = new[]
+        {
+            MakeSetDword("enable-feature", @"HKLM\Software\Test", "EnableFeature", 1),
+            MakeSetDword("disable-feature", @"HKLM\Software\Test", "EnableFeature", 0),
+        };
+        var conflicts = ConflictDetector.DetectRegistryConflicts(tweaks);
+        Assert.Single(conflicts);
+        Assert.Equal(ConflictSeverity.Critical, conflicts[0].Severity);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_ContainsBothTweakIds()
+    {
+        var tweaks = new[] { MakeSetDword("id-x", @"HKCU\Test", "Foo", 1), MakeSetDword("id-y", @"HKCU\Test", "Foo", 0) };
+        var conflict = ConflictDetector.DetectRegistryConflicts(tweaks).Single();
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { conflict.TweakIdA, conflict.TweakIdB };
+        Assert.Contains("id-x", ids);
+        Assert.Contains("id-y", ids);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_ContainsCorrectPathAndName()
+    {
+        var tweaks = new[] { MakeSetDword("a", @"HKCU\Software\MyApp", "Setting", 1), MakeSetDword("b", @"HKCU\Software\MyApp", "Setting", 0) };
+        var conflict = ConflictDetector.DetectRegistryConflicts(tweaks).Single();
+        Assert.Equal(@"HKCU\Software\MyApp", conflict.RegistryPath);
+        Assert.Equal("Setting", conflict.ValueName);
+    }
+
+    [Fact]
+    public void DetectRegistryConflicts_EmptyTweaks_ReturnsEmpty()
+    {
+        var conflicts = ConflictDetector.DetectRegistryConflicts([]);
+        Assert.Empty(conflicts);
+    }
 }

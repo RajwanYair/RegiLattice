@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using RegiLattice.Core;
@@ -19,6 +20,21 @@ public sealed class HistoryEntry
 
     [JsonPropertyName("timestamp")]
     public string Timestamp { get; set; } = "";
+
+    /// <summary>OS user who performed the operation (populated from v6.27.0 onwards).</summary>
+    [JsonPropertyName("username")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? Username { get; set; }
+
+    /// <summary>Machine name where the operation was performed.</summary>
+    [JsonPropertyName("machine")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? MachineName { get; set; }
+
+    /// <summary>Short per-process GUID that groups entries from the same session.</summary>
+    [JsonPropertyName("session")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string? SessionId { get; set; }
 }
 
 /// <summary>
@@ -32,6 +48,9 @@ public static class TweakHistory
     private static readonly object Lock = new();
     private static List<HistoryEntry>? _cache;
     private static bool _dirty;
+
+    // Per-process session identifier — a short 8-char hex prefix for audit grouping.
+    private static readonly string s_sessionId = Guid.NewGuid().ToString("N")[..8];
 
     /// <summary>Maximum entries to keep in history.</summary>
     public const int MaxEntries = 500;
@@ -67,6 +86,9 @@ public static class TweakHistory
                     Action = action,
                     Result = result,
                     Timestamp = DateTimeOffset.UtcNow.ToString("o"),
+                    Username = Environment.UserName,
+                    MachineName = Environment.MachineName,
+                    SessionId = s_sessionId,
                 }
             );
 
@@ -209,6 +231,34 @@ public static class TweakHistory
         var json = JsonSerializer.Serialize(snapshot, JsonOptions.Indented);
         Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
         await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Exports the current history as a CSV file suitable for SIEM ingestion.
+    /// Columns: Timestamp, TweakId, Action, Result, Username, MachineName, SessionId.
+    /// </summary>
+    public static void ExportCsv(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        IReadOnlyList<HistoryEntry> snapshot;
+        lock (Lock)
+            snapshot = LoadList().ToList();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Timestamp,TweakId,Action,Result,Username,MachineName,SessionId");
+        foreach (var e in snapshot)
+        {
+            sb.Append('"').Append(e.Timestamp).Append('"').Append(',');
+            sb.Append('"').Append(e.TweakId.Replace("\"", "\"\"")).Append('"').Append(',');
+            sb.Append('"').Append(e.Action).Append('"').Append(',');
+            sb.Append('"').Append(e.Result).Append('"').Append(',');
+            sb.Append('"').Append(e.Username ?? "").Append('"').Append(',');
+            sb.Append('"').Append(e.MachineName ?? "").Append('"').Append(',');
+            sb.AppendLine('"' + (e.SessionId ?? "") + '"');
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
+        File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
     }
 
     private static List<HistoryEntry> LoadList()

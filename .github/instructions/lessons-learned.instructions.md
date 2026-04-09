@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-09 (v6.26.0, C# 13 / .NET 10.0-windows, ~7,518 tweaks, 127 categories, 3,239 tests)
+> Last updated: 2026-04-09 (v6.27.0, C# 13 / .NET 10.0-windows, ~7,518 tweaks, 127 categories, 3,259 tests)
 
 ---
 
@@ -1637,7 +1637,8 @@ Version history:
 | v6.24.0 | 8 | +80 | — (Phase 5.3 Accessibility remaining + Phase 5.5 Developer: MagnifierAdvanced/LiveCaptions/EyeControlSettings/VoiceAccessControl/WinDbgSettings/WSLAdvanced/GitCredManager/ContainerRuntime) |
 | v6.25.0 | 5 | +50 | — (Phase 5.4 Energy & Battery Management: BatterySaver/ChargingOptimization/StandbyStates/CPUPowerStates/DisplayPower; 7,479 tweaks, 127 categories, 175 modules) |
 | v6.26.0 | 3 | +39 | Sprint 688 — 3 new Office GP security modules (PolicyOfficeWord/PolicyOfficeExcel/PolicyOfficeOutlook) + PolicyWindowsSearch expanded 1→10 tweaks; deleted 3 empty stubs; 7,518 tweaks, 127 categories, 175 modules |
-**Current version**: v6.26.0 — 7,518 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
+| v6.27.0 | 0 | 0 | — (Phase 6.1–6.3: TweakHistory audit logging + ExportCsv, HealthScoreService.CategoryHealthScores, ConflictDetector.DetectRegistryConflicts + ConflictSeverity/RegistryConflict; fix .runsettings HangTimeout warning; +20 tests → 3,259 total) |
+**Current version**: v6.27.0 — 7,518 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 
@@ -2066,3 +2067,212 @@ $destName = if (Test-Path (Join-Path $TweaksDir "$className.cs")) {
 **Important**: The class name in the file must remain exactly `internal static class Input`
 (not renamed). Only the filename gets the prefix. TweakEngine discovers classes by
 reflection on the namespace, not by filename, so filenames are arbitrary.
+
+---
+
+## Blame Data Collector `HangTimeout` Is Invalid in .NET SDK 10.0.201+
+
+In `.NET SDK 10.0.201`, the `HangTimeout` attribute on `<CollectDumpOnTestSessionHang>` in
+`.runsettings` became an unrecognised configuration key. Leaving it produces two non-fatal
+**test-runner warnings** (not CS compiler warnings) on every `dotnet test` invocation:
+
+```
+Microsoft.TestPlatform.targets(48,5): warning Data collector 'Blame' message:
+  The blame parameter key specified HangTimeout is not valid. Ignoring this key..
+Microsoft.TestPlatform.targets(48,5): warning Data collector 'Blame' message:
+  All tests finished running, Sequence file will not be generated.
+```
+
+These are classified as `warning` in the `build succeeded with N warning(s)` summary, but
+they are **NOT** subject to `TreatWarningsAsErrors=true` — that policy applies to the C#
+compiler (`CS*`) and Roslyn analyzers, not to the `Microsoft.TestPlatform.targets` blame
+collector messages. Tests still run and pass correctly.
+
+**Fix**: Remove the `HangTimeout="30000"` attribute from `<CollectDumpOnTestSessionHang>`.
+Use `TestSessionTimeout` in `<RunConfiguration>` as the primary hang-protection mechanism.
+
+```xml
+<!-- ❌ BAD — produces warning in .NET SDK 10.0.201+ -->
+<CollectDumpOnTestSessionHang DumpType="None" HangTimeout="30000" />
+
+<!-- ✅ GOOD — remove HangTimeout; rely on TestSessionTimeout *)  -->
+<CollectDumpOnTestSessionHang DumpType="None" />
+```
+
+**Fixed in**: v6.27.0 — `tests/.runsettings` updated.
+
+---
+
+## Copilot Agent Terminal Stdout Capture — Check Output Repeatedly, Not Once
+
+When `dotnet build` or `dotnet test` is run in an async terminal in a Copilot agent session,
+the stdout output arrives in chunks and may initially appear blank. The build IS running; output
+is just buffered.
+
+**Pattern that works**:
+
+1. Run the command with `mode=async` (non-blocking)
+2. Call `get_terminal_output` once after 5–10 seconds — may see blank or partial output
+3. Wait a further 5–10 seconds and call `get_terminal_output` AGAIN
+4. Continue until you see final lines like `Build succeeded in Ns` or `Test Run Successful`
+
+**Do NOT**:
+- Retry the same build command assuming it didn't start
+- Open a new terminal and run the command again (causes a second build to start concurrently)
+- Wait for `stdout` in a `mode=sync` call with a 60-second timeout — on OneDrive paths,
+  core library compilation alone (`CoreCompile`) takes ~54 seconds before any output appears
+
+**Rule**: A `Build succeeded` line WILL appear in `get_terminal_output` output eventually.
+Poll 3–5 times at 5–10 second intervals rather than treating the first blank response as failure.
+
+**Symptom context**: This is a terminal ringbuffer/scroll artefact in the VS Code agent
+surface. The underlying process is running; the Copilot tool only captures what fits in the
+current view. The `RegiLattice.Core CoreCompile` step takes ~54 s, then `Core.Tests CoreCompile`
+takes ~30 s — total ~84–110 s before the `Build succeeded` summary line appears.
+
+---
+
+## New Service Methods: `ExportCsv` Is Sync, `ExportToJsonAsync` Is Async
+
+When adding new export methods to Core services (e.g., `TweakHistory`, `Analytics`,
+`Favorites`), follow the established naming and sync/async convention:
+
+| Method                  | Pattern  | Why                                               |
+| ----------------------- | -------- | ------------------------------------------------- |
+| `ExportToJsonAsync()`   | `async`  | JSON serialization can be large; async I/O avoids UI freeze |
+| `ExportCsv()`           | `sync`   | CSV is row-by-row; `StringBuilder` + `File.WriteAllText` is fast enough |
+| `Load()` / `Flush()`    | `sync`   | Small local file; OneDrive sync is async at OS level |
+| Any network or pack I/O | `async`  | Always async for anything going over the wire |
+
+**Specifically for `TweakHistory.ExportCsv`**: The method writes a 7-column CSV with header
+`Timestamp,TweakId,Action,Result,Username,MachineName,SessionId`. It uses `StringBuilder`
+and `File.WriteAllText(path, csv, Encoding.UTF8)`. Making this `async` would require
+`await File.WriteAllTextAsync` and would force callers to `await` unnecessarily for a
+local file that is typically under 1 KB.
+
+**Rule**: Do NOT make `ExportCsv` async unless profiling shows it is a bottleneck.
+
+---
+
+## `[JsonIgnore(Condition = WhenWritingDefault)]` for Backward-Compatible DTO Expansion
+
+When adding optional fields to a serialised data class (e.g., `HistoryEntry`, `AnalyticsEntry`),
+use `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]` on nullable fields.
+This preserves backward compatibility with existing JSON files that don't have the new fields:
+
+```csharp
+// ✅ GOOD — new field is omitted from JSON when null; old files deserialise correctly
+[JsonPropertyName("username")]
+[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+public string? Username { get; set; }
+
+// ❌ BAD — writes "username": null to every entry; bloats the file and breaks old parsers
+[JsonPropertyName("username")]
+public string? Username { get; set; }
+```
+
+**Applied in**: `TweakHistory.HistoryEntry` — three new audit fields (`Username`, `MachineName`,
+`SessionId`) added in v6.27.0. Existing `history.json` files from v6.26.0 and earlier load
+without error; new entries written by v6.27.0+ include the audit fields automatically.
+
+---
+
+## Per-Process Session ID Pattern — `Guid.NewGuid().ToString("N")[..8]`
+
+When you need a stable, short, readable ID that identifies "all operations in one process run"
+(as opposed to a per-machine or per-user ID), use a static GUID truncated to hex:
+
+```csharp
+// ✅ GOOD — 8-char hex derived from a unique Guid; stable for the lifetime of the process
+private static readonly string s_sessionId = Guid.NewGuid().ToString("N")[..8];
+```
+
+Properties:
+- **Length**: exactly 8 characters
+- **Charset**: lowercase hex `[0-9a-f]` (the `"N"` format omits hyphens)
+- **Uniqueness**: collision probability ~1.5 × 10⁻⁹ between two concurrent processes
+- **Stability**: same value for all operations in one process invocation
+- **Range notation**: `[..8]` = C# 13 range expression for `Substring(0, 8)` — requires .NET 8+
+
+**Applied in**: `TweakHistory.TweakHistory` — `s_sessionId` initialised once at class load,
+stamped on every `HistoryEntry` recorded by that process run.
+
+**Test pattern**: To verify the contract, check both constraints in separate tests:
+
+```csharp
+[Fact]
+public void Record_SameProcess_SharesSessionId()
+{
+    var entry1 = ...; var entry2 = ...;
+    Assert.Equal(entry1.SessionId, entry2.SessionId);   // stable within process
+}
+
+[Fact]
+public void Record_SessionId_IsEightCharHex()
+{
+    var entry = ...;
+    Assert.NotNull(entry.SessionId);
+    Assert.Equal(8, entry.SessionId!.Length);
+    Assert.Matches(@"^[0-9a-f]{8}$", entry.SessionId);
+}
+```
+
+---
+
+## `CategoryHealthScore` Sealed Record — Placement After Class Closing Brace
+
+When adding a companion record or struct to a service class in the same file, place it
+**after** the class closing brace, not inside the class:
+
+```csharp
+// ✅ GOOD — CategoryHealthScore is a sibling type in the same namespace, not nested
+internal sealed class HealthScoreService { ... }
+
+public sealed record CategoryHealthScore(
+    string Category, int Score, int AppliedCount, int TotalCount, string Recommendation);
+
+// ❌ BAD — nested inside HealthScoreService; callers need the full qualified name
+internal sealed class HealthScoreService {
+    public sealed record CategoryHealthScore(...);
+}
+```
+
+**Why**: Callers (GUI, CLI, tests) need `CategoryHealthScore` without knowing which service
+class hosts it. Placing it at namespace level ("sibling type") lets callers import it with
+just `using RegiLattice.Core.Services` rather than `using ... = HealthScoreService.CategoryHealthScore`.
+
+---
+
+## `ConflictSeverity` Enum and `RegistryConflict` Record — Phase 6.3 Pattern
+
+When extending `ConflictDetector.cs` or similar static analysis services:
+
+1. Define supporting enums and record structs **before** the service class declaration.
+2. Use `readonly record struct` for result types that are small, value-typed, and returned
+   in `IReadOnlyList<T>` — avoids heap allocations in hot paths.
+3. The `DetectRegistryConflicts()` method indexes all `RegOp` ApplyOps by `"Path\Name"` key.
+   Only `SetValue`-family ops (SetDword, SetString, etc.) are indexed — not Check, Delete, or DeleteTree ops.
+4. Severity classification:
+   - `Info` — same path+name with the SAME value (redundant but not conflicting)
+   - `Critical` — same path+name with opposing binary values `0` / `1` (tweaks cancel each other)
+   - `Warning` — same path+name with different non-binary values (order-dependent behaviour)
+
+```csharp
+// Severity helper pattern:
+private static ConflictSeverity ClassifySeverity(string valA, string valB)
+{
+    if (string.Equals(valA, valB, StringComparison.Ordinal)) return ConflictSeverity.Info;
+    if (int.TryParse(valA, out var ia) && int.TryParse(valB, out var ib)
+        && ((ia == 0 && ib == 1) || (ia == 1 && ib == 0)))
+        return ConflictSeverity.Critical;
+    return ConflictSeverity.Warning;
+}
+```
+
+**Test pattern**: Use a private factory helper `MakeSetDword(id, path, name, value)` in the
+test class to create minimal `TweakDef` instances without cluttering each test body:
+```csharp
+private static TweakDef MakeSetDword(string id, string path, string name, int value) =>
+    new() { Id = id, Label = id, Category = "Test",
+            ApplyOps = [RegOp.SetDword(path, name, value)] };
+```

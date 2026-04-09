@@ -26,17 +26,17 @@
     -->
   </RunConfiguration>
 
-  <!-- Blame data collector: kills any test that hangs for > 30 s.
-       Equivalent to passing the blame-hang-timeout 30s flag on the CLI, but applies even when
-       tests are run from the VS Code Test Explorer which does not forward that flag.
-       DumpType="None" kills the test host without writing a memory dump (avoids large
-       files on OneDrive-hosted workspaces). -->
+  <!-- Blame data collector: terminates a hung test host.
+       In .NET SDK 10.0.201+, the HangTimeout attribute on CollectDumpOnTestSessionHang
+       is no longer a supported configuration key (produces a non-fatal warning if used).
+       The primary hang-protection mechanism is TestSessionTimeout above (2000 s).
+       DumpType="None" avoids writing memory dumps on OneDrive-hosted workspaces. -->
   <DataCollectionRunSettings>
     <DataCollectors>
       <DataCollector friendlyName="blame" enabled="True">
         <Configuration>
           <CollectAlways>false</CollectAlways>
-          <CollectDumpOnTestSessionHang DumpType="None" HangTimeout="30000" />
+          <CollectDumpOnTestSessionHang DumpType="None" />
         </Configuration>
       </DataCollector>
     </DataCollectors>
