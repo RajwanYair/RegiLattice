@@ -15,6 +15,23 @@ Set-StrictMode -Version Latest
         Invoke-RLApply       — apply a tweak (supports -DryRun, -Force, -WhatIf)
         Invoke-RLRemove      — remove/revert a tweak (supports -DryRun, -Force, -WhatIf)
         Get-RLHealthScore    — summarise the system's overall tweak-health percentage
+        Set-RLTweak          — apply or remove a tweak by Id
+        Get-RLProfile        — list available tweak profiles
+        Set-RLProfile        — apply a named profile
+        Export-RLSnapshot    — save current tweak state to a JSON snapshot file
+        Restore-RLSnapshot   — restore a previously saved snapshot
+        Invoke-RLBatch       — apply or remove a batch of tweaks from a file
+        Get-RLCategory       — list all registered categories
+        Get-RLTag            — list all registered tags
+        Compare-RLSnapshot   — diff two snapshot files
+        Export-RLJson        — export all tweaks as JSON
+        Export-RLReg         — export current apply-state as a .REG file
+        Import-RLJson        — import a tweak selection from a JSON file
+        Invoke-RLValidate    — run the built-in tweak integrity validator
+        Get-RLStats          — show tweak statistics summary
+        Invoke-RLDoctor      — run the system health check
+        Get-RLHwInfo         — display hardware detection results
+        Get-RLDependency     — show the dependency chain for a tweak
 
     Quick start:
         Import-Module .\RegiLattice.psd1
@@ -648,6 +665,333 @@ function Invoke-RLBatch {
 }
 
 # ---------------------------------------------------------------------------
+#  Get-RLCategory
+# ---------------------------------------------------------------------------
+
+function Get-RLCategory {
+    <#
+    .SYNOPSIS
+        List all registered tweak categories.
+
+    .DESCRIPTION
+        Returns every category name that has at least one registered tweak,
+        sorted alphabetically. Suitable for pipeline use.
+
+    .EXAMPLE
+        Get-RLCategory
+
+    .EXAMPLE
+        Get-RLCategory | Where-Object { $_ -like 'P*' }
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--show-categories', '--no-color')
+    $raw | Where-Object { $_ -match '\S' } | ForEach-Object { $_.Trim() } | Sort-Object
+}
+
+# ---------------------------------------------------------------------------
+#  Get-RLTag
+# ---------------------------------------------------------------------------
+
+function Get-RLTag {
+    <#
+    .SYNOPSIS
+        List all registered tweak tags.
+
+    .DESCRIPTION
+        Returns every tag that is assigned to at least one tweak, sorted alphabetically.
+
+    .EXAMPLE
+        Get-RLTag
+
+    .EXAMPLE
+        Get-RLTag | Where-Object { $_ -like 'priv*' }
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--show-tags', '--no-color')
+    $raw | Where-Object { $_ -match '\S' } | ForEach-Object { $_.Trim() } | Sort-Object
+}
+
+# ---------------------------------------------------------------------------
+#  Compare-RLSnapshot
+# ---------------------------------------------------------------------------
+
+function Compare-RLSnapshot {
+    <#
+    .SYNOPSIS
+        Diff two snapshot JSON files and show what changed between them.
+
+    .DESCRIPTION
+        Calls 'regilattice --snapshot-diff <a> <b>' and returns the raw diff
+        output as a string array suitable for further processing.
+
+    .PARAMETER Before
+        Path to the older (baseline) snapshot JSON file.
+
+    .PARAMETER After
+        Path to the newer snapshot JSON file to compare against.
+
+    .EXAMPLE
+        Compare-RLSnapshot -Before baseline.json -After current.json
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position = 0)][string]$Before,
+        [Parameter(Mandatory, Position = 1)][string]$After
+    )
+
+    $raw = Invoke-RLRaw @('--snapshot-diff', $Before, $After, '--no-color')
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Export-RLJson
+# ---------------------------------------------------------------------------
+
+function Export-RLJson {
+    <#
+    .SYNOPSIS
+        Export all registered tweaks (with metadata) to a JSON file.
+
+    .DESCRIPTION
+        Calls 'regilattice --export-json <path>'. The output file contains a
+        JSON array of tweak objects including Id, Label, Category, Tags, Scope,
+        and current apply-state.
+
+    .PARAMETER Path
+        Destination file path for the JSON export.
+
+    .EXAMPLE
+        Export-RLJson -Path C:\Backups\tweaks.json
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position = 0)][string]$Path
+    )
+
+    Invoke-RLRaw @('--export-json', $Path, '--no-color') | Out-Null
+    if (Test-Path $Path) {
+        Write-Verbose "Exported tweaks to: $Path"
+        Get-Item $Path
+    } else {
+        Write-Error "Export failed: '$Path' was not created."
+    }
+}
+
+# ---------------------------------------------------------------------------
+#  Export-RLReg
+# ---------------------------------------------------------------------------
+
+function Export-RLReg {
+    <#
+    .SYNOPSIS
+        Export the current apply-state as a Windows .REG file.
+
+    .DESCRIPTION
+        Calls 'regilattice --export-reg <path>'. Only tweaks that are currently
+        applied are included. The file can be imported with regedit.exe.
+
+    .PARAMETER Path
+        Destination file path for the .REG export.
+
+    .EXAMPLE
+        Export-RLReg -Path C:\Backups\applied.reg
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position = 0)][string]$Path
+    )
+
+    Invoke-RLRaw @('--export-reg', $Path, '--no-color') | Out-Null
+    if (Test-Path $Path) {
+        Write-Verbose "Exported .REG file to: $Path"
+        Get-Item $Path
+    } else {
+        Write-Error "Export failed: '$Path' was not created."
+    }
+}
+
+# ---------------------------------------------------------------------------
+#  Import-RLJson
+# ---------------------------------------------------------------------------
+
+function Import-RLJson {
+    <#
+    .SYNOPSIS
+        Import and apply a tweak selection from a JSON file.
+
+    .DESCRIPTION
+        Calls 'regilattice --import-json <path>'. The file must be a JSON array
+        of tweak IDs (or a full export file produced by Export-RLJson).
+
+    .PARAMETER Path
+        Path to the JSON file containing the tweak selection to import.
+
+    .PARAMETER DryRun
+        Preview the import without writing to the registry.
+
+    .PARAMETER Force
+        Override the corporate-guard check.
+
+    .EXAMPLE
+        Import-RLJson -Path privacy-selection.json
+
+    .EXAMPLE
+        Import-RLJson -Path all-tweaks.json -DryRun
+    #>
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    param(
+        [Parameter(Mandatory, Position = 0)][string]$Path,
+        [Parameter()][switch]$DryRun,
+        [Parameter()][switch]$Force
+    )
+
+    if (-not $PSCmdlet.ShouldProcess($Path, 'Import tweak selection')) { return }
+
+    $pArgs = [System.Collections.Generic.List[string]]::new()
+    $pArgs.Add('--import-json')
+    $pArgs.Add($Path)
+    $pArgs.Add('--no-color')
+    if ($DryRun) { $pArgs.Add('--dry-run') }
+    if ($Force)  { $pArgs.Add('--force') }
+
+    $raw = Invoke-RLRaw $pArgs
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Invoke-RLValidate
+# ---------------------------------------------------------------------------
+
+function Invoke-RLValidate {
+    <#
+    .SYNOPSIS
+        Run the built-in tweak integrity validator.
+
+    .DESCRIPTION
+        Calls 'regilattice --validate'. Checks all registered tweaks for
+        duplicate IDs, empty labels/categories, broken DependsOn references,
+        and circular dependency chains. Writes a summary to the pipeline.
+
+    .EXAMPLE
+        Invoke-RLValidate
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--validate', '--no-color')
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Get-RLStats
+# ---------------------------------------------------------------------------
+
+function Get-RLStats {
+    <#
+    .SYNOPSIS
+        Show tweak statistics: total tweaks, categories, applied/pending counts.
+
+    .DESCRIPTION
+        Calls 'regilattice --stats --no-color' and returns the formatted
+        statistics summary as a string.
+
+    .EXAMPLE
+        Get-RLStats
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--stats', '--no-color')
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Invoke-RLDoctor
+# ---------------------------------------------------------------------------
+
+function Invoke-RLDoctor {
+    <#
+    .SYNOPSIS
+        Run the system health check.
+
+    .DESCRIPTION
+        Calls 'regilattice --doctor'. Detects admin status, corporate guard
+        state, Windows build, and hardware compatibility. Returns a multi-line
+        diagnostic report.
+
+    .EXAMPLE
+        Invoke-RLDoctor
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--doctor', '--no-color')
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Get-RLHwInfo
+# ---------------------------------------------------------------------------
+
+function Get-RLHwInfo {
+    <#
+    .SYNOPSIS
+        Display hardware detection results.
+
+    .DESCRIPTION
+        Calls 'regilattice --hwinfo'. Returns a formatted summary of the
+        detected hardware: CPU, RAM, GPU, storage, and suggested profile.
+
+    .EXAMPLE
+        Get-RLHwInfo
+    #>
+    [CmdletBinding()]
+    param()
+
+    $raw = Invoke-RLRaw @('--hwinfo', '--no-color')
+    Write-Output ($raw | Out-String).Trim()
+}
+
+# ---------------------------------------------------------------------------
+#  Get-RLDependency
+# ---------------------------------------------------------------------------
+
+function Get-RLDependency {
+    <#
+    .SYNOPSIS
+        Show the full dependency chain for a tweak.
+
+    .DESCRIPTION
+        Calls 'regilattice --depends-on <Id>'. Returns the topological
+        dependency list for the specified tweak, showing which other tweaks
+        must be applied first.
+
+    .PARAMETER Id
+        The kebab-case tweak ID whose dependency chain you want to inspect.
+
+    .EXAMPLE
+        Get-RLDependency -Id sec-configure-firewall
+
+    .EXAMPLE
+        Get-RLTweak | Where-Object { $_.DependsOn } | ForEach-Object { Get-RLDependency $_.Id }
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position = 0, ValueFromPipelineByPropertyName)]
+        [string]$Id
+    )
+
+    process {
+        $raw = Invoke-RLRaw @('--depends-on', $Id, '--no-color')
+        Write-Output ($raw | Out-String).Trim()
+    }
+}
+
+# ---------------------------------------------------------------------------
 #  Type formatting hints (Format-Table defaults)
 # ---------------------------------------------------------------------------
 
@@ -668,8 +1012,18 @@ Set-Alias -Name srt  -Value Set-RLTweak        -Scope Global -Force
 Set-Alias -Name grp  -Value Get-RLProfile      -Scope Global -Force
 Set-Alias -Name srp  -Value Set-RLProfile      -Scope Global -Force
 Set-Alias -Name irb  -Value Invoke-RLBatch     -Scope Global -Force
+Set-Alias -Name grc  -Value Get-RLCategory     -Scope Global -Force
+Set-Alias -Name grtg -Value Get-RLTag          -Scope Global -Force
+Set-Alias -Name crs  -Value Compare-RLSnapshot -Scope Global -Force
+Set-Alias -Name erj  -Value Export-RLJson      -Scope Global -Force
+Set-Alias -Name irv  -Value Invoke-RLValidate  -Scope Global -Force
+Set-Alias -Name grst -Value Get-RLStats        -Scope Global -Force
+Set-Alias -Name ird  -Value Invoke-RLDoctor    -Scope Global -Force
+Set-Alias -Name grdp -Value Get-RLDependency   -Scope Global -Force
 
 Export-ModuleMember -Function `
         Get-RLTweak, Get-RLTweakStatus, Invoke-RLApply, Invoke-RLRemove, Get-RLHealthScore, `
-        Set-RLTweak, Get-RLProfile, Set-RLProfile, Export-RLSnapshot, Restore-RLSnapshot, Invoke-RLBatch `
-    -Alias grt, grts, ira, irr, srt, grp, srp, irb
+        Set-RLTweak, Get-RLProfile, Set-RLProfile, Export-RLSnapshot, Restore-RLSnapshot, Invoke-RLBatch, `
+        Get-RLCategory, Get-RLTag, Compare-RLSnapshot, Export-RLJson, Export-RLReg, Import-RLJson, `
+        Invoke-RLValidate, Get-RLStats, Invoke-RLDoctor, Get-RLHwInfo, Get-RLDependency `
+    -Alias grt, grts, ira, irr, srt, grp, srp, irb, grc, grtg, crs, erj, irv, grst, ird, grdp

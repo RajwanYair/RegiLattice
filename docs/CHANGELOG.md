@@ -4,6 +4,53 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.30.0] — 2026-07-02
+
+### Added — Phase 7.4 (PowerShell Module Expansion)
+
+#### 11 New PowerShell Cmdlets
+
+Expanded `RegiLattice.psm1` from 11 to **22 public cmdlets** (+11) and 8 to **16 aliases** (+8):
+
+| Cmdlet | Alias | Description |
+|--------|-------|-------------|
+| `Get-RLCategory` | `grc` | List all tweak categories |
+| `Get-RLTag` | `grtg` | List all tweak tags |
+| `Compare-RLSnapshot` | `crs` | Diff two snapshot files |
+| `Export-RLJson` | `erj` | Export all tweaks to JSON |
+| `Export-RLReg` | — | Export applied tweaks to .REG |
+| `Import-RLJson` | — | Import tweak selection from JSON |
+| `Invoke-RLValidate` | `irv` | Run tweak integrity validation |
+| `Get-RLStats` | `grst` | Print registry tweak statistics |
+| `Invoke-RLDoctor` | `ird` | Run system health check |
+| `Get-RLHwInfo` | — | Display hardware information |
+| `Get-RLDependency` | `grdp` | Show dependency chain for a tweak |
+
+- All cmdlets include `--no-color` on internal CLI calls to prevent ANSI sequences in pipeline output.
+- `Import-RLJson` implements `SupportsShouldProcess` + `ConfirmImpact = 'Medium'` for `-WhatIf`/`-Confirm` safety.
+- `Get-RLDependency` supports `ValueFromPipelineByPropertyName` for pipeline usage: `Get-RLTweak perf-* | Get-RLDependency`.
+- `powershell/RegiLattice.psd1` updated: `FunctionsToExport`, `AliasesToExport`, `ReleaseNotes`, `ModuleVersion` all in sync.
+
+#### Phase 7.5 — Pack Validation CI Workflow
+
+- Added `.github/workflows/pack-validation.yml` — runs on `packs/**` changes.
+- Validates `packs/index.json` structure and all `.rlpack.json` files via shell step + xUnit `OfficialPack` filter.
+- Triggers on push, pull_request, and workflow_dispatch.
+
+#### Lessons-Learned Additions
+
+Three new lessons appended to `.github/instructions/lessons-learned.instructions.md`:
+- `[CallerFilePath]` for pack load tests (never use `AppDomain.BaseDirectory`)
+- PowerShell module co-maintenance rule (`psm1` + `psd1` must be updated atomically)
+- Official pack ecosystem — `packs/index.json` structure and constraints
+
+#### Stats
+
+- **Tweaks**: 7,568 · **Categories**: 127 · **Modules**: 180 · **Tests**: 3,296 (0 failures)
+- **PS Module**: 22 cmdlets · 16 aliases
+
+---
+
 ## [6.29.0] — 2026-07-01
 
 ### Added — Phase 7 (Internationalisation & Ecosystem): Locales, Official Packs, Pack Authoring Guide

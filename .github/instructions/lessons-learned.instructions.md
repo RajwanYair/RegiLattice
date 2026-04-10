@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-10 (v6.29.0, C# 13 / .NET 10.0-windows, ~7,568 tweaks, 127 categories, 3,296 tests)
+> Last updated: 2026-07-02 (v6.30.0, C# 13 / .NET 10.0-windows, ~7,568 tweaks, 127 categories, 3,296 tests)
 
 ---
 
@@ -1640,7 +1640,8 @@ Version history:
 | v6.27.0 | 0 | 0 | — (Phase 6.1–6.3: TweakHistory audit logging + ExportCsv, HealthScoreService.CategoryHealthScores, ConflictDetector.DetectRegistryConflicts + ConflictSeverity/RegistryConflict; fix .runsettings HangTimeout warning; +20 tests → 3,259 total) |
 | v6.28.0 | 5 | +50 | — (Phase 6.4 ScheduledTweakService + Phase 6.5 TweakMigrationService + TweakEngine.Migrations/ResolveMigration + SnapshotManager auto-migrate; 5 new Office Policy modules: PowerPoint/Access/Publisher/Visio/Project; +32 tests → 3,291 total; 7,568 tweaks, 180 modules) |
 | v6.29.0 | 0 | 0 | — (Phase 7.1–7.3: 10 locales documented; 5 official packs in `packs/`; `packs/index.json`; `docs/PackAuthoring.md`; +5 pack load tests; 3,296 tests total) |
-**Current version**: v6.29.0 — 7,568 tweaks, 127 categories, 180 files (31 original + 149 extracted/split). Run full gap analysis on all three phases before creating any new module.
+| v6.30.0 | 0 | 0 | — (Phase 7.4–7.5: 22 PS cmdlets + 16 aliases in psm1/psd1; pack-validation.yml CI workflow; 3 new lessons-learned entries; 3,296 tests total) |
+**Current version**: v6.30.0 — 7,568 tweaks, 127 categories, 180 files (31 original + 149 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 
@@ -2407,3 +2408,167 @@ is designed for GUI interaction, not automated testing.
 **Corollary**: `WizardEngine` tests that exercise hardware detection must also pass
 `dryRun: true` to bypass the `HardwareInfo.Detect()` WMI call (which uses Task.Run
 and creates COM STA pump threads that block process exit — see the `Task.Run + WMI` lesson).
+
+---
+
+## `[CallerFilePath]` for Pack Test Helpers — Never Use `AppDomain.BaseDirectory`
+
+When writing xUnit tests that load `.rlpack.json` files by path (e.g., `OfficialPackTests`),
+the test helper must locate the file relative to the **test source file**, not the test
+assembly's build output directory. Using `AppDomain.CurrentDomain.BaseDirectory` resolves
+to `bin/Debug/net10.0-windows/` where `.rlpack.json` files are NOT copied during build.
+
+**Root cause**: `.rlpack.json` pack files live in `packs/` at the workspace root. MSBuild
+does not copy them to the test output unless explicitly configured with `<CopyToOutput>`.
+The test source file is always located near the `packs/` directory in the source tree, so a
+path relative to the source file always resolves correctly regardless of build configuration.
+
+```csharp
+// ❌ BAD — resolves to bin/Debug/net10.0-windows/ — .rlpack.json not present there
+private static string PackPath(string fileName) =>
+    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "packs", fileName);
+
+// ✅ GOOD — resolves relative to the test source file via [CallerFilePath]
+private static string PackPath(string fileName,
+    [System.Runtime.CompilerServices.CallerFilePath] string? sourceFile = null)
+{
+    string dir = Path.GetDirectoryName(sourceFile)!;
+    // sourceFile is e.g. tests/RegiLattice.Core.Tests/PluginTests.cs
+    // Go up to workspace root, then into packs/
+    return Path.GetFullPath(Path.Combine(dir, "..", "..", "packs", fileName));
+}
+```
+
+**Why `[CallerFilePath]` works**: The C# compiler substitutes the full path of the
+calling source file at compile time. This path is always valid regardless of where the
+binary is published, how MSBuild routes output, or whether the workspace is on OneDrive.
+
+**Applied in**: `tests/RegiLattice.Core.Tests/PluginTests.cs` — `OfficialPackTests` class
+(added in v6.29.0). The same pattern should be used for any future test that references
+files that live in the workspace tree but are not copied to the build output directory.
+
+---
+
+## PowerShell Module Co-Maintenance — `psm1` and `psd1` Must Be Updated Together
+
+The PowerShell module has two separate entry points for function/alias discovery:
+
+| File | Used by | When it matters |
+|------|---------|-----------------|
+| `RegiLattice.psm1` — `Export-ModuleMember` | Runtime (`Import-Module`) | Always; controls what is visible in the user's session |
+| `RegiLattice.psd1` — `FunctionsToExport` + `AliasesToExport` | PSGallery / `Find-Module` / `Get-Module -ListAvailable` | PowerShellGet, `Requires #Requires -Module`, tab completion before import |
+
+**Problem**: Forgetting to update `psd1` when adding new functions to `psm1` causes the
+new cmdlets to be AVAILABLE after `Import-Module` but INVISIBLE to `Find-Module` and
+`#Requires` manifests. Users who install from PSGallery see an incomplete function list.
+
+```powershell
+# ❌ BAD — added function in psm1 Export-ModuleMember but not in psd1 FunctionsToExport
+# Users get: Find-Module RegiLattice | Select -ExpandProperty ExportedCommands
+# → shows only old 11 functions; new ones appear after Import-Module but not in manifests
+
+# ✅ CORRECT — both files updated simultaneously
+# psm1: Export-ModuleMember -Function Get-RLCategory, ..., Get-RLDependency -Alias grc, ..., grdp
+# psd1: FunctionsToExport = @('Get-RLCategory', ..., 'Get-RLDependency')
+#        AliasesToExport   = @('grc', ..., 'grdp')
+```
+
+**Standing rule**: Every function added to `psm1` MUST be accompanied by a matching entry in:
+1. `psm1` `Export-ModuleMember -Function` list (runtime export)
+2. `psd1` `FunctionsToExport` array (manifest export)
+3. If the function has an alias: `psm1` `Set-Alias` + `Export-ModuleMember -Alias` AND `psd1` `AliasesToExport`
+4. `psd1` `ReleaseNotes` — update to describe what was added in the new module version
+
+**Also update**: `psd1` `ModuleVersion` — must match the CLI's current version. The module
+is maintained in lockstep with the CLI; a module version of `6.0.6` against a CLI at
+`6.30.0` confuses users. Always update `ModuleVersion` during every version bump.
+
+**Checklist when adding PS module functions**:
+```
+☐ Added function body to psm1 with proper .SYNOPSIS / .DESCRIPTION / .PARAMETER / .EXAMPLE
+☐ Added all --no-color flags to internal CLI calls (prevents ANSI escapes in pipeline output)
+☐ Updated psm1 Export-ModuleMember -Function list
+☐ Updated psm1 Set-Alias for any new short-form aliases
+☐ Updated psm1 Export-ModuleMember -Alias list
+☐ Updated psd1 FunctionsToExport
+☐ Updated psd1 AliasesToExport
+☐ Updated psd1 ReleaseNotes
+☐ Updated psd1 ModuleVersion to match CLI version
+```
+
+---
+
+## Official Pack Ecosystem — `packs/index.json` Structure and Constraints
+
+The `packs/` directory (added v6.29.0) is the official pack distribution point for
+RegiLattice. Every pack file and the index must follow strict structural rules:
+
+### `packs/index.json` schema
+
+```json
+{
+  "version": "1.0",
+  "updated": "YYYY-MM-DD",
+  "packs": [
+    {
+      "id": "kebab-case-unique-id",
+      "file": "filename-without-extension.rlpack.json",
+      "name": "Human-Readable Name",
+      "description": "One-sentence description of what this pack does.",
+      "category": "Gaming|Privacy|Security|Developer|Accessibility|Enterprise",
+      "tweakCount": 25
+    }
+  ]
+}
+```
+
+**Constraints on `index.json`**:
+- `id` must be globally unique across all packs (checked by `PackIndex.FromJson`)
+- `file` is the filename ONLY (not a full path) — resolved relative to the directory containing `index.json`
+- `tweakCount` should match the actual count in the `.rlpack.json` file — validated by `PackLoader.ValidatePackJson`
+- Update `updated` date on every new pack or pack modification
+
+### `.rlpack.json` schema
+
+```json
+{
+  "name": "Pack Display Name",
+  "version": "1.0.0",
+  "author": "AuthorName",
+  "description": "Full description",
+  "tags": ["tag1", "tag2"],
+  "tweaks": ["tweak-id-1", "tweak-id-2"]
+}
+```
+
+**Constraints on `.rlpack.json`**:
+- All tweak IDs in `tweaks[]` must exist in `TweakEngine.AllTweaks()` — `PackLoader.ValidatePackJson` rejects any unknown ID
+- `version` follows semver; bump when tweaks are added/removed/changed
+- File must be UTF-8, no BOM
+
+### Test pattern for official packs
+
+```csharp
+// ✅ CORRECT — use [CallerFilePath] to locate pack files (see CallerFilePath lesson)
+[Theory]
+[InlineData("gaming-fps.rlpack.json")]
+[InlineData("privacy-extreme.rlpack.json")]
+public void OfficialPack_LoadsWithoutError(string fileName,
+    [CallerFilePath] string? sourceFile = null)
+{
+    string path = Path.GetFullPath(Path.Combine(
+        Path.GetDirectoryName(sourceFile)!, "..", "..", "packs", fileName));
+    Assert.True(File.Exists(path), $"Pack file not found: {path}");
+    var (pack, errors) = PackLoader.LoadFromJson(path);
+    Assert.Empty(errors);
+    Assert.NotNull(pack);
+    Assert.NotEmpty(pack!.Tweaks);
+}
+```
+
+**Rule**: The `packs/index.json` and all `.rlpack.json` files must be kept in sync.
+When adding a new pack:
+1. Create `packs/<name>.rlpack.json` with the pack definition
+2. Add an entry to `packs/index.json` with matching `id`, `file`, `tweakCount`
+3. Add a test in `PluginTests.cs` — `OfficialPackTests` class
+4. Update `docs/PackAuthoring.md` if the pack introduces a new category or pattern

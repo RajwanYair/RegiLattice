@@ -1,0 +1,71 @@
+name: Pack Validation
+
+on:
+    push:
+        paths:
+            - 'packs/**'
+    pull_request:
+        paths:
+            - 'packs/**'
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    validate:
+        name: Validate Official Packs
+        runs-on: windows-latest
+        env:
+            MSBUILDDISABLENODEREUSE: 1
+            FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v5
+              with:
+                  dotnet-version: '10.0.x'
+
+            - name: Cache NuGet
+              uses: actions/cache@v5
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+                  restore-keys: ${{ runner.os }}-nuget-
+
+            - name: Restore
+              run: dotnet restore RegiLattice.sln --verbosity minimal
+
+            - name: Build
+              run: dotnet build RegiLattice.sln -c Release --no-restore --verbosity minimal
+
+            - name: Validate pack index exists
+              shell: pwsh
+              run: |
+                  if (-not (Test-Path 'packs/index.json')) {
+                      Write-Error 'packs/index.json not found'
+                      exit 1
+                  }
+                  $index = Get-Content 'packs/index.json' | ConvertFrom-Json
+                  Write-Host "Pack index version: $($index.version), updated: $($index.updated)"
+                  Write-Host "Registered packs: $($index.packs.Count)"
+                  foreach ($p in $index.packs) {
+                      $packFile = "packs/$($p.file)"
+                      if (-not (Test-Path $packFile)) {
+                          Write-Error "Pack file missing: $packFile (referenced in index as id=$($p.id))"
+                          exit 1
+                      }
+                      Write-Host "  OK: $($p.id) -> $packFile ($($p.tweakCount) tweaks)"
+                  }
+
+            - name: Run pack xUnit tests
+              run: >-
+                  dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
+                  -c Release --no-build
+                  --filter "Category=OfficialPacks|FullyQualifiedName~OfficialPack"
+                  --settings tests/.runsettings
+                  --blame-hang-timeout 60s
+                  --logger "console;verbosity=normal"

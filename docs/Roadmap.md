@@ -1102,7 +1102,7 @@ guide with examples, validation steps, and publishing workflow.
 
 ---
 
-### 7.4 PowerShell Module Parity
+### 7.4 PowerShell Module Parity ✅ Completed v6.30.0
 
 **Layer**: CLI · PowerShell module
 **Priority**: P3 — Nice to Have
@@ -1126,7 +1126,7 @@ strongly-typed `PSCustomObject` output (→ `--json`).
 
 ---
 
-### 7.5 GitHub Actions Reusable Workflow for Pack CI
+### 7.5 GitHub Actions Reusable Workflow for Pack CI ✅ Completed v6.30.0
 
 **Layer**: CI/CD
 **Priority**: P3 — Nice to Have
