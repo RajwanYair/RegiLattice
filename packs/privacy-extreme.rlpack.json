@@ -1,0 +1,108 @@
+{
+  "name": "privacy-extreme",
+  "displayName": "Privacy Extreme",
+  "version": "1.0.0",
+  "author": "RegiLattice Official",
+  "description": "Advanced privacy hardening beyond standard settings. Disables AppCompat inventory, handwriting cloud sharing, keyboard typing insights, input personalisation sync, and WER diagnostics queuing.",
+  "categories": ["Privacy", "Telemetry Advanced"],
+  "tags": ["privacy", "telemetry", "extreme", "hardening", "official"],
+  "minRegiLatticeVersion": "6.0.0",
+  "minWindowsBuild": 19041,
+  "changelog": "1.0.0 — Initial official release",
+  "tweaks": [
+    {
+      "id": "privacy-extreme-appcompat-disable-inventory",
+      "label": "Disable AppCompat Inventory Collection",
+      "category": "Privacy",
+      "description": "Stops Windows from collecting hardware/software inventory for telemetry and compatibility-assessment purposes.",
+      "needsAdmin": true,
+      "corpSafe": false,
+      "tags": ["privacy", "telemetry", "inventory", "appcompat"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags", "name": "DisableInventory", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags", "name": "DisableInventory" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags", "name": "DisableInventory", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "privacy-extreme-disable-handwriting-harvest",
+      "label": "Disable Handwriting Contact Harvesting",
+      "category": "Privacy",
+      "description": "Prevents the handwriting personalisation engine from harvesting contact names to improve recognition quality.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["privacy", "handwriting", "cloud", "contacts"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization\\TrainedDataStore", "name": "HarvestContacts", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization\\TrainedDataStore", "name": "HarvestContacts" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization\\TrainedDataStore", "name": "HarvestContacts", "dwordValue": 0 }
+      ]
+    },
+    {
+      "id": "privacy-extreme-disable-keyboard-typing-insights",
+      "label": "Disable Keyboard Typing Insights",
+      "category": "Privacy",
+      "description": "Disables the Text Intelligence Processing Component (TIPC) that learns typing patterns for personalised suggestions.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["privacy", "keyboard", "learning", "tipc"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Input\\TIPC", "name": "Enabled", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Input\\TIPC", "name": "Enabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Input\\TIPC", "name": "Enabled", "dwordValue": 0 }
+      ]
+    },
+    {
+      "id": "privacy-extreme-restrict-implicit-ink-text",
+      "label": "Restrict Implicit Ink and Text Collection",
+      "category": "Privacy",
+      "description": "Blocks implicit collection of ink strokes and text input data for cross-device personalisation.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["privacy", "input", "ink", "sync", "cloud"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization", "name": "RestrictImplicitInkCollection", "dwordValue": 1 },
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization", "name": "RestrictImplicitTextCollection", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization", "name": "RestrictImplicitInkCollection" },
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization", "name": "RestrictImplicitTextCollection" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\InputPersonalization", "name": "RestrictImplicitInkCollection", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "privacy-extreme-wer-disable-additional-data",
+      "label": "Disable WER Additional Data Upload",
+      "category": "Privacy",
+      "description": "Stops Windows Error Reporting from uploading additional diagnostic data and disables the WER logging queue.",
+      "needsAdmin": true,
+      "corpSafe": false,
+      "tags": ["privacy", "wer", "crash-reports", "diagnostics"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting", "name": "DontSendAdditionalData", "dwordValue": 1 },
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting", "name": "LoggingDisabled", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting", "name": "DontSendAdditionalData" },
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting", "name": "LoggingDisabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting", "name": "DontSendAdditionalData", "dwordValue": 1 }
+      ]
+    }
+  ]
+}

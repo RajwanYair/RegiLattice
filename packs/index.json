@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-07-01T00:00:00Z",
+  "packs": [
+    {
+      "name": "privacy-extreme",
+      "displayName": "Privacy Extreme",
+      "version": "1.0.0",
+      "author": "RegiLattice Official",
+      "description": "Advanced privacy hardening beyond standard settings. Disables AppCompat inventory, handwriting cloud sharing, keyboard typing insights, input personalisation sync, and WER diagnostics queuing.",
+      "tweakCount": 5,
+      "categories": ["Privacy", "Telemetry Advanced"],
+      "tags": ["privacy", "telemetry", "extreme", "hardening", "official"],
+      "sha256": "",
+      "downloadUrl": "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/packs/privacy-extreme.rlpack.json",
+      "minRegiLatticeVersion": "6.0.0",
+      "minWindowsBuild": 19041,
+      "changelog": "1.0.0 — Initial official release",
+      "signatureUrl": ""
+    },
+    {
+      "name": "gaming-fps",
+      "displayName": "Gaming FPS Optimizer",
+      "version": "1.0.0",
+      "author": "RegiLattice Official",
+      "description": "Aggressive FPS and latency optimizations for competitive gaming. Enables HAGS, disables Game DVR, enables game mode priority, tunes memory, and disables Game Bar overhead.",
+      "tweakCount": 5,
+      "categories": ["Gaming", "GPU / Graphics", "Network Optimization"],
+      "tags": ["gaming", "fps", "performance", "gpu", "latency", "official"],
+      "sha256": "",
+      "downloadUrl": "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/packs/gaming-fps.rlpack.json",
+      "minRegiLatticeVersion": "6.0.0",
+      "minWindowsBuild": 19041,
+      "changelog": "1.0.0 — Initial official release",
+      "signatureUrl": ""
+    },
+    {
+      "name": "enterprise-soc2",
+      "displayName": "Enterprise SOC 2 Hardening",
+      "version": "1.0.0",
+      "author": "RegiLattice Official",
+      "description": "Registry hardening tweaks aligned with SOC 2 Type II control requirements. Enforces NTLMv2, disables WDigest credential caching, requires SMB signing, enforces safe DLL search order, and enables TLS strong cryptography.",
+      "tweakCount": 5,
+      "categories": ["Security", "Hardening"],
+      "tags": ["security", "enterprise", "soc2", "compliance", "hardening", "official"],
+      "sha256": "",
+      "downloadUrl": "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/packs/enterprise-soc2.rlpack.json",
+      "minRegiLatticeVersion": "6.0.0",
+      "minWindowsBuild": 19041,
+      "changelog": "1.0.0 — Initial official release",
+      "signatureUrl": ""
+    },
+    {
+      "name": "developer-full",
+      "displayName": "Developer Full Setup",
+      "version": "1.0.0",
+      "author": "RegiLattice Official",
+      "description": "Comprehensive developer workflow optimizations. Enables long path support, UTF-8 active code page, PowerShell script block logging, .NET developer mode errors, and ANSI escape codes in the Windows console.",
+      "tweakCount": 5,
+      "categories": ["Dev Drive / Developer", "PowerShell", "Command Line"],
+      "tags": ["developer", "dev", "powershell", "utf8", "logging", "official"],
+      "sha256": "",
+      "downloadUrl": "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/packs/developer-full.rlpack.json",
+      "minRegiLatticeVersion": "6.0.0",
+      "minWindowsBuild": 19041,
+      "changelog": "1.0.0 — Initial official release",
+      "signatureUrl": ""
+    },
+    {
+      "name": "accessibility-inclusive",
+      "displayName": "Accessibility Inclusive",
+      "version": "1.0.0",
+      "author": "RegiLattice Official",
+      "description": "Inclusive accessibility optimizations for users who rely on keyboard navigation, screen readers, or visual-assist features. Enables Toggle Keys audio, disables StickyKeys dialogs, enables Mouse Keys, configures FilterKeys, and enables caret browsing.",
+      "tweakCount": 5,
+      "categories": ["Accessibility"],
+      "tags": ["accessibility", "inclusive", "keyboard", "screen-reader", "motor", "official"],
+      "sha256": "",
+      "downloadUrl": "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/packs/accessibility-inclusive.rlpack.json",
+      "minRegiLatticeVersion": "6.0.0",
+      "minWindowsBuild": 19041,
+      "changelog": "1.0.0 — Initial official release",
+      "signatureUrl": ""
+    }
+  ],
+  "authorKeys": [
+    {
+      "author": "RegiLattice Official",
+      "publicKeyPem": ""
+    }
+  ]
+}

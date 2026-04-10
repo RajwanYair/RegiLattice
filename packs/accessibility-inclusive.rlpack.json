@@ -1,0 +1,106 @@
+{
+  "name": "accessibility-inclusive",
+  "displayName": "Accessibility Inclusive",
+  "version": "1.0.0",
+  "author": "RegiLattice Official",
+  "description": "Inclusive accessibility optimizations for users who rely on keyboard navigation, screen readers, or visual-assist features. Enables Toggle Keys audio alerts, disables StickyKeys dialog timeout, enables mouse keys, disables window snap rotation, and enables caret browsing for keyboard-only web navigation.",
+  "categories": ["Accessibility"],
+  "tags": ["accessibility", "inclusive", "keyboard", "screen-reader", "motor", "official"],
+  "minRegiLatticeVersion": "6.0.0",
+  "minWindowsBuild": 19041,
+  "changelog": "1.0.0 — Initial official release",
+  "tweaks": [
+    {
+      "id": "accessibility-inclusive-enable-toggle-keys-sound",
+      "label": "Enable Toggle Keys Audio Alerts",
+      "category": "Accessibility",
+      "description": "Plays an audio tone when Caps Lock, Num Lock, or Scroll Lock is pressed — helpful for users who accidentally activate these keys.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["accessibility", "toggle-keys", "audio", "keyboard"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\ToggleKeys", "name": "Flags", "dwordValue": 62 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\ToggleKeys", "name": "Flags" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\ToggleKeys", "name": "Flags", "dwordValue": 62 }
+      ]
+    },
+    {
+      "id": "accessibility-inclusive-disable-stickykeys-dialog",
+      "label": "Disable StickyKeys Activation Dialog",
+      "category": "Accessibility",
+      "description": "Prevents the StickyKeys dialog from appearing when Shift is pressed 5 times — avoids interrupting users who type quickly.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["accessibility", "sticky-keys", "keyboard", "dialog"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\StickyKeys", "name": "Flags", "dwordValue": 506 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\StickyKeys", "name": "Flags" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\StickyKeys", "name": "Flags", "dwordValue": 506 }
+      ]
+    },
+    {
+      "id": "accessibility-inclusive-enable-mouse-keys",
+      "label": "Enable Mouse Keys via Numeric Keypad",
+      "category": "Accessibility",
+      "description": "Enables Mouse Keys so the numeric keypad can control the mouse pointer — useful for users with limited hand mobility.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["accessibility", "mouse-keys", "motor", "keyboard"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\MouseKeys", "name": "Flags", "dwordValue": 63 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\MouseKeys", "name": "Flags" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\MouseKeys", "name": "Flags", "dwordValue": 63 }
+      ]
+    },
+    {
+      "id": "accessibility-inclusive-enable-filter-keys-no-repeat",
+      "label": "Configure FilterKeys to Ignore Brief Key Repeat",
+      "category": "Accessibility",
+      "description": "Configures FilterKeys to ignore brief or repeated keystrokes, reducing unintended characters for users with hand tremors.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["accessibility", "filter-keys", "tremor", "keyboard"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\Keyboard Response", "name": "BounceTime", "dwordValue": 0 },
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\Keyboard Response", "name": "DelayBeforeAcceptance", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\Keyboard Response", "name": "BounceTime" },
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\Keyboard Response", "name": "DelayBeforeAcceptance" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Control Panel\\Accessibility\\Keyboard Response", "name": "BounceTime", "dwordValue": 0 }
+      ]
+    },
+    {
+      "id": "accessibility-inclusive-enable-caret-browsing",
+      "label": "Enable Caret Browsing in Browsers",
+      "category": "Accessibility",
+      "description": "Enables F7 caret browsing mode in Chromium-based browsers, allowing keyboard-only text navigation without a mouse.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["accessibility", "caret", "browsing", "keyboard", "browser"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\CaretBrowsing", "name": "Enabled", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\CaretBrowsing", "name": "Enabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\CaretBrowsing", "name": "Enabled", "dwordValue": 1 }
+      ]
+    }
+  ]
+}

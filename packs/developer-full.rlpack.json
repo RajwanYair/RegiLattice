@@ -1,0 +1,106 @@
+{
+  "name": "developer-full",
+  "displayName": "Developer Full Setup",
+  "version": "1.0.0",
+  "author": "RegiLattice Official",
+  "description": "Comprehensive developer workflow optimizations. Enables long path support, UTF-8 active code page, PowerShell script block logging, Windows Script Block execution policy, and developer error verbosity for .NET applications.",
+  "categories": ["Dev Drive / Developer", "PowerShell", "Command Line"],
+  "tags": ["developer", "dev", "powershell", "utf8", "logging", "official"],
+  "minRegiLatticeVersion": "6.0.0",
+  "minWindowsBuild": 19041,
+  "changelog": "1.0.0 — Initial official release",
+  "tweaks": [
+    {
+      "id": "developer-full-enable-long-paths",
+      "label": "Enable NTFS Long Path Support",
+      "category": "Dev Drive / Developer",
+      "description": "Removes the 260-character MAX_PATH limit, enabling tools like npm, pip, and cargo to use deeply nested directories.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["developer", "long-paths", "ntfs", "npm", "node"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\FileSystem", "name": "LongPathsEnabled", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\FileSystem", "name": "LongPathsEnabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\FileSystem", "name": "LongPathsEnabled", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "developer-full-enable-utf8-codepage",
+      "label": "Enable UTF-8 Active Code Page",
+      "category": "Dev Drive / Developer",
+      "description": "Sets the system code page to UTF-8 (beta feature), enabling correct display of Unicode characters in console apps and scripts.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["developer", "utf8", "codepage", "unicode", "console"],
+      "applyOps": [
+        { "kind": "SetString", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage", "name": "ACP", "stringValue": "65001" },
+        { "kind": "SetString", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage", "name": "OEMCP", "stringValue": "65001" }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage", "name": "ACP" },
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage", "name": "OEMCP" }
+      ],
+      "detectOps": [
+        { "kind": "CheckString", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage", "name": "ACP", "stringValue": "65001" }
+      ]
+    },
+    {
+      "id": "developer-full-enable-ps-scriptblock-logging",
+      "label": "Enable PowerShell Script Block Logging",
+      "category": "PowerShell",
+      "description": "Enables PowerShell script block logging to the event log, useful for auditing and debugging PowerShell automation.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["developer", "powershell", "logging", "scriptblock", "audit"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging", "name": "EnableScriptBlockLogging", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging", "name": "EnableScriptBlockLogging" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging", "name": "EnableScriptBlockLogging", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "developer-full-enable-dotnet-dev-mode",
+      "label": "Enable .NET Developer Mode Error Details",
+      "category": "Dev Drive / Developer",
+      "description": "Enables detailed exception messages in .NET Framework applications, showing inner exceptions and stack traces in developer environments.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["developer", "dotnet", "errors", "exceptions", "debug"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework", "name": "DbgJITDebugLaunchSetting", "dwordValue": 16 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework", "name": "DbgJITDebugLaunchSetting" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework", "name": "DbgJITDebugLaunchSetting", "dwordValue": 16 }
+      ]
+    },
+    {
+      "id": "developer-full-enable-console-ansi",
+      "label": "Enable ANSI Escape Codes in Windows Console",
+      "category": "Command Line",
+      "description": "Enables Virtual Terminal Processing in the Windows Console host so that ANSI escape sequences (colours, cursor positioning) render correctly in all console apps.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["developer", "console", "ansi", "terminal", "colors"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Console", "name": "VirtualTerminalLevel", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Console", "name": "VirtualTerminalLevel" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Console", "name": "VirtualTerminalLevel", "dwordValue": 1 }
+      ]
+    }
+  ]
+}

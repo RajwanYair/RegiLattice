@@ -4,7 +4,50 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [6.28.0] — 2026-04-09
+## [6.29.0] — 2026-07-01
+
+### Added — Phase 7 (Internationalisation & Ecosystem): Locales, Official Packs, Pack Authoring Guide
+
+#### Phase 7.1 — 10 Built-in Locales Documented
+
+- `Locale.cs` ships with **10 built-in language packs**: `en` (English), `de` (German), `fr` (French), `es` (Spanish), `he` (Hebrew), `ja` (Japanese), `zh-CN` (Simplified Chinese), `ko` (Korean), `ar` (Arabic), `pt-BR` (Brazilian Portuguese).
+- `LocaleSupplementalTests.cs` verifies all 10 locale codes at test-time: `AvailableLocales_ContainsTenBuiltIns` + `AvailableLocales_ContainsAllExpectedCodes`.
+- Locale selector in About dialog now shows all 10 options; right-to-left languages (he, ar) automatically flip text alignment in the GUI.
+
+#### Phase 7.2 — 5 Official Community Packs
+
+Five official `.rlpack.json` pack files ship in `packs/`:
+
+| Pack | Name | Category | Tweaks |
+|------|------|----------|--------|
+| `privacy-extreme.rlpack.json` | Privacy Extreme | Privacy / Telemetry | 5 tweaks: AppCompat inventory, handwriting harvest, TIPC, input personalisation, WER |
+| `gaming-fps.rlpack.json` | Gaming FPS Boost | Gaming Performance | 5 tweaks: HAGS, Xbox DVR, Game Mode, large system cache, GameBar presence writer |
+| `enterprise-soc2.rlpack.json` | Enterprise SOC 2 Hardening | Security / Hardening | 5 tweaks: NTLMv2, WDigest, SMB signing, safe DLL search, TLS strong crypto |
+| `developer-full.rlpack.json` | Developer Full Setup | Development / Tools | 5 tweaks: long paths, UTF-8 codepage, PS scriptblock logging, .NET dev mode, ANSI console |
+| `accessibility-inclusive.rlpack.json` | Accessibility Inclusive | Accessibility | 5 tweaks: Toggle Keys, StickyKeys dialog, Mouse Keys, FilterKeys, caret browsing |
+
+- `packs/index.json` — local marketplace index listing all 5 official packs (matches `PackIndex` camelCase schema).
+- Each pack is fully validated against all 12 `PackLoader` rules (IDs prefixed, detectOps non-empty, valid registry paths, etc.).
+
+#### Phase 7.3 — Pack Authoring Guide
+
+- New `docs/PackAuthoring.md` — comprehensive 300+ line pack authoring reference.
+- Covers: pack JSON schema (required + optional fields), tweak schema, RegOp schema, all 12 validation rules, all 12 RegOp kinds (with JSON `kind` values), SHA-256 hashing (PowerShell), RSA signing workflow, marketplace submission checklist, local testing via CLI and xUnit.
+- Binary registry values use **Base64 encoding** for the `binaryValue` JSON field.
+
+#### Tests
+
+- +5 Official pack load tests (`OfficialPack_*_LoadsValid` in `PluginSandboxTests`) — each reads the `.rlpack.json` from the `packs/` directory, loads via `PackLoader.LoadFromJson`, and validates name, tweak count, ID prefix, and `detectOps`.
+- Uses `[CallerFilePath]` to locate pack files relative to the source file (not the DLL output dir) — reliable on OneDrive-hosted builds with redirected `%TEMP%` output paths.
+
+#### Stats
+
+- Tests: 3,291 → **3,296** (+5)
+- Tweaks: 7,568 (unchanged)
+- Categories: 127 (unchanged)
+- Locales: 10 (documented)
+
+
 
 ### Added — Phase 6.4 + 6.5: Scheduling & Migration
 

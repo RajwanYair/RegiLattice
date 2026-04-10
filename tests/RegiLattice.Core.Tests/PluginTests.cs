@@ -1191,4 +1191,91 @@ public sealed class PluginSandboxTests
         Assert.True(result.TimedOut);
         Assert.False(result.Success);
     }
+
+    // ── Official pack validation tests ───────────────────────────────────────
+
+    private static string GetPackPath(
+        string packFileName,
+        [System.Runtime.CompilerServices.CallerFilePath] string? sourceFile = null)
+    {
+        // Walk up from the compile-time source file path (not the DLL location, which
+        // may be in a temp directory on OneDrive builds). CallerFilePath embeds the
+        // absolute path of PluginTests.cs at compile time, so ancestor traversal always
+        // reaches the workspace root regardless of where MSBuild placed the output.
+        string? dir = Path.GetDirectoryName(sourceFile);
+        while (dir is not null)
+        {
+            string candidate = Path.Combine(dir, "packs", packFileName);
+            if (File.Exists(candidate))
+                return candidate;
+            dir = Path.GetDirectoryName(dir);
+        }
+
+        throw new FileNotFoundException($"Official pack '{packFileName}' not found in any ancestor 'packs/' directory.");
+    }
+
+    [Fact]
+    public void OfficialPack_PrivacyExtreme_LoadsValid()
+    {
+        string json = File.ReadAllText(GetPackPath("privacy-extreme.rlpack.json"));
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        Assert.NotNull(pack);
+        Assert.Equal("privacy-extreme", pack.Name);
+        Assert.True(tweaks.Count >= 1, "Pack must contain at least one tweak");
+        Assert.All(tweaks, t => Assert.StartsWith("privacy-extreme-", t.Id));
+        Assert.All(tweaks, t => Assert.NotEmpty(t.DetectOps));
+    }
+
+    [Fact]
+    public void OfficialPack_GamingFps_LoadsValid()
+    {
+        string json = File.ReadAllText(GetPackPath("gaming-fps.rlpack.json"));
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        Assert.NotNull(pack);
+        Assert.Equal("gaming-fps", pack.Name);
+        Assert.True(tweaks.Count >= 1, "Pack must contain at least one tweak");
+        Assert.All(tweaks, t => Assert.StartsWith("gaming-fps-", t.Id));
+        Assert.All(tweaks, t => Assert.NotEmpty(t.DetectOps));
+    }
+
+    [Fact]
+    public void OfficialPack_EnterpriseSoc2_LoadsValid()
+    {
+        string json = File.ReadAllText(GetPackPath("enterprise-soc2.rlpack.json"));
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        Assert.NotNull(pack);
+        Assert.Equal("enterprise-soc2", pack.Name);
+        Assert.True(tweaks.Count >= 1, "Pack must contain at least one tweak");
+        Assert.All(tweaks, t => Assert.StartsWith("enterprise-soc2-", t.Id));
+        Assert.All(tweaks, t => Assert.NotEmpty(t.DetectOps));
+    }
+
+    [Fact]
+    public void OfficialPack_DeveloperFull_LoadsValid()
+    {
+        string json = File.ReadAllText(GetPackPath("developer-full.rlpack.json"));
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        Assert.NotNull(pack);
+        Assert.Equal("developer-full", pack.Name);
+        Assert.True(tweaks.Count >= 1, "Pack must contain at least one tweak");
+        Assert.All(tweaks, t => Assert.StartsWith("developer-full-", t.Id));
+        Assert.All(tweaks, t => Assert.NotEmpty(t.DetectOps));
+    }
+
+    [Fact]
+    public void OfficialPack_AccessibilityInclusive_LoadsValid()
+    {
+        string json = File.ReadAllText(GetPackPath("accessibility-inclusive.rlpack.json"));
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        Assert.NotNull(pack);
+        Assert.Equal("accessibility-inclusive", pack.Name);
+        Assert.True(tweaks.Count >= 1, "Pack must contain at least one tweak");
+        Assert.All(tweaks, t => Assert.StartsWith("accessibility-inclusive-", t.Id));
+        Assert.All(tweaks, t => Assert.NotEmpty(t.DetectOps));
+    }
 }

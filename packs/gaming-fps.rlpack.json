@@ -1,0 +1,106 @@
+{
+  "name": "gaming-fps",
+  "displayName": "Gaming FPS Optimizer",
+  "version": "1.0.0",
+  "author": "RegiLattice Official",
+  "description": "Aggressive FPS and latency optimizations for competitive gaming. Enables Hardware-Accelerated GPU Scheduling, disables Game DVR overlay capture, enables game mode priority, disables unnecessary background CPU activity, and tunes network buffers for local gaming.",
+  "categories": ["Gaming", "GPU / Graphics", "Network Optimization"],
+  "tags": ["gaming", "fps", "performance", "gpu", "latency", "official"],
+  "minRegiLatticeVersion": "6.0.0",
+  "minWindowsBuild": 19041,
+  "changelog": "1.0.0 — Initial official release",
+  "tweaks": [
+    {
+      "id": "gaming-fps-enable-hags",
+      "label": "Enable Hardware-Accelerated GPU Scheduling",
+      "category": "GPU / Graphics",
+      "description": "Enables HAGS (HwSch mode 2) which reduces GPU scheduling latency by allowing the GPU to directly manage its own memory.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["gaming", "gpu", "hags", "latency"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers", "name": "HwSchMode", "dwordValue": 2 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers", "name": "HwSchMode" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers", "name": "HwSchMode", "dwordValue": 2 }
+      ]
+    },
+    {
+      "id": "gaming-fps-disable-xbox-dvr-app-capture",
+      "label": "Disable Xbox Game DVR App Capture",
+      "category": "Gaming",
+      "description": "Disables the background app-capture component of Xbox Game DVR to prevent frame-rate drops during gaming sessions.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["gaming", "dvr", "xbox", "capture", "fps"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR", "name": "AppCaptureEnabled", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR", "name": "AppCaptureEnabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR", "name": "AppCaptureEnabled", "dwordValue": 0 }
+      ]
+    },
+    {
+      "id": "gaming-fps-enable-game-mode",
+      "label": "Enable Windows Game Mode Globally",
+      "category": "Gaming",
+      "description": "Enables the Windows Game Mode scheduler that prioritises CPU and GPU resources for the foreground game process.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["gaming", "game-mode", "scheduler", "priority"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "AutoGameModeEnabled", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "AutoGameModeEnabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "AutoGameModeEnabled", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "gaming-fps-large-system-cache",
+      "label": "Enable Large System Cache for Games",
+      "category": "Gaming",
+      "description": "Configures Windows memory manager to use a larger system cache, reducing disk I/O during large open-world game loads.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["gaming", "memory", "cache", "performance"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management", "name": "LargeSystemCache", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management", "name": "LargeSystemCache" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management", "name": "LargeSystemCache", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "gaming-fps-disable-gamebar-presence-writer",
+      "label": "Disable Game Bar Presence Writer",
+      "category": "Gaming",
+      "description": "Stops the GameBarPresenceWriter process from launching with games, reducing background overhead and minor input latency.",
+      "needsAdmin": false,
+      "corpSafe": true,
+      "tags": ["gaming", "gamebar", "background", "latency"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "ShowStartupPanel", "dwordValue": 0 },
+        { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "UseNexusForGameBarEnabled", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "ShowStartupPanel" },
+        { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "UseNexusForGameBarEnabled" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\GameBar", "name": "ShowStartupPanel", "dwordValue": 0 }
+      ]
+    }
+  ]
+}

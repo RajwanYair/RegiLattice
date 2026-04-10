@@ -1,0 +1,106 @@
+{
+  "name": "enterprise-soc2",
+  "displayName": "Enterprise SOC 2 Hardening",
+  "version": "1.0.0",
+  "author": "RegiLattice Official",
+  "description": "Registry hardening tweaks aligned with SOC 2 Type II control requirements. Enforces NTLMv2-only authentication, disables WDigest plain-text credential caching, requires SMB signing, enables safe DLL search order, and enforces TLS strong cryptography.",
+  "categories": ["Security", "Hardening"],
+  "tags": ["security", "enterprise", "soc2", "compliance", "hardening", "official"],
+  "minRegiLatticeVersion": "6.0.0",
+  "minWindowsBuild": 19041,
+  "changelog": "1.0.0 — Initial official release",
+  "tweaks": [
+    {
+      "id": "enterprise-soc2-enforce-ntlmv2",
+      "label": "Enforce NTLMv2 Authentication Only",
+      "category": "Security",
+      "description": "Sets LAN Manager Authentication Level to 5 — send NTLMv2 responses only and refuse LM and NTLM responses.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["security", "ntlm", "authentication", "soc2"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa", "name": "LmCompatibilityLevel", "dwordValue": 5 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa", "name": "LmCompatibilityLevel" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa", "name": "LmCompatibilityLevel", "dwordValue": 5 }
+      ]
+    },
+    {
+      "id": "enterprise-soc2-disable-wdigest-plaintext",
+      "label": "Disable WDigest Plain-Text Credential Caching",
+      "category": "Security",
+      "description": "Prevents WDigest from caching credentials in plain text in LSASS memory, mitigating credential harvesting attacks.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["security", "wdigest", "credentials", "lsass", "soc2"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest", "name": "UseLogonCredential", "dwordValue": 0 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest", "name": "UseLogonCredential" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest", "name": "UseLogonCredential", "dwordValue": 0 }
+      ]
+    },
+    {
+      "id": "enterprise-soc2-require-smb-signing",
+      "label": "Require SMB Signing on Client",
+      "category": "Security",
+      "description": "Enforces SMB packet signing on the client, preventing NTLM relay and man-in-the-middle attacks on file shares.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["security", "smb", "signing", "network", "soc2"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "name": "RequireSecuritySignature", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "name": "RequireSecuritySignature" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "name": "RequireSecuritySignature", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "enterprise-soc2-safe-dll-search-order",
+      "label": "Enable Safe DLL Search Order",
+      "category": "Hardening",
+      "description": "Ensures Windows searches system directories before the current working directory when loading DLLs, preventing DLL hijacking.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["security", "dll", "hijacking", "hardening", "soc2"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager", "name": "SafeDllSearchMode", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager", "name": "SafeDllSearchMode" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager", "name": "SafeDllSearchMode", "dwordValue": 1 }
+      ]
+    },
+    {
+      "id": "enterprise-soc2-enforce-tls-strong-crypto",
+      "label": "Enforce TLS Strong Cryptography (.NET)",
+      "category": "Security",
+      "description": "Forces .NET Framework to use TLS 1.2+ by disabling weak cipher fallback in the SchUseStrongCrypto registry setting.",
+      "needsAdmin": true,
+      "corpSafe": true,
+      "tags": ["security", "tls", "cryptography", "dotnet", "soc2"],
+      "applyOps": [
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319", "name": "SchUseStrongCrypto", "dwordValue": 1 },
+        { "kind": "SetDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\.NETFramework\\v4.0.30319", "name": "SchUseStrongCrypto", "dwordValue": 1 }
+      ],
+      "removeOps": [
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319", "name": "SchUseStrongCrypto" },
+        { "kind": "DeleteValue", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\.NETFramework\\v4.0.30319", "name": "SchUseStrongCrypto" }
+      ],
+      "detectOps": [
+        { "kind": "CheckDword", "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319", "name": "SchUseStrongCrypto", "dwordValue": 1 }
+      ]
+    }
+  ]
+}

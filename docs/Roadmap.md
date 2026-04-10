@@ -1034,7 +1034,7 @@ in `%LOCALAPPDATA%\RegiLattice\smartscan-feedback.json`.
 
 ## Phase 7 — Internationalisation & Ecosystem
 
-### 7.1 Five New Locales
+### 7.1 Five New Locales ✅ Completed v6.29.0
 
 **Layer**: Services · Locale
 **Priority**: P2 — Medium
@@ -1058,7 +1058,7 @@ or JSON resource files.
 
 ---
 
-### 7.2 Plugin Marketplace Bootstrap
+### 7.2 Plugin Marketplace Bootstrap ✅ Completed v6.29.0
 
 **Layer**: Plugins · PackManager · MarketplaceDialog
 **Priority**: P2 — Medium
@@ -1084,7 +1084,7 @@ Each pack includes:
 
 ---
 
-### 7.3 Tweak Pack Authoring Guide
+### 7.3 Tweak Pack Authoring Guide ✅ Completed v6.29.0
 
 **Layer**: Documentation
 **Priority**: P2 — Medium

@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-04-09 (v6.28.0, ~7,568 tweaks, 127 categories, 3,291 tests).
+> Last verified: 2026-04-10 (v6.29.0, ~7,568 tweaks, 127 categories, 3,296 tests).
 
 ## Companion Instruction Files
 
@@ -79,12 +79,12 @@ Rules:
 | -------- | ------------------------------------------------------------------------ |
 | Language | C# 13 / .NET 10.0-windows (x64)                                          |
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
-| Test     | xUnit 2.9.3 — 3,291 tests (0 failures)                                   |
+| Test     | xUnit 2.9.3 — 3,296 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 6.28.0                                                                   |
+| Version  | 6.29.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
 | Tweaks   | 7,568 across 127 categories (180 files)                                 |
-| Tests    | 3,291 passing (0 consistent failures)                                    |
+| Tests    | 3,296 passing (0 consistent failures)                                    |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
 ## Build Quality Standards — Non-Negotiable
@@ -94,7 +94,7 @@ Rules:
 | Build fatals            | **0** — hard CI fail                                                   |
 | Build errors            | **0** — hard CI fail                                                   |
 | Build warnings          | **0** — `TreatWarningsAsErrors=true` in `Directory.Build.props`        |
-| Test failures           | **0** — all 3,291+ tests must pass                                     |
+| Test failures           | **0** — all 3,296+ tests must pass                                     |
 | Skipped tests           | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` forbidden            |
 | Warning suppressions    | **0** — `#pragma warning disable` / `[SuppressMessage]` forbidden; fix at source |
 | TODO / FIXME comments   | **0** — open a GitHub Issue instead; no inline deferrals               |
@@ -143,7 +143,7 @@ git push; git push --tags   # ← REQUIRED on every version bump
 
 > Full annotated solution tree: see `.github/instructions/workspace.instructions.md` — Solution Structure section.
 
-Key namespaces: `RegiLattice.Core` (engine + models + registry + tweak modules, 31 files), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 3,291 total.
+Key namespaces: `RegiLattice.Core` (engine + models + registry + tweak modules, 31 files), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 3,296 total.
 
 ### TweakDef Model
 
@@ -392,7 +392,7 @@ Canonical category slugs:
 
 > Full test file inventory and coverage targets: see `.github/instructions/testing.instructions.md` — Test File Structure section.
 
-Projects: `RegiLattice.Core.Tests` (2,494 tests), `RegiLattice.CLI.Tests` (434 tests), `RegiLattice.GUI.Tests` (363 tests). Total: 3,291.
+Projects: `RegiLattice.Core.Tests` (2,499 tests), `RegiLattice.CLI.Tests` (434 tests), `RegiLattice.GUI.Tests` (363 tests). Total: 3,296.
 
 ## Adding a New Tweak — Checklist
 

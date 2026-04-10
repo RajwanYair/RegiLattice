@@ -20,10 +20,10 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-3291%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-3296%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-6.28.0-blue)
+![Version](https://img.shields.io/badge/version-6.29.0-blue)
 
 A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7,568 verified tweaks** across **127 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
@@ -31,7 +31,7 @@ A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system op
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v6.28.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v6.29.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -321,7 +321,7 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 7,518 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 7,568 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 
@@ -331,7 +331,7 @@ Set the following topics on the repository (GitHub UI → "About" gear → Topic
 
 ### Repository Description *(paste into GitHub → About gear → Description)*
 
-> Windows 10/11 registry tweaks toolkit — 7,518 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
+> Windows 10/11 registry tweaks toolkit — 7,568 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
 
 ### Search Keywords
 
