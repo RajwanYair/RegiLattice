@@ -8,21 +8,21 @@
 
 ## Phase Overview
 
-| Phase | Focus | Timeline | Key Deliverables |
-|-------|-------|----------|------------------|
-| **Phase 1** | Engine & Model Hardening | Next 2 sprints | Transactional apply, risk flags, before/after diff, cancellation tokens |
-| **Phase 2** | UI/UX & Accessibility | Sprints 3–6 | WCAG 2.1 AA, keyboard shortcuts, tweak diff panel, batch ETA |
-| **Phase 3** | CLI & Integration | Sprints 7–10 | JSON output piping, batch scripts, conditional apply, interactive wizard |
-| **Phase 4** | Test & Quality | Sprints 11–14 | E2E scenarios, mutation coverage 80%+, perf regression baselines |
-| **Phase 5** | Tweak Expansion | Sprints 15–20 | +300 new tweaks (security, gaming, accessibility, energy, developer) |
-| **Phase 6** | Services & Intelligence | Sprints 21–26 | Audit logging, health score breakdown, scheduling, conflict detection |
-| **Phase 7** | Internationalisation & Ecosystem | Sprints 27–30 | 5 new locales, plugin marketplace bootstrap, custom theme API |
+| Phase | Focus | Status | Key Deliverables | Version |
+|-------|-------|--------|------------------|---------|
+| **Phase 1** | Engine & Model Hardening | ✅ Complete | Transactional apply, risk flags, before/after diff, cancellation tokens, search ranking, custom profiles, recommendation engine | v6.14.0–v6.15.0 |
+| **Phase 2** | UI/UX & Accessibility | ✅ Complete | Keyboard shortcuts, risk confirmation dialog, batch ETA, enhanced context menu, user JSON themes with hot-reload | v6.18.0–v6.20.0 |
+| **Phase 3** | CLI & Integration | ✅ Complete | JSON output piping, conditional apply flags, interactive wizard, Ansible + DSC export | v6.16.0, v6.20.0 |
+| **Phase 4** | Test & Quality | ✅ Complete | 13 E2E + concurrent tests, test hang elimination, GDI leak fixes | v6.21.0 |
+| **Phase 5** | Tweak Expansion | ✅ Complete | +300 new tweaks (security, gaming, accessibility, energy, developer, Office GP) | v6.22.0–v6.26.0 |
+| **Phase 6** | Services & Intelligence | ✅ Complete | Audit logging, health score breakdown, conflict detection, scheduling, migration service | v6.27.0–v6.28.0 |
+| **Phase 7** | Internationalisation & Ecosystem | ✅ Complete | 10 locales, 5 official packs, 22 PS cmdlets, pack-validation CI | v6.29.0–v6.30.0 |
 
 ---
 
 ## Phase 1 — Engine & Model Hardening
 
-### 1.1 Transactional Apply with Auto-Rollback
+### 1.1 Transactional Apply with Auto-Rollback ✅ Completed v6.14.0
 
 **Layer**: TweakEngine · RegistrySession
 **Priority**: P0 — Critical
@@ -61,7 +61,7 @@ public sealed class BatchResult
 
 ---
 
-### 1.2 CancellationToken on All Long-Running APIs
+### 1.2 CancellationToken on All Long-Running APIs ✅ Completed v6.14.0
 
 **Layer**: TweakEngine
 **Priority**: P0 — Critical
@@ -84,7 +84,7 @@ collected so far (not an exception — callers inspect `result.IsCancelled`).
 
 ---
 
-### 1.3 TweakDef Risk Flags (Bitmask)
+### 1.3 TweakDef Risk Flags (Bitmask) ✅ Completed v6.14.0
 
 **Layer**: Models · TweakDef
 **Priority**: P0 — Critical
@@ -126,7 +126,7 @@ Required" (orange), "🗑 Deletes Key" (red), "🔒 Affects Security" (blue).
 
 ---
 
-### 1.4 Before/After Registry Diff on Apply
+### 1.4 Before/After Registry Diff on Apply ✅ Completed v6.14.0
 
 **Layer**: RegistrySession
 **Priority**: P1 — High
@@ -158,7 +158,7 @@ public (IReadOnlyList<RegDiff> Diffs, TweakResult Result) ExecuteWithDiff(
 
 ---
 
-### 1.5 Search Relevance Ranking
+### 1.5 Search Relevance Ranking ✅ Completed v6.14.0
 
 **Layer**: TweakEngine
 **Priority**: P1 — High
@@ -186,7 +186,7 @@ backward compatibility (wraps the scored version).
 
 ---
 
-### 1.6 Dynamic Custom Profile API
+### 1.6 Dynamic Custom Profile API ✅ Completed v6.15.0
 
 **Layer**: TweakEngine · ProfileDef
 **Priority**: P2 — Medium
@@ -212,7 +212,7 @@ CLI `--profile-create` delegates to engine instead of custom logic.
 
 ---
 
-### 1.7 Tweak Recommendation Engine Integration
+### 1.7 Tweak Recommendation Engine Integration ✅ Completed v6.15.0
 
 **Layer**: TweakEngine · SmartScanService
 **Priority**: P2 — Medium
@@ -278,7 +278,7 @@ have text alternatives).
 
 ---
 
-### 2.2 Keyboard Shortcut System with Cheatsheet
+### 2.2 Keyboard Shortcut System with Cheatsheet ✅ Completed v6.18.0
 
 **Layer**: GUI · MainForm
 **Priority**: P1 — High
@@ -313,7 +313,7 @@ themed to match current palette. Closable via Escape or Enter.
 
 ---
 
-### 2.3 Tweak Diff Preview Panel
+### 2.3 Tweak Diff Preview Panel ✅ Completed v6.19.0
 
 **Layer**: GUI · MainForm (tweak info panel)
 **Priority**: P1 — High
@@ -333,7 +333,7 @@ to preview the diff without writing. The dialog is themed and shows risk flag ba
 
 ---
 
-### 2.4 Batch Operation Progress with ETA
+### 2.4 Batch Operation Progress with ETA ✅ Completed v6.19.0
 
 **Layer**: GUI · MainForm
 **Priority**: P1 — High
@@ -358,7 +358,7 @@ display = formatDuration(remaining)
 
 ---
 
-### 2.5 Enhanced Context Menu
+### 2.5 Enhanced Context Menu ✅ Completed v6.18.0
 
 **Layer**: GUI · MainForm (tweak list)
 **Priority**: P2 — Medium
@@ -386,7 +386,7 @@ toolbar buttons.
 
 ---
 
-### 2.6 Custom User Theme Support (JSON)
+### 2.6 Custom User Theme Support (JSON) ✅ Completed v6.20.0
 
 **Layer**: GUI · Theme.cs
 **Priority**: P2 — Medium
@@ -441,7 +441,7 @@ neighbour interpolation.
 
 ## Phase 3 — CLI & Integration
 
-### 3.1 Global `--json` Output Flag
+### 3.1 Global `--json` Output Flag ✅ Completed v6.16.0
 
 **Layer**: CLI · Program.cs
 **Priority**: P0 — Critical
@@ -507,7 +507,7 @@ steps pass.
 
 ---
 
-### 3.3 Conditional Apply Flags
+### 3.3 Conditional Apply Flags ✅ Completed v6.16.0
 
 **Layer**: CLI · CliArgs · Program.cs
 **Priority**: P1 — High
@@ -535,7 +535,7 @@ RegiLatticeCLI.exe apply priv-disable-telemetry --if-not-applied --dry-run
 
 ---
 
-### 3.4 Interactive Profile Wizard (CLI)
+### 3.4 Interactive Profile Wizard (CLI) ✅ Completed v6.16.0
 
 **Layer**: CLI · Program.cs
 **Priority**: P2 — Medium
@@ -594,7 +594,7 @@ scheduled task to enforce compliance.
 
 ---
 
-### 3.6 GPO/Intune Export Enhancements
+### 3.6 GPO/Intune Export Enhancements ✅ Completed v6.20.0
 
 **Layer**: CLI · PolicyExporter service
 **Priority**: P2 — Medium
@@ -615,7 +615,7 @@ IT needs deployment-ready formats.
 
 ## Phase 4 — Test & Quality
 
-### 4.1 End-to-End Workflow Test Scenarios
+### 4.1 End-to-End Workflow Test Scenarios ✅ Completed v6.21.0
 
 **Layer**: Tests (all 3 projects)
 **Priority**: P0 — Critical
@@ -728,7 +728,7 @@ English keys have German translations.
 
 ---
 
-### 4.6 Concurrent Tweak Apply Safety Tests
+### 4.6 Concurrent Tweak Apply Safety Tests ✅ Completed v6.21.0
 
 **Layer**: Tests · Core
 **Priority**: P2 — Medium
@@ -747,7 +747,7 @@ access. No tests verify thread-safety.
 
 ## Phase 5 — Tweak Expansion (+300 tweaks)
 
-### 5.1 Security Hardening Deep Dive (+80 tweaks)
+### 5.1 Security Hardening Deep Dive (+80 tweaks) ✅ Completed v6.22.0
 
 **Layer**: Tweaks · New modules
 **Priority**: P1 — High
@@ -772,7 +772,7 @@ policies that are not yet covered.
 
 ---
 
-### 5.2 Gaming & GPU Optimization (+60 tweaks)
+### 5.2 Gaming & GPU Optimization (+60 tweaks) ✅ Completed v6.23.0
 
 **Layer**: Tweaks · New modules
 **Priority**: P2 — Medium
@@ -793,7 +793,7 @@ optimizations (disable Game Bar, disable fullscreen optimizations).
 
 ---
 
-### 5.3 Accessibility Feature Tweaks (+40 tweaks)
+### 5.3 Accessibility Feature Tweaks (+40 tweaks) ✅ Completed v6.23.0–v6.24.0
 
 **Layer**: Tweaks · New modules
 **Priority**: P2 — Medium
@@ -812,7 +812,7 @@ both enable and configure accessibility features for users who need them.
 
 ---
 
-### 5.4 Energy & Battery Management (+50 tweaks)
+### 5.4 Energy & Battery Management (+50 tweaks) ✅ Completed v6.25.0
 
 **Layer**: Tweaks · New modules
 **Priority**: P2 — Medium
@@ -832,7 +832,7 @@ controls beyond basic power plans.
 
 ---
 
-### 5.5 Developer Productivity (+70 tweaks)
+### 5.5 Developer Productivity (+70 tweaks) ✅ Completed v6.24.0–v6.26.0
 
 **Layer**: Tweaks · New modules
 **Priority**: P2 — Medium
@@ -856,7 +856,7 @@ tools). Missing: IDE configuration, debugging settings, containerization tuning.
 
 ## Phase 6 — Services & Intelligence
 
-### 6.1 Enterprise Audit Logging
+### 6.1 Enterprise Audit Logging ✅ Completed v6.27.0
 
 **Layer**: Services · TweakHistory
 **Priority**: P1 — High
@@ -883,7 +883,7 @@ all fields. File is signed with HMAC-SHA256 using a per-install secret to detect
 
 ---
 
-### 6.2 Per-Category Health Score Breakdown
+### 6.2 Per-Category Health Score Breakdown ✅ Completed v6.27.0
 
 **Layer**: Services · HealthScoreService
 **Priority**: P1 — High
@@ -913,7 +913,7 @@ bar navigates to that category in the tweak browser. Colours: green (>80), yello
 
 ---
 
-### 6.3 Enhanced Conflict Detection
+### 6.3 Enhanced Conflict Detection ✅ Completed v6.27.0
 
 **Layer**: Services · ConflictDetector
 **Priority**: P2 — Medium
@@ -944,7 +944,7 @@ conflicting tweaks. CLI `--validate --verbose` lists all conflicts.
 
 ---
 
-### 6.4 Tweak Scheduling Service Enhancement
+### 6.4 Tweak Scheduling Service Enhancement ✅ Completed v6.28.0
 
 **Layer**: Services · ScheduledTweakService
 **Priority**: P2 — Medium
@@ -978,7 +978,7 @@ and CLI `--schedule add/remove/list`.
 
 ---
 
-### 6.5 Tweak Versioning & Deprecation
+### 6.5 Tweak Versioning & Deprecation ✅ Completed v6.28.0
 
 **Layer**: Services · New TweakVersionService
 **Priority**: P2 — Medium

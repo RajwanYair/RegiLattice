@@ -1642,6 +1642,8 @@ Version history:
 | v6.29.0 | 0 | 0 | — (Phase 7.1–7.3: 10 locales documented; 5 official packs in `packs/`; `packs/index.json`; `docs/PackAuthoring.md`; +5 pack load tests; 3,296 tests total) |
 | v6.30.0 | 0 | 0 | — (Phase 7.4–7.5: 22 PS cmdlets + 16 aliases in psm1/psd1; pack-validation.yml CI workflow; 3 new lessons-learned entries; 3,296 tests total) |
 | v6.31.0 | 5 | +50 | Sprints 689–693 — 5 new policy modules (PolicyWindowsFeedback/PolicySettingSync/PolicyWindowsRAHardening/PolicyWindowsSecCenter/PolicyDeliveryOpt); fixed 3 duplicate tweak IDs; 7,618 tweaks, 148 categories, 185 modules, 3,296 tests |
+| v6.32.0 | 5 | +50 | 5 new policy modules (PolicyBITS/PolicyPersonalization/PolicyTabletPC/PolicyWindowsBackup/PolicyGameDVR); fix RegistrySession.Backup() DryRun short-circuit; 7,668 tweaks, 153 categories, 190 modules, 3,296 tests |
+| v6.33.0 | 5 | +50 | 5 new policy modules (PolicyWindowsDefenderATP/PolicyWindowsInstaller/PolicyCryptography/PolicyFVE/PolicyWindowsUpdateAU); 7,718 tweaks, 158 categories, 195 modules, 3,296 tests |
 **Current version**: v6.33.0 — 7,718 tweaks, 158 categories, 195 files (31 original + 164 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---

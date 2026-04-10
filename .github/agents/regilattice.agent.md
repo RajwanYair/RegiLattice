@@ -287,7 +287,7 @@ Every tweak is a `TweakDef` with: `Id` (unique kebab-case), `Label`, `Category`,
 
 ### Solution Layout
 
-- `src/RegiLattice.Core/` — engine, models, registry, services, 180 tweak module files (31 original + 149 extracted/split)
+- `src/RegiLattice.Core/` — engine, models, registry, services, 195 tweak module files (31 original + 164 extracted/split)
 - `src/RegiLattice.GUI/` — WinForms, 11 themes, package manager dialogs
 - `src/RegiLattice.CLI/` — 25+ commands
 - `tests/` — 3 test projects (Core: 2,499 · CLI: 434 · GUI: 363), 3,296 total tests
