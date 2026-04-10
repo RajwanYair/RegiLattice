@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-09 (v6.27.0, C# 13 / .NET 10.0-windows, ~7,518 tweaks, 127 categories, 3,259 tests)
+> Last updated: 2026-04-09 (v6.28.0, C# 13 / .NET 10.0-windows, ~7,568 tweaks, 127 categories, 3,291 tests)
 
 ---
 
@@ -1638,7 +1638,8 @@ Version history:
 | v6.25.0 | 5 | +50 | — (Phase 5.4 Energy & Battery Management: BatterySaver/ChargingOptimization/StandbyStates/CPUPowerStates/DisplayPower; 7,479 tweaks, 127 categories, 175 modules) |
 | v6.26.0 | 3 | +39 | Sprint 688 — 3 new Office GP security modules (PolicyOfficeWord/PolicyOfficeExcel/PolicyOfficeOutlook) + PolicyWindowsSearch expanded 1→10 tweaks; deleted 3 empty stubs; 7,518 tweaks, 127 categories, 175 modules |
 | v6.27.0 | 0 | 0 | — (Phase 6.1–6.3: TweakHistory audit logging + ExportCsv, HealthScoreService.CategoryHealthScores, ConflictDetector.DetectRegistryConflicts + ConflictSeverity/RegistryConflict; fix .runsettings HangTimeout warning; +20 tests → 3,259 total) |
-**Current version**: v6.27.0 — 7,518 tweaks, 127 categories, 175 files (31 original + 144 extracted/split). Run full gap analysis on all three phases before creating any new module.
+| v6.28.0 | 5 | +50 | — (Phase 6.4 ScheduledTweakService + Phase 6.5 TweakMigrationService + TweakEngine.Migrations/ResolveMigration + SnapshotManager auto-migrate; 5 new Office Policy modules: PowerPoint/Access/Publisher/Visio/Project; +32 tests → 3,291 total; 7,568 tweaks, 180 modules) |
+**Current version**: v6.28.0 — 7,568 tweaks, 127 categories, 180 files (31 original + 149 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 

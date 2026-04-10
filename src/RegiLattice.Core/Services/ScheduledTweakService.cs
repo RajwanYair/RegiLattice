@@ -1,5 +1,6 @@
 // RegiLattice.Core — Services/ScheduledTweakService.cs
 // Sprint 50: Persists tweak schedules and provides CRUD for scheduled tweak execution.
+// Phase 6.4: Extended with ScheduleAction, additional triggers, and query helpers.
 
 #nullable enable
 
@@ -12,6 +13,19 @@ using System.Text.Json.Serialization;
 
 namespace RegiLattice.Core.Services;
 
+/// <summary>Action to perform when a scheduled trigger fires.</summary>
+public enum ScheduleAction
+{
+    /// <summary>Apply the tweak (default).</summary>
+    Apply,
+
+    /// <summary>Remove/revert the tweak.</summary>
+    Remove,
+
+    /// <summary>Detect-only: check current status without writing.</summary>
+    Detect,
+}
+
 /// <summary>Trigger types for scheduled tweaks.</summary>
 public enum ScheduleTrigger
 {
@@ -23,6 +37,27 @@ public enum ScheduleTrigger
 
     /// <summary>Apply on a repeating timer interval.</summary>
     Timer,
+
+    /// <summary>Apply on system startup (Windows Task Scheduler OnStartup; functionally equivalent to <see cref="OnBoot"/>).</summary>
+    OnStartup,
+
+    /// <summary>Apply when the user logs out of the session.</summary>
+    OnLogout,
+
+    /// <summary>Apply on system shutdown.</summary>
+    OnShutdown,
+
+    /// <summary>Apply once every 24 hours (set <see cref="TweakSchedule.IntervalMinutes"/> = 1440).</summary>
+    Daily,
+
+    /// <summary>Apply once every 7 days (set <see cref="TweakSchedule.IntervalMinutes"/> = 10080).</summary>
+    Weekly,
+
+    /// <summary>Apply when a network adapter changes state (connect/disconnect).</summary>
+    OnNetworkChange,
+
+    /// <summary>Apply when the system switches between AC power and battery.</summary>
+    OnPowerChange,
 }
 
 /// <summary>Immutable record representing one scheduled tweak entry.</summary>
@@ -45,6 +80,10 @@ public sealed record TweakSchedule
 
     [JsonPropertyName("createdAt")]
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+
+    /// <summary>Action to perform when this trigger fires. Defaults to <see cref="ScheduleAction.Apply"/>.</summary>
+    [JsonPropertyName("action")]
+    public ScheduleAction Action { get; init; } = ScheduleAction.Apply;
 }
 
 /// <summary>
@@ -139,17 +178,27 @@ public sealed class ScheduledTweakService
             _schedules[idx] = _schedules[idx] with { Enabled = enabled };
     }
 
-    /// <summary>Returns all schedules that are due to run (Timer-based, interval elapsed).</summary>
+    /// <summary>Returns all schedules that are due to run based on their interval (Timer, Daily, or Weekly).</summary>
     public IReadOnlyList<TweakSchedule> GetDueTimerSchedules()
     {
         var now = DateTime.UtcNow;
         return _schedules
             .Where(s =>
                 s.Enabled
-                && s.Trigger == ScheduleTrigger.Timer
+                && (s.Trigger == ScheduleTrigger.Timer
+                    || s.Trigger == ScheduleTrigger.Daily
+                    || s.Trigger == ScheduleTrigger.Weekly)
                 && s.IntervalMinutes > 0
                 && (s.LastRun is null || (now - s.LastRun.Value).TotalMinutes >= s.IntervalMinutes)
             )
             .ToList();
     }
+
+    /// <summary>Returns all schedules whose trigger matches <paramref name="trigger"/>.</summary>
+    public IReadOnlyList<TweakSchedule> GetSchedulesByTrigger(ScheduleTrigger trigger) =>
+        _schedules.Where(s => s.Trigger == trigger).ToList();
+
+    /// <summary>Returns all schedules whose action matches <paramref name="action"/>.</summary>
+    public IReadOnlyList<TweakSchedule> GetSchedulesByAction(ScheduleAction action) =>
+        _schedules.Where(s => s.Action == action).ToList();
 }

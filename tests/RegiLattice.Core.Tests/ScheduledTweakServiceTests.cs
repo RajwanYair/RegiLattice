@@ -353,9 +353,162 @@ public sealed class ScheduledTweakServiceTests
     public void TweakSchedule_AllTriggerValues_AreDistinct()
     {
         var values = Enum.GetValues<ScheduleTrigger>();
-        Assert.Equal(3, values.Length);
+        // Phase 6.4 added 7 new trigger types (OnStartup, OnLogout, OnShutdown,
+        // Daily, Weekly, OnNetworkChange, OnPowerChange) to the original 3.
+        Assert.Equal(10, values.Length);
         Assert.Contains(ScheduleTrigger.OnBoot, values);
         Assert.Contains(ScheduleTrigger.OnLogin, values);
         Assert.Contains(ScheduleTrigger.Timer, values);
+        Assert.Contains(ScheduleTrigger.OnStartup, values);
+        Assert.Contains(ScheduleTrigger.OnLogout, values);
+        Assert.Contains(ScheduleTrigger.OnShutdown, values);
+        Assert.Contains(ScheduleTrigger.Daily, values);
+        Assert.Contains(ScheduleTrigger.Weekly, values);
+        Assert.Contains(ScheduleTrigger.OnNetworkChange, values);
+        Assert.Contains(ScheduleTrigger.OnPowerChange, values);
+    }
+
+    // ── Phase 6.4: ScheduleAction default and filtering ──────────────────────
+
+    [Fact]
+    public void TweakSchedule_DefaultAction_IsApply()
+    {
+        var s = new TweakSchedule { TweakId = "priv-test", Trigger = ScheduleTrigger.OnBoot };
+        Assert.Equal(ScheduleAction.Apply, s.Action);
+    }
+
+    [Fact]
+    public void TweakSchedule_ExplicitActionRemove_IsStoredCorrectly()
+    {
+        var s = new TweakSchedule
+        {
+            TweakId = "priv-test",
+            Trigger = ScheduleTrigger.OnLogin,
+            Action = ScheduleAction.Remove,
+        };
+        Assert.Equal(ScheduleAction.Remove, s.Action);
+    }
+
+    [Fact]
+    public void TweakSchedule_AllActionValues_AreDistinct()
+    {
+        var values = Enum.GetValues<ScheduleAction>();
+        Assert.Equal(3, values.Length);
+        Assert.Contains(ScheduleAction.Apply, values);
+        Assert.Contains(ScheduleAction.Remove, values);
+        Assert.Contains(ScheduleAction.Detect, values);
+    }
+
+    [Fact]
+    public void GetSchedulesByAction_Apply_ReturnsOnlyApplySchedules()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-a", Trigger = ScheduleTrigger.OnBoot, Action = ScheduleAction.Apply });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-b", Trigger = ScheduleTrigger.OnBoot, Action = ScheduleAction.Remove });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-c", Trigger = ScheduleTrigger.OnLogin, Action = ScheduleAction.Detect });
+
+        var results = svc.GetSchedulesByAction(ScheduleAction.Apply);
+
+        Assert.Single(results);
+        Assert.Equal("priv-a", results[0].TweakId);
+    }
+
+    [Fact]
+    public void GetSchedulesByAction_Remove_ReturnsMatchingSchedules()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-a", Trigger = ScheduleTrigger.OnBoot, Action = ScheduleAction.Remove });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-b", Trigger = ScheduleTrigger.Timer, Action = ScheduleAction.Remove });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-c", Trigger = ScheduleTrigger.OnBoot, Action = ScheduleAction.Apply });
+
+        var results = svc.GetSchedulesByAction(ScheduleAction.Remove);
+
+        Assert.Equal(2, results.Count);
+        Assert.All(results, s => Assert.Equal(ScheduleAction.Remove, s.Action));
+    }
+
+    [Fact]
+    public void GetSchedulesByAction_Detect_EmptyWhenNoneSet()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-a", Trigger = ScheduleTrigger.OnBoot });
+
+        Assert.Empty(svc.GetSchedulesByAction(ScheduleAction.Detect));
+    }
+
+    [Fact]
+    public void GetSchedulesByTrigger_OnLogin_ReturnsMatchingSchedules()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-a", Trigger = ScheduleTrigger.OnLogin });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-b", Trigger = ScheduleTrigger.OnLogin });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-c", Trigger = ScheduleTrigger.OnBoot });
+
+        var results = svc.GetSchedulesByTrigger(ScheduleTrigger.OnLogin);
+
+        Assert.Equal(2, results.Count);
+        Assert.All(results, s => Assert.Equal(ScheduleTrigger.OnLogin, s.Trigger));
+    }
+
+    [Fact]
+    public void GetSchedulesByTrigger_NewTrigger_OnShutdown_ReturnsCorrectly()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-a", Trigger = ScheduleTrigger.OnShutdown, Action = ScheduleAction.Remove });
+        svc.AddSchedule(new TweakSchedule { TweakId = "priv-b", Trigger = ScheduleTrigger.OnBoot });
+
+        var results = svc.GetSchedulesByTrigger(ScheduleTrigger.OnShutdown);
+
+        Assert.Single(results);
+        Assert.Equal("priv-a", results[0].TweakId);
+    }
+
+    [Fact]
+    public void GetSchedulesByTrigger_Daily_ReturnsDailySchedules()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(new TweakSchedule { TweakId = "maint-a", Trigger = ScheduleTrigger.Daily, IntervalMinutes = 1440 });
+        svc.AddSchedule(new TweakSchedule { TweakId = "maint-b", Trigger = ScheduleTrigger.Weekly, IntervalMinutes = 10080 });
+
+        var results = svc.GetSchedulesByTrigger(ScheduleTrigger.Daily);
+
+        Assert.Single(results);
+        Assert.Equal("maint-a", results[0].TweakId);
+    }
+
+    [Fact]
+    public void GetDueTimerSchedules_DailyTriggerOverdue_IsIncluded()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(
+            new TweakSchedule
+            {
+                TweakId = "maint-daily",
+                Trigger = ScheduleTrigger.Daily,
+                IntervalMinutes = 1440,
+                LastRun = DateTime.UtcNow.AddMinutes(-2000), // overdue
+                Enabled = true,
+            }
+        );
+
+        Assert.Single(svc.GetDueTimerSchedules());
+    }
+
+    [Fact]
+    public void GetDueTimerSchedules_WeeklyTriggerNotDue_IsExcluded()
+    {
+        var svc = new ScheduledTweakService();
+        svc.AddSchedule(
+            new TweakSchedule
+            {
+                TweakId = "maint-weekly",
+                Trigger = ScheduleTrigger.Weekly,
+                IntervalMinutes = 10080,
+                LastRun = DateTime.UtcNow.AddMinutes(-100), // ran 100 mins ago, not yet due
+                Enabled = true,
+            }
+        );
+
+        Assert.Empty(svc.GetDueTimerSchedules());
     }
 }

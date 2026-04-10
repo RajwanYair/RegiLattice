@@ -4,6 +4,43 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.28.0] — 2026-04-09
+
+### Added — Phase 6.4 + 6.5: Scheduling & Migration
+
+#### 6.4 Scheduled Tweak Service (`ScheduledTweakService`)
+
+- New `ScheduledTweakService` in `RegiLattice.Core.Services` schedules tweaks to be applied or removed at a specified future `DateTimeOffset`.
+- API: `ScheduleApply(string tweakId, DateTimeOffset when)`, `ScheduleRemove(...)`, `Pending` (IReadOnlyList), `Cancel(string tweakId)`, `ExecuteDue(TweakEngine)` — applies/removes all due entries and removes them from the pending queue.
+- Persists schedule to `scheduledTweaks.json` in `AppConfig.ConfigDir` via `Flush()` / `Load()`.
+- 430-line xUnit test suite (`ScheduledTweakServiceTests.cs`) — schedule/cancel/execute-due/persistence round-trips.
+
+#### 6.5 Tweak Migration Service (`TweakMigrationService`)
+
+- New `TweakMigrationService` and `TweakMigration` record in `RegiLattice.Core.Services` map obsolete tweak IDs to current replacement IDs.
+- New `TweakEngine.Migrations` property (IReadOnlyList) registers migrations; `TweakEngine.ResolveMigration(string oldId)` returns the current `TweakDef` for a retired ID.
+- `SnapshotManager.RestoreSnapshot()` now auto-migrates: obsolete IDs in a snapshot are resolved to their replacements before the restore operation, with a warning logged for each migrated entry.
+- 210-line xUnit test suite (`TweakMigrationServiceTests.cs`) — 18 tests covering registration, resolution, no-op for current IDs, null for unknown IDs, snapshot auto-migration.
+
+#### 5 New Office Policy Modules (+50 tweaks)
+
+- `PolicyOfficePowerPoint.cs` — 10 security policy tweaks for Office PowerPoint (`HKCU\...\PowerPoint\Security`, ProtectedView, FileBlock): `offppt-pol-*`
+- `PolicyOfficeAccess.cs` — 10 security policy tweaks for Office Access (`HKCU\...\Access\Security`, ProtectedView, FileBlock), includes `offacc-pol-sandbox-mode` (SandboxMode=3): `offacc-pol-*`
+- `PolicyOfficePublisher.cs` — 10 security policy tweaks for Office Publisher (`HKCU\...\Publisher\Security`, ProtectedView, FileBlock): `offpub-pol-*`
+- `PolicyOfficeVisio.cs` — 10 security policy tweaks for Office Visio (`HKCU\...\Visio\Security`, ProtectedView, FileBlock): `offvis-pol-*`
+- `PolicyOfficeProject.cs` — 10 security policy tweaks for MS Project (`HKCU\...\MS Project\Security`, ProtectedView, FileBlock): `offprj-pol-*`
+
+All 5 modules: `NeedsAdmin = false`, `CorpSafe = true`, ImpactScore/SafetyRating set explicitly per tweak, auto-discovered by `TweakEngine.RegisterBuiltins()` via reflection.
+
+### Stats
+
+- Tweaks: **7,568** (+50 from previous release)
+- Categories: **127** (unchanged)
+- Modules: **180** (+5)
+- Tests: **3,291** (+32 from Phase 6.4 + 6.5 test suites)
+
+---
+
 ## [6.27.0] — 2026-04-09
 
 ### Added — Phase 6.1–6.3: Services & Intelligence

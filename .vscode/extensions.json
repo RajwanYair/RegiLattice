@@ -8,7 +8,6 @@
     // OSS-first: Continue supports Ollama, LM Studio, any OpenAI-compatible backend
     "continue.continue",
     // Vendor alternative (if GitHub Copilot subscription is active):
-    "github.copilot",
     "github.copilot-chat",
     // ── Git & source control (open source: MIT) ─────────────────────
     "eamodio.gitlens",

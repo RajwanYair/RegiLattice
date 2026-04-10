@@ -39,6 +39,8 @@ public sealed class SnapshotManager
     /// <summary>
     /// Restore tweak states from a snapshot file.
     /// Applies tweaks marked "applied" and removes tweaks marked "notapplied".
+    /// Stale snapshot IDs are automatically resolved via <see cref="TweakEngine.ResolveMigration"/>:
+    /// renamed IDs redirect to the current tweak; deprecated IDs (null resolution) are skipped.
     /// </summary>
     public Dictionary<string, TweakResult> Restore(string path, bool forceCorp = false)
     {
@@ -46,10 +48,16 @@ public sealed class SnapshotManager
         var results = new Dictionary<string, TweakResult>();
         foreach (var (id, state) in snapshot)
         {
-            var td = _engine.GetTweak(id);
+            // Phase 6.5: auto-migrate renamed/deprecated snapshot IDs
+            var resolvedId = _engine.ResolveMigration(id);
+            if (resolvedId is null)
+                continue; // deprecated tweak — no replacement, skip silently
+
+            var td = _engine.GetTweak(resolvedId);
             if (td is null)
                 continue;
-            results[id] = state switch
+
+            results[resolvedId] = state switch
             {
                 "applied" => _engine.Apply(td, forceCorp: forceCorp),
                 "notapplied" => _engine.Remove(td, forceCorp: forceCorp),

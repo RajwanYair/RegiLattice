@@ -751,6 +751,20 @@ public sealed class TweakEngine
 
     public IReadOnlyList<TweakDef> Dependents(string tweakId) => DependencyResolver.Dependents(tweakId, _allTweaks);
 
+    // ── Phase 6.5: Tweak migration / deprecation (delegated to TweakMigrationService) ─────────
+
+    private static readonly Services.TweakMigrationService s_migrationService = new();
+
+    /// <summary>All registered tweak ID migrations (renames, merges, deprecations).</summary>
+    public IReadOnlyList<Services.TweakMigration> Migrations => s_migrationService.Migrations;
+
+    /// <summary>
+    /// Resolve <paramref name="oldId"/> to its current tweak ID.
+    /// Returns <c>null</c> if the tweak is deprecated with no replacement.
+    /// Returns <paramref name="oldId"/> unchanged if no migration is known.
+    /// </summary>
+    public string? ResolveMigration(string oldId) => s_migrationService.ResolveMigration(oldId);
+
     // ── Phase 2.4: Batch ETA calculator ─────────────────────────────────────────────────────────
 
     /// <summary>
