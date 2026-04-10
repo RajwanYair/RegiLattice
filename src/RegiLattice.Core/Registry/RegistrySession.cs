@@ -175,6 +175,8 @@ public sealed class RegistrySession
 
     public string Backup(IReadOnlyList<string> keys, string label)
     {
+        if (_dryRun) return string.Empty;
+
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
         var safeName = string.Join("_", label.Split(Path.GetInvalidFileNameChars()));
         var backupPath = Path.Combine(_backupDir, $"{timestamp}_{safeName}.json");
