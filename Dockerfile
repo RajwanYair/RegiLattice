@@ -12,7 +12,7 @@
 FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
 
 LABEL org.opencontainers.image.source="https://github.com/RajwanYair/RegiLattice"
-LABEL org.opencontainers.image.description="RegiLattice CLI — Windows registry tweak toolkit (7,568 tweaks across 127 categories)"
+LABEL org.opencontainers.image.description="RegiLattice CLI — Windows registry tweak toolkit (7,618 tweaks across 148 categories)"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.vendor="Yair Rajwan"
 
