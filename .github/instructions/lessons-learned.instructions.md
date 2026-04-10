@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-09 (v6.28.0, C# 13 / .NET 10.0-windows, ~7,568 tweaks, 127 categories, 3,291 tests)
+> Last updated: 2026-04-10 (v6.28.0, C# 13 / .NET 10.0-windows, ~7,568 tweaks, 127 categories, 3,291 tests)
 
 ---
 
@@ -1658,7 +1658,7 @@ versions exist; latest stable is `@v4` for all three), plus `github/codeql-actio
 `github/codeql-action/analyze@v4`, and `github/codeql-action/upload-sarif@v4` (v4 does not
 exist for codeql-action; latest stable is `@v3`). Fixed in commit `bc51a02`.
 
-**Canonical stable versions (verified 2026-03-29)**:
+**Canonical stable versions (verified 2026-04-10)**:
 
 | Action | Latest Stable |
 |--------|--------------|
@@ -2277,3 +2277,132 @@ private static TweakDef MakeSetDword(string id, string path, string name, int va
     new() { Id = id, Label = id, Category = "Test",
             ApplyOps = [RegOp.SetDword(path, name, value)] };
 ```
+
+---
+
+## `ShellRunner` Kill-on-Timeout — Required for Every Subprocess Call
+
+`ShellRunner.RunCommand()` and `ShellRunner.RunPowerShell()` originally had no process
+kill-on-timeout. Any `ApplyAction` delegate that invoked an external binary (bcdedit,
+secedit, netsh, schtasks) could block indefinitely if the spawned process hung or stalled.
+Under `blame-hang-timeout 60s` in CI this killed the entire test session.
+
+**Fix** (`fa93c0f6`): Both methods now enforce a timeout with a hard kill:
+
+```csharp
+// ✅ CORRECT — process is killed if it doesn't exit within the budget
+private static (int Exit, string Out, string Err) RunWithTimeout(
+    ProcessStartInfo psi, TimeSpan timeout)
+{
+    using var proc = Process.Start(psi) ?? throw new InvalidOperationException("...");
+    string stdout = proc.StandardOutput.ReadToEnd();   // drain before WaitForExit
+    string stderr = proc.StandardError.ReadToEnd();
+    bool exited = proc.WaitForExit((int)timeout.TotalMilliseconds);
+    if (!exited) { proc.Kill(entireProcessTree: true); }
+    return (exited ? proc.ExitCode : -1, stdout, stderr);
+}
+
+// RunCommand timeout: 10 seconds
+// RunPowerShell timeout: 30 seconds
+```
+
+**Rule**: Every `Process.Start` call in the codebase MUST have a corresponding kill-on-timeout.
+Omitting it means a single misbehaving system utility stalls the entire CI test run.
+The 10s/30s budgets are generous for normal tool invocations; increase them only with a
+comment explaining why a specific command legitimately needs more time.
+
+**Symptom**: Test output shows all tests running, then suddenly the test runner reports
+`The operation timed out` or `blame-hang` and the entire session is aborted — even though
+the specific test that hung may have NOTHING to do with the hanging process.
+
+---
+
+## GDI Handle Exhaustion in WinForms Paint Handlers — Always `using`
+
+WinForms GDI objects (`StringFormat`, `Pen`, `LinearGradientBrush`, `SolidBrush`,
+`Font`) must be disposed immediately after use. Each un-disposed object consumes one GDI
+handle. The OS imposes a hard limit of ~10,000 GDI handles per process. Under test-loop
+stress (hundreds of Paint events per second across many test cases), untracked objects
+exhaust the GDI pool in minutes, then `Graphics` calls throw `ExternalException`
+or `OutOfMemoryException` and the test host crashes.
+
+**Found in v6.18.0–v6.21.0** (commits `c8e2840a`, `d37c882a`, `1fe510af`):
+
+```csharp
+// ❌ BAD — StringFormat is never disposed; GDI leak on every Paint call
+protected override void OnPaint(PaintEventArgs e)
+{
+    var sf = new StringFormat { Alignment = StringAlignment.Center };
+    e.Graphics.DrawString(text, Font, Brushes.White, rect, sf);
+    // sf goes out of scope without Dispose → GDI handle leaked
+}
+
+// ✅ GOOD — using disposes sf immediately after the draw call
+protected override void OnPaint(PaintEventArgs e)
+{
+    using var sf = new StringFormat { Alignment = StringAlignment.Center };
+    e.Graphics.DrawString(text, Font, Brushes.White, rect, sf);
+}
+```
+
+**Objects that MUST use `using` in Paint handlers**:
+- `StringFormat` — always create with `using`; `StringFormat.GenericDefault` is shared (no dispose)
+- `Pen` — `new Pen(color)` must use `using`; `Pens.X` static cache does not need dispose
+- `SolidBrush` / `LinearGradientBrush` — always `using`; `Brushes.X` static cache does not
+- `Font` — if created locally; `Control.Font` is owned by the control (do not dispose)
+- `HBITMAP` from `bitmap.GetHbitmap()` — call `DeleteObject(hbmp)` via P/Invoke after use
+
+**Detection**: Enable Task Manager → View → Select Columns → GDI Objects for the test host
+process. If it climbs from ~200 to >1000 during a test run, there is a GDI leak.
+
+**Rule**: Any WinForms code path that runs repeatedly (Paint events, resize handlers,
+owner-draw list items) is a GDI leak multiplier. Apply `using` defensively to ALL locally
+created GDI objects in such paths.
+
+---
+
+## E2E Tests Blocking CI — `ConfirmAction` Delegate Must Be Guarded by `DryRun`
+
+`TweakEngine.Apply()` and `ApplyBatch()` have a `ConfirmAction` delegate path: if a
+registered confirmation handler is set and `DryRun == false`, the engine awaits the
+handler before writing to the registry. In E2E tests that do NOT set `DryRun = true`
+on the `RegistrySession`, this call waits for a GUI dialog that never appears in
+headless CI — causing the test host to hang until the blame-hang-timeout fires.
+
+**Found in v6.21.0** (`379020b8` `fix(tests): eliminate all test hang sources`):
+
+```csharp
+// ❌ BAD — ConfirmAction waits for a dialog that never appears in headless CI
+[Fact]
+public void E2E_ApplyBatch_AllTweaks_Succeeds()
+{
+    var engine = new TweakEngine();
+    engine.RegisterBuiltins();
+    engine.ApplyBatch(engine.AllTweaks().Take(5).Select(t => t.Id));
+    // blocks in CI: ConfirmAction delegate fires, no GUI to respond
+}
+
+// ✅ GOOD — DryRun bypasses the ConfirmAction gate
+[Fact]
+public void E2E_ApplyBatch_DryRun_Succeeds()
+{
+    var session = new RegistrySession { DryRun = true };
+    var engine = new TweakEngine(session);
+    engine.RegisterBuiltins();
+    engine.ApplyBatch(engine.AllTweaks().Take(5).Select(t => t.Id));
+    // DryRun short-circuits before ConfirmAction — no hang
+    Assert.NotEmpty(session.DryOps);
+}
+```
+
+**Rule**: Every E2E or integration test that calls `Apply()`, `Remove()`, `ApplyBatch()`,
+or `RemoveBatch()` MUST either:
+1. Use `new RegistrySession { DryRun = true }` and pass it to the engine constructor, OR
+2. Register a noop auto-approving `ConfirmAction` delegate
+
+Never call apply methods with `DryRun = false` in CI test bodies — the ConfirmAction path
+is designed for GUI interaction, not automated testing.
+
+**Corollary**: `WizardEngine` tests that exercise hardware detection must also pass
+`dryRun: true` to bypass the `HardwareInfo.Detect()` WMI call (which uses Task.Run
+and creates COM STA pump threads that block process exit — see the `Task.Run + WMI` lesson).

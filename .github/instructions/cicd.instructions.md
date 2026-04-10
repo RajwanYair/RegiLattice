@@ -42,7 +42,7 @@ to GitHub Releases as soon as the version is tagged.
 - Run on both push to main and pull_request
 - Windows-only project — run on `windows-latest`
 
-## Canonical Action Versions (verified 2026-04-07)
+## Canonical Action Versions (verified 2026-04-10)
 
 > **Before adding or bumping any action, verify the version exists on the action's GitHub releases page.**
 > Pinning a non-existent version silently fails the CI step.
