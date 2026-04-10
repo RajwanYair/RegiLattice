@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.32.0] — 2026-04-10
+
+### New Tweaks (5 modules, 50 tweaks)
+
+- **PolicyBITS** (`bits-`) — 10 BITS transfer bandwidth/job/peer-caching policy tweaks
+- **PolicyPersonalization** (`person-`) — 10 lock screen & personalization policy tweaks
+- **PolicyTabletPC** (`tablet-`) — 10 tablet/pen/touch input policy tweaks
+- **PolicyWindowsBackup** (`wbackup-`) — 10 Windows Backup (client/server) policy tweaks
+- **PolicyGameDVR** (`gdvr-`) — 10 Game DVR & Game Bar policy tweaks
+
+### Fixed
+
+- `RegistrySession.Backup()` now short-circuits in DryRun mode, preventing 1,480+ unnecessary file writes during tests
+- All 3,296 tests pass with 0 failures
+
+> **Stats**: Tweaks: 7,668 · Categories: 153 · Modules: 190 · Tests: 3,296 (0 failures)
+
+---
+
 ## [6.31.0] — 2026-04-10
 
 ### New Tweaks (5 modules, 50 tweaks)

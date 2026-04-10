@@ -1,7 +1,7 @@
 {
   "name": "@rajwanyair/regilattice",
-  "version": "6.31.0",
-  "description": "RegiLattice — Windows registry tweak toolkit (7,618 tweaks across 148 categories)",
+  "version": "6.32.0",
+  "description": "RegiLattice — Windows registry tweak toolkit (7,668 tweaks across 153 categories)",
   "keywords": ["windows", "registry", "tweaks", "performance", "privacy", "security", "debloat"],
   "homepage": "https://github.com/RajwanYair/RegiLattice",
   "bugs": {

@@ -5,7 +5,7 @@
      shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
      windows 11 tweaks windows 10 tweaks gaming optimization security hardening
      registry backup corporate IT sysadmin gpo intune-compatible compliance audit
-     7618 tweaks 148 categories declarative regop engine dry-run snapshot diff
+     7668 tweaks 153 categories declarative regop engine dry-run snapshot diff
      RegiLattice windows-optimizer tweak-manager registry-automation open-source
 -->
 
@@ -23,15 +23,15 @@
 ![Tests](https://img.shields.io/badge/tests-3296%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-6.31.0-blue)
+![Version](https://img.shields.io/badge/version-6.32.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7,618 verified tweaks** across **148 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7,668 verified tweaks** across **153 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v6.31.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v6.32.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -50,7 +50,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **7,618 verified tweaks** across 148 categories — each fully reversible with apply + remove
+- **7,668 verified tweaks** across 153 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -110,9 +110,9 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (148)
+## Tweak Categories (153)
 
-148 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, cloud storage, remote desktop, virtualization, and more. Each tweak is fully reversible with apply/remove/detect operations.
+153 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, cloud storage, remote desktop, virtualization, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See [docs/TweakCategories.md](docs/TweakCategories.md) for the full category reference, or use `--categories` for live counts.
 
@@ -321,7 +321,7 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 7,618 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 7,668 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 
@@ -331,7 +331,7 @@ Set the following topics on the repository (GitHub UI → "About" gear → Topic
 
 ### Repository Description *(paste into GitHub → About gear → Description)*
 
-> Windows 10/11 registry tweaks toolkit — 7,618 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
+> Windows 10/11 registry tweaks toolkit — 7,668 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
 
 ### Search Keywords
 
