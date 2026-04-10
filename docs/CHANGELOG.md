@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.31.0] — 2026-04-10
+
+### New Tweaks (5 modules, 50 tweaks)
+
+- **PolicyWindowsFeedback** (`fbk-`) — 10 Windows User Feedback policy tweaks
+- **PolicySettingSync** (`syncp-`) — 10 Windows Settings Sync policy tweaks
+- **PolicyWindowsRAHardening** (`ra-`/`sidebar-`) — 10 Windows Remote Assistance & Sidebar hardening tweaks
+- **PolicyWindowsSecCenter** (`wsc-`) — 10 Windows Security Center policy tweaks
+- **PolicyDeliveryOpt** (`delopt-`) — 10 Windows Delivery Optimization policy tweaks
+
+### Fixed
+
+- Resolved 3 duplicate tweak ID conflicts across PolicyWindowsFeedback, PolicySettingSync, PolicyWindowsRAHardening
+- All 3,296 tests pass with 0 failures
+
+> **Stats**: Tweaks: 7,618 · Categories: 148 · Modules: 185 · Tests: 3,296 (0 failures)
+
+---
+
 ## [6.30.0] — 2026-07-02
 
 ### Added — Phase 7.4 (PowerShell Module Expansion)
