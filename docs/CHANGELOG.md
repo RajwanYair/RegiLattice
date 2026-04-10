@@ -4,6 +4,20 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.33.0] — 2026-04-10
+
+### New Tweaks (5 modules, 50 tweaks)
+
+- **PolicyWindowsDefenderATP** (`atp-`) — 10 Windows Defender ATP onboarding/telemetry/protection policy tweaks
+- **PolicyWindowsInstaller** (`msipol-`) — 10 Windows Installer (MSI) elevation/logging/patching policy tweaks
+- **PolicyCryptography** (`crypto-`) — 10 cryptography, TLS/SSL protocol enforcement, and FIPS policy tweaks
+- **PolicyFVE** (`fve-`) — 10 BitLocker Full Volume Encryption policy tweaks
+- **PolicyWindowsUpdateAU** (`wuau-`) — 10 Windows Update Automatic Updates scheduling/notification policy tweaks
+
+> **Stats**: Tweaks: 7,718 · Categories: 158 · Modules: 195 · Tests: 3,296 (0 failures)
+
+---
+
 ## [6.32.0] — 2026-04-10
 
 ### New Tweaks (5 modules, 50 tweaks)

@@ -2,7 +2,7 @@
 
 > Comprehensive improvement plan across every layer of the project.
 > Prioritised by impact and ordered by implementation phase.
-> Baseline: **v6.32.0** — 7,668 tweaks · 153 categories · 190 files · 3,296 tests · 11 themes
+> Baseline: **v6.33.0** — 7,718 tweaks · 158 categories · 195 files · 3,296 tests · 11 themes
 
 ---
 

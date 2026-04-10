@@ -189,7 +189,7 @@
   <!-- ===== STATS BADGE ===== -->
   <g filter="url(#shadow)">
     <rect x="40" y="502" width="1020" height="44" rx="10" fill="#316044" stroke="#585b70" stroke-width="1"/>
-    <text x="550" y="530" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="13" fill="#cdd6f4">153 Categories &#x2022; 7 668 Tweaks &#x2022; 190 Module Files &#x2022; 11 Themes &#x2022; 5 Profiles &#x2022; Fully Declarative &amp; Reversible</text>
+    <text x="550" y="530" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="13" fill="#cdd6f4">158 Categories &#x2022; 7 718 Tweaks &#x2022; 195 Module Files &#x2022; 11 Themes &#x2022; 5 Profiles &#x2022; Fully Declarative &amp; Reversible</text>
   </g>
 
   <!-- ===== LEGEND ===== -->
