@@ -1198,10 +1198,25 @@ public sealed class PluginSandboxTests
         string packFileName,
         [System.Runtime.CompilerServices.CallerFilePath] string? sourceFile = null)
     {
-        // Walk up from the compile-time source file path (not the DLL location, which
-        // may be in a temp directory on OneDrive builds). CallerFilePath embeds the
-        // absolute path of PluginTests.cs at compile time, so ancestor traversal always
-        // reaches the workspace root regardless of where MSBuild placed the output.
+        // When ContinuousIntegrationBuild=true, the .NET SDK PathMap rewrites all
+        // source paths to "/_/..." in the compiled binary. CallerFilePath therefore
+        // returns "/_/tests/..." in CI — a virtual path that doesn't exist on disk.
+        // Use GITHUB_WORKSPACE (always set on GitHub Actions runners) to reach the
+        // actual checkout root directly.
+        if (sourceFile != null && sourceFile.StartsWith("/_/", StringComparison.Ordinal))
+        {
+            string? workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+            if (workspace is not null)
+            {
+                string ciCandidate = Path.Combine(workspace, "packs", packFileName);
+                if (File.Exists(ciCandidate))
+                    return ciCandidate;
+            }
+        }
+
+        // Local development: walk up from the compile-time source file path (a real
+        // local path) until we find a 'packs/' directory. This always reaches the
+        // workspace root regardless of where MSBuild placed the output DLL.
         string? dir = Path.GetDirectoryName(sourceFile);
         while (dir is not null)
         {
@@ -1211,7 +1226,25 @@ public sealed class PluginSandboxTests
             dir = Path.GetDirectoryName(dir);
         }
 
-        throw new FileNotFoundException($"Official pack '{packFileName}' not found in any ancestor 'packs/' directory.");
+        // Final fallback: walk up from the process working directory (tests run from
+        // the workspace root in most CI configurations).
+        dir = Directory.GetCurrentDirectory();
+        while (dir is not null)
+        {
+            string candidate = Path.Combine(dir, "packs", packFileName);
+            if (File.Exists(candidate))
+                return candidate;
+            string? parent = Path.GetDirectoryName(dir);
+            if (parent == dir)
+                break;
+            dir = parent;
+        }
+
+        throw new FileNotFoundException(
+            $"Official pack '{packFileName}' not found. Searched: CallerFilePath ancestors, " +
+            $"GITHUB_WORKSPACE, and CWD ancestors. sourceFile='{sourceFile}', " +
+            $"GITHUB_WORKSPACE='{Environment.GetEnvironmentVariable("GITHUB_WORKSPACE")}', " +
+            $"CWD='{Directory.GetCurrentDirectory()}'.");
     }
 
     [Fact]
