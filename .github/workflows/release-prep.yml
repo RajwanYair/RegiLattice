@@ -72,7 +72,7 @@ jobs:
 
       - name: Create release issue
         id: create-issue
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -150,7 +150,7 @@ jobs:
           echo "Branch release/v${{ inputs.version }} created and pushed"
 
       - name: Create draft pull request
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const { owner, repo } = context.repo;
