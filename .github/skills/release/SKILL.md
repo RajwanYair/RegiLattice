@@ -65,22 +65,19 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 |22 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
 |23 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
 |24 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
-|25 | `npm/package.json` | `version`, `description` counts |
-|26 | `maven/pom.xml` | `<version>`, `<description>` counts |
-|27 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
+|25 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
 
 ### Group E — Derived files (update AFTER release build)
 
 | # | File | What changes |
 |---|------|----|
-|28 | `gem/lib/regilattice/version.rb` | `VERSION` string |
-|29 | `Dockerfile` | `LABEL` description counts |
+|26 | `Dockerfile` | `LABEL` description counts |
 
 ### Group F — External (post-push)
 
 | # | Action | What changes |
 |---|--------|----|
-|30 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
+|27 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
 
 ## Step-by-Step Release Process
 

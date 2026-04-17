@@ -247,9 +247,7 @@ Update-File 'winget\RegiLattice.RegiLattice.yaml' "PackageVersion: $OldVersion" 
 Update-File 'winget\RegiLattice.RegiLattice.installer.yaml' "PackageVersion: $OldVersion" "PackageVersion: $Version" 'winget installer version'
 Update-File 'winget\RegiLattice.RegiLattice.locale.en-US.yaml' "PackageVersion: $OldVersion" "PackageVersion: $Version" 'winget locale version'
 Update-FileRegex 'winget\RegiLattice.RegiLattice.locale.en-US.yaml' '\d{4,5} tweaks' "$TweakCount tweaks" 'winget locale tweak count'
-Update-File 'npm\package.json' "`"version`": `"$OldVersion`"" "`"version`": `"$Version`"" 'npm package version'
-Update-FileRegex 'maven\pom.xml' "<version>$([regex]::Escape($OldVersion))</version>" "<version>$Version</version>" 'maven version'
-Update-File 'gem\lib\regilattice\version.rb' "VERSION = '$OldVersion'" "VERSION = '$Version'" 'gem version'
+
 Update-File 'powershell\RegiLattice.psd1' "ModuleVersion = '$OldVersion'" "ModuleVersion = '$Version'" 'psd1 version'
 
 # ---------------------------------------------------------------------------
