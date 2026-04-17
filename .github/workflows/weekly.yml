@@ -1,0 +1,145 @@
+name: Weekly Maintenance
+
+# Runs every Monday at varying times to spread load.
+# Combines: CodeQL security analysis, stale issue/PR management,
+# and PSScriptAnalyzer lint for PowerShell scripts.
+# Can also be triggered manually via workflow_dispatch.
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"   # Monday 08:00 UTC — CodeQL + PSScriptAnalyzer
+    - cron: "0 6 * * 1"   # Monday 06:00 UTC — Stale
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# =============================================================================
+# Job 1: CodeQL Security Analysis (C#)
+# =============================================================================
+jobs:
+  codeql:
+    name: CodeQL — C#
+    runs-on: windows-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    env:
+      MSBUILDDISABLENODEREUSE: 1
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cache NuGet
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-codeql-${{ hashFiles('**/*.csproj', 'Directory.Packages.props') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore RegiLattice.sln
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+          queries: security-and-quality
+
+      - name: Build
+        run: dotnet build RegiLattice.sln -c Release --no-restore
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:csharp"
+
+# =============================================================================
+# Job 2: Stale Issues & PRs
+# Marks issues inactive for 60 days as stale, closes after 14 more.
+# Marks PRs inactive for 30 days as stale, closes after 7 more.
+# =============================================================================
+  stale:
+    name: Stale — Issues & PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/stale@v10
+        with:
+          stale-issue-message: >
+            This issue has had no activity for **60 days** and has been marked
+            as stale. It will be closed in 14 days unless there is new activity.
+            If this issue is still relevant, please comment, push an update, or
+            add the `keep-open` label.
+          stale-pr-message: >
+            This pull request has had no activity for **30 days** and has been
+            marked as stale. It will be closed in 7 days unless there is new
+            activity. If this PR is still in progress, please push a commit or
+            leave a comment.
+          close-issue-message: >
+            Closed automatically due to inactivity. Please reopen and add
+            details if this issue is still relevant.
+          close-pr-message: >
+            Closed automatically due to inactivity. Please reopen and push an
+            update if this PR is still in progress.
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-issue-label: stale
+          stale-pr-label: stale
+          exempt-issue-labels: "keep-open,bug,security,regression,enhancement"
+          exempt-pr-labels: "keep-open,work-in-progress"
+          remove-stale-when-updated: true
+          operations-per-run: 100
+
+# =============================================================================
+# Job 3: PSScriptAnalyzer — PowerShell lint
+# =============================================================================
+  psscriptanalyzer:
+    name: PSScriptAnalyzer
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run PSScriptAnalyzer
+        # SHA pinned to v1.1.0 — microsoft/action-psscriptanalyzer latest stable.
+        uses: microsoft/psscriptanalyzer-action@6b2948b1944407914a58661c49941824d149734f
+        with:
+          path: ./
+          recurse: true
+          includeRule: >-
+            PSAvoidDefaultValueSwitchParameter,
+            PSAvoidGlobalVars,
+            PSAvoidUsingCmdletAliases,
+            PSAvoidUsingWMICmdlet,
+            PSReservedCmdletChar,
+            PSReservedParams,
+            PSShouldProcess,
+            PSUseApprovedVerbs,
+            PSUseCmdletCorrectly
+
+      - name: Upload SARIF results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results.sarif.json
+        continue-on-error: true

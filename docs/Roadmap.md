@@ -1,1372 +1,1160 @@
 # RegiLattice — Project Roadmap
 
-> Comprehensive improvement plan across every layer of the project.
-> Prioritised by impact and ordered by implementation phase.
+> Strategic improvement plan — rethinking every layer of the project for best-in-class quality.
+> Consolidates completed phases 1–7, then proposes a new forward-looking architecture.
 > Baseline: **v6.33.0** — 7,718 tweaks · 158 categories · 195 files · 3,296 tests · 11 themes
 
 ---
 
-## Phase Overview
+## Table of Contents
 
-| Phase | Focus | Status | Key Deliverables | Version |
-|-------|-------|--------|------------------|---------|
-| **Phase 1** | Engine & Model Hardening | ✅ Complete | Transactional apply, risk flags, before/after diff, cancellation tokens, search ranking, custom profiles, recommendation engine | v6.14.0–v6.15.0 |
-| **Phase 2** | UI/UX & Accessibility | ✅ Complete | Keyboard shortcuts, risk confirmation dialog, batch ETA, enhanced context menu, user JSON themes with hot-reload | v6.18.0–v6.20.0 |
-| **Phase 3** | CLI & Integration | ✅ Complete | JSON output piping, conditional apply flags, interactive wizard, Ansible + DSC export | v6.16.0, v6.20.0 |
-| **Phase 4** | Test & Quality | ✅ Complete | 13 E2E + concurrent tests, test hang elimination, GDI leak fixes | v6.21.0 |
-| **Phase 5** | Tweak Expansion | ✅ Complete | +300 new tweaks (security, gaming, accessibility, energy, developer, Office GP) | v6.22.0–v6.26.0 |
-| **Phase 6** | Services & Intelligence | ✅ Complete | Audit logging, health score breakdown, conflict detection, scheduling, migration service | v6.27.0–v6.28.0 |
-| **Phase 7** | Internationalisation & Ecosystem | ✅ Complete | 10 locales, 5 official packs, 22 PS cmdlets, pack-validation CI | v6.29.0–v6.30.0 |
+- [Completed Work (v6.0–v6.33)](#completed-work-v60v633)
+- [Strategic Assessment](#strategic-assessment)
+- [Phase 8 — Architecture Modernisation](#phase-8--architecture-modernisation)
+- [Phase 9 — Data Layer & Persistence](#phase-9--data-layer--persistence)
+- [Phase 10 — Frontend Revolution](#phase-10--frontend-revolution)
+- [Phase 11 — Scope Discipline & Feature Focus](#phase-11--scope-discipline--feature-focus)
+- [Phase 12 — Build, CI/CD & Distribution](#phase-12--build-cicd--distribution)
+- [Phase 13 — Quality, Testing & Observability](#phase-13--quality-testing--observability)
+- [Phase 14 — Documentation & Developer Experience](#phase-14--documentation--developer-experience)
+- [Phase 15 — Data-Driven Tweaks](#phase-15--data-driven-tweaks)
+- [Phase 16 — Security & Trust](#phase-16--security--trust)
+- [Phase 17 — Ecosystem & Community](#phase-17--ecosystem--community)
+- [Success Metrics](#success-metrics)
+- [Risk Register](#risk-register)
+- [Migration Sequence](#migration-sequence)
 
 ---
 
-## Phase 1 — Engine & Model Hardening
+## Completed Work (v6.0–v6.33)
 
-### 1.1 Transactional Apply with Auto-Rollback ✅ Completed v6.14.0
+All seven original phases have been delivered. This section is a consolidated summary.
 
-**Layer**: TweakEngine · RegistrySession
+| Phase | Focus | Versions | Key Deliverables |
+|-------|-------|----------|------------------|
+| **1** | Engine Hardening | v6.14–v6.15 | Transactional apply with rollback, CancellationToken on all APIs, TweakRisk bitmask flags, before/after registry diff, search relevance ranking, custom profile API, recommendation engine |
+| **2** | UI/UX | v6.18–v6.20 | 19 keyboard shortcuts with F1 cheatsheet, risk confirmation dialog (ConfirmApplyDialog), batch ETA with EMA, 11-item context menu, user JSON themes with FileSystemWatcher hot-reload |
+| **3** | CLI & Integration | v6.16, v6.20 | `--json` global output flag, conditional apply flags (`--if-not-applied`, `--if-admin`, `--if-build`), interactive wizard, Ansible `win_regedit` YAML + DSC `.ps1` export |
+| **4** | Test & Quality | v6.21 | 13 E2E + concurrent tests, GDI leak fixes (`using` on all Paint-path objects), ShellRunner kill-on-timeout, test hang elimination via DryRun + StubCorporate |
+| **5** | Tweak Expansion | v6.22–v6.26 | +300 new tweaks: security WDAG/LSA/CredGuard, gaming DirectStorage/VRR/latency, accessibility magnifier/captions/eye-control/voice, energy battery/charging/standby/CPU/display, developer WSL/Git/containers, Office GP Word/Excel/Outlook/PowerPoint/Access |
+| **6** | Services & Intelligence | v6.27–v6.28 | TweakHistory audit logging + ExportCsv, per-category HealthScoreService, ConflictDetector with severity classification, ScheduledTweakService, TweakMigrationService + SnapshotManager auto-migrate |
+| **7** | Internationalisation & Ecosystem | v6.29–v6.30 | 10 locale stubs, 5 official `.rlpack.json` packs, 22 PowerShell cmdlets + 16 aliases, `pack-validation.yml` reusable CI workflow, `docs/PackAuthoring.md` |
+
+**Post-Phase 7 (v6.31–v6.33)**: 15 new policy modules (+150 tweaks), `RegistrySession.Backup()` DryRun fix, `.runsettings` HangTimeout fix. Current totals: 7,718 tweaks, 158 categories, 195 module files, 3,296 tests.
+
+---
+
+## Strategic Assessment
+
+> An honest, first-principles review of every major decision in the project.
+> Each area is scored on a 1–5 scale (1 = needs rethinking, 5 = best-in-class).
+
+### Decision Matrix
+
+| Area | Current State | Score | Verdict |
+|------|--------------|-------|---------|
+| **Language (C# 13 / .NET 10)** | Modern, performant, Windows-native, excellent tooling | **5/5** | ✅ Keep — best choice for Windows registry work |
+| **Frontend (WinForms)** | Legacy framework, 67+ dialogs, no data binding, poor DPI/a11y | **2/5** | 🔴 Rethink — migrate to WPF or WinUI 3 |
+| **Backend architecture** | Monolithic `TweakEngine` God class, tight coupling, no DI | **2/5** | 🔴 Rethink — interface segregation + DI container |
+| **Data persistence** | Scattered JSON files, no transactions, cross-assembly races | **1/5** | 🔴 Rethink — embedded database (SQLite/LiteDB) |
+| **Tweak authoring** | 195 C# files, boilerplate-heavy, manual registration | **2/5** | 🟡 Enhance — data-driven YAML/JSON + auto-registration |
+| **Testing (xUnit v2)** | 3,296 tests, held at v2, no UI automation, flaky perf tests | **3/5** | 🟡 Enhance — migrate to xUnit v3, proper integration testing |
+| **CI/CD** | 14 workflows, manual 28-file version bump, over-engineered | **2/5** | 🔴 Rethink — consolidate to 3–4 workflows, automate bumps |
+| **Documentation** | 12+ docs, 8 instruction files, manual SVG updates | **2/5** | 🔴 Rethink — auto-generate from code, consolidate |
+| **Package registries** | npm/maven/gem stubs for a Windows-only tool | **1/5** | 🔴 Remove — keep only winget/scoop/chocolatey |
+| **Feature scope** | 67+ dialogs (battery, port scanner, DNS, memory cleaner...) | **2/5** | 🔴 Rethink — refocus on core mission, extract utilities |
+| **Security** | No code signing, no sandbox, admin elevation at startup | **2/5** | 🟡 Enhance — sign binaries, lazy elevation, pack sandboxing |
+| **Localization** | Custom `Locale.T()`, 10 stubs, 2 actual translations | **2/5** | 🟡 Enhance — .resx standard pattern or accept English-only |
+| **Build system** | OneDrive-specific workarounds baked into global config | **2/5** | 🟡 Enhance — isolate workarounds, clean global config |
+
+### Top 5 Strategic Priorities
+
+1. **Frontend modernisation** — WinForms → WPF/WinUI 3 (biggest user experience gain)
+2. **Architecture cleanup** — DI, interface segregation, embedded database (biggest code quality gain)
+3. **Scope discipline** — Extract 40+ utility dialogs, refocus on registry tweaks (biggest maintainability gain)
+4. **Data-driven tweaks** — YAML/JSON definitions instead of 195 C# files (biggest authoring gain)
+5. **CI/CD simplification** — 14 → 4 workflows, automated version bumps (biggest velocity gain)
+
+---
+
+## Phase 8 — Architecture Modernisation
+
+> **Goal**: Transform the monolith into a clean, testable, extensible architecture.
+
+### 8.1 Dependency Injection Container
+
+**Priority**: P0 — Critical
+**Effort**: Large
+
+Replace manual wiring with `Microsoft.Extensions.DependencyInjection`. Every service
+becomes injectable and mockable.
+
+```csharp
+// Before: tight coupling, God class
+var engine = new TweakEngine();
+engine.RegisterBuiltins();
+var status = engine.StatusMap(parallel: true);
+
+// After: DI-wired, interface-segregated
+var host = Host.CreateDefaultBuilder()
+    .ConfigureServices(services =>
+    {
+        services.AddSingleton<ITweakRegistry, TweakRegistry>();
+        services.AddSingleton<ITweakApplier, TweakApplier>();
+        services.AddSingleton<ITweakDetector, TweakDetector>();
+        services.AddSingleton<ITweakSearcher, TweakSearcher>();
+        services.AddSingleton<IProfileService, ProfileService>();
+        services.AddSingleton<ISnapshotService, SnapshotService>();
+        services.AddSingleton<IRegistrySession, RegistrySession>();
+        services.AddScoped<ITweakHistoryService, TweakHistoryService>();
+    })
+    .Build();
+```
+
+**Key interfaces to extract from `TweakEngine`**:
+
+| Interface | Responsibility | Current Methods |
+|-----------|---------------|-----------------|
+| `ITweakRegistry` | Registration, lookup, categories | `Register`, `AllTweaks`, `GetTweak`, `Categories`, `TweaksByCategory` |
+| `ITweakApplier` | Apply, remove, batch operations | `Apply`, `Remove`, `ApplyBatch`, `RemoveBatch` |
+| `ITweakDetector` | Status detection | `DetectStatus`, `StatusMap` |
+| `ITweakSearcher` | Search, filter | `Search`, `Filter` |
+| `IProfileService` | Profile management | `Profiles`, `GetProfile`, `TweaksForProfile`, `ApplyProfile` |
+| `ISnapshotService` | Snapshot save/load/restore | `SaveSnapshot`, `LoadSnapshot`, `RestoreSnapshot` |
+
+**Backward compatibility**: `TweakEngine` becomes a facade that delegates to the
+interfaces, preserving the existing API during migration.
+
+### 8.2 Interface Segregation for RegistrySession
+
 **Priority**: P0 — Critical
 
-`ApplyBatch()` currently applies tweaks sequentially and continues past failures, logging
-partial results. When a registry write fails mid-batch (e.g., permissions denied on op 5
-of 20), the first 4 ops remain applied with no automated revert.
+`RegistrySession` mixes read, write, check, backup, and execute concerns. Split into:
 
-**Deliverable**: Add a `transactional` parameter to `ApplyBatch()` and `RemoveBatch()`.
-When `transactional: true`, the engine captures before-state for every op, and if any op
-fails, all preceding ops are reverted in reverse order using the captured before-state.
+| Interface | Methods |
+|-----------|---------|
+| `IRegistryReader` | `ReadDword`, `ReadString`, `ReadValue`, `KeyExists`, `ValueExists` |
+| `IRegistryWriter` | `SetDword`, `SetString`, `DeleteValue`, `DeleteTree` |
+| `IRegistryExecutor` | `Execute`, `Evaluate`, `ExecuteWithDiff` |
+| `IRegistryBackup` | `Backup`, `Restore` |
+
+**Benefit**: Tests mock only the interface they need. GUI can inject a read-only session
+for status display. CLI can inject a dry-run writer for preview mode.
+
+### 8.3 Event-Driven Architecture (Mediator Pattern)
+
+**Priority**: P1 — High
+
+Replace direct method calls between services with an event bus. When a tweak is applied,
+multiple services react independently:
 
 ```csharp
-// New API surface
-public BatchResult ApplyBatch(
-    IReadOnlyList<string> ids,
-    bool dryRun = false,
-    bool transactional = false,        // ← NEW
-    Action<int, int, string>? onProgress = null,
-    CancellationToken ct = default);   // ← NEW (see 1.2)
+// Event
+public sealed record TweakAppliedEvent(string TweakId, TweakResult Result, IReadOnlyList<RegDiff> Diffs);
 
-public sealed class BatchResult
-{
-    public IReadOnlyList<(string Id, TweakResult Result)> Results { get; init; }
-    public bool RolledBack { get; init; }           // true if transactional mode reverted
-    public IReadOnlyList<string> RollbackErrors { get; init; }  // ops that failed to revert
-}
+// Handlers (registered via DI)
+public sealed class HistoryHandler : IEventHandler<TweakAppliedEvent> { ... }
+public sealed class AnalyticsHandler : IEventHandler<TweakAppliedEvent> { ... }
+public sealed class HealthScoreHandler : IEventHandler<TweakAppliedEvent> { ... }
+public sealed class ConflictHandler : IEventHandler<TweakAppliedEvent> { ... }
 ```
 
-**Implementation notes**:
-- `RegistrySession.Execute()` gains `captureBeforeState: true` flag that records current
-  values before each write. Returns `IReadOnlyList<RegOp> undoOps`.
-- On failure, `Execute(undoOps)` is called in reverse to restore prior state.
-- DryRun mode: transactional is ignored (no writes to undo).
-- `TweakHistory` records both the apply and the rollback as separate events.
+**Benefits**: Services are decoupled. Adding a new handler requires zero changes to
+existing code. Testing a handler means firing one event.
+
+**Implementation**: Use `MediatR` (OSS, MIT) or a minimal in-process event dispatcher.
+
+### 8.4 Lazy Module Loading
+
+**Priority**: P2 — Medium
+
+Currently `RegisterBuiltins()` loads all 195 modules (~7,718 tweaks) into memory at
+startup. With DI, modules can be loaded on-demand per category:
+
+```csharp
+public interface ITweakModule
+{
+    string Category { get; }
+    IReadOnlyList<TweakDef> Tweaks { get; }  // materialized on first access
+}
+
+// Registration via assembly scanning
+services.Scan(scan => scan
+    .FromAssemblyOf<TweakEngine>()
+    .AddClasses(c => c.AssignableTo<ITweakModule>())
+    .AsImplementedInterfaces()
+    .WithSingletonLifetime());
+```
+
+**Benefit**: Startup time drops from ~200ms to ~50ms. Memory usage: only loaded
+categories occupy RAM.
 
 ---
 
-### 1.2 CancellationToken on All Long-Running APIs ✅ Completed v6.14.0
+## Phase 9 — Data Layer & Persistence
 
-**Layer**: TweakEngine
+> **Goal**: Replace scattered JSON files with a proper embedded database.
+
+### 9.1 SQLite Embedded Database
+
+**Priority**: P0 — Critical
+**Effort**: Large
+
+Replace 8+ individual JSON files with a single SQLite database. Use
+`Microsoft.Data.Sqlite` (OSS, MIT, first-party).
+
+**Current file-based state** (each with its own serialization/IO logic):
+
+| File | Service | Records |
+|------|---------|---------|
+| `config.json` | AppConfig | 1 (settings) |
+| `favorites.json` | Favorites | ~50 IDs |
+| `ratings.json` | Ratings | ~100 entries |
+| `history.json` | TweakHistory | ~1000 events |
+| `analytics.json` | Analytics | ~500 entries |
+| `compliance-history.json` | ComplianceHistory | ~200 entries |
+| `smartscan-feedback.json` | SmartScanService | ~100 entries |
+| `profiles/*.json` | UserProfileService | ~5 files |
+
+**Target schema** (single `regilattice.db` file in `%LOCALAPPDATA%\RegiLattice\`):
+
+```sql
+CREATE TABLE config (key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE favorites (tweak_id TEXT PRIMARY KEY, added_at TEXT);
+CREATE TABLE ratings (tweak_id TEXT PRIMARY KEY, score INTEGER, rated_at TEXT);
+CREATE TABLE history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tweak_id TEXT NOT NULL,
+    action TEXT NOT NULL,          -- Apply, Remove, Update
+    result TEXT NOT NULL,          -- Applied, Error, etc.
+    timestamp TEXT NOT NULL,
+    username TEXT,
+    machine_name TEXT,
+    session_id TEXT,
+    diffs_json TEXT                -- JSON blob for registry diffs
+);
+CREATE TABLE analytics (tweak_id TEXT, event TEXT, timestamp TEXT);
+CREATE TABLE profiles (name TEXT PRIMARY KEY, definition_json TEXT);
+CREATE TABLE compliance (id INTEGER PRIMARY KEY AUTOINCREMENT, snapshot_json TEXT, timestamp TEXT);
+
+CREATE INDEX idx_history_tweak ON history(tweak_id);
+CREATE INDEX idx_history_timestamp ON history(timestamp);
+CREATE INDEX idx_analytics_tweak ON analytics(tweak_id);
+```
+
+**Benefits**:
+- **ACID transactions**: No more data corruption on power failure
+- **Concurrent access safety**: Eliminates cross-assembly test race conditions
+- **Structured queries**: `SELECT * FROM history WHERE tweak_id = ? ORDER BY timestamp DESC LIMIT 10`
+- **Single file backup**: One file to backup/restore instead of 8+
+- **Full-text search**: SQLite FTS5 extension for tweak searching
+- **Migration support**: Schema versioning with `PRAGMA user_version`
+
+**Migration path**: `DatabaseMigrator` reads existing JSON files on first launch,
+imports into SQLite, renames old files to `.json.migrated`.
+
+### 9.2 Repository Pattern
+
+**Priority**: P1 — High
+
+Abstract database access behind repository interfaces:
+
+```csharp
+public interface ITweakHistoryRepository
+{
+    void RecordApply(string tweakId, TweakResult result, IReadOnlyList<RegDiff>? diffs = null);
+    void RecordRemove(string tweakId, TweakResult result);
+    IReadOnlyList<HistoryEntry> Recent(int count = 50);
+    IReadOnlyList<HistoryEntry> ForTweak(string tweakId);
+    void ExportCsv(string path);
+}
+```
+
+**Benefit**: Swappable between SQLite (production), in-memory (tests), and mock
+(unit tests). Tests no longer need file cleanup or `IDisposable` temp-file patterns.
+
+### 9.3 Caching Layer with Change Notifications
+
+**Priority**: P2 — Medium
+
+Hot data (favorites, status map, config) cached in-memory with cache invalidation when
+the database changes:
+
+```csharp
+public interface ICacheService
+{
+    T GetOrCreate<T>(string key, Func<T> factory, TimeSpan? ttl = null);
+    void Invalidate(string key);
+    void InvalidateAll();
+}
+```
+
+**Status map caching**: After `StatusMap()` runs (~300ms for 7K tweaks), results are
+cached. Cache is invalidated only when `Apply`/`Remove` changes state.
+
+---
+
+## Phase 10 — Frontend Revolution
+
+> **Goal**: Modern, accessible, high-DPI, data-bound UI.
+
+### 10.1 WPF Migration (Recommended Path)
+
+**Priority**: P0 — Critical
+**Effort**: Very Large (multi-sprint)
+
+**Why WPF over WinUI 3**:
+- Mature ecosystem, extensive community support
+- `CommunityToolkit.Mvvm` provides source-generated MVVM
+- `MaterialDesignInXamlToolkit` or `HandyControl` for modern visuals
+- Full accessibility support (UI Automation patterns)
+- HiDPI is native (resolution-independent vector rendering)
+- WinForms interop period possible via `WindowsFormsHost`
+
+**Why not WinUI 3**:
+- Packaging requirements (MSIX or unpackaged workarounds)
+- Smaller community, fewer third-party controls
+- Still maturing (missing some WPF features like multi-window)
+
+**Migration strategy** (incremental, not big-bang):
+
+| Sprint | Scope | Approach |
+|--------|-------|----------|
+| 10.1a | Shell + navigation | New WPF `MainWindow` with sidebar nav, embed WinForms panels via `WindowsFormsHost` |
+| 10.1b | Tweak browser | Native WPF `ListView` with virtualization, replace `TweakBrowserPanel` |
+| 10.1c | Settings & dialogs | Migrate dialog-by-dialog (focused core dialogs first) |
+| 10.1d | Remove WinForms dependency | All controls are native WPF, remove `WindowsFormsHost` |
+
+**Architecture** (MVVM):
+
+```
+View (XAML)          ← data binding →    ViewModel (C#)    ← DI →    Service (Core)
+MainWindow.xaml      ←→  MainViewModel         ← ITweakRegistry
+TweakBrowser.xaml    ←→  TweakBrowserViewModel  ← ITweakSearcher, ITweakDetector
+ProfilePanel.xaml    ←→  ProfileViewModel       ← IProfileService
+SettingsPage.xaml    ←→  SettingsViewModel       ← IAppConfig
+```
+
+### 10.2 Alternative: Terminal UI for Power Users (Spectre.Console)
+
+**Priority**: P2 — Medium
+
+For users who prefer the terminal, build a rich TUI using `Spectre.Console` (OSS, MIT):
+
+```
+┌─ RegiLattice ────────────────────────────────────────────┐
+│ Categories (158)        │ Privacy (31 tweaks)             │
+│ ▸ Privacy          [31] │ ☑ Disable Telemetry    Applied │
+│ ▸ Performance      [28] │ ☑ Disable Activity     Applied │
+│ ▸ Security         [45] │ ☐ Disable Location   NotApplied│
+│ ▸ Gaming           [22] │ ☐ Disable Cortana    NotApplied│
+│   ...                   │   ...                          │
+├─────────────────────────┴────────────────────────────────┤
+│ [A]pply  [R]emove  [S]earch  [P]rofile  [Q]uit          │
+└──────────────────────────────────────────────────────────┘
+```
+
+This replaces the current `--menu` interactive mode with a full TUI.
+
+### 10.3 WCAG 2.1 AA Accessibility (Carried Forward)
+
+**Priority**: P1 — High
+
+Full accessibility audit and remediation. Applies to whichever UI framework is active:
+
+1. **Tab order** on every interactive control
+2. **Screen reader labels** (`AccessibleName` / `AutomationProperties.Name`)
+3. **Colour contrast** ≥ 4.5:1 (audit all 11 themes)
+4. **Focus indicators** visible in all themes
+5. **High contrast mode** detection and compatible palette
+6. **Keyboard-only navigation** for every feature
+
+### 10.4 High-DPI Vector Icon Rendering (Carried Forward)
+
+**Priority**: P2 — Medium
+
+Generate icons at DPI-aware sizes. WPF migration makes this nearly free (vector
+rendering is native). For WinForms interim: 2× and 3× bitmap variants with
+`DeviceDpi`-based selection.
+
+---
+
+## Phase 11 — Scope Discipline & Feature Focus
+
+> **Goal**: Refocus on the core mission. Extract utilities into a separate project.
+
+### 11.1 Feature Audit & Classification
+
 **Priority**: P0 — Critical
 
-`StatusMap(parallel: true)` spawns parallel detection across 7,429 tweaks but has no
-cancellation mechanism. On slow machines or under heavy WMI load, detection can take
-30+ seconds with no way for the GUI to cancel. Same applies to `ApplyBatch()`,
-`RemoveBatch()`, `Search()`, and `ValidateTweaks()`.
+The 67+ dialog classes need honest classification:
 
-**Deliverable**: Add `CancellationToken ct = default` parameter to:
-- `StatusMap(bool parallel, IReadOnlyList<string>? ids = null, CancellationToken ct = default)`
-- `ApplyBatch(...)` / `RemoveBatch(...)`
-- `Search(string query, CancellationToken ct = default)`
-- `ValidateTweaks(CancellationToken ct = default)`
-- `Filter(...)` overload with cancellation
+**Core (keep in main app)** — directly support tweak management:
 
-**Behaviour**: Token checked between tweaks in sequential mode, and passed to
-`Parallel.ForEach` options in parallel mode. On cancellation, returns partial results
-collected so far (not an exception — callers inspect `result.IsCancelled`).
+| Dialog | Reason |
+|--------|--------|
+| `MainForm` | Primary interface |
+| `AboutDialog` | Standard |
+| `PreferencesDialog` | App configuration |
+| `ConfirmApplyDialog` | Safety gate |
+| `KeyboardShortcutsDialog` | Usability |
+| `ProfileWizardDialog` | Core workflow |
+| `SmartScanDialog` | Core workflow |
+| `MarketplaceDialog` | Pack management |
+| `DependencyGraphDialog` | Tweak relationships |
+| `WhatsNewDialog` | Onboarding |
+| `FirstRunWizardDialog` | Onboarding |
+| `ComplianceTrendDialog` | Enterprise |
+| `ScheduledTweakDialog` | Automation |
+| `ProfileCompareDialog` | Core workflow |
+| `ProfileSchedulerDialog` | Automation |
+| 5× Package manager dialogs | Supported feature |
+
+**Extract to "RegiLattice Tools" plugin** — standalone utilities unrelated to tweaks:
+
+| Dialog | Current Purpose | Better Home |
+|--------|----------------|-------------|
+| `BatteryHealthDialog` | Battery diagnostics | Separate tool |
+| `BatterySaverDialog` | Battery settings | Separate tool |
+| `BootTimeAnalyzerDialog` | Boot time analysis | Separate tool |
+| `BrightnessSchedulerDialog` | Display scheduling | Separate tool |
+| `BrowserCacheCleanerDialog` | Cache cleanup | Separate tool |
+| `ContextMenuManagerDialog` | Shell extension mgmt | Separate tool |
+| `DiskSpaceDialog` | Disk analysis | Separate tool |
+| `DnsOverHttpsDialog` | DNS config | Separate tool |
+| `DnsSwitcherDialog` | DNS config | Separate tool |
+| `DriverUpdateCheckerDialog` | Driver updates | Separate tool |
+| `FirewallRulesDialog` | Firewall management | Separate tool |
+| `HardwareTemperatureDialog` | Hardware monitoring | Separate tool |
+| `HostsFileManagerDialog` | Hosts file editor | Separate tool |
+| `InstalledAppsDialog` | App management | Separate tool |
+| `MacAddressDialog` | Network info | Separate tool |
+| `MemoryCleanerDialog` | Memory optimization | Separate tool |
+| `NetworkAdapterDialog` | NIC management | Separate tool |
+| `NetworkBandwidthDialog` | Bandwidth monitoring | Separate tool |
+| `NetworkRepairDialog` | Network fix | Separate tool |
+| `NetworkToolsDialog` | Network diagnostics | Separate tool |
+| `NotificationManagerDialog` | Notification settings | Separate tool |
+| `PortScannerDialog` | Port scanning | Separate tool |
+| `PowerPlanDialog` | Power plan config | Separate tool |
+| `PowerSchedulerDialog` | Power scheduling | Separate tool |
+| `PrivacyDashboardDialog` | Privacy overview | Could stay |
+| `ProxyConfigDialog` | Proxy settings | Separate tool |
+| `ScheduledTaskManagerDialog` | Task scheduler | Separate tool |
+| `ServiceManagerDialog` | Service management | Separate tool |
+| `ShellExtensionDialog` | Shell extensions | Separate tool |
+| `SleepTimerDialog` | Sleep timer | Separate tool |
+| `StartupManagerDialog` | Startup programs | Separate tool |
+| `TelemetryDashboardDialog` | Telemetry overview | Could stay |
+| `TempFileCleanerDialog` | Temp cleanup | Separate tool |
+| `UpdateCheckerDialog` | Update checking | Could stay |
+| `UsbPowerDialog` | USB power config | Separate tool |
+| `WakeOnLanDialog` | WOL utility | Separate tool |
+| `WiFiProfileDialog` | WiFi management | Separate tool |
+| `WindowsUpdateControlDialog` | WU control | Could stay |
+
+**Impact**: ~35 dialogs extracted. Main app drops from 67 to ~30 dialogs. Dramatically
+simpler to maintain, test, and evolve.
+
+### 11.2 Create `RegiLattice.Tools` Project
+
+**Priority**: P1 — High
+
+New class library project for extracted utilities:
+
+```
+src/
+├── RegiLattice.Core/       # Engine, tweaks, registry (unchanged)
+├── RegiLattice.GUI/        # Main app (30 focused dialogs)
+├── RegiLattice.CLI/        # CLI (unchanged)
+└── RegiLattice.Tools/      # NEW: extracted utility dialogs
+    ├── Network/             # DNS, proxy, firewall, port scanner, bandwidth
+    ├── System/              # Services, startup, disk, memory, temp cleaner
+    ├── Hardware/            # Battery, temperature, USB power
+    └── Scheduling/          # Power scheduler, sleep timer, brightness
+```
+
+**Loading**: GUI loads `RegiLattice.Tools` as an optional plugin. If the DLL is present,
+"Tools" menu appears. If absent, the app runs fine without it.
+
+### 11.3 Core Services Audit
+
+**Priority**: P1 — High
+
+Apply the same discipline to Core services. Some belong in a "Tools" layer:
+
+| Service | Keep in Core? | Reason |
+|---------|--------------|--------|
+| `TweakEngine` (split) | ✅ | Core mission |
+| `RegistrySession` | ✅ | Core mission |
+| `AppConfig` | ✅ | Configuration |
+| `TweakHistory` | ✅ | Audit trail |
+| `Favorites` | ✅ | User preference |
+| `SnapshotManager` | ✅ | State management |
+| `ProfileService` | ✅ | Core feature |
+| `CorporateGuard` | ✅ | Safety gate |
+| `ConflictDetector` | ✅ | Validation |
+| `TweakValidator` | ✅ | Validation |
+| `DependencyResolver` | ✅ | Core feature |
+| `NetworkManager` | ❌ Move to Tools | Utility |
+| `PowerPlanManager` | ❌ Move to Tools | Utility |
+| `ServiceManager` | ❌ Move to Tools | Utility |
+| `ScheduledTaskManager` | ❌ Move to Tools | Utility |
+| `StartupManager` | ❌ Move to Tools | Utility |
+| `SystemMonitor` | 🟡 Keep (used by HardwareInfo) | Supporting |
 
 ---
 
-### 1.3 TweakDef Risk Flags (Bitmask) ✅ Completed v6.14.0
+## Phase 12 — Build, CI/CD & Distribution
 
-**Layer**: Models · TweakDef
+> **Goal**: Simplify the build pipeline, automate version bumps, remove dead weight.
+
+### 12.1 Consolidate Workflows: 14 → 4
+
 **Priority**: P0 — Critical
 
-The current `SafetyRating` (scalar 1–5) collapses multiple risk dimensions into one
-number. A tweak that requires a reboot and one that deletes a registry tree both score
-"2" but carry fundamentally different risks.
+| Keep | Purpose | Replaces |
+|------|---------|----------|
+| `ci.yml` | Build + test on push/PR | ci.yml (keep), smoke.yml (merge) |
+| `release.yml` | Tag-triggered builds + GitHub Release | release.yml (keep), release-prep.yml (automate) |
+| `weekly.yml` | Stale issues, dependency review, mutations, CodeQL | stale.yml, dependency-review.yml, codeql.yml, packages.yml |
+| `pages.yml` | GitHub Pages deployment | pages.yml (keep) |
 
-**Deliverable**: Add a `[Flags]` enum and property to `TweakDef`:
+**Remove**: `debug.yml` (ad-hoc, use `workflow_dispatch` on ci.yml), `label.yml`
+(replace with branch-name labelling in ci.yml), `notify-failure.yml` (use GitHub's
+native notification), `powershell.yml` (merge into ci.yml), `pack-validation.yml`
+(merge into ci.yml as a job).
 
-```csharp
-[Flags]
-public enum TweakRisk
-{
-    None          = 0,
-    ModifiesHKLM  = 1 << 0,   // Machine-wide registry change
-    ModifiesHKCU  = 1 << 1,   // User-scope registry change
-    DeletesKey    = 1 << 2,   // Uses RegOp.DeleteTree or DeleteValue
-    RequiresReboot = 1 << 3,  // Change needs reboot to take effect
-    AffectsService = 1 << 4,  // Stops/disables a Windows service
-    AffectsNetwork = 1 << 5,  // Modifies firewall, proxy, or DNS
-    AffectsSecurity = 1 << 6, // Weakens or hardens a security boundary
-    PotentialDataLoss = 1 << 7, // Could lose user data (e.g., deletes cache)
-}
+### 12.2 Automated Version Bump Script
 
-public sealed class TweakDef
-{
-    // ...existing properties...
-    public TweakRisk RiskFlags { get; init; } = TweakRisk.None;  // ← NEW
-}
-```
-
-**Auto-detection**: `TweakDef`'s computed `RiskFlags` property auto-infers flags from
-`ApplyOps` (e.g., any `DeleteTree` → `DeletesKey`, any HKLM path → `ModifiesHKLM`).
-Explicit `RiskFlags` in the initialiser overrides auto-detection.
-
-**GUI impact**: Risk flags shown as coloured badges on the tweak info panel. "⚠ Reboot
-Required" (orange), "🗑 Deletes Key" (red), "🔒 Affects Security" (blue).
-
----
-
-### 1.4 Before/After Registry Diff on Apply ✅ Completed v6.14.0
-
-**Layer**: RegistrySession
-**Priority**: P1 — High
-
-When a user applies a tweak, they currently see only "Applied" or "Error". There is no
-way to confirm what actually changed in the registry.
-
-**Deliverable**: `RegistrySession.ExecuteWithDiff()` that returns a structured diff:
-
-```csharp
-public sealed class RegDiff
-{
-    public string Path { get; init; }
-    public string ValueName { get; init; }
-    public object? Before { get; init; }   // null if value didn't exist
-    public object? After { get; init; }    // null if value was deleted
-    public bool Changed => !Equals(Before, After);
-}
-
-public (IReadOnlyList<RegDiff> Diffs, TweakResult Result) ExecuteWithDiff(
-    IReadOnlyList<RegOp> ops);
-```
-
-**Use cases**:
-- GUI tweak info panel: "Changed `AllowTelemetry` from `1` → `0`" after apply.
-- CLI `--verbose` mode: prints diff table for each tweak.
-- Rollback verification: after `RemoveOps`, diff shows value returned to original.
-- Audit log: `TweakHistory` stores the diff JSON for compliance.
-
----
-
-### 1.5 Search Relevance Ranking ✅ Completed v6.14.0
-
-**Layer**: TweakEngine
-**Priority**: P1 — High
-
-`Search(query)` currently returns all tweaks whose lowercased label, description, tags,
-or ID contain the query substring. Results are unranked — an exact ID match appears
-alongside a description-only match with no distinction.
-
-**Deliverable**: Return results ordered by relevance score:
-
-| Match Type | Weight |
-|------------|--------|
-| Exact ID match | 100 |
-| ID prefix match (`priv-` for query `priv`) | 80 |
-| Exact label match | 70 |
-| Label word-start match | 50 |
-| Tag exact match | 40 |
-| Description substring match | 20 |
-| Category name match | 15 |
-| Synonym match (existing `_SYNONYMS`) | 10 |
-
-**API change**: `Search()` returns `IReadOnlyList<(TweakDef Tweak, int Score)>` sorted
-descending by score. The existing `IReadOnlyList<TweakDef>` overload remains for
-backward compatibility (wraps the scored version).
-
----
-
-### 1.6 Dynamic Custom Profile API ✅ Completed v6.15.0
-
-**Layer**: TweakEngine · ProfileDef
-**Priority**: P2 — Medium
-
-The 5 built-in profiles (business, gaming, privacy, minimal, server) are static. CLI
-supports `--profile-create` for user profiles, but the engine has no runtime API for
-programmatic profile composition.
-
-**Deliverable**: New engine methods:
-
-```csharp
-public ProfileDef CreateProfile(string name, string description,
-    IReadOnlyList<string> applyCategories,
-    IReadOnlyList<string>? skipCategories = null);
-
-public void SaveProfile(ProfileDef profile);   // persists to ConfigDir/profiles/
-public void DeleteProfile(string name);
-public IReadOnlyList<ProfileDef> UserProfiles();  // load from ConfigDir/profiles/
-```
-
-**Use cases**: GUI profile wizard can save, Smart Scan can generate recommended profiles,
-CLI `--profile-create` delegates to engine instead of custom logic.
-
----
-
-### 1.7 Tweak Recommendation Engine Integration ✅ Completed v6.15.0
-
-**Layer**: TweakEngine · SmartScanService
-**Priority**: P2 — Medium
-
-`SmartScanService` exists but is not integrated into TweakEngine's public API. Smart Scan
-results are only accessible from the GUI dialog.
-
-**Deliverable**: Expose recommendations via TweakEngine:
-
-```csharp
-public IReadOnlyList<TweakRecommendation> RecommendTweaks(
-    SmartScanProfile profile,    // hardware + user preferences
-    int maxResults = 50);
-
-public sealed class TweakRecommendation
-{
-    public required TweakDef Tweak { get; init; }
-    public required int ConfidencePercent { get; init; }  // 0–100
-    public required string Reason { get; init; }          // human-readable
-}
-```
-
-**Powers**: CLI `--recommend` command, GUI Smart Scan panel with confidence bars, pack
-marketplace "suggested for your hardware" badges.
-
----
-
-## Phase 2 — UI/UX & Accessibility
-
-### 2.1 WCAG 2.1 Level AA Accessibility Compliance
-
-**Layer**: GUI (all Forms, Controls, Dialogs)
 **Priority**: P0 — Critical
 
-No accessibility audit has been performed. Screen readers (NVDA, Narrator, JAWS) cannot
-navigate the tweak list, category tree, or dashboard. Tab order is undefined in most
-dialogs. Colour contrast has not been verified against WCAG 4.5:1 minimum ratio.
+The current 28+ file manual update process is unsustainable. Create a single PowerShell
+script:
 
-**Deliverable — 6 workstreams**:
-
-1. **Tab order**: Set `TabIndex` on every control in every form. Verify with Tab-only
-   navigation (no mouse). All interactive controls reachable by Tab/Shift+Tab.
-
-2. **Screen reader labels**: Set `AccessibleName` and `AccessibleDescription` on every
-   interactive control. ListView items announce tweak label, status, category, and scope.
-
-3. **Colour contrast**: Audit all 11 themes against WCAG 4.5:1 text contrast and 3:1
-   non-text contrast. Document any themes that fail (likely Cyberpunk and Solarized Dark
-   on secondary text). Fix or add disclaimer.
-
-4. **Focus indicators**: Ensure visible focus ring on all controls in all themes.
-   WinForms default focus rect is invisible on dark themes — override with a high-contrast
-   ring.
-
-5. **Keyboard shortcuts**: Implement full shortcut set (see 2.2 below).
-
-6. **High contrast mode**: Detect Windows high-contrast theme and switch to a compatible
-   palette. Currently all themes ignore system HC mode.
-
-**Acceptance criteria**: Full keyboard-only navigation of every feature. Narrator reads
-all tweak labels, statuses, and category names. No colour-only information (all badges
-have text alternatives).
-
----
-
-### 2.2 Keyboard Shortcut System with Cheatsheet ✅ Completed v6.18.0
-
-**Layer**: GUI · MainForm
-**Priority**: P1 — High
-
-Only Ctrl+Z/Y (undo/redo) are implemented. Power users expect comprehensive keyboard
-navigation without touching the mouse.
-
-**Deliverable**: Global shortcut handler in MainForm + F1 cheatsheet dialog:
-
-| Shortcut | Action | Scope |
-|----------|--------|-------|
-| `Ctrl+F` | Focus search bar | Global |
-| `Ctrl+A` | Select all visible tweaks | Tweak list |
-| `Ctrl+Shift+A` | Deselect all | Tweak list |
-| `Enter` | Apply selected tweak(s) | Tweak list |
-| `Delete` | Remove selected tweak(s) | Tweak list |
-| `Ctrl+Z` | Undo last operation | Global (exists) |
-| `Ctrl+Y` | Redo last undone operation | Global (exists) |
-| `Ctrl+S` | Save snapshot | Global |
-| `Ctrl+P` | Open profile selector | Global |
-| `Ctrl+T` | Cycle to next theme | Global |
-| `Ctrl+,` | Open Preferences | Global |
-| `F1` | Show keyboard shortcut cheatsheet | Global |
-| `F5` | Refresh status detection | Global |
-| `Escape` | Close current dialog / clear search | Context |
-| `Space` | Toggle selected tweak checkbox | Tweak list |
-| `Ctrl+D` | Toggle favorite on selected tweak | Tweak list |
-| `Ctrl+I` | Show tweak info panel | Tweak list |
-
-**F1 dialog**: Two-column layout (shortcut → description), filterable by keyword,
-themed to match current palette. Closable via Escape or Enter.
-
----
-
-### 2.3 Tweak Diff Preview Panel ✅ Completed v6.19.0
-
-**Layer**: GUI · MainForm (tweak info panel)
-**Priority**: P1 — High
-
-When a user selects a tweak and clicks "Apply", there is no preview of what will
-change. For safety-rated 1–2 tweaks, this is especially concerning.
-
-**Deliverable**: Before applying any tweak with `SafetyRating ≤ 3` or `RiskFlags` that
-include `DeletesKey | RequiresReboot | AffectsSecurity`, show a confirmation dialog:
-
-<p align="center">
-  <img src="assets/confirm-dialog-mockup.svg" alt="Confirmation Dialog Mockup — Catppuccin Mocha themed" width="600"/>
-</p>
-
-**Implementation**: Uses `RegistrySession.ExecuteWithDiff()` (Phase 1.4) in DryRun mode
-to preview the diff without writing. The dialog is themed and shows risk flag badges.
-
----
-
-### 2.4 Batch Operation Progress with ETA ✅ Completed v6.19.0
-
-**Layer**: GUI · MainForm
-**Priority**: P1 — High
-
-`ApplyBatch` shows a percentage progress bar but no time estimate. For large batches
-(e.g., 100+ tweaks in a profile), users have no idea if it will take 10 seconds or
-5 minutes.
-
-**Deliverable**:
-1. Add `EstimatedApplyTimeMs` metadata field to `TweakDef` (default: 50ms for Registry
-   kind, 500ms for SystemCommand, 2000ms for ServiceControl/PowerShell).
-2. GUI progress bar shows: `Applying: 34/100 — ~2 min 15 sec remaining`
-3. ETA recalculates dynamically based on actual elapsed time per preceding tweak
-   (exponential moving average), not just the static estimate.
-
-**Calculation**:
-```
-avgPerTweak = exponentialMovingAverage(actualTimesMs, alpha=0.3)
-remaining = (total - current) * avgPerTweak
-display = formatDuration(remaining)
+```powershell
+# Usage: .\scripts\Bump-Version.ps1 -Version "6.34.0" -TweakCount 7768 -CategoryCount 163 -TestCount 3320
+param(
+    [Parameter(Mandatory)] [string] $Version,
+    [Parameter(Mandatory)] [int] $TweakCount,
+    [Parameter(Mandatory)] [int] $CategoryCount,
+    [Parameter(Mandatory)] [int] $TestCount
+)
 ```
 
----
+The script updates ALL 28 files from a single invocation. Includes a `--dry-run` mode
+that shows what would change without modifying files.
 
-### 2.5 Enhanced Context Menu ✅ Completed v6.18.0
+**Ground-truth extraction**: The script can also auto-detect counts from the compiled
+assembly (eliminating the need to pass them manually):
 
-**Layer**: GUI · MainForm (tweak list)
+```powershell
+.\scripts\Bump-Version.ps1 -Version "6.34.0" -AutoDetectCounts
+```
+
+### 12.3 Remove Dead Package Registries
+
+**Priority**: P1 — High
+
+**Remove entirely** (Windows-only tool has zero npm/maven/gem users):
+
+| Directory | Why remove |
+|-----------|-----------|
+| `npm/` | No one installs a Windows registry tool via npm |
+| `maven/` | No JVM users for a Windows .NET tool |
+| `gem/` | No Ruby users for a Windows .NET tool |
+
+**Keep and maintain**:
+
+| Registry | Why keep |
+|----------|---------|
+| `winget/` | Native Windows package manager |
+| `scoop/` | Power-user Windows package manager |
+| `chocolatey/` | Enterprise Windows deployment |
+| `powershell/` | Administrative automation |
+
+**Impact**: 28-file version bump checklist drops to ~20 files. 3 fewer directories to
+maintain. Simpler mental model.
+
+### 12.4 Code Signing
+
+**Priority**: P1 — High
+
+Windows SmartScreen blocks unsigned executables. Users see "Windows protected your PC"
+on every download.
+
+**Options** (prefer OSS/free):
+- **SignPath.io**: Free for OSS projects, integrates with GitHub Actions
+- **Azure Trusted Signing**: Microsoft's cloud signing service (~$10/month)
+- **.pfx certificate**: Self-managed, stored in GitHub Secrets
+
+**Implementation**: Add a signing step to `release.yml` after build, before upload.
+
+### 12.5 Clean Build System Configuration
+
 **Priority**: P2 — Medium
 
-Right-clicking a tweak in the list shows no context menu. All actions require the
-toolbar buttons.
+Isolate OneDrive-specific workarounds from global build configuration:
 
-**Deliverable**: Right-click context menu on tweak rows:
+```xml
+<!-- Directory.Build.props — conditional on OneDrive detection -->
+<PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('OneDrive'))">
+    <RegiLatticeLocalBuildRoot>$(TEMP)\RegiLattice-build\$(MSBuildProjectName)</RegiLatticeLocalBuildRoot>
+    <BaseIntermediateOutputPath>$(RegiLatticeLocalBuildRoot)\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(RegiLatticeLocalBuildRoot)\bin\</BaseOutputPath>
+</PropertyGroup>
+```
 
-| Menu Item | Action |
-|-----------|--------|
-| **Apply** | Apply selected tweak(s) |
-| **Remove** | Remove/revert selected tweak(s) |
-| **Toggle Favorite** ⭐ | Add/remove from favorites |
-| **Copy Tweak ID** | Copy `priv-disable-telemetry` to clipboard |
-| **Copy Registry Path** | Copy the primary registry key to clipboard |
-| **Open in Registry Editor** | Launch `regedit.exe` navigated to the key |
-| **Show Dependencies** | Open DependencyGraph dialog filtered to this tweak |
-| **Show Related Tweaks** | Filter list to tweaks with overlapping tags/category |
-| **Schedule...** | Open scheduling dialog for this tweak |
-| **View History** | Show `TweakHistory` entries for this tweak |
-
-**Separator groups**: Operations (Apply/Remove), Info (Copy/Open/Dependencies), Advanced
-(Schedule/History).
+Contributors cloning to normal paths get standard MSBuild behaviour without the temp
+redirect. OneDrive users still get the workaround automatically.
 
 ---
 
-### 2.6 Custom User Theme Support (JSON) ✅ Completed v6.20.0
+## Phase 13 — Quality, Testing & Observability
 
-**Layer**: GUI · Theme.cs
+> **Goal**: Modern test infrastructure, real coverage, and production observability.
+
+### 13.1 xUnit v3 Migration
+
+**Priority**: P1 — High
+
+xUnit v2 is end-of-life. v3 brings:
+- Better parallel execution
+- Improved assertions
+- Source-generated test discovery (faster)
+- `IAsyncLifetime` improvements
+
+**Migration checklist**:
+
+| Package | v2 | v3 |
+|---------|----|----|
+| `xunit` | 2.9.3 | 3.x |
+| `xunit.runner.visualstudio` | 2.8.2 | 3.x |
+| `FsCheck.Xunit` | 2.16.6 | 3.x |
+| `Microsoft.NET.Test.Sdk` | 17.14.1 | 18.x |
+
+**Breaking changes to handle**: New test class model, changed attribute APIs for
+`FsCheck`, new test-host protocol for Test SDK 18.x.
+
+### 13.2 Integration Testing with Real Registry (Sandboxed)
+
+**Priority**: P1 — High
+
+Current tests use `DryRun = true` exclusively. No test verifies actual registry
+read/write behavior.
+
+**Solution**: Dedicated integration test project that:
+- Creates a temporary `HKCU\Software\RegiLattice-Test-{guid}` key
+- Runs real Apply → Detect → Remove cycles
+- Cleans up the key in `IAsyncLifetime.DisposeAsync()`
+- Runs only when `REGILATTICE_INTEGRATION_TESTS=1` env var is set
+
+### 13.3 Structured Logging with Serilog
+
 **Priority**: P2 — Medium
 
-The 11 built-in themes are hardcoded `ThemeDef` records. Users cannot create custom
-colour palettes without modifying source code.
+Replace `Console.WriteLine` and custom log panels with structured logging:
 
-**Deliverable**: Load user themes from `%LOCALAPPDATA%\RegiLattice\themes\*.json`:
+```csharp
+services.AddSerilog(config => config
+    .WriteTo.File("logs/regilattice-.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
+    .Enrich.FromLogContext());
+```
+
+**Benefits**: Log levels, structured properties, log correlation with session IDs,
+export to any sink (file, EventLog, SIEM). Replaces the ad-hoc `RegistrySession.Log`
+and `TweakHistory` logging.
+
+### 13.4 OpenTelemetry Metrics (Opt-In)
+
+**Priority**: P3 — Nice to Have
+
+For enterprise deployments, expose metrics via OpenTelemetry:
+
+```csharp
+// Counters
+meter.CreateCounter<long>("regilattice.tweaks.applied");
+meter.CreateCounter<long>("regilattice.tweaks.removed");
+meter.CreateHistogram<double>("regilattice.statusmap.duration_ms");
+```
+
+Users opt-in via config. Metrics exported to Prometheus, Azure Monitor, or any OTLP
+endpoint. Zero overhead when disabled.
+
+### 13.5 Performance Benchmarks in CI (Carried Forward)
+
+**Priority**: P2 — Medium
+
+`RegiLattice.Benchmarks` already exists. Add:
+- Monthly CI job that runs benchmarks
+- Results stored as JSON artifacts
+- Comparison against previous run, flag regressions > 50%
+- Dashboard in GitHub Pages
+
+---
+
+## Phase 14 — Documentation & Developer Experience
+
+> **Goal**: Documentation that maintains itself. Less to write, less to update.
+
+### 14.1 Auto-Generated API Documentation
+
+**Priority**: P1 — High
+
+Replace manually maintained `docs/Api.md` with auto-generated docs:
+
+**Option A** — DocFX (OSS, Microsoft):
+```yaml
+# docfx.json
+{
+  "metadata": [{ "src": [{ "src": "src", "files": ["**/*.csproj"] }] }],
+  "build": { "dest": "_site" }
+}
+```
+
+**Option B** — xmldoc2md (lightweight, OSS):
+```powershell
+dotnet tool install -g xmldoc2md
+xmldoc2md src/RegiLattice.Core/bin/Release/net10.0-windows/RegiLattice.Core.dll docs/api/
+```
+
+### 14.2 Consolidate Instruction Files
+
+**Priority**: P1 — High
+
+8 instruction files with heavy overlap:
+
+| Current | Merge Into |
+|---------|-----------|
+| `copilot-instructions.md` (500+ lines) | **Keep**, but trim to essentials |
+| `workspace.instructions.md` | Merge into `copilot-instructions.md` |
+| `csharp.instructions.md` | Keep (scoped to `*.cs`) |
+| `testing.instructions.md` | Keep (scoped to `tests/**`) |
+| `git-workflow.instructions.md` | Keep, but trim 50% |
+| `lessons-learned.instructions.md` | Convert to tests/analyzers where possible |
+| `cicd.instructions.md` | Merge into `git-workflow.instructions.md` |
+| `no-duplication.instructions.md` | Merge into `csharp.instructions.md` |
+
+**Result**: 8 files → 4 files. Reduce total instruction content by ~40%.
+
+**Lessons-learned conversion**: Many entries in lessons-learned are rules that should be
+**enforced by analyzers or tests**, not documented:
+
+| Lesson | Better Enforcement |
+|--------|--------------------|
+| "No `#pragma warning disable`" | Roslyn analyzer rule |
+| "All classes must be `sealed`" | Custom Roslyn analyzer |
+| "All tweak IDs must be unique" | Already tested (keep test, remove doc) |
+| "DryRun mode in tests" | Test base class enforces this |
+| "No `--no-build` for GUI.Tests" | CI workflow already handles this |
+
+### 14.3 Template SVGs with CI Substitution
+
+**Priority**: P2 — Medium
+
+Replace hardcoded count SVGs with templates:
+
+```xml
+<!-- docs/assets/stats.svg.template -->
+<text>{{TWEAK_COUNT}}</text>
+<text>{{CATEGORY_COUNT}}</text>
+<text>{{TEST_COUNT}}</text>
+```
+
+CI or the `Bump-Version.ps1` script substitutes values and generates final SVGs.
+No more manual SVG editing on every version bump.
+
+### 14.4 Single-Source README
+
+**Priority**: P2 — Medium
+
+`README.md` duplicates content from `Architecture.md`, `Development.md`, and
+`CLI-Reference.md`. Keep README focused:
+
+1. One-paragraph description
+2. Installation (3 methods)
+3. Screenshot / demo GIF
+4. Quick start (5 commands)
+5. Link to full docs
+
+Move detailed content to `docs/` and link from README. Current README is ~300 lines;
+target: ~100 lines.
+
+---
+
+## Phase 15 — Data-Driven Tweaks
+
+> **Goal**: Tweak definitions as data (YAML/JSON), not C# code.
+
+### 15.1 YAML Tweak Definitions
+
+**Priority**: P1 — High
+**Effort**: Very Large
+
+The biggest architectural shift. Replace 195 C# tweak module files with YAML data files:
+
+```yaml
+# tweaks/privacy/disable-telemetry.yaml
+id: priv-disable-telemetry
+label: Disable Telemetry
+category: Privacy
+description: Disables Windows diagnostic and usage data collection.
+tags: [telemetry, privacy, data-collection]
+needsAdmin: true
+corpSafe: true
+impactScore: 5
+safetyRating: 5
+impactNote: Prevents Windows from sending diagnostic data to Microsoft.
+apply:
+  - setDword: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry, value: 0 }
+remove:
+  - deleteValue: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry }
+detect:
+  - checkDword: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry, expected: 0 }
+```
+
+**Benefits**:
+- **Non-developers can author tweaks** — just edit a YAML file
+- **JSON Schema validation** — catches errors before compile
+- **Tooling**: YAML linters, diff-friendly, IDE autocompletion
+- **Smaller codebase**: 195 C# files (~50K LOC) → 195 YAML files (~15K lines)
+- **Hot-reload**: Load new tweaks without recompiling
+- **Pack convergence**: `.rlpack.json` and built-in tweaks use the same format
+
+**Implementation**:
+
+```csharp
+public sealed class YamlTweakLoader : ITweakModule
+{
+    public IReadOnlyList<TweakDef> Load(string yamlPath)
+    {
+        var yaml = new YamlDotNet.Serialization.Deserializer();
+        var raw = yaml.Deserialize<TweakYamlModel>(File.ReadAllText(yamlPath));
+        return raw.ToTweakDef();  // validated, immutable
+    }
+}
+```
+
+**NuGet**: `YamlDotNet` (OSS, MIT, 300M+ downloads).
+
+**Migration**: Script converts existing C# `TweakDef` initializers to YAML. Run once,
+delete the 195 `.cs` files.
+
+### 15.2 JSON Schema for Tweak Validation
+
+**Priority**: P1 — High
+
+Publish a JSON Schema (works for YAML too) that IDEs use for autocompletion and
+validation:
 
 ```json
 {
-  "name": "My Corporate Blue",
-  "isDark": true,
-  "background": "#1B2838",
-  "surface": "#1F3044",
-  "primary": "#4A90D9",
-  "secondary": "#2ECC71",
-  "text": "#E8E8E8",
-  "textSecondary": "#A0A0A0",
-  "border": "#2A4560",
-  "success": "#27AE60",
-  "warning": "#F39C12",
-  "error": "#E74C3C",
-  "accent": "#3498DB"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["id", "label", "category"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+-[a-z0-9-]+$" },
+    "label": { "type": "string", "minLength": 3 },
+    "category": { "type": "string" },
+    "impactScore": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "safetyRating": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "apply": { "type": "array", "items": { "$ref": "#/$defs/RegOp" } }
+  }
 }
 ```
 
-- Validated on load (all 12 colour fields required, valid hex format).
-- Appears in theme selector dropdown alongside built-in themes.
-- Hot-reload: file watcher detects changes and re-reads without restart.
-- Invalid JSON shows a warning in the log panel, theme is skipped.
+### 15.3 Auto-Registration via Assembly Scanning
 
----
-
-### 2.7 High-DPI Vector Icon Rendering
-
-**Layer**: GUI · AppIcons.cs · FluentIcons.cs
 **Priority**: P2 — Medium
 
-`AppIcons.cs` generates bitmaps programmatically at fixed pixel sizes. On 150%/200%
-DPI displays, these icons appear blurry because WinForms scales them via nearest-
-neighbour interpolation.
+If YAML is too large a shift, at minimum replace the manual `RegisterBuiltins()` method
+(which must list every module by hand) with assembly scanning:
 
-**Deliverable**:
-1. Generate icons at 2× and 3× sizes (32px, 48px, 64px variants).
-2. Use `SystemInformation.HighContrast` and `DeviceDpi` to select the appropriate size.
-3. Cache generated bitmaps per DPI scale factor in `AppIcons._cache`.
-4. For `FluentIcons.cs` SVG path data: render at native DPI using `Graphics.Transform`
-   scaling rather than bitmap upscaling.
+```csharp
+// Before: manual registration of 195 modules
+engine.Register(Privacy.Tweaks);
+engine.Register(Performance.Tweaks);
+// ... 193 more lines ...
 
----
-
-## Phase 3 — CLI & Integration
-
-### 3.1 Global `--json` Output Flag ✅ Completed v6.16.0
-
-**Layer**: CLI · Program.cs
-**Priority**: P0 — Critical
-
-Every CLI command currently outputs human-readable text (colourised ANSI). There is no
-machine-readable output mode. This blocks integration with automation tools, CI/CD
-pipelines, and PowerShell scripting.
-
-**Deliverable**: Add `--json` global flag to `CliArgs`. When active, all output is
-valid JSON:
-
-```powershell
-# Current (human-readable)
-RegiLatticeCLI.exe status priv-disable-telemetry
-# → ✅ Applied — Disable Telemetry [Privacy]
-
-# With --json
-RegiLatticeCLI.exe --json status priv-disable-telemetry
-# → {"id":"priv-disable-telemetry","label":"Disable Telemetry","category":"Privacy","status":"Applied","scope":"Machine"}
-
-# List with --json
-RegiLatticeCLI.exe --json --list
-# → {"tweaks":[{"id":"acc-...","label":"...","category":"...","status":"Unknown"},...]}
-
-# Batch apply with --json
-RegiLatticeCLI.exe --json --profile privacy --dry-run
-# → {"profile":"privacy","tweakCount":31,"dryRun":true,"results":[...]}
+// After: auto-discover all ITweakModule implementations
+var modules = Assembly.GetExecutingAssembly()
+    .GetTypes()
+    .Where(t => t.IsClass && !t.IsAbstract && typeof(ITweakModule).IsAssignableFrom(t))
+    .Select(Activator.CreateInstance)
+    .Cast<ITweakModule>();
+foreach (var m in modules) engine.Register(m.Tweaks);
 ```
 
-**Implementation**: `JsonOutputWriter` class wraps `System.Text.Json.JsonSerializer`.
-Each command handler checks `args.JsonOutput` and calls the writer instead of
-`ConsoleColorizer`. Exit codes unchanged (0 = success, 1 = error).
+**Or**: Source generators at compile time (zero runtime reflection cost).
 
 ---
 
-### 3.2 Batch Script Executor (`--batch-file`)
+## Phase 16 — Security & Trust
 
-**Layer**: CLI · Program.cs
+> **Goal**: Enterprise-grade security posture.
+
+### 16.1 Lazy Admin Elevation
+
 **Priority**: P1 — High
 
-IT teams need to deploy tweak configurations across hundreds of machines. Currently
-requires chaining multiple CLI invocations in a .ps1 script.
+Currently `Elevation.RequestElevation()` re-launches the entire app as admin at startup.
+Many tweaks only touch `HKCU` (user scope) and don't need admin.
 
-**Deliverable**: New `--batch-file <path>` command that reads a YAML or JSON recipe:
+**Better**: Elevate only when the user attempts to apply/remove an `HKLM` tweak:
+
+```csharp
+public async Task ApplyAsync(string tweakId)
+{
+    var tweak = registry.GetTweak(tweakId);
+    if (tweak.NeedsAdmin && !Elevation.IsAdmin())
+    {
+        // Launch a helper process with admin rights for just this operation
+        await ElevatedHelper.RunAsync("apply", tweakId);
+        return;
+    }
+    applier.Apply(tweak);
+}
+```
+
+**Benefits**: App starts faster, user sees fewer UAC prompts, principle of least
+privilege.
+
+### 16.2 Pack Sandboxing
+
+**Priority**: P2 — Medium
+
+Packs currently run in the same AppDomain with full access. A malicious pack could
+execute arbitrary code via `ApplyAction` delegates.
+
+**Mitigation**: Packs are **data-only** (YAML/JSON tweak definitions). No executable
+code allowed. `PackLoader` rejects any pack that defines `ApplyAction`, `RemoveAction`,
+or `DetectAction` delegates.
+
+### 16.3 SBOM Generation
+
+**Priority**: P2 — Medium
+
+Generate Software Bill of Materials on every release:
 
 ```yaml
-# deploy-privacy.rl.yaml
+# In release.yml
+- name: Generate SBOM
+  run: dotnet CycloneDX RegiLattice.sln -o sbom.json -j
+```
+
+Published alongside binaries. Required for SOC 2 and many enterprise procurement
+processes.
+
+### 16.4 Reproducible Builds
+
+**Priority**: P3 — Nice to Have
+
+`<Deterministic>true</Deterministic>` is already set. Add:
+- `<EmbedUntrackedSources>true</EmbedUntrackedSources>`
+- Source Link for GitHub
+- Publish `.snupkg` symbol packages
+
+Any user can rebuild from source and get bit-identical output.
+
+---
+
+## Phase 17 — Ecosystem & Community
+
+> **Goal**: Make it easy for others to contribute and extend.
+
+### 17.1 Contribution Experience
+
+**Priority**: P1 — High
+
+- **`CONTRIBUTING.md`**: Streamlined guide (currently exists but needs updating)
+- **Good First Issues**: Label and curate 10+ starter issues
+- **Developer setup**: One-command `.\scripts\Setup-Dev.ps1` that installs SDK, restores, builds, tests
+- **PR template**: Checklist with quality gates
+
+### 17.2 Plugin SDK NuGet Package
+
+**Priority**: P2 — Medium
+
+Publish `RegiLattice.SDK` NuGet package containing:
+- `TweakDef`, `RegOp`, `TweakKind`, `TweakResult` models
+- `ITweakModule` interface
+- JSON Schema for pack files
+- Validation helpers
+
+Third-party developers reference the SDK to build packs with compile-time validation.
+
+### 17.3 Community Translation Platform
+
+**Priority**: P3 — Nice to Have
+
+Replace manual `Locale.T()` string maintenance with Crowdin or Weblate:
+- Translators work in a web UI
+- Pull requests auto-generated when translations are complete
+- Coverage dashboard per locale
+- OR: Accept English-only and remove localization overhead
+
+### 17.4 Watch Mode for Tweak Drift (Carried Forward)
+
+**Priority**: P2 — Medium
+
+`--watch` command monitors applied tweaks for external reversion:
+
+```powershell
+RegiLatticeCLI.exe --watch --interval 300 --auto-fix
+# → [22:20:30] ⚠ DRIFT: priv-disable-telemetry reverted (AllowTelemetry: 0 → 1)
+# → [22:20:31] ✅ Auto-fixed: priv-disable-telemetry re-applied
+```
+
+**Use case**: IT scheduled task enforcing compliance continuously.
+
+### 17.5 Batch Script Executor (Carried Forward)
+
+**Priority**: P2 — Medium
+
+`--batch-file <path>` reads a YAML recipe for multi-step deployment:
+
+```yaml
 name: "Privacy Hardening"
-author: "IT Security Team"
 rollbackOnFailure: true
 steps:
   - apply: ["priv-disable-telemetry", "priv-disable-activity-history"]
   - apply-profile: "privacy"
-  - remove: ["priv-disable-location"]  # exception for this site
   - verify:
       tweaks: ["priv-disable-telemetry"]
       expected: "Applied"
 ```
 
-**Execution model**: Sequential, with optional `rollbackOnFailure: true` (uses Phase 1.1
-transactional mode). Output: JSON report of each step's result. Exit code 0 only if all
-steps pass.
-
----
-
-### 3.3 Conditional Apply Flags ✅ Completed v6.16.0
-
-**Layer**: CLI · CliArgs · Program.cs
-**Priority**: P1 — High
-
-Scripts need to apply tweaks conditionally: "apply only if not already applied", "apply
-only if admin", "apply only if hardware matches".
-
-**Deliverable**: New conditional flags:
-
-| Flag | Behaviour |
-|------|-----------|
-| `--if-not-applied` | Skip if `DetectStatus` = `Applied` |
-| `--if-admin` | Skip if not running elevated |
-| `--if-build <N>` | Skip if Windows build < N |
-| `--if-hardware <tag>` | Skip if `IsApplicable` returns false for hardware tag |
-| `--if-not-corp` | Skip if `CorporateGuard.IsCorporateNetwork()` |
-
-**Example**:
-```powershell
-RegiLatticeCLI.exe apply priv-disable-telemetry --if-not-applied --dry-run
-# → Skipped: Already applied.
-```
-
-**Exit codes**: 0 = applied or correctly skipped, 1 = error, 2 = skipped by condition.
-
----
-
-### 3.4 Interactive Profile Wizard (CLI) ✅ Completed v6.16.0
-
-**Layer**: CLI · Program.cs
-**Priority**: P2 — Medium
-
-`--menu` exists but presents a flat numbered list. New users don't know which profile to
-choose. An interactive wizard that asks preference questions would guide them.
-
-**Deliverable**: `--wizard` command that prompts in sequence:
-
-```
-RegiLattice Interactive Setup Wizard
-=====================================
-
-1. What is this machine's primary use?
-   [1] Office / Business    [2] Gaming    [3] Personal / Home
-   [4] Server / Headless    [5] Developer Workstation
-
-2. How important is privacy to you?
-   [1] Not important    [2] Moderate    [3] Maximum
-
-3. Is this a managed corporate device?
-   [y/N]
-
-Based on your answers, we recommend: "privacy" profile (31 tweaks)
-Apply now? [Y/n]
-```
-
-**Logic**: Maps answers to a weighted score across the 5 profiles, selects the highest.
-Shows a summary of what will change before confirming. Respects `--dry-run` if combined.
-
----
-
-### 3.5 Watch Mode for Tweak Drift Detection
-
-**Layer**: CLI · Program.cs · new WatchService
-**Priority**: P2 — Medium
-
-After applying tweaks, Windows Update, Group Policy refresh, or other software may
-silently revert registry changes ("tweak drift"). There is no mechanism to detect this.
-
-**Deliverable**: `--watch <tweaks.json>` command that monitors applied tweaks:
-
-```powershell
-RegiLatticeCLI.exe --watch --interval 300  # check every 5 minutes
-# → [22:15:30] Watching 42 applied tweaks...
-# → [22:20:30] ⚠ DRIFT: priv-disable-telemetry reverted (AllowTelemetry: 0 → 1)
-# → [22:20:30] ⚠ DRIFT: perf-disable-animations reverted (value deleted)
-```
-
-**Implementation**: Runs `StatusMap()` on the specified interval. Compares results to
-"expected" state (last known good). On drift, optionally auto-reapplies (`--auto-fix`)
-or logs + exits with code 3.
-
-**Use case**: IT deployment scripts run `--watch --auto-fix --interval 3600` as a
-scheduled task to enforce compliance.
-
----
-
-### 3.6 GPO/Intune Export Enhancements ✅ Completed v6.20.0
-
-**Layer**: CLI · PolicyExporter service
-**Priority**: P2 — Medium
-
-`--export-gpo` and `--export-intune` exist but output raw key-value pairs. Enterprise
-IT needs deployment-ready formats.
-
-**Deliverable**: Enhanced output formats:
-
-| Format | Command | Output |
-|--------|---------|--------|
-| ADMX/ADML | `--export-gpo --format admx` | Custom ADMX template + ADML language files |
-| Intune OMA-URI | `--export-intune --format oma-uri` | JSON for Intune custom configuration profiles |
-| Ansible | `--export-ansible` | `win_regedit` tasks in YAML playbook format |
-| DSC | `--export-dsc` | PowerShell Desired State Configuration `.ps1` |
-
----
-
-## Phase 4 — Test & Quality
-
-### 4.1 End-to-End Workflow Test Scenarios ✅ Completed v6.21.0
-
-**Layer**: Tests (all 3 projects)
-**Priority**: P0 — Critical
-
-Current tests are isolated unit tests per component. No tests verify a complete workflow
-from CLI/GUI invocation through engine to registry and back.
-
-**Deliverable**: 10 e2e scenario tests:
-
-| # | Scenario | What It Tests |
-|---|----------|---------------|
-| 1 | Apply single tweak → detect → verify Applied | Full lifecycle for Registry kind |
-| 2 | Apply profile → status map → all Applied | Profile resolution + batch apply |
-| 3 | Apply batch → undo all → verify NotApplied | Undo/redo integration |
-| 4 | Apply with DryRun → verify no registry writes | DryRun isolation |
-| 5 | Apply conflicting tweaks → detect conflict | ConflictDetector integration |
-| 6 | Save snapshot → modify system → restore → verify | Snapshot round-trip |
-| 7 | CLI `--export-json` → CLI `--import-json` → verify | Export/import pipeline |
-| 8 | Apply corporate-blocked tweak → verify SkippedCorp | CorporateGuard integration |
-| 9 | Apply tweak with dependency → verify dependency applied first | DependencyResolver |
-| 10 | Apply MinBuild-gated tweak on wrong build → SkippedBuild | Build gating |
-
-**All e2e tests use `RegistrySession { DryRun = true }` to avoid real registry writes.**
-
----
-
-### 4.2 Performance Regression Baselines
-
-**Layer**: Tests · RegiLattice.Benchmarks
-**Priority**: P1 — High
-
-`RegiLattice.Benchmarks` project exists but has no CI enforcement. Performance can
-silently degrade sprint-over-sprint.
-
-**Deliverable**: Establish baselines and enforce in CI:
-
-| Benchmark | Baseline (7,429 tweaks) | Budget | Action if exceeded |
-|-----------|------------------------|--------|-------------------|
-| `RegisterBuiltins()` | ~200ms | 500ms | CI warning |
-| `Search("telemetry")` | ~60ms | 150ms | CI warning |
-| `StatusMap(parallel: true)` DryRun | ~300ms | 750ms | CI warning |
-| `ValidateTweaks()` | ~100ms | 300ms | CI warning |
-| `Categories()` (cached) | <1ms | 5ms | CI fail |
-
-**CI integration**: Add a `benchmark.yml` workflow that runs monthly on `main`. Results
-stored as JSON artifacts. Compare against previous run; flag regressions > 50%.
-
----
-
-### 4.3 Mutation Testing Coverage Target: 80%+ Branch
-
-**Layer**: Tests · Stryker
-**Priority**: P1 — High
-
-Current mutation score is estimated at ~56.8% branch coverage. `Run-MutationTests.ps1`
-exists but results aren't tracked.
-
-**Deliverable**:
-1. Run full Stryker mutation on `RegiLattice.Core`.
-2. Identify top 20 surviving mutants (unkilled mutations).
-3. Write targeted tests for each survivor.
-4. Target: 80% mutation score on Core, 70% on CLI, 60% on GUI.
-5. Track mutation score in CHANGELOG per version.
-
-**Priority survivors** (estimated from coverage gaps):
-- `TweakEngine.Filter()` branch conditions (null parameters, empty queries)
-- `RegistrySession.ReadValue()` type-switching logic
-- `SnapshotManager.Restore()` partial-apply edge cases
-- `DependencyResolver.Resolve()` cycle-detection paths
-
----
-
-### 4.4 GUI Integration Tests
-
-**Layer**: Tests · RegiLattice.GUI.Tests
-**Priority**: P2 — Medium
-
-GUI tests cover only Theme, AppIcons, PackageNameValidation, and ExecutableValidation
-(357 tests). No tests exercise dialog logic, undo/redo integration, or data binding.
-
-**Deliverable**: Add 100+ integration tests without creating real WinForms windows:
-
-- **Theme tests**: Verify all 11 themes have valid hex colours, sufficient contrast
-  ratios (WCAG 4.5:1), and no null fields. (extend existing)
-- **Undo/redo stack tests**: Create `TweakOperationStack`, push 50 ops, undo 25, redo
-  10, verify state consistency.
-- **Profile wizard logic**: Test the scoring algorithm (hardware profile → recommended
-  profile) without the dialog.
-- **Search integration**: Feed 7,429 tweaks into search logic, verify relevance
-  ranking (Phase 1.5).
-- **Dashboard data provider**: Test `HealthScoreService` calculations, category
-  breakdown aggregation.
-
----
-
-### 4.5 Locale Translation Coverage Tests
-
-**Layer**: Tests · Core (Locale service)
-**Priority**: P2 — Medium
-
-German (DE) locale exists and is tested. No other locales exist. The test verifies all
-English keys have German translations.
-
-**Deliverable**:
-1. Add locale test infrastructure: `LocaleCompletenessTests` that scans all `T("key")`
-   calls in the codebase and verifies every locale file contains those keys.
-2. Generate a "missing translations" report per locale.
-3. Block CI if English has keys that any enabled locale lacks.
-4. Prerequisite for Phase 7 locale expansion.
-
----
-
-### 4.6 Concurrent Tweak Apply Safety Tests ✅ Completed v6.21.0
-
-**Layer**: Tests · Core
-**Priority**: P2 — Medium
-
-`ApplyBatch(parallel: true)` and concurrent `StatusMap()` calls could race on registry
-access. No tests verify thread-safety.
-
-**Deliverable**:
-- Launch 10 concurrent `StatusMap(parallel: true)` calls against the same engine.
-  Verify no exceptions and results are consistent.
-- Launch 5 concurrent `ApplyBatch()` calls in DryRun mode against overlapping tweak IDs.
-  Verify `DryOps` list is consistent (no interleaving).
-- Use `ConcurrentBag<Exception>` to catch any unobserved thread exceptions.
-
----
-
-## Phase 5 — Tweak Expansion (+300 tweaks)
-
-### 5.1 Security Hardening Deep Dive (+80 tweaks) ✅ Completed v6.22.0
-
-**Layer**: Tweaks · New modules
-**Priority**: P1 — High
-
-Current security coverage: ~80 tweaks. Windows exposes 200+ security-relevant registry
-policies that are not yet covered.
-
-**Target areas (8 new modules)**:
-
-| Module | Tweaks | Focus |
-|--------|--------|-------|
-| `ExploitProtection.cs` | 10 | Per-process DEP, ASLR, CFG, SEHOP enforcement |
-| `AttackSurfaceReduction.cs` | 10 | ASR rules (Office macro blocking, credential theft prevention, script obfuscation blocking) |
-| `CodeIntegrity.cs` | 10 | WDAC, UMCI, HVCI, driver signing enforcement |
-| `CredentialGuard.cs` | 10 | LSA protection, credential isolation, remote credential guard |
-| `AppLocker.cs` | 10 | Executable rules, script rules, MSI rules, DLL rules |
-| `AuditPolicy.cs` | 10 | Advanced audit policy: logon events, privilege use, object access, policy change |
-| `TLS_Hardening.cs` | 10 | Disable TLS 1.0/1.1, enforce TLS 1.3, cipher suite ordering, HSTS preload |
-| `DefenderAdvanced.cs` | 10 | Tamper protection, cloud-delivered protection timeouts, PUA blocking, scan scheduling |
-
-**All tweaks**: `CorpSafe = true`, `NeedsAdmin = true`, explicit `ImpactScore` and `SafetyRating`.
-
----
-
-### 5.2 Gaming & GPU Optimization (+60 tweaks) ✅ Completed v6.23.0
-
-**Layer**: Tweaks · New modules
-**Priority**: P2 — Medium
-
-Gamers are a primary audience. Current gaming coverage: ~50 tweaks focused on basic
-optimizations (disable Game Bar, disable fullscreen optimizations).
-
-**Target areas (6 new modules)**:
-
-| Module | Tweaks | Focus |
-|--------|--------|-------|
-| `DirectStorage.cs` | 10 | DirectStorage pipeline, GPU decompression, IO priority, NVMe alignment |
-| `VariableRefreshRate.cs` | 10 | VRR enforcement, G-Sync/FreeSync policies, frame rate caps, presentation mode |
-| `LatencyOptimization.cs` | 10 | Timer resolution (0.5ms), multimedia class scheduling, DPC/ISR latency tuning |
-| `GPUPowerStates.cs` | 10 | P-state locking, GPU clock persistence, compute preemption, TDR timeout |
-| `NetworkGaming.cs` | 10 | Nagle algorithm disable per-app, TCP timestamps off, RSS/RSC tuning, QoS tagging |
-| `AudioGaming.cs` | 10 | Exclusive mode, spatial audio bypass, sample rate locking, buffer size reduction |
-
----
-
-### 5.3 Accessibility Feature Tweaks (+40 tweaks) ✅ Completed v6.23.0–v6.24.0
-
-**Layer**: Tweaks · New modules
-**Priority**: P2 — Medium
-
-Accessibility category has ~20 tweaks focused on disabling features. Need tweaks that
-both enable and configure accessibility features for users who need them.
-
-**Target areas (4 new modules)**:
-
-| Module | Tweaks | Focus |
-|--------|--------|-------|
-| `VoiceAccess.cs` | 10 | Wake-on-voice, dictation mode, command vocabulary, noise gate, continuous listening |
-| `EyeControl.cs` | 10 | Gaze cursor speed, dwell click timing, scroll speed, calibration interval |
-| `CaptionsDisplay.cs` | 10 | Live captions, caption styling (font/size/colour/background), language selection |
-| `MagnifierAdvanced.cs` | 10 | Magnification level, lens mode, tracking, colour inversion, smooth edges |
-
----
-
-### 5.4 Energy & Battery Management (+50 tweaks) ✅ Completed v6.25.0
-
-**Layer**: Tweaks · New modules
-**Priority**: P2 — Medium
-
-Power management category has ~25 tweaks. Laptop users need fine-grained battery
-controls beyond basic power plans.
-
-**Target areas (5 new modules)**:
-
-| Module | Tweaks | Focus |
-|--------|--------|-------|
-| `BatterySaver.cs` | 10 | Trigger threshold, background app behaviour, brightness reduction, notification control |
-| `ChargingOptimization.cs` | 10 | Smart charging, charge limit (80%), USB-C power delivery, fast charge toggle |
-| `StandbyStates.cs` | 10 | Modern Standby (S0ix) tuning, hibernate after, hybrid sleep, wake timers |
-| `CPUPowerStates.cs` | 10 | Core parking, frequency capping, boost mode, thermal limits, EPP balance |
-| `DisplayPower.cs` | 10 | Adaptive brightness, auto-dim, HDR auto-enable, refresh rate on battery |
-
----
-
-### 5.5 Developer Productivity (+70 tweaks) ✅ Completed v6.24.0–v6.26.0
-
-**Layer**: Tweaks · New modules
-**Priority**: P2 — Medium
-
-Developer category has ~60 tweaks but is heavily focused on package management (scoop
-tools). Missing: IDE configuration, debugging settings, containerization tuning.
-
-**Target areas (7 new modules)**:
-
-| Module | Tweaks | Focus |
-|--------|--------|-------|
-| `WSLAdvanced.cs` | 10 | GPU passthrough, systemd, nested virtualisation, network bridging, memory reclaim |
-| `DevDriveOptimization.cs` | 10 | ReFS integrity, copy-on-write, anti-virus exclusions, package cache redirection |
-| `ContainerRuntime.cs` | 10 | Docker/Podman: daemon settings, layer caching, network mode, resource limits |
-| `GitConfiguration.cs` | 10 | Credential manager, GPG signing, delta compression, multi-pack index, fsmonitor |
-| `DebuggerSettings.cs` | 10 | WER mini-dump, symbol path, child process debugging, JIT debugger registration |
-| `SSHConfiguration.cs` | 10 | OpenSSH server, key management, agent forwarding, connection multiplexing |
-| `TerminalAdvanced.cs` | 10 | Windows Terminal: GPU rendering, cursor style, scroll buffer, bell notification |
-
----
-
-## Phase 6 — Services & Intelligence
-
-### 6.1 Enterprise Audit Logging ✅ Completed v6.27.0
-
-**Layer**: Services · TweakHistory
-**Priority**: P1 — High
-
-`TweakHistory` records apply/remove/update events with timestamps. For enterprise
-compliance (SOC 2, HIPAA, ISO 27001), audit logs must also capture WHO made the change
-and on WHICH machine.
-
-**Deliverable**: Extend `TweakHistoryEntry`:
-
-```csharp
-public sealed class TweakHistoryEntry
-{
-    // ...existing fields...
-    public string Username { get; init; }      // NEW: Environment.UserName
-    public string MachineName { get; init; }   // NEW: Environment.MachineName
-    public string SessionId { get; init; }     // NEW: unique per-session GUID
-    public IReadOnlyList<RegDiff>? Diffs { get; init; }  // NEW: Phase 1.4 diffs
-}
-```
-
-**Export format**: `--audit-export <path>` exports CSV/JSON for SIEM ingestion. Includes
-all fields. File is signed with HMAC-SHA256 using a per-install secret to detect tampering.
-
----
-
-### 6.2 Per-Category Health Score Breakdown ✅ Completed v6.27.0
-
-**Layer**: Services · HealthScoreService
-**Priority**: P1 — High
-
-`HealthScoreService` returns a single scalar score (0–100). Users cannot see which
-categories are well-optimised and which need attention.
-
-**Deliverable**: New `CategoryHealthScore` model:
-
-```csharp
-public sealed class CategoryHealthScore
-{
-    public required string Category { get; init; }
-    public required int Score { get; init; }        // 0–100
-    public required int AppliedCount { get; init; }
-    public required int TotalCount { get; init; }
-    public required string Recommendation { get; init; }  // "Apply 5 more tweaks"
-}
-
-// New engine API
-public IReadOnlyList<CategoryHealthScore> CategoryHealthScores();
-```
-
-**GUI**: Dashboard shows a horizontal bar chart with per-category scores. Clicking a
-bar navigates to that category in the tweak browser. Colours: green (>80), yellow
-(50–80), red (<50).
-
----
-
-### 6.3 Enhanced Conflict Detection ✅ Completed v6.27.0
-
-**Layer**: Services · ConflictDetector
-**Priority**: P2 — Medium
-
-`ConflictDetector` only checks plugin pack conflicts. Built-in tweaks can also conflict:
-tweak A sets `HKLM\X\Y = 0` while tweak B sets `HKLM\X\Y = 1`. Applying both leaves
-the last-applied value, which may not be the user's intent.
-
-**Deliverable**: Extend `ConflictDetector` to scan all registered tweaks:
-
-```csharp
-public sealed class TweakConflict
-{
-    public required string TweakIdA { get; init; }
-    public required string TweakIdB { get; init; }
-    public required string RegistryPath { get; init; }
-    public required string ValueName { get; init; }
-    public required object ValueA { get; init; }
-    public required object ValueB { get; init; }
-    public required ConflictSeverity Severity { get; init; }
-}
-
-public enum ConflictSeverity { Info, Warning, Critical }
-```
-
-**Integration**: `ValidateTweaks()` includes conflict report. GUI shows ⚠ icon on
-conflicting tweaks. CLI `--validate --verbose` lists all conflicts.
-
----
-
-### 6.4 Tweak Scheduling Service Enhancement ✅ Completed v6.28.0
-
-**Layer**: Services · ScheduledTweakService
-**Priority**: P2 — Medium
-
-`ScheduledTweakService` exists but only supports profile-level scheduling. Users need
-per-tweak schedules (e.g., "Apply privacy tweaks at login, remove gaming tweaks at
-shutdown").
-
-**Deliverable**:
-
-```csharp
-public sealed class TweakSchedule
-{
-    public required string TweakId { get; init; }
-    public required ScheduleTrigger Trigger { get; init; }
-    public required ScheduleAction Action { get; init; }
-}
-
-public enum ScheduleTrigger
-{
-    OnLogin, OnLogout, OnStartup, OnShutdown,
-    Daily, Weekly, OnNetworkChange, OnPowerChange
-}
-
-public enum ScheduleAction { Apply, Remove, Detect }
-```
-
-**Implementation**: Creates Windows Task Scheduler entries via `schtasks.exe` that invoke
-the CLI with the appropriate `apply`/`remove` command. Managed via GUI Schedule dialog
-and CLI `--schedule add/remove/list`.
-
----
-
-### 6.5 Tweak Versioning & Deprecation ✅ Completed v6.28.0
-
-**Layer**: Services · New TweakVersionService
-**Priority**: P2 — Medium
-
-When tweaks are renamed, merged, or deprecated across versions, there is no migration
-path. Users with saved snapshots or profiles referencing old IDs get silent no-ops.
-
-**Deliverable**: New `TweakMigration` system:
-
-```csharp
-public sealed class TweakMigration
-{
-    public required string OldId { get; init; }
-    public required string NewId { get; init; }       // null if deprecated
-    public required string Version { get; init; }     // when migration added
-    public required string Reason { get; init; }      // "Merged into priv-disable-all-telemetry"
-}
-
-// In TweakEngine
-public IReadOnlyList<TweakMigration> Migrations { get; }
-public string? ResolveMigration(string oldId);  // returns new ID or null
-```
-
-**Integration**: `SnapshotManager.Restore()` auto-applies migrations. CLI warns when
-using deprecated IDs. `--validate` lists all tweaks with pending migrations.
-
----
-
-### 6.6 Smart Scan with User Feedback Loop
-
-**Layer**: Services · SmartScanService
-**Priority**: P3 — Nice to Have
-
-`SmartScanService` recommends tweaks based on hardware and profile analysis. Recommendations
-are static — no learning from user behaviour.
-
-**Deliverable**: Track which Smart Scan recommendations users accept or dismiss:
-
-```csharp
-public sealed class SmartScanFeedback
-{
-    public required string TweakId { get; init; }
-    public required bool Accepted { get; init; }
-    public required DateTime Timestamp { get; init; }
-}
-```
-
-Over time, adjust recommendation confidence scores: tweaks that users consistently
-dismiss get lower confidence; tweaks that are always accepted get boosted. Stored locally
-in `%LOCALAPPDATA%\RegiLattice\smartscan-feedback.json`.
-
----
-
-## Phase 7 — Internationalisation & Ecosystem
-
-### 7.1 Five New Locales ✅ Completed v6.29.0
-
-**Layer**: Services · Locale
-**Priority**: P2 — Medium
-
-Only English (EN) and German (DE) are supported. Five additional locales cover ~80% of
-the potential international user base.
-
-**Target locales** (in priority order):
-
-| Locale | Language | Est. user share |
-|--------|----------|-----------------|
-| `fr` | French | 12% |
-| `es` | Spanish | 10% |
-| `ja` | Japanese | 8% |
-| `zh-CN` | Simplified Chinese | 7% |
-| `ko` | Korean | 5% |
-
-**Per locale**: Translation of all `Locale.T()` keys (~200 strings), validated by
-`LocaleCompletenessTests` (Phase 4.5). Community contributions via dedicated `.resx`
-or JSON resource files.
-
----
-
-### 7.2 Plugin Marketplace Bootstrap ✅ Completed v6.29.0
-
-**Layer**: Plugins · PackManager · MarketplaceDialog
-**Priority**: P2 — Medium
-
-The Marketplace infrastructure is complete (`PackDef`, `PackLoader`, `PackManager`,
-`PackIndex`, `MarketplaceDialog`) but zero public packs exist. The marketplace needs
-seed content to attract contributors.
-
-**Deliverable**: Create 5 official example packs:
-
-| Pack Name | Tweaks | Description |
-|-----------|--------|-------------|
-| `privacy-extreme` | 25 | Maximum privacy: block all telemetry, cloud, and tracking |
-| `gaming-fps` | 20 | FPS maximisation: latency, GPU, CPU, network |
-| `enterprise-soc2` | 30 | SOC 2 Type II compliance: audit logging, encryption, access controls |
-| `developer-full` | 25 | Full dev setup: WSL, Docker, Git, SSH, terminals |
-| `accessibility-inclusive` | 15 | Enable and configure all accessibility features |
-
-Each pack includes:
-- `pack.json` with all required `PackDef` metadata
-- SHA256 integrity hash
-- Tests verifying all tweak IDs are unique and don't conflict with builtins
-
----
-
-### 7.3 Tweak Pack Authoring Guide ✅ Completed v6.29.0
-
-**Layer**: Documentation
-**Priority**: P2 — Medium
-
-No documentation exists for creating third-party tweak packs. Contributors need a clear
-guide with examples, validation steps, and publishing workflow.
-
-**Deliverable**: `docs/PackAuthoring.md` covering:
-1. Pack JSON schema with annotated examples
-2. How to test a pack locally (`--marketplace install <local-path>`)
-3. Validation checklist (unique IDs, no conflicts, integrity hash)
-4. Publishing to the marketplace index
-5. Pack versioning and update workflow
-6. Security requirements (signed manifests, no executable code)
-
----
-
-### 7.4 PowerShell Module Parity ✅ Completed v6.30.0
-
-**Layer**: CLI · PowerShell module
-**Priority**: P3 — Nice to Have
-
-`powershell/RegiLattice.psm1` exists as a wrapper module but may lack parity with the
-full CLI command set.
-
-**Deliverable**: Ensure all 25+ CLI commands are exposed as PowerShell functions:
-
-```powershell
-# Desired ergonomics:
-Import-Module RegiLattice
-Get-RegiLatticeTweak -Category "Privacy"
-Set-RegiLatticeTweak -Id "priv-disable-telemetry" -WhatIf
-Get-RegiLatticeProfile -Name "privacy"
-Export-RegiLatticeConfig -Path "config.json" -Format Json
-```
-
-Each function maps to a CLI command, respects `-WhatIf` (→ `--dry-run`), and returns
-strongly-typed `PSCustomObject` output (→ `--json`).
-
----
-
-### 7.5 GitHub Actions Reusable Workflow for Pack CI ✅ Completed v6.30.0
-
-**Layer**: CI/CD
-**Priority**: P3 — Nice to Have
-
-Tweak pack authors need a reusable CI workflow to validate their packs against the
-latest RegiLattice engine.
-
-**Deliverable**: `.github/workflows/pack-validation.yml` (reusable):
-
-```yaml
-# Pack authors add to their repo:
-jobs:
-  validate:
-    uses: RajwanYair/RegiLattice/.github/workflows/pack-validation.yml@main
-    with:
-      pack-path: "./my-pack/pack.json"
-```
-
-The workflow:
-1. Checks out RegiLattice
-2. Loads the pack via `PackLoader.LoadFromJson()`
-3. Registers all builtins + pack tweaks
-4. Runs `ValidateTweaks()` — checks unique IDs, broken deps, conflicts
-5. Verifies SHA256 hash matches
-6. Reports pass/fail as a GitHub Status check
-
 ---
 
 ## Success Metrics
 
-| Metric | Current (v6.13.0) | Phase 2 Target | Phase 5 Target |
-|--------|-------------------|---------------|---------------|
-| Tweaks | 7,189 | 7,189 | 7,489+ |
-| Categories | 122 | 122 | 152+ |
-| Tests | 3,052 | 3,250+ | 3,600+ |
-| Branch coverage | 56.8% | 70%+ | 80%+ |
-| Mutation score | ~57% | 70%+ | 80%+ |
-| Locales | 2 (EN, DE) | 2 | 7 (+ FR, ES, JA, ZH, KO) |
-| Themes | 11 | 11 + user JSON | 11 + user JSON |
-| CLI output modes | Text | Text + JSON | Text + JSON |
-| Marketplace packs | 0 | 0 | 5 official |
-| Keyboard shortcuts | 2 | 18+ | 18+ |
+| Metric | Current (v6.33) | Phase 10 Target | Phase 15 Target |
+|--------|----------------|-----------------|-----------------|
+| Tweaks | 7,718 | 7,718 | 8,000+ |
+| GUI framework | WinForms | WPF shell + WinForms interop | Full WPF |
+| Backend architecture | Monolithic | DI + interfaces | Full CQRS-lite |
+| Data persistence | 8 JSON files | SQLite | SQLite + cache |
+| Tweak format | 195 C# files | 195 C# files | YAML data files |
+| Tests | 3,296 (xUnit v2) | 3,500+ (xUnit v3) | 4,000+ |
+| CI workflows | 14 | 4 | 4 |
+| Version bump files | 28 manual | 1 script | 1 script |
+| Package registries | 7 (npm/maven/gem/etc) | 4 (winget/scoop/choco/PS) | 4 |
+| Dialogs in main app | 67 | ~30 (rest extracted) | ~25 |
+| Code signing | None | SignPath.io | SignPath.io |
+| Locales | 2 real + 8 stubs | 2 (focused) | Crowdin (community) |
+| DPI support | Bitmap scaling | WPF vector rendering | Native |
 | a11y compliance | None | WCAG 2.1 AA partial | WCAG 2.1 AA full |
+| Startup time | ~200ms | ~100ms (lazy load) | ~50ms |
+| Build output size | ~40MB self-contained | ~35MB (scope reduction) | ~30MB (trimming-safe) |
 
 ---
 
 ## Risk Register
 
-| ID | Risk | Impact | Mitigation |
-|----|------|--------|------------|
-| R1 | Transactional rollback fails mid-revert | Registry left in inconsistent state | Capture before-state as backup JSON before transaction; worst case = manual restore |
-| R2 | Risk flags auto-detection misclassifies | Users see wrong risk badges | Auto-detection is override-able; explicit `RiskFlags` takes precedence |
-| R3 | WCAG contrast audit fails multiple themes | Must fix or remove themes | Fix colours; Cyberpunk and Solarized Dark are highest risk |
-| R4 | Batch ETA inaccurate for mixed-kind tweaks | Progress shows wrong estimate | Use exponential moving average instead of static estimate |
-| R5 | JSON output breaks existing CLI scripts | Backward compatibility | `--json` is opt-in; default output unchanged |
-| R6 | Mutation testing reveals large untested surface | Sprint delays to write tests | Prioritise top-20 survivors; don't pursue 100% |
-| R7 | Security hardening tweaks lock out users | System becomes unusable | All security tweaks have `RemoveOps`; reboot to Safe Mode as escape hatch |
-| R8 | Locale expansion produces poor translations | Bad UX for non-English users | Machine translation + community review; flag as "beta" locale |
-| R9 | Pack marketplace zero adoption | Wasted infrastructure | Seed with 5 official packs; promote on GitHub readme |
-| R10 | Watch mode (`--watch`) consumes excessive CPU | Battery drain on laptops | Default interval is 300s; minimum interval enforced at 60s |
+| ID | Risk | Impact | Probability | Mitigation |
+|----|------|--------|------------|------------|
+| R1 | WPF migration takes longer than expected | Months of dual-framework maintenance | High | Incremental migration via `WindowsFormsHost`; WinForms remains functional |
+| R2 | SQLite migration corrupts existing user data | Users lose favorites, history, config | Medium | JSON backup before migration; rollback path; extensive migration tests |
+| R3 | YAML tweak format has edge cases C# handled implicitly | Broken tweaks after migration | Medium | Comprehensive round-trip test: C# → YAML → load → compare |
+| R4 | xUnit v3 migration breaks 3,296 tests | CI blocked for days | Medium | Migrate in a branch; fix one test project at a time |
+| R5 | Removing npm/maven/gem breaks unknown downstream users | Broken installs (unlikely — no evidence of usage) | Low | Announce deprecation in CHANGELOG one version before removal |
+| R6 | Scope reduction (dialog extraction) upsets existing users | Feature regression perception | Medium | Extract to a separate downloadable plugin, not deleted |
+| R7 | DI container adds startup overhead | Slower cold start | Low | Benchmark before/after; DI registration is ~10ms typically |
+| R8 | Code signing certificate expires or is compromised | Broken release pipeline, trust loss | Low | Auto-renew via SignPath; revocation procedure documented |
 
 ---
 
-## Sprint Execution Prompt — 20-Task Consolidation & Release
+## Migration Sequence
 
-> **This section is a standing execution plan.** It is meant to be picked up as-is by
-> the repo maintainer or an AI agent for a single focused sprint that produces 20
-> committed tasks, each with a version-bumped release to GitHub.
+> Recommended execution order. Each phase can be a MINOR version bump.
 
-### Role
-
-You are the repo maintainer and release engineer. Operate only within this repository.
-Follow best practices, but prioritise the requirements below. Do not hand-wave: every
-change must be implemented as code/config/docs changes and validated by build/tests.
-
-### Primary Objective
-
-Continue the roadmap by executing the next 20 tasks as one sprint. For each revision bump:
-
-1. Create/track GitHub Issues for non-trivial work.
-2. Implement via a Pull Request (or direct commit on `main` per single-dev workflow).
-3. Ensure clean build with **0 errors and 0 warnings** (no suppression).
-4. Update docs + graphics to match the actual state.
-5. Publish a GitHub Release with compiled artifacts attached (do NOT commit binaries
-   into the repo unless the repo already does so; prefer Actions artifacts/release assets).
-6. Tag the revision and update CHANGELOG.
-
-### Scope Lock (MANDATORY)
-
-- **Windows-only** support.
-- Feature scope reduced to **Windows Explorer thumbnail support only**.
-- Deliverables must be:
-  - **A)** One single Manager EXE (for install/register/unregister/diagnostics).
-  - **B)** One thumbnail provider DLL (COM in-proc server) registered for Explorer
-    thumbnail generation.
-  - **C)** Any additional DLLs only if strictly necessary; minimise footprint.
-- Remove all non-related files and implementations, including any Python code/methods/
-  scripts and any cross-platform scaffolding.
-- Consolidate and deduplicate aggressively: configs, code paths, duplicated utilities,
-  docs.
-- Goal: **dramatically smaller project footprint**.
-
-### Quality Gates (MANDATORY)
-
-- 0 build errors, 0 build warnings, 0 analyser warnings.
-- **No warning suppressions** (no pragma disables, no `/wd`, no "ignore warnings").
-  Fix root causes.
-- Ensure VS Code extension diagnostics are clean (configure recommended extensions +
-  settings; fix issues they flag where reasonable).
-- Ensure CI passes (add/adjust GitHub Actions workflows accordingly).
-- Run clean builds for all supported configs (at minimum Release x64; include Debug x64
-  if the repo supports it).
-- Add/adjust tests or minimal verification harness for the thumbnail provider if possible.
-
-### Execution Plan
-
-#### Step 0 — Baseline Verification
-
-- Identify current latest release/tag and current version number in repo.
-- Run the build/tests locally (or via CI config) to confirm whether last release is
-  truly passing.
-- If failures/warnings exist: create Issues and fix first until clean.
-
-#### Step 1 — Sprint Backlog: Implement the Next 20 Tasks
-
-Create a Sprint section in this file (or a dedicated `SPRINT.md` if preferred) listing
-these 20 tasks with checkboxes and links to Issues/PRs.
-
-Implement tasks in logical PR-sized chunks. Each PR must include:
-
-- Summary.
-- Build/test evidence.
-- Checklist confirming 0 warnings and scope lock.
-
-#### The 20 Tasks
-
-| # | Task | Scope |
-|---|------|-------|
-| 1 | Inventory & delete non-Windows code paths; remove cross-platform build options; update docs accordingly. | Code cleanup |
-| 2 | Remove all Python scripts/methods and any pipeline references to Python; ensure replacements exist in PowerShell/MSBuild/CMake as needed. | Code cleanup |
-| 3 | Define the minimal architecture: Manager EXE + Thumbnail DLL; document it in `ARCHITECTURE.md`. | Architecture |
-| 4 | Implement/confirm COM in-proc thumbnail provider DLL using `IThumbnailProvider` (or existing repo approach) and ensure correct registry entries. | Feature |
-| 5 | Ensure Manager EXE supports: install/register, uninstall/unregister, status/diagnostics, and logging path selection. | Feature |
-| 6 | Consolidate project structure: `src/` (manager, shell_ext), `include/`, `tests/`, `docs/`; remove unused directories. | Structure |
-| 7 | Deduplicate utilities (logging, error handling, COM helpers); enforce a single implementation. | Code quality |
-| 8 | Enforce "warnings as errors" across toolchains (MSVC `/W4 /WX` or equivalent; C# `TreatWarningsAsErrors`; clang-cl if used). | Build |
-| 9 | Fix all warnings (compiler, static analysis, style), without suppressions. | Build |
-| 10 | Add GitHub Actions CI: build + test + package artifacts; ensure clean logs with zero warnings. | CI/CD |
-| 11 | Add GitHub Actions Release workflow: on tag, build artifacts and attach Manager EXE + DLL + checksums to GitHub Release. | CI/CD |
-| 12 | Add `.vscode`: `settings.json`, `extensions.json`, `tasks.json` to standardise builds, formatting, and diagnostics. | Dev experience |
-| 13 | Add `.github`: issue templates (bug/feature), PR template, `CODEOWNERS`, `CONTRIBUTING.md`, `SECURITY.md`. | Governance |
-| 14 | Add Dependabot (if dependencies exist) and minimal policy docs. | Governance |
-| 15 | Update README to Windows-only + thumbnail scope; include install/uninstall instructions and troubleshooting. | Docs |
-| 16 | Update `CHANGELOG.md` for this sprint; adopt SemVer and document version bump rules. | Docs |
-| 17 | Update or generate diagrams/graphics with correct current data (prefer Mermaid in Markdown; any images must match current architecture). | Docs |
-| 18 | Remove/merge redundant config files (multiple formatters, linters, build configs); keep a single source of truth. | Cleanup |
-| 19 | Consolidate documentation: eliminate duplicates, ensure links are correct, and docs match code behaviour. | Docs |
-| 20 | Final consolidation pass: reduce footprint (delete unused assets, samples, legacy docs, dead code); verify size reduction and report what changed. | Cleanup |
-
-#### Step 2 — Release Discipline
-
-For each revision bump:
-
-1. Update version in a single canonical location (`Directory.Build.props`).
-2. Update CHANGELOG.
-3. Open PR (or commit on `main`), pass CI, merge.
-4. Create a Git tag (`vX.Y.Z`).
-5. Publish a GitHub Release with artifacts (EXE + DLL + checksums).
-6. Keep binaries out of git history; publish through Releases unless the repository
-   policy requires otherwise.
-
-### Required Outputs (per sprint completion)
-
-When the sprint is complete, the final report must include:
-
-- [ ] Checklist of all 20 tasks with links to Issues/PRs/commits.
-- [ ] Confirmation of last release status + evidence (CI links/logs references).
-- [ ] Build commands used and configs tested.
-- [ ] Where the artifacts are published (Release link) and what files are attached.
-- [ ] Footprint reduction summary (what was removed, size reduction estimate if available).
-- [ ] Updated diagrams/graphics references and where they live in the repo.
-
-### Metadata Synchronisation Rule (STANDING)
-
-> **On every version bump or count change, ALL files listed below must be updated
-> to match the ground-truth counts from the compiled assembly and test suite.**
-
-Ground-truth sources:
-
-| Metric | Source of truth |
-|--------|----------------|
-| Tweaks | `TweakEngine.RegisterBuiltins()` → `AllTweaks().Count` |
-| Categories | `TweakEngine.RegisterBuiltins()` → `Categories().Count` |
-| Module files | `Get-ChildItem src/RegiLattice.Core/Tweaks/*.cs | Measure-Object` |
-| Tests | `dotnet test` summary per project (Core + CLI + GUI) |
-| Themes | `Theme.cs` dictionary entry count |
-| Profiles | `ProfileDefinitions.cs` `new ProfileDef` count |
-| Version | `Directory.Build.props` `<Version>` |
-
-Files that must be kept in sync:
-
-| # | File | Fields |
-|---|------|--------|
-| 1 | `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| 2 | `installer/Package.wxs` | `Version="X.Y.Z"` |
-| 3 | `README.md` | Badge, download link, description line, features bullet, diagram counts, test count, module count |
-| 4 | `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules/tests row |
-| 5 | `.github/instructions/workspace.instructions.md` | Tweaks/module class count in `Tweaks/` directory comment |
-| 6 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
-| 7 | `docs/assets/stats.svg` | Tweaks count + categories count (space-separated thousands) |
-| 8 | `docs/assets/banner.svg` | Tweaks count, categories count, tests count, themes count, profiles count |
-| 9 | `docs/assets/architecture.svg` | Tweaks count in TweakDef Modules box, module class count |
-| 10 | `docs/assets/how-it-works.svg` | Tweaks count in Browse step |
-| 11 | `docs/assets/features.svg` | Per-category tweak count badges |
-| 12 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
-| 13 | `scoop/regilattice.json` | `version`, `url`, description |
-| 14 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
-| 15 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
-| 16 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
-
-**Verification command** (run after every bump):
-
-```powershell
-# Ground-truth from compiled assembly
-$dll = "$env:TEMP\RegiLattice-build\RegiLattice.Core\bin\Debug\net10.0-windows\RegiLattice.Core.dll"
-Add-Type -Path $dll
-$e = [RegiLattice.Core.TweakEngine]::new(); $e.RegisterBuiltins()
-$tweaks = $e.AllTweaks().Count
-$cats   = $e.Categories().Count
-$mods   = (Get-ChildItem src/RegiLattice.Core/Tweaks/*.cs).Count
-Write-Host "Tweaks: $tweaks | Categories: $cats | Modules: $mods"
-
-# Cross-check against files
-$files = @(
-    'README.md', '.github/copilot-instructions.md',
-    'docs/assets/stats.svg', 'docs/assets/banner.svg'
-)
-foreach ($f in $files) {
-    $hits = Select-String -Path $f -Pattern "$tweaks|$cats" -SimpleMatch
-    if ($hits) { Write-Host "  ✅ $f — contains correct counts" }
-    else       { Write-Host "  ❌ $f — STALE counts detected" }
-}
 ```
+Phase 11 (Scope Discipline)           ─── v7.0.0 (MAJOR — breaking: dialogs extracted)
+  ↓
+Phase 12.1–12.3 (CI + Registry Cleanup) ── v7.1.0
+  ↓
+Phase 8.1–8.2 (DI + Interfaces)       ─── v7.2.0
+  ↓
+Phase 9.1–9.2 (SQLite + Repository)    ─── v7.3.0
+  ↓
+Phase 14 (Docs Consolidation)          ─── v7.4.0
+  ↓
+Phase 13.1 (xUnit v3)                 ─── v7.5.0
+  ↓
+Phase 10.1a–b (WPF Shell + Browser)    ─── v8.0.0 (MAJOR — new UI framework)
+  ↓
+Phase 15 (YAML Tweaks)                ─── v9.0.0 (MAJOR — new tweak format)
+  ↓
+Phase 16 (Security + Signing)          ─── v9.1.0
+  ↓
+Phase 17 (Ecosystem)                   ─── v9.2.0+
+```
+
+**Key principle**: Each phase is independently valuable. No phase depends on all prior
+phases being complete. Start with the highest-ROI items (scope discipline, CI cleanup,
+DI) before the larger migrations (WPF, YAML).
+
+---
+
+## Appendix — Completed Phase Details (v6.0–v6.33)
+
+<details>
+<summary>Click to expand completed phase specifications</summary>
+
+### Phase 1 — Engine & Model Hardening (v6.14–v6.15)
+
+- **1.1 Transactional Apply**: `ApplyBatch(transactional: true)` with auto-rollback on failure
+- **1.2 CancellationToken**: Added to `StatusMap`, `ApplyBatch`, `RemoveBatch`, `Search`, `ValidateTweaks`, `Filter`
+- **1.3 TweakRisk Flags**: `[Flags] enum TweakRisk` with 8 flags, auto-detected from `ApplyOps`
+- **1.4 Registry Diff**: `ExecuteWithDiff()` returns before/after values for every registry write
+- **1.5 Search Ranking**: 8-tier relevance scoring (ID exact match → synonym match)
+- **1.6 Custom Profiles**: `CreateProfile()`, `SaveProfile()`, `DeleteProfile()`, `UserProfiles()`
+- **1.7 Recommendation Engine**: `RecommendTweaks()` with confidence percentages and `IsQuickWin`
+
+### Phase 2 — UI/UX & Accessibility (v6.18–v6.20)
+
+- **2.2 Keyboard Shortcuts**: 19 shortcuts, 4 groups, `KeyboardShortcutsDialog`
+- **2.3 Confirm Apply Dialog**: `ConfirmApplyDialog` + `ConfirmApplyThreshold` for risk-rated tweaks
+- **2.4 Batch ETA**: `TweakDef.EstimatedApplyTimeMs` per-kind, exponential moving average display
+- **2.5 Context Menu**: 11 items (Apply/Remove/Favorite/CopyRegPath/OpenRegedit/Dependencies/History)
+- **2.6 User Themes**: JSON themes in `%LOCALAPPDATA%\RegiLattice\themes\`, `FileSystemWatcher` hot-reload
+
+### Phase 3 — CLI & Integration (v6.16, v6.20)
+
+- **3.1 JSON Output**: `--json` flag, `CliJsonContext` source-generated serializer
+- **3.3 Conditional Flags**: `--if-not-applied`, `--if-admin`, `--if-build`, `--if-hardware`, `--if-not-corp`
+- **3.4 Interactive Wizard**: `--wizard` command with 3-question profile recommender
+- **3.6 Export Formats**: Ansible `win_regedit` YAML, DSC `.ps1` export
+
+### Phase 4 — Test & Quality (v6.21)
+
+- **4.1 E2E Tests**: 13 scenarios covering full lifecycle, profiles, DryRun, snapshots, JSON export, dep chain, CorporateGuard, concurrent operations
+- **4.6 Concurrent Safety**: 10 concurrent `StatusMap()` + 5 concurrent `ApplyBatch()` in DryRun mode
+
+### Phase 5 — Tweak Expansion (v6.22–v6.26)
+
+- **5.1 Security**: WDAG, Printer, LSA, MSI, NTP, WinRM, CredGuard, IE Zones (+80)
+- **5.2 Gaming**: DirectStorage, VRR, Latency, GPU Power, Network Opt, Audio Opt (+60)
+- **5.3 Accessibility**: Motor, Visual, Magnifier, LiveCaptions, EyeControl, VoiceAccess (+40)
+- **5.4 Energy**: BatterySaver, Charging, Standby, CPUPower, DisplayPower (+50)
+- **5.5 Developer**: WinDbg, WSLAdvanced, GitCredManager, ContainerRuntime (+70)
+- **Office GP**: Word, Excel, Outlook, PowerPoint, Access, Publisher, Visio, Project (+80)
+
+### Phase 6 — Services & Intelligence (v6.27–v6.28)
+
+- **6.1 Audit Logging**: `Username`, `MachineName`, `SessionId` on `HistoryEntry` + `ExportCsv()`
+- **6.2 Health Scores**: `CategoryHealthScore` record with per-category breakdown
+- **6.3 Conflict Detection**: `ConflictDetector.DetectRegistryConflicts()` with `ConflictSeverity`
+- **6.4 Scheduling**: `ScheduledTweakService` with per-tweak `ScheduleTrigger`
+- **6.5 Migration**: `TweakMigrationService` + `TweakEngine.Migrations` + `SnapshotManager` auto-migrate
+
+### Phase 7 — Internationalisation & Ecosystem (v6.29–v6.30)
+
+- **7.1 Locales**: 10 locale stubs documented (en, de, fr, es, ja, zh-CN, ko, pt, it, ru)
+- **7.2 Official Packs**: 5 packs in `packs/` (gaming-fps, privacy-extreme, enterprise-soc2, developer-full, accessibility-inclusive)
+- **7.3 Pack Authoring**: `docs/PackAuthoring.md` with schema, examples, publishing workflow
+- **7.4 PowerShell Module**: 22 cmdlets + 16 aliases in `RegiLattice.psm1`/`.psd1`
+- **7.5 Pack Validation CI**: `pack-validation.yml` reusable workflow
+
+</details>
