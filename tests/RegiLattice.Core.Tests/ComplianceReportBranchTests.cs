@@ -198,4 +198,3 @@ public sealed class ComplianceReportExporterBranchTests
 // 2.  StartupManager — currently 14 % branch coverage (7 tests cover GetAllEntries only)
 //     All writes go to HKCU which requires no admin; cleaned up via Delete().
 // ═══════════════════════════════════════════════════════════════════════════
-

@@ -274,6 +274,40 @@ Review against:
 - Architecture (single responsibility, immutable models)
 - Testing (new code has tests, error paths tested)
 
+### 12. Release Notes
+
+**When**: User says "draft changelog", "release notes", "what changed", "CHANGELOG entry", "generate release notes", "summarise commits"
+
+**Load skill**: `.github/skills/release-notes/SKILL.md`
+
+**Workflow**: Identify commit range since last tag → categorize by Conventional Commits type → draft `## [X.Y.Z]` CHANGELOG section with stats line → generate GitHub Release body.
+
+### 13. Performance Profiling
+
+**When**: User says "slow", "performance", "profile", "benchmark", "lag", "freeze", "latency", "too slow", "optimize speed", "BenchmarkDotNet"
+
+**Load skill**: `.github/skills/perf-profiling/SKILL.md`
+
+**Key hotspots**: `TweakEngine.Search()` (150ms budget), `StatusMap(parallel:true)` (5s budget), `RegisterBuiltins()` (startup), WinForms Paint handlers (GDI leaks).
+
+### 14. PR Review
+
+**When**: User says "review PR", "review pull request", "check PR", "review #N"
+
+**Use prompt**: `.github/prompts/review-pr.prompt.md`
+
+### 15. Category Audit
+
+**When**: User says "audit categories", "check categories", "category coverage", "category gaps"
+
+**Use prompt**: `.github/prompts/audit-categories.prompt.md`
+
+### 16. Generate Pack
+
+**When**: User says "generate pack", "create pack", "new pack", ".rlpack"
+
+**Use prompt**: `.github/prompts/generate-pack.prompt.md`
+
 ## Key Domain Knowledge
 
 ### TweakDef Model
