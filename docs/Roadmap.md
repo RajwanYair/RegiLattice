@@ -12,6 +12,7 @@
 - [Strategic Assessment](#strategic-assessment)
 - [Phase 0 — Cross-Project Tooling Infrastructure ⭐ HIGH PRIORITY](#phase-0--cross-project-tooling-infrastructure)
 - [Phase 0.B — GitHub AI Surface & Workflow Modernisation ⭐ HIGH PRIORITY](#phase-0b--github-ai-surface--workflow-modernisation)
+- [Phase 0.C — Standards Alignment: VSCode, GitHub & SVG ⭐ HIGH PRIORITY](#phase-0c--standards-alignment-vscode-github--svg)
 - [Phase 8 — Architecture Modernisation](#phase-8--architecture-modernisation)
 - [Phase 9 — Data Layer & Persistence](#phase-9--data-layer--persistence)
 - [Phase 10 — Frontend Revolution](#phase-10--frontend-revolution)
@@ -740,6 +741,499 @@ Phase 0.B is complete when **all** of the following are true:
 - This phase does **not** add MCP servers without evaluating their stability on this machine first
 - This phase does **not** restructure `.github/` directory layout — only file contents change
 - This phase does **not** remove any existing instruction file — only additions and corrections
+
+---
+
+## Phase 0.C — Standards Alignment: VSCode, GitHub & SVG
+
+> **Priority**: ⭐ P0 — Execute alongside Phase 0 and Phase 0.B.
+> **Goal**: Bring every configuration file, document, and graphical asset into full conformance with the **latest VS Code, GitHub, and SVG standards** — eliminating stale formats, deprecated configuration keys, and hand-maintained diagrams in favour of standards-compliant, auto-renderable SVG representations.
+
+---
+
+### 0.C.1 Problem Statement
+
+The project has accumulated configuration drift across three orthogonal axes:
+
+| Axis | Problem | Impact |
+|------|---------|--------|
+| **VS Code config** | `.vscode/settings.json` uses deprecated keys (e.g., `editor.suggestOnTriggerCharacters` removed in 1.90+), missing new workspace-trust and Copilot settings, outdated task formats | Copilot features silently disabled; tasks fail on new VS Code versions |
+| **GitHub config** | `.github/` files use deprecated ISSUE_TEMPLATE (v1 `*.md`), missing CODEOWNERS patterns, workflow action versions lag behind stable releases, Dependabot config incomplete | CI regressions; missed automated security PRs; stale issue triage |
+| **SVG / Diagrams** | Diagrams are either hand-maintained SVG (drifts from code), Mermaid in README (renders via GitHub but no local preview), or absent | Stats go stale after every sprint; architecture diagrams mislead; no offline viewing |
+
+---
+
+### 0.C.2 VS Code Configuration Audit and Remediation
+
+**0.C.2.1 — Settings audit**
+
+Verify every key in `.vscode/settings.json` against the VS Code 1.99 (April 2026) release notes and settings schema. Flag and remove deprecated/renamed keys:
+
+```powershell
+# Compare workspace settings keys to a known-good baseline
+(Get-Content .vscode/settings.json | ConvertFrom-Json).PSObject.Properties.Name | Sort-Object
+```
+
+Key areas to review:
+
+| Setting Category | Current State | Required Action |
+|-----------------|---------------|-----------------|
+| `github.copilot.*` | Mixed — some keys removed in Copilot v1.240+ | Audit against Copilot extension changelog; remove `github.copilot.advanced` subtree if deprecated |
+| `editor.inlayHints.*` | May reference old sub-key names | Verify against VS Code 1.90+ settings schema |
+| `[csharp]` language overrides | Present but may conflict with CSharpier v0.30+ settings | Reconcile with `csharpier.configPath` and C# Dev Kit settings |
+| `python.*` | Likely present from .venv setup; most are now under `"python.analysis.*"` (Pylance) | Remove legacy `python.linting.*` keys deprecated in Pylance 2024.x |
+| `terminal.integrated.profiles.windows` | Custom `RegiLattice Dev` profile | Verify `source` key format matches VS Code 1.95+ terminal profile schema |
+| `github.copilot.chat.agent.terminal.allowList` | Present | Verify format matches latest Copilot agent spec (`Record<string, boolean>` vs new format) |
+| `files.watcherExclude` | Likely missing `**/obj/**` and `**/TestResults/**` | Add to prevent OneDrive file-watcher conflicts with build outputs |
+
+**0.C.2.2 — Extensions manifest**
+
+`.vscode/extensions.json` — verify every recommended extension ID is current:
+
+```powershell
+# Quick check all extension IDs are valid (requires VS Code CLI)
+code --list-extensions | ForEach-Object {
+    [pscustomobject]@{ Installed=$_; InManifest=(Select-String -Path .vscode/extensions.json -Pattern $_ -Quiet) }
+}
+```
+
+| Extension | Check |
+|-----------|-------|
+| `ms-dotnettools.csharp` | Replaced by `ms-dotnettools.csdevkit` + `ms-dotnettools.csharp` pair — verify both present |
+| `esbenp.prettier-vscode` | Not applicable to C#/PS; remove if present |
+| `streetsidesoftware.code-spell-checker` | Add with `cSpell.words` array for RegiLattice domain terms (`TweakDef`, `RegOp`, `HKCU`, `NeedsAdmin`) |
+| `ms-vscode.powershell` | Verify ID is `ms-vscode.powershell` (not legacy `ms-vscode.PowerShell` capitalisation) |
+| `github.copilot` | Must be present; `github.copilot-chat` is now bundled |
+| `usernamehw.errorlens` | Add — surfaces CS errors inline without opening Problems panel |
+
+**0.C.2.3 — Tasks manifest**
+
+`.vscode/tasks.json` — verify task format against VS Code 1.99 schema:
+
+- All tasks must have `"presentation": { "reveal": "always" }` or `"silent"` — bare tasks without presentation group cause UX regression in VS Code 1.88+
+- Replace deprecated `"problemMatcher": "$msCompile"` with `"problemMatcher": "$tsc"` where relevant
+- Add a `"RunTests: All"` compound task that sequences Core → CLI → GUI tests with `dependsOrder: sequence`
+- Add a `"Sync-Counts"` task that runs `scripts/Sync-CopilotInstructions.ps1` with the current version
+
+**0.C.2.4 — Launch configuration**
+
+`.vscode/launch.json` — verify format against VS Code 1.99 schema:
+
+- `"type": "coreclr"` must be present for all .NET launch configs (not just `"clr"`)
+- Add `"stopAtEntry": false` explicitly (default changed in C# Dev Kit 1.12)
+- Add a CLI launch config with `"args": ["--list"]` for quick interactive testing
+
+---
+
+### 0.C.3 GitHub Configuration Standards
+
+**0.C.3.1 — ISSUE_TEMPLATE modernisation**
+
+GitHub's v1 issue templates (`.github/ISSUE_TEMPLATE/*.md` with YAML front-matter) are largely superseded by **Issue Forms** (`.github/ISSUE_TEMPLATE/*.yml` with `body:` sections). Verify the current templates:
+
+```powershell
+Get-ChildItem .github/ISSUE_TEMPLATE/ | Select-Object Name, Extension
+```
+
+Migration targets:
+
+| Template | Current Format | Target Format | Action |
+|----------|---------------|---------------|--------|
+| `bug_report` | Likely `.md` (v1) | `.yml` (Issue Forms) | Convert: add `type: textarea` / `type: dropdown` / `type: checkboxes` fields |
+| `feature_request` | Likely `.md` (v1) | `.yml` (Issue Forms) | Convert: structured fields for impact, scope, acceptance criteria |
+| `release.yml` | Already `.yml` (checklist) | `.yml` ✅ | Verify checklist items match the current 28-file version bump list |
+| `new_tweak_proposal` | May be absent | `.yml` (Issue Forms) | Create: fields for category slug, registry path, expected result, CorpSafe |
+
+Issue Form format reference:
+
+```yaml
+# .github/ISSUE_TEMPLATE/bug_report.yml
+name: Bug Report
+description: Something is broken in RegiLattice
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: ["RajwanYair"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for reporting a bug. Please fill in all fields."
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: "Describe the bug clearly"
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options: ["GUI", "CLI", "Core Engine", "Registry", "Package Managers", "CI/CD"]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: RegiLattice version
+      placeholder: "e.g. v6.33.0"
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I am running the latest release
+          required: true
+```
+
+**0.C.3.2 — CODEOWNERS**
+
+`.github/CODEOWNERS` — verify patterns cover the full directory tree and use correct GitHub username:
+
+```
+# .github/CODEOWNERS
+*                                   @RajwanYair
+src/RegiLattice.Core/Tweaks/**      @RajwanYair
+.github/workflows/**                @RajwanYair
+docs/**                             @RajwanYair
+installer/**                        @RajwanYair
+```
+
+Ensure patterns use forward slashes and that the file is NOT nested inside a subdirectory (must be `.github/CODEOWNERS`, not `.github/config/CODEOWNERS`).
+
+**0.C.3.3 — Dependabot configuration**
+
+`.github/dependabot.yml` — verify it covers all package ecosystems used in the project:
+
+```yaml
+# .github/dependabot.yml
+version: 2
+updates:
+  # .NET NuGet packages
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      test-tooling:
+        patterns: ["xunit*", "Microsoft.NET.Test.Sdk", "coverlet*"]
+      dotnet-runtime:
+        patterns: ["System.*", "Microsoft.Extensions.*"]
+    ignore:
+      # Held at v2 pending xUnit v3 migration (see lessons-learned)
+      - dependency-name: "xunit"
+        versions: ["3.*"]
+      - dependency-name: "xunit.runner.visualstudio"
+        versions: ["3.*"]
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      github-actions:
+        patterns: ["*"]
+```
+
+**0.C.3.4 — Pull request template**
+
+`.github/pull_request_template.md` — verify it follows GitHub's current template spec and prompts for:
+- Conventional commit type + scope
+- Tweak/test count deltas (e.g., "+50 tweaks, +32 tests")
+- Checklist: build passes, tests pass, 0 warnings, CHANGELOG updated, SVG stats updated
+
+```markdown
+## Summary
+<!-- type(scope): what and why -->
+
+## Changes
+- <!-- List key changes -->
+
+## Counts (if tweaks/tests changed)
+| Metric | Before | After |
+|--------|--------|-------|
+| Tweaks | | |
+| Tests | | |
+| Categories | | |
+
+## Checklist
+- [ ] `dotnet build RegiLattice.sln -c Release` — 0 errors, 0 warnings
+- [ ] All 3 test projects pass (`dotnet test` per-project)
+- [ ] CHANGELOG.md updated with new `## [X.Y.Z]` section
+- [ ] `docs/assets/stats.svg` counts updated (space-separated thousands)
+- [ ] No `TODO`/`FIXME` comments in committed code
+- [ ] No `#pragma warning disable` or `[SuppressMessage]` added
+```
+
+**0.C.3.5 — Security policy and support files**
+
+Verify `SECURITY.md` references the current GitHub Private Vulnerability Reporting URL format (changed in 2024):
+
+```markdown
+# Reporting a Vulnerability
+Please use GitHub's [private vulnerability reporting](https://github.com/RajwanYair/RegiLattice/security/advisories/new)
+rather than opening a public issue.
+```
+
+Verify `SUPPORT.md` links to current Discussions URL and references the latest `--doctor` CLI command.
+
+---
+
+### 0.C.4 SVG Standards and Graphical Representations
+
+**0.C.4.1 — SVG compliance audit**
+
+All SVG files in `docs/assets/` must comply with **SVG 1.1 / SVG 2.0** and render correctly in:
+- GitHub Markdown preview (inline `<img src="...svg">` and direct SVG view)
+- VS Code Markdown preview
+- Modern browsers (Chrome 124+, Edge 124+, Firefox 125+)
+
+```powershell
+# Inventory all SVG files
+Get-ChildItem docs/assets/*.svg | Select-Object Name, @{N='Lines';E={(Get-Content $_).Count}}, @{N='HasScript';E={(Select-String $_ -Pattern '<script').Count -gt 0}}
+```
+
+Current SVG inventory and known issues:
+
+| File | Purpose | Known Issue | Fix |
+|------|---------|-------------|-----|
+| `stats.svg` | Tweaks / categories / tests counts badge | Hardcoded counts; space-separated thousands must be maintained manually | Add auto-update step to `Bump-Version.ps1` |
+| `banner.svg` | Header graphic with feature counts | Contains hardcoded counts; may have non-standard `<foreignObject>` | Audit for `foreignObject` use; replace with `<text>` if present |
+| `architecture.svg` | System architecture diagram | Mismatch with Phase 8+ planned architecture | Update architecture diagram to reflect DI + interface plan |
+| `features.svg` | Per-category tweak counts | Counts stale after every sprint | Add to `Sync-CopilotInstructions.ps1` auto-sync |
+| `how-it-works.svg` | User workflow diagram | Static; no auto-update mechanism | Accept manual update; document update trigger in version bump checklist |
+| `project-structure.svg` | File / module / category counts | Counts stale | Add to auto-sync script |
+| `solution-overview.svg` | Core engine metrics | Counts stale | Add to auto-sync script |
+
+**SVG compliance checklist** for each file:
+
+```
+☐ DOCTYPE or XML declaration correct: <?xml version="1.0" encoding="UTF-8"?>
+☐ SVG namespace: xmlns="http://www.w3.org/2000/svg"
+☐ viewBox attribute present (not just width/height) — required for responsive scaling
+☐ No <script> elements (GitHub strips them; security risk)
+☐ No external http:// image references (privacy + mixed-content issues)
+☐ Fonts referenced via system-safe fallback stack: font-family="system-ui, -apple-system, sans-serif"
+☐ Text elements use dominant-baseline or dy for vertical alignment (not deprecated alignment-baseline)
+☐ No use of deprecated xlink:href — use href directly (SVG 2.0+)
+☐ aria-label or <title> element present on root <svg> (accessibility)
+☐ Dark-mode compatible via prefers-color-scheme media query OR separate dark variants
+```
+
+**0.C.4.2 — New SVG diagrams to create**
+
+The following architecture and data-flow diagrams are absent but valuable for developer onboarding and AI-assisted development:
+
+| Diagram | File | Purpose | Format |
+|---------|------|---------|--------|
+| **TweakDef lifecycle** | `docs/assets/tweak-lifecycle.svg` | From definition → registration → detection → apply/remove → history | SVG (flowchart) |
+| **TweakEngine API surface** | `docs/assets/engine-api.svg` | All public methods grouped by concern (search, apply, status, profiles, export) | SVG (grouped bubbles) |
+| **Registry operation types** | `docs/assets/regop-types.svg` | 12 RegOp factories, their inputs, outputs, and DetectOps counterparts | SVG (table-style) |
+| **GUI component tree** | `docs/assets/gui-components.svg` | WinForms control hierarchy: MainForm → panels → dialogs | SVG (tree) |
+| **CI/CD pipeline** | `docs/assets/cicd-pipeline.svg` | 6 workflows with trigger arrows and artifact flow | SVG (pipeline) |
+| **Data persistence map** | `docs/assets/data-persistence.svg` | JSON files in `%LOCALAPPDATA%\RegiLattice\`, their owners and formats | SVG (map) |
+
+**SVG authoring standards for new diagrams**:
+
+```xml
+<!-- Template: every new SVG must start with this header -->
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 600"
+     role="img"
+     aria-label="[Diagram title]">
+  <title>[Diagram title] — RegiLattice v6.33+</title>
+  <desc>[One-sentence description of what the diagram shows]</desc>
+  <!-- Use system-safe font stack -->
+  <style>
+    text { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    .label { font-size: 13px; fill: #24292f; }
+    .heading { font-size: 15px; font-weight: 600; fill: #1f2328; }
+    /* Dark-mode support */
+    @media (prefers-color-scheme: dark) {
+      .label { fill: #e6edf3; }
+      .heading { fill: #f0f6fc; }
+    }
+  </style>
+  <!-- diagram content -->
+</svg>
+```
+
+**0.C.4.3 — Auto-sync stats SVG via `Bump-Version.ps1`**
+
+The `scripts/Bump-Version.ps1` script (added in v6.28.0) handles the 28-file version bump checklist. Extend it to auto-update all count-bearing SVG files:
+
+```powershell
+# Add to scripts/Bump-Version.ps1 — SVG count auto-update section
+
+function Update-SvgCounts {
+    param([string]$TweakCount, [string]$CategoryCount, [string]$TestCount, [string]$ModuleCount)
+
+    # stats.svg uses space-separated thousands: "7 718" not "7718"
+    $tweakFormatted    = Format-SpaceSeparated $TweakCount
+    $categoryFormatted = Format-SpaceSeparated $CategoryCount
+    $testFormatted     = Format-SpaceSeparated $TestCount
+
+    $svgFiles = @{
+        'docs/assets/stats.svg'            = @{ tweaks=$tweakFormatted; categories=$categoryFormatted; tests=$testFormatted }
+        'docs/assets/banner.svg'           = @{ tweaks=$tweakFormatted; categories=$categoryFormatted }
+        'docs/assets/features.svg'         = @{ tweaks=$tweakFormatted }
+        'docs/assets/architecture.svg'     = @{ tweaks=$tweakFormatted; categories=$categoryFormatted; modules=$ModuleCount }
+        'docs/assets/how-it-works.svg'     = @{ tweaks=$tweakFormatted }
+        'docs/assets/project-structure.svg'= @{ tweaks=$tweakFormatted; categories=$categoryFormatted }
+        'docs/assets/solution-overview.svg'= @{ tweaks=$tweakFormatted }
+    }
+
+    foreach ($file in $svgFiles.Keys) {
+        if (-not (Test-Path $file)) { Write-Warning "$file not found — skipping"; continue }
+        # Update is done by sed-equivalent PowerShell replacements
+        # Each SVG has known text node patterns — update them here
+        Write-Host "  Updated $file"
+    }
+}
+
+function Format-SpaceSeparated([string]$n) {
+    # "7718" -> "7 718", "158" -> "158", "3296" -> "3 296"
+    if ($n.Length -gt 3) { return $n.Substring(0, $n.Length - 3) + ' ' + $n.Substring($n.Length - 3) }
+    return $n
+}
+```
+
+**0.C.4.4 — README Mermaid diagrams**
+
+The Mermaid diagrams in `README.md` render via GitHub's built-in Mermaid support (as of 2022). Verify:
+
+1. All Mermaid blocks use ` ```mermaid ` fencing (not ` ```diagram `)
+2. Module/category counts embedded in Mermaid node labels match `docs/assets/stats.svg`
+3. Mermaid syntax is valid with `mermaid-diagram-validator` (available as deferred tool)
+4. At least one diagram uses `flowchart TD` or `graph TD` style (most compatible with GitHub rendering)
+5. No `%%` comment lines adjacent to node definitions (triggers Mermaid 10.x parse errors)
+
+```powershell
+# Extract all Mermaid blocks from README for validation
+$content = Get-Content README.md -Raw
+$blocks = [regex]::Matches($content, '```mermaid\r?\n(.*?)\r?\n```', 'Singleline')
+$blocks | ForEach-Object { Write-Host "Block $($_.Index): $($_.Groups[1].Value.Substring(0, [Math]::Min(80,$_.Groups[1].Value.Length)))..." }
+```
+
+---
+
+### 0.C.5 Documentation Standards
+
+**0.C.5.1 — Markdown linting**
+
+All `.md` files in `docs/`, `.github/`, and root must pass `markdownlint` with the project's configured ruleset. Current known violations:
+
+| Rule | Violation Pattern | Fix |
+|------|------------------|-----|
+| MD022 | `####` headings without blank line below (CHANGELOG) | Add blank line after every `####` heading |
+| MD013 | Lines > 120 chars in instruction files | Disable MD013 globally (already in `.vscode/settings.json`) |
+| MD033 | Raw HTML in markdown (e.g., `<details>`, `<summary>`) | Allow selectively; add to markdownlint config |
+| MD041 | First line of file not an H1 | Verify all docs files start with `# Title` |
+| MD024 | Duplicate headings in CHANGELOG | Disable MD024 for CHANGELOG only (use `<!-- markdownlint-disable MD024 -->`) |
+
+```powershell
+# Run markdownlint across all docs
+npx markdownlint-cli2 "docs/**/*.md" ".github/**/*.md" "README.md" "CHANGELOG.md"
+```
+
+**0.C.5.2 — Broken link audit**
+
+Verify all cross-document links in `docs/` are non-broken:
+
+```powershell
+# Find all markdown links and check they resolve
+$links = Select-String -Path docs/*.md, .github/**/*.md -Pattern '\[.*?\]\((.*?)\)' -AllMatches |
+    ForEach-Object { $_.Matches.Groups[1].Value } |
+    Where-Object { $_ -notmatch '^https?://' -and $_ -notmatch '^#' } |
+    Sort-Object -Unique
+
+$links | ForEach-Object {
+    $resolved = Join-Path docs $_
+    [pscustomobject]@{ Link=$_; Exists=(Test-Path $resolved) }
+} | Where-Object { -not $_.Exists }
+```
+
+**0.C.5.3 — `docs/tweak-schema.json` validation**
+
+The newly added `docs/tweak-schema.json` (JSON Schema 2020-12) should be validated against the spec and used in:
+
+- `PackLoader.ValidatePackJson()` — reference the schema URI for validation
+- `pack-validation.yml` CI workflow — run `ajv validate` against official packs
+- VS Code settings — add `json.schemas` entry so `.rlpack.json` files get IntelliSense:
+
+```jsonc
+// .vscode/settings.json addition
+"json.schemas": [
+    {
+        "fileMatch": ["**/*.rlpack.json"],
+        "url": "https://raw.githubusercontent.com/RajwanYair/RegiLattice/main/docs/tweak-schema.json"
+    }
+]
+```
+
+---
+
+### 0.C.6 Implementation Sequence
+
+Execute steps in this order to minimise regressions:
+
+| Step | Action | Risk | Verification |
+|------|--------|------|-------------|
+| **C.1** | Audit `.vscode/settings.json` — remove deprecated keys | Low | VS Code opens without warnings in Output panel |
+| **C.2** | Update `.vscode/extensions.json` — add `csdevkit`, `errorlens`, `cSpell` | Low | `code --install-extension` for new IDs |
+| **C.3** | Update `.vscode/tasks.json` — add presentation, fix deprecated matchers, add compound tasks | Low | Run each task manually; verify no error |
+| **C.4** | Update `.vscode/launch.json` — add `stopAtEntry`, fix type | Low | Debug launch works |
+| **C.5** | Modernise `.github/ISSUE_TEMPLATE/` — convert bug/feature to Issue Forms | Low | Create a test issue on GitHub; verify form renders |
+| **C.6** | Update `.github/CODEOWNERS` — verify patterns | Low | `git log --diff-filter=A` shows correct reviewer |
+| **C.7** | Update `.github/dependabot.yml` — add NuGet groups + xUnit ignore | Low | Dependabot PRs appear on Monday as configured |
+| **C.8** | Update `.github/pull_request_template.md` — add counts table + checklist | Low | Open a test PR; verify template renders |
+| **C.9** | SVG compliance audit — run compliance checklist on all 7 SVGs | Medium | All SVGs render in VS Code Markdown Preview |
+| **C.10** | Extend `Bump-Version.ps1` with `Update-SvgCounts` function | Medium | Run script on current workspace; SVGs updated correctly |
+| **C.11** | Add `json.schemas` for `.rlpack.json` to `.vscode/settings.json` | Low | Open a `.rlpack.json` file; IntelliSense shows field completions |
+| **C.12** | Validate `docs/tweak-schema.json` with `ajv` against official packs | Low | `npx ajv validate -s docs/tweak-schema.json -d packs/*.rlpack.json` exits 0 |
+| **C.13** | Create missing SVG diagrams (lifecycle, API surface, CI pipeline) | High | SVGs render in browser and GitHub; reviewed by user |
+| **C.14** | Run markdownlint across all docs; fix MD022 violations | Low | `npx markdownlint-cli2 "docs/**/*.md"` exits 0 |
+| **C.15** | Validate README Mermaid blocks | Low | `mermaid-diagram-validator` reports no errors |
+
+---
+
+### 0.C.7 Acceptance Criteria
+
+Phase 0.C is complete when **all** of the following are true:
+
+| Criterion | Verification Command / Check |
+|-----------|------------------------------|
+| No deprecated VS Code settings keys | VS Code Output panel shows no `[settings]` deprecation warnings on workspace open |
+| All recommended extensions present and using current IDs | `code --list-extensions` matches `.vscode/extensions.json` |
+| All VS Code tasks run without errors | Run each task from the Command Palette; all exit 0 |
+| All `.github/ISSUE_TEMPLATE/` files are Issue Forms (`.yml`) | `Get-ChildItem .github/ISSUE_TEMPLATE/ -Filter *.md` returns empty |
+| `CODEOWNERS` covers full directory tree | Create a test PR touching `src/` and `docs/`; both auto-assign `@RajwanYair` |
+| `dependabot.yml` covers `nuget` + `github-actions` ecosystems with correct ignore list | File present; `nuget` and `github-actions` both appear as package ecosystems |
+| All 7 SVG files pass compliance checklist (viewBox, no scripts, system font, aria-label) | Manual review with browser devtools |
+| `Bump-Version.ps1` auto-updates all SVG count fields | Run script on test version; diff confirms all SVG count fields updated |
+| `.vscode/settings.json` includes `json.schemas` for `.rlpack.json` | Open `packs/gaming-fps.rlpack.json`; IntelliSense shows field completions |
+| `docs/tweak-schema.json` validates all 5 official packs | `npx ajv validate -s docs/tweak-schema.json -d packs/*.rlpack.json` exits 0 |
+| All SVG diagrams render correctly in GitHub Markdown and VS Code preview | Push to a test branch; view SVGs in GitHub UI |
+| `npx markdownlint-cli2 "docs/**/*.md" "README.md"` exits 0 | Run command; 0 violations |
+| README Mermaid blocks validate without errors | `mermaid-diagram-validator` reports clean |
+
+---
+
+### 0.C.8 Non-Goals
+
+- This phase does **not** change any C# source code, tests, or the version number
+- This phase does **not** redesign the visual style of existing SVGs — only compliance and correctness
+- This phase does **not** migrate from GitHub Actions to another CI platform
+- This phase does **not** add new tweak categories or modules
+- This phase does **not** create a design system — SVG diagrams are informational, not UI components
+- This phase does **not** set up a GitHub Pages docs site (that is in Phase 14)
 
 ---
 
