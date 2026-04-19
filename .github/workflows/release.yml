@@ -337,3 +337,87 @@ jobs:
             exit 1
           }
           Write-Host "\u2705 Release $tag verified — all required assets present"
+
+  # ---------------------------------------------------------------------------
+  # Smoke Tests — download and validate CLI EXE on both Windows runners.
+  # Absorbed from smoke.yml (A.3 CI consolidation).
+  # ---------------------------------------------------------------------------
+  smoke-test:
+    name: Smoke Test — ${{ matrix.os }}
+    needs: build-and-release
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-2025]
+
+    steps:
+      - name: Download CLI artifact from release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          $dir = "$env:TEMP\regilattice-smoke"
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Write-Host "Downloading CLI EXE for release $tag"
+          gh release download $tag `
+              --repo "${{ github.repository }}" `
+              --pattern "*CLI*-win-x64.exe" `
+              --dir $dir
+          $script:exe = Get-ChildItem $dir -Filter "*CLI*-win-x64.exe" | Select-Object -First 1 -ExpandProperty FullName
+          if (-not $script:exe) { Write-Error "CLI EXE not found in $dir"; exit 1 }
+          Write-Host "Downloaded: $script:exe"
+
+      - name: Smoke — all commands
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem "$env:TEMP\regilattice-smoke" -Filter "*CLI*-win-x64.exe" |
+                     Select-Object -First 1 -ExpandProperty FullName
+          if (-not $exe) { Write-Error "CLI EXE not found"; exit 1 }
+          $cmds = @(
+              @{ Args = @("--help");             Name = "--help"            },
+              @{ Args = @("--list-profiles");    Name = "--list-profiles"   },
+              @{ Args = @("--show-categories");  Name = "--show-categories" },
+              @{ Args = @("--validate");         Name = "--validate"        },
+              @{ Args = @("--stats");            Name = "--stats"           },
+              @{ Args = @("--list","--dry-run"); Name = "--list --dry-run"  }
+          )
+          $failed = @()
+          foreach ($cmd in $cmds) {
+              Write-Host "--- $($cmd.Name) ---"
+              & $exe @($cmd.Args) 2>&1 | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" }
+              if ($LASTEXITCODE -ne 0) {
+                  Write-Host "FAIL: $($cmd.Name) exited $LASTEXITCODE"
+                  $failed += $cmd.Name
+              } else {
+                  Write-Host "OK (exit 0)"
+              }
+          }
+          if ($failed.Count -gt 0) {
+              Write-Error "Failed commands: $($failed -join ', ')"
+              exit 1
+          }
+          Write-Host "All smoke commands passed."
+
+      - name: Write Smoke Summary
+        if: always()
+        shell: pwsh
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          $tag    = '${{ inputs.tag_name || github.ref_name }}'
+          $os     = "${{ matrix.os }}"
+          $status = $env:JOB_STATUS
+          $icon   = if ($status -eq "success") { ":white_check_mark:" } else { ":x:" }
+          $body   = @"
+          ## $icon Smoke Tests — $tag on $os
+
+          | Commands tested | --help, --list-profiles, --show-categories, --validate, --stats, --list --dry-run |
+          |---|---|
+          | **Overall status** | $status |
+
+"@
+          $body | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append

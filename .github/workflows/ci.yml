@@ -1,22 +1,28 @@
-name: CI
+﻿name: CI
 
 on:
   push:
     branches: [main]
     paths-ignore:
       - "docs/**"
-      - "*.md"
+      - "**.md"
+      - "**.svg"
+      - "**.txt"
       - ".github/instructions/**"
       - ".github/skills/**"
-      - "docs/assets/**"
+      - ".github/prompts/**"
+      - "scripts/**"
   pull_request:
     branches: [main]
     paths-ignore:
       - "docs/**"
-      - "*.md"
+      - "**.md"
+      - "**.svg"
+      - "**.txt"
       - ".github/instructions/**"
       - ".github/skills/**"
-      - "docs/assets/**"
+      - ".github/prompts/**"
+      - "scripts/**"
   schedule:
     # Run mutation testing weekly (Monday 04:00 UTC) to avoid burning minutes on every push
     - cron: "0 4 * * 1"
@@ -284,81 +290,37 @@ jobs:
           --logger "console;verbosity=normal"
 
   # ---------------------------------------------------------------------------
-  # Dependency Review — only on pull_request events.
-  # Absorbed from dependency-review.yml (12.1 CI consolidation).
+  # GitHub Pages deployment - only on push to main.
+  # Absorbed from pages.yml (A.3 CI consolidation).
   # ---------------------------------------------------------------------------
-  dependency-review:
-    name: Dependency Review
-    if: github.event_name == 'pull_request'
+  pages-deploy:
+    name: Deploy GitHub Pages
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    continue-on-error: true
     permissions:
       contents: read
-      pull-requests: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v6
 
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          fail-on-severity: high
-          comment-summary-in-pr: always
-          deny-licenses: GPL-2.0, LGPL-2.0, AGPL-3.0
+          path: "."
 
-  # ---------------------------------------------------------------------------
-  # Pack Validation — validates packs/index.json + .rlpack.json files.
-  # Absorbed from pack-validation.yml (12.1 CI consolidation).
-  # Runs only on push/PR (not on schedule — no packs change on schedule).
-  # ---------------------------------------------------------------------------
-  pack-validation:
-    name: Pack Validation
-    needs: build-and-test
-    if: github.event_name != 'schedule'
-    runs-on: windows-latest
-    timeout-minutes: 15
-    env:
-      MSBUILDDISABLENODEREUSE: 1
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: "10.0.x"
-
-      - name: Cache NuGet
-        uses: actions/cache@v5
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
-
-      - name: Build (for pack tests)
-        run: dotnet build RegiLattice.sln -c Release --no-restore
-
-      - name: Validate pack index
-        shell: pwsh
-        run: |
-          if (-not (Test-Path 'packs/index.json')) {
-            Write-Error 'packs/index.json not found'; exit 1
-          }
-          $index = Get-Content 'packs/index.json' | ConvertFrom-Json
-          Write-Host "Pack index v$($index.version), updated $($index.updated), $($index.packs.Count) packs"
-          foreach ($p in $index.packs) {
-            $packFile = "packs/$($p.file)"
-            if (-not (Test-Path $packFile)) {
-              Write-Error "Missing pack file: $packFile (id=$($p.id))"; exit 1
-            }
-            Write-Host "  OK $($p.id) -> $packFile ($($p.tweakCount) tweaks)"
-          }
-
-      - name: Run pack xUnit tests
-        run: >-
-          dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
-          -c Release --no-build
-          --filter "Category=OfficialPacks|FullyQualifiedName~OfficialPack"
-          --settings tests/.runsettings
-          --blame-hang-timeout 30s
-          --logger "console;verbosity=normal"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
