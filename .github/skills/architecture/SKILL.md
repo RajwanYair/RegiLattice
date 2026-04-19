@@ -22,7 +22,7 @@ RegiLattice.sln
 │   │                                   #   Favorites, HardwareInfo, Locale, Ratings,
 │   │                                   #   ShellRunner, SystemMonitor, TweakHistory
 │   ├── Plugins/                        # Tweak Pack marketplace (JSON packs)
-│   └── Tweaks/                         # 170 module files, 7,429 tweaks across 122 categories
+│   └── Tweaks/                         # 195 module files, 7,718 tweaks across 158 categories
 ├── src/RegiLattice.GUI/                # WinForms app (depends on Core)
 │   ├── Theme.cs                        # 11-theme engine (ThemeDef records)
 │   ├── Forms/MainForm.cs               # Main window — categories, search, tray, log panel
@@ -31,7 +31,7 @@ RegiLattice.sln
 ├── src/RegiLattice.CLI/                # Console app (depends on Core)
 │   ├── Program.cs                      # 25+ commands via args parsing
 │   └── CliArgs.cs                      # Extracted CLI argument model
-└── tests/                              # 2,434+ Core + 434+ CLI + 362+ GUI = 3,230 tests
+└── tests/                              # 2,499+ Core + 434+ CLI + 363+ GUI = 3,296 tests
 ```
 
 ## Data Flow — Tweak Lifecycle
@@ -54,14 +54,14 @@ TweakHistory.Record()       Append entry to %LOCALAPPDATA%\RegiLattice\history.j
 
 ## Key Design Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| Declarative tweaks (95%) | Pure data — no code needed for registry-only tweaks |
-| Immutable `TweakDef` (`required init`) | Thread-safe, can't be mutated after construction |
-| All registry I/O via `RegistrySession` | DryRun, backup, structured logging, testability |
-| Sealed classes everywhere | JIT devirtualisation + prevent unintended subclassing |
-| Only 4 P/Invoke calls | `GetComputerNameExW`, `GlobalMemoryStatusEx` ×2, `GetSystemTimes` |
-| `IReadOnlyList<T>` for all public collections | Consumers can't mutate engine state |
+| Decision                                      | Rationale                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------- |
+| Declarative tweaks (95%)                      | Pure data — no code needed for registry-only tweaks               |
+| Immutable `TweakDef` (`required init`)        | Thread-safe, can't be mutated after construction                  |
+| All registry I/O via `RegistrySession`        | DryRun, backup, structured logging, testability                   |
+| Sealed classes everywhere                     | JIT devirtualisation + prevent unintended subclassing             |
+| Only 4 P/Invoke calls                         | `GetComputerNameExW`, `GlobalMemoryStatusEx` ×2, `GetSystemTimes` |
+| `IReadOnlyList<T>` for all public collections | Consumers can't mutate engine state                               |
 
 ## Investigation Commands
 
@@ -84,11 +84,11 @@ Get-ChildItem "src\RegiLattice.Core\Tweaks\*.cs" | Select-Object -ExpandProperty
 
 ## Entry Points for Common Questions
 
-| Question | Starting File |
-|----------|--------------|
-| How is a tweak applied? | `TweakEngine.cs` → `Apply()` → `RegistrySession.Execute()` |
-| Where are profiles? | `Models/ProfileDefinitions.cs`, `Models/ProfileDef.cs` |
-| How is the GUI built? | `Forms/MainForm.cs` → `BuildCategoryPanels()` |
-| How does search work? | `TweakEngine.cs` → `Search()` using pre-built `_searchPairs` |
-| What is CorpSafe? | `Services/CorporateGuard.cs` → P/Invoke + WMI domain checks |
-| How are themes applied? | `Theme.cs` → `SetTheme()` → `ApplyTheme(control)` |
+| Question                | Starting File                                                |
+| ----------------------- | ------------------------------------------------------------ |
+| How is a tweak applied? | `TweakEngine.cs` → `Apply()` → `RegistrySession.Execute()`   |
+| Where are profiles?     | `Models/ProfileDefinitions.cs`, `Models/ProfileDef.cs`       |
+| How is the GUI built?   | `Forms/MainForm.cs` → `BuildCategoryPanels()`                |
+| How does search work?   | `TweakEngine.cs` → `Search()` using pre-built `_searchPairs` |
+| What is CorpSafe?       | `Services/CorporateGuard.cs` → P/Invoke + WMI domain checks  |
+| How are themes applied? | `Theme.cs` → `SetTheme()` → `ApplyTheme(control)`            |

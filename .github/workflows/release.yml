@@ -306,8 +306,7 @@ jobs:
 
       - name: Verify release published cleanly
         # Confirms the release exists on GitHub with the mandatory artifacts.
-        # Fails the workflow (and triggers notify-failure.yml → GH Issue) if
-        # the GUI or CLI EXE is missing from the release asset list.
+        # Fails the workflow if the GUI or CLI EXE is missing from the release asset list.
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}

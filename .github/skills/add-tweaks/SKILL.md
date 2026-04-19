@@ -44,20 +44,20 @@ new TweakDef
 
 ## RegOp Factory Reference
 
-| Method | Registry Type | Notes |
-|--------|--------------|-------|
-| `RegOp.SetDword(path, name, value)` | REG_DWORD | Most common |
-| `RegOp.SetString(path, name, value)` | REG_SZ | Plain string |
+| Method                                     | Registry Type | Notes                     |
+| ------------------------------------------ | ------------- | ------------------------- |
+| `RegOp.SetDword(path, name, value)`        | REG_DWORD     | Most common               |
+| `RegOp.SetString(path, name, value)`       | REG_SZ        | Plain string              |
 | `RegOp.SetExpandString(path, name, value)` | REG_EXPAND_SZ | Paths with `%SystemRoot%` |
-| `RegOp.SetQword(path, name, value)` | REG_QWORD | 64-bit value |
-| `RegOp.SetBinary(path, name, bytes)` | REG_BINARY | Raw bytes |
-| `RegOp.SetMultiSz(path, name, strings)` | REG_MULTI_SZ | String array |
-| `RegOp.DeleteValue(path, name)` | — | Remove op |
-| `RegOp.DeleteTree(path)` | — | Remove entire key |
-| `RegOp.CheckDword(path, name, expected)` | — | Detect op |
-| `RegOp.CheckString(path, name, expected)` | — | Detect op |
-| `RegOp.CheckMissing(path, name)` | — | Detect value absent |
-| `RegOp.CheckKeyMissing(path)` | — | Detect key absent |
+| `RegOp.SetQword(path, name, value)`        | REG_QWORD     | 64-bit value              |
+| `RegOp.SetBinary(path, name, bytes)`       | REG_BINARY    | Raw bytes                 |
+| `RegOp.SetMultiSz(path, name, strings)`    | REG_MULTI_SZ  | String array              |
+| `RegOp.DeleteValue(path, name)`            | —             | Remove op                 |
+| `RegOp.DeleteTree(path)`                   | —             | Remove entire key         |
+| `RegOp.CheckDword(path, name, expected)`   | —             | Detect op                 |
+| `RegOp.CheckString(path, name, expected)`  | —             | Detect op                 |
+| `RegOp.CheckMissing(path, name)`           | —             | Detect value absent       |
+| `RegOp.CheckKeyMissing(path)`              | —             | Detect key absent         |
 
 ## Critical Rules
 
@@ -66,19 +66,19 @@ new TweakDef
 - **Unique IDs across ALL 170 modules** — duplicates throw `ArgumentException` at startup
 - **Registry path format**: Full hive names preferred (`HKEY_LOCAL_MACHINE\...`); abbreviations (`HKLM\...`) also accepted
 - **Duplicate scan before writing**:
-  ```powershell
-  Select-String -Pattern '"my-new-id"' -Path src/RegiLattice.Core/Tweaks/*.cs
-  ```
+    ```powershell
+    Select-String -Pattern '"my-new-id"' -Path src/RegiLattice.Core/Tweaks/*.cs
+    ```
 
 ## Category Slug Reference
 
-| Slug | Category | | Slug | Category |
-|------|----------|-|------|----------|
-| `priv` | Privacy | | `perf` | Performance |
-| `game` | Gaming | | `wsl` | WSL |
-| `sec` | Security | | `svc` | Services |
-| `schtask` | Scheduled Tasks | | `net` | Network |
-| `power` | Power | | `explorer` | Explorer |
+| Slug      | Category        |     | Slug       | Category    |
+| --------- | --------------- | --- | ---------- | ----------- |
+| `priv`    | Privacy         |     | `perf`     | Performance |
+| `game`    | Gaming          |     | `wsl`      | WSL         |
+| `sec`     | Security        |     | `svc`      | Services    |
+| `schtask` | Scheduled Tasks |     | `net`      | Network     |
+| `power`   | Power           |     | `explorer` | Explorer    |
 
 Full slug table in `.github/copilot-instructions.md`.
 
@@ -91,7 +91,7 @@ After adding tweaks, verify all quality gates pass before committing:
 dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Debug
 
 # 2. Run Core tests — must be 0 failures, 0 skipped
-dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
 
 # 3. Check for duplicate IDs (catches new duplicates the build won't)
 Select-String -Pattern 'Id = "' -Path src/RegiLattice.Core/Tweaks/*.cs |

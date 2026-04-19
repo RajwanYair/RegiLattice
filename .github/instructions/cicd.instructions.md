@@ -11,10 +11,11 @@ applyTo: "**/*.yml,**/*.yaml,.github/**"
 Every time a version is bumped (PATCH, MINOR, or MAJOR), the tag **must be pushed immediately**
 after committing. The `git push --tags` triggers the `release.yml` GitHub Actions workflow which:
 
-1. Builds a self-contained `RegiLattice.exe` (win-x64, single file, GUI)
-2. Builds a self-contained `RegiLatticeCLI.exe` (win-x64, single file, CLI)
-3. Builds the MSI installer via WiX
-4. Publishes all three as assets on a new GitHub Release
+1. Builds a self-contained `RegiLattice-vX.Y.Z-win-x64.exe` (GUI)
+2. Builds a self-contained `RegiLatticeCLI-vX.Y.Z-win-x64.exe` (CLI)
+3. Builds the MSI installer via WiX when available
+4. Builds an MSIX package when the runner toolchain supports it
+5. Publishes the release assets plus `SHA256SUMS.txt` on a new GitHub Release
 
 **No version bump may be committed without a tag push.**
 
@@ -67,6 +68,17 @@ to GitHub Releases as soon as the version is tagged.
 gh release list --repo actions/upload-artifact --limit 5
 ```
 
+## Workflow Ecosystem
+
+| Workflow | Trigger | Purpose |
+| -------- | ------- | ------- |
+| `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, test, vulnerability check, dependency review, pack validation, weekly mutation testing |
+| `release.yml` | `v*` tag push, manual dispatch | Versioned release artifacts, GitHub Release, Chocolatey package |
+| `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale issue/PR management, PSScriptAnalyzer |
+| `smoke.yml` | release published | Cross-runner smoke test for the published CLI artifact |
+| `pages.yml` | `push` to `main`, manual dispatch | GitHub Pages deployment |
+| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR container |
+
 ## Standard .NET CI Workflow Pattern
 
 ```yaml
@@ -116,13 +128,28 @@ jobs:
 
             # Run each project individually to avoid cross-assembly file-write races
             - name: Test (Core)
-              run: dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --collect:"XPlat Code Coverage" --logger "console;verbosity=normal"
+              run: dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 30s --collect:"XPlat Code Coverage" --logger "console;verbosity=minimal"
 
             - name: Test (CLI)
-              run: dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+              run: dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 30s --logger "console;verbosity=minimal"
 
             - name: Test (GUI)
-              run: dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+              run: dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --no-restore --settings tests/.runsettings --blame-hang-timeout 30s --logger "console;verbosity=minimal"
+
+            - name: Check for vulnerable NuGet packages
+              shell: pwsh
+              run: |
+                  $output = dotnet list RegiLattice.sln package --vulnerable --include-transitive 2>&1
+                  Write-Host $output
+                  if ($output -match 'has the following vulnerable packages') {
+                      Write-Warning '::warning::Vulnerable NuGet packages detected — review Dependabot PRs'
+                  }
+
+            - name: Validate TweakDef integrity
+              run: >-
+                  dotnet run --project src/RegiLattice.CLI/RegiLattice.CLI.csproj
+                  -c Release --no-build
+                  -- --validate
 
             - name: Upload coverage artifact
               uses: actions/upload-artifact@v7
@@ -226,10 +253,11 @@ gh release view vX.Y.Z --repo RajwanYair/RegiLattice
 ```
 
 **Expected artifacts on every release:**
-- `RegiLattice.GUI.exe` — GUI portable (self-contained win-x64)
-- `RegiLattice.exe` — CLI portable (self-contained win-x64)
+- `RegiLattice-vX.Y.Z-win-x64.exe` — GUI portable (self-contained win-x64)
+- `RegiLatticeCLI-vX.Y.Z-win-x64.exe` — CLI portable (self-contained win-x64)
 - `SHA256SUMS.txt` — checksums file
-- `*.msi` — MSI installer (optional — WiX build may skip if toolchain unavailable)
+- `RegiLattice-vX.Y.Z-win-x64.msi` — optional MSI installer
+- `RegiLattice-vX.Y.Z-win-x64.msix` — optional MSIX package
 
 **If release.yml failed:**
 ```powershell
@@ -240,7 +268,7 @@ git tag vX.Y.Z
 git push --tags
 ```
 
-**If notify-failure.yml creates a GH issue:** Close it once the next run is green.
+**If the failure needs tracking:** Open or update a `ci-failure` issue manually, then close it once the next run is green.
 Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green as of <commit>."`
 
 ---

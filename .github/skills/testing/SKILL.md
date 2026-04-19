@@ -10,9 +10,9 @@ argument-hint: "What to test (e.g. 'TweakEngine.Search', 'new service class', 'C
 
 | Project                         | Tests | Covers                                                                                                                                      |
 | ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/RegiLattice.Core.Tests/` | 2,434+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
+| `tests/RegiLattice.Core.Tests/` | 2,499+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
 | `tests/RegiLattice.CLI.Tests/`  | 434+   | CLI argument parsing, ConsoleColorizer                                                                                                      |
-| `tests/RegiLattice.GUI.Tests/`  | 362+   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
+| `tests/RegiLattice.GUI.Tests/`  | 363+   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
 
 ## Naming Convention
 
@@ -106,11 +106,38 @@ Assert.Contains(profile, ["business", "gaming"]);
 Assert.Contains(profile, new[] { "business", "gaming" });
 ```
 
+### Builtins-heavy tests — share `BuiltinsFixture`
+
+```csharp
+[Collection("Builtins")]
+public sealed class TweakEngineBuiltinsTests
+{
+    private readonly TweakEngine _engine;
+
+    public TweakEngineBuiltinsTests(BuiltinsFixture fixture)
+    {
+        _engine = fixture.Engine;
+    }
+}
+```
+
+Use the shared builtins fixture for tests that only read from `RegisterBuiltins()` data. Rebuilding the full tweak catalog per test class is unnecessary unless the test explicitly validates registration.
+
+### Nullable return guards — `ParseArgs()` first needs `Assert.NotNull()`
+
+```csharp
+var args = Program.ParseArgs(["--list"]);
+Assert.NotNull(args);
+Assert.True(args.ShowList);
+```
+
 ## Running Tests
 
 ```powershell
-# All tests
-dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s
+# All tests (run per project to avoid cross-assembly races)
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
 
 # Single project
 dotnet test tests/RegiLattice.Core.Tests --no-build --verbosity normal
@@ -143,7 +170,7 @@ Every test run must satisfy ALL conditions before committing:
 | Build fatals | **0** — hard CI fail |
 | Build warnings | **0** — `TreatWarningsAsErrors=true`; any warning is a build error |
 | Build errors | **0** — hard fail |
-| Test failures | **0** — all 3,230+ tests must pass |
+| Test failures | **0** — all 3,296+ tests must pass |
 | Skipped tests | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` are **FORBIDDEN** |
 | Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// NOLINT` in test code **FORBIDDEN** |
 | Waivers / lint ignores | **0** — `// csharpier-ignore`, `// coverage: ignore`, `// HACK:` etc. equally forbidden |
@@ -153,9 +180,9 @@ Every test run must satisfy ALL conditions before committing:
 ```powershell
 # Verify quality gate locally before every commit:
 dotnet build RegiLattice.sln -c Release -m:1   # must print: 0 Error(s), 0 Warning(s)
-dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
-dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
-dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj   --settings tests/.runsettings --blame-hang-timeout 30s
 ```
 
 ## Flaky Test Prevention

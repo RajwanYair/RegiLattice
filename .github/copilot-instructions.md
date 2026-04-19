@@ -21,13 +21,15 @@ All files below are auto-loaded into every Copilot chat session via `.vscode/set
 
 ### Environment Bootstrap
 
-Dot-source `.env.ps1` at the project root to ensure **all** CLI tools are on PATH:
+Dot-source `.env.ps1` at the project root to load the **RegiLattice-specific** bootstrap on top of the shared MyScripts tooling bootstrap:
 
 ```powershell
 . .\.env.ps1
 ```
 
-This is auto-loaded by the default VS Code terminal profile (`RegiLattice Dev`).
+This is auto-loaded by the default VS Code terminal profile (`RegiLattice Dev`), which first runs
+`..\.vscode\scripts\Initialize-CommonTooling.ps1` from the `MyScripts` root and then dot-sources
+the workspace `.env.ps1` for repo-local helpers only.
 See `docs/archive/Win11_tools.engineer‑friendly.tool.md` and `docs/archive/SCOOP.engineer‑friendly.tool.md`
 for the full tool reference (local only — not tracked in git).
 
@@ -87,6 +89,35 @@ Rules:
 | Tests    | 3,296 passing (0 consistent failures)                                    |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
+## Workflow Ecosystem
+
+| Workflow | Trigger | Purpose |
+| -------- | ------- | ------- |
+| `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, test, dependency review, pack validation, weekly mutation testing |
+| `release.yml` | `v*` tag push, manual dispatch | Build versioned GUI/CLI artifacts, optional MSI/MSIX, GitHub Release |
+| `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale issues/PRs, PSScriptAnalyzer |
+| `smoke.yml` | release published | Download released CLI artifact and smoke-test it on Windows 2022/2025 |
+| `pages.yml` | `push` to `main`, manual dispatch | Publish the static site to GitHub Pages |
+| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR container |
+
+## MCP Servers
+
+Configured in `.vscode/mcp.json`:
+
+| Server | Backing tool | Capability surface |
+| ------ | ------------ | ------------------ |
+| `github` | GitHub Copilot remote MCP | Repos, issues, PRs, code search, file content, commits, branches |
+| `filesystem` | `@modelcontextprotocol/server-filesystem` | Full workspace read/write/search |
+| `project-docs` | `@modelcontextprotocol/server-filesystem` | Scoped `.github/` + `docs/` read/write/search |
+| `memory` | `@modelcontextprotocol/server-memory` | Persistent project facts in `.github/mcp-memory.jsonl` |
+| `sequential-thinking` | `@modelcontextprotocol/server-sequential-thinking` | Structured multi-step reasoning for debugging and planning |
+
+## Skill And Prompt Surface
+
+- Skills live under `.github/skills/*/SKILL.md` and should stay aligned with the current codebase, workflows, and tool surface.
+- Prompt entrypoints live under `.github/prompts/*.prompt.md` for repeatable review, test, tweak-search, and tool-health tasks.
+- The RegiLattice agent definition in `.github/agents/regilattice.agent.md` should reflect the workflow ecosystem above and the MCP servers configured in `.vscode/mcp.json`.
+
 ## Build Quality Standards — Non-Negotiable
 
 | Standard                | Requirement                                                            |
@@ -117,10 +148,10 @@ Rules:
 
 ### Issue-Driven Release Flow (MANDATORY for version bumps)
 
-1. Run `release-prep.yml` → creates release issue + `release/vX.Y.Z` branch + draft PR
-2. Check out branch, update version files, push changes
-3. Mark PR ready → CI validates → merge to `main`
-4. Tag and push immediately after merge:
+1. Create a release issue from `.github/ISSUE_TEMPLATE/release.yml`
+2. Create and push `release/vX.Y.Z`, then open a draft PR to `main`
+3. Update version files on the release branch and let CI validate the branch
+4. Merge the PR to `main`, then tag and push immediately:
 
 ```powershell
 git checkout main; git pull
@@ -136,6 +167,8 @@ git commit -m "feat(tweaks): Sprint NNN — N tweaks, vX.Y.Z"
 git tag vX.Y.Z
 git push; git push --tags   # ← REQUIRED on every version bump
 ```
+
+When using the issue/PR path above, the tag push happens only after the release branch has merged to `main`.
 
 ---
 

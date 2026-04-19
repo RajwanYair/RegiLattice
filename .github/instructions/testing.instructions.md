@@ -248,9 +248,9 @@ Every test run and every CI build must meet these conditions before merging:
 ```powershell
 # Verify the full quality gate locally before every commit:
 dotnet build RegiLattice.sln -c Release   # must print 0 Error(s), 0 Warning(s)
-dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s
-dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 60s
-dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj  --settings tests/.runsettings --blame-hang-timeout 30s
 ```
 
 ## Flaky Test Prevention

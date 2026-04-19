@@ -11,7 +11,8 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>HtmlReportGenerator tests.</summary>
-public sealed class HtmlReportGeneratorTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class HtmlReportGeneratorTests
 {
     private readonly TweakEngine _engine;
 

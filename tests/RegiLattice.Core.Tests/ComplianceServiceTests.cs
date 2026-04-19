@@ -10,7 +10,8 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>ComplianceService check logic tests.</summary>
-public sealed class ComplianceServiceTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class ComplianceServiceTests
 {
     private readonly TweakEngine _engine;
 

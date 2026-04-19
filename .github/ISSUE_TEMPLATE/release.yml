@@ -1,5 +1,5 @@
 name: Release Checklist
-description: Track a version bump and release — created automatically by release-prep.yml or manually for planned releases
+description: Track a version bump and release for planned releases
 title: "Release vX.Y.Z"
 labels: ["release"]
 body:

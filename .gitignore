@@ -77,6 +77,7 @@ current-ids.txt
 
 # ── Development temporary / intermediate files ──────────────
 .tmp/
+build_output.txt
 
 .fake
 

@@ -151,8 +151,10 @@ Build and package configuration is centralized in:
 # Build
 dotnet build RegiLattice.sln
 
-# Test
-dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s
+# Test (run per project to avoid cross-assembly file races)
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
 
 # Run GUI
 dotnet run --project src/RegiLattice.GUI

@@ -58,6 +58,21 @@ WinForms, xUnit testing, MSBuild, and Windows registry internals.
 - Stack: C# 13 / .NET 10.0-windows (x64), WinForms GUI, xUnit 2.9.3
 - Current state: 7,718 tweaks across 158 categories, 195 modules, 3,296 tests
 
+## Workflow Awareness
+
+Know the active automation surface before suggesting process changes:
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, sequential tests, dependency review, pack validation, weekly mutation testing |
+| `release.yml` | `v*` tag push, manual dispatch | Versioned GUI/CLI artifacts, optional MSI/MSIX, GitHub Release |
+| `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale cleanup, PSScriptAnalyzer |
+| `smoke.yml` | release published | Smoke-test released CLI artifact on Windows 2022/2025 |
+| `pages.yml` | `push` to `main`, manual dispatch | Deploy GitHub Pages site |
+| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR image |
+
+For version bumps, the current repo path is: create a release issue from `.github/ISSUE_TEMPLATE/release.yml`, create `release/vX.Y.Z`, open a draft PR, merge, then tag and push.
+
 ## Standing Rules (ALWAYS enforce)
 
 ### PowerShell Only — HARD BLOCK
@@ -318,6 +333,12 @@ Use dedicated Copilot/MCP tools before falling back to shell commands:
 | `project-docs` | stdio (OSS) | `.github/` + `docs/` scoped read/write — all `mcp_project-docs_*` tools |
 | `memory` | stdio (OSS) | Persistent knowledge graph — store project facts across sessions in `.github/mcp-memory.jsonl` |
 | `sequential-thinking` | stdio (OSS) | Explicit multi-step reasoning for complex debugging and sprint planning |
+
+## Skill And Prompt Discovery
+
+- Skills live in `.github/skills/*/SKILL.md` and should be loaded before executing the matching workflow.
+- Reusable prompt entrypoints live in `.github/prompts/*.prompt.md`.
+- Prefer the workflow-specific skill over ad-hoc improvisation when the request matches a documented domain such as release, testing, debug-fix, add-tweaks, search-tweaks, package-managers, tool-versions, no-duplication, gui-themes, or architecture.
 
 ## Response Style
 

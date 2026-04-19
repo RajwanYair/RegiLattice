@@ -17,6 +17,15 @@ argument-hint: "Tool name or what to check/add (e.g. 'add docker version check')
 | Chocolatey | `choco` | `--version` | `choco upgrade chocolatey` |
 | Git | `git` | `--version` | `winget upgrade Git.Git` |
 | Node.js | `node` | `--version` | `winget upgrade OpenJS.NodeJS` |
+| .NET SDK | `dotnet` | `--version` | `winget upgrade Microsoft.DotNet.SDK` |
+| GitHub CLI | `gh` | `--version` | `winget upgrade GitHub.cli` |
+| CMake | `cmake` | `--version` | `winget upgrade Kitware.CMake` |
+| Ninja | `ninja` | `--version` | Scoop or package manager update |
+| Perl | `perl` | `-v` | Scoop or package manager update |
+| Docker | `docker` | `--version` | `winget upgrade Docker.DockerDesktop` |
+| Rust | `rustc` | `--version` | `rustup update` |
+| Go | `go` | `version` | `winget upgrade GoLang.Go` |
+| Java | `java` | `-version` | `winget upgrade Oracle.JDK` or `winget upgrade EclipseAdoptium.Temurin` |
 
 ## Key Files
 
@@ -27,23 +36,20 @@ argument-hint: "Tool name or what to check/add (e.g. 'add docker version check')
 | `src/RegiLattice.Core/Services/AppConfig.cs` | `CheckToolUpdates` setting |
 | `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` | Tool version format tests |
 
+`ToolVersionChecker.CheckAllAsync()` currently probes 16 tools. `CheckAllWithUpdatesAsync()` augments a subset of them with winget-backed latest-version detection when a stable package ID mapping exists.
+
 ## Adding a New Tool
 
 1. **Add entry to `ToolVersionChecker.CheckAllAsync()`**:
 ```csharp
-new ToolVersionEntry
-{
-    Name = "MyTool",
-    Executable = "mytool",
-    VersionArgs = ["--version"],
-    ParseVersion = static output => output.Trim().TrimStart('v'),
-    LatestVersionUrl = "https://api.github.com/repos/org/mytool/releases/latest"
-}
+CheckToolAsync("MyTool", "mytool", ["--version"], ct)
 ```
 
-2. **Add the tool row to `ToolVersionsDialog`** display list
+2. **If update checks are supported, add the winget package mapping** in `CheckAllWithUpdatesAsync()` so the tool can surface `LatestVersion` and `UpdateAvailable`
 
-3. **Write a test** in `PackageManagerValidationTests.cs` verifying version string format parsing
+3. **Add or update `ExtractVersion()`** if the tool emits a non-standard version string
+
+4. **Write a test** in `PackageManagerValidationTests.cs` verifying version string parsing or UI rendering
 
 ## Process Execution Rules
 

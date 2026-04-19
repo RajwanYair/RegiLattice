@@ -94,7 +94,9 @@ For non-version-bump work, push criteria (at end of session):
 ```powershell
 # End-of-session push flow
 dotnet build RegiLattice.sln -c Release -m:1
-dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build -c Release --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s -c Release --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s -c Release --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s -c Release --logger "console;verbosity=minimal"
 git push
 ```
 
@@ -183,8 +185,8 @@ so CI validates the change before it lands on `main`.
 | Bug discovered                | Create or find a **Bug Report** issue                 |
 | Feature planned               | Create a **Feature Request** issue                    |
 | New tweaks needed             | Create a **New Tweak Proposal** issue                 |
-| Version bump planned          | Run **release-prep.yml** → auto-creates issue + PR    |
-| CI/Release fails              | **notify-failure.yml** auto-creates a `ci-failure` issue |
+| Version bump planned          | Create a **Release Checklist** issue from `.github/ISSUE_TEMPLATE/release.yml` |
+| CI/Release fails              | Inspect the failed workflow run and track follow-up in a `ci-failure` issue if needed |
 
 Every commit that addresses an issue MUST reference it in the footer:
 
@@ -196,12 +198,12 @@ Closes #42
 
 ### Release via Pull Request (MANDATORY for version bumps)
 
-**Automated path** (preferred):
+**Current path**:
 
-1. Run `release-prep.yml` via GitHub Actions → creates release issue + `release/vX.Y.Z` branch + draft PR
-2. Check out the release branch locally: `git checkout release/vX.Y.Z`
+1. Create a release issue from `.github/ISSUE_TEMPLATE/release.yml`
+2. Check out the release branch locally: `git checkout -b release/vX.Y.Z`
 3. Update all version files (follow the checklist in the release issue)
-4. Push changes to the release branch
+4. Push changes to the release branch and open a draft PR to `main`
 5. Mark the PR as ready → CI runs automatically
 6. Merge the PR to `main` (squash or merge commit)
 7. Tag and push immediately after merge:
@@ -261,7 +263,7 @@ Version follows **Semantic Versioning**: `MAJOR.MINOR.PATCH`
 
 When bumping:
 
-0. **Create a release issue** — run `release-prep.yml` or create manually from the Release Checklist template. This creates the tracking issue, release branch, and draft PR.
+0. **Create a release issue** — create it from the Release Checklist template, then create the release branch and draft PR manually.
 1. Update `Directory.Build.props` — ALL four version properties must be kept in sync:
     ```xml
     <Version>X.Y.Z</Version>
@@ -326,7 +328,9 @@ git commit --amend --no-edit
 
 # Build + test before committing
 dotnet build RegiLattice.sln -c Debug -m:1
-dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s --logger "console;verbosity=minimal"
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s --logger "console;verbosity=minimal"
 
 # End-of-session push (includes tags)
 git push

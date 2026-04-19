@@ -800,10 +800,10 @@ persistent MSBuild node running from a previous build holds an exclusive file ha
 `*.AssemblyInfoInputs.cache` in that temp dir. The next build tries to read the locked
 file → `error MSB3492: Could not read existing file "...AssemblyInfoInputs.cache"`.
 
-**Permanent fix**: `MSBUILDDISABLENODEREUSE=1` — set in three places so it is never missing:
+**Permanent fix**: `MSBUILDDISABLENODEREUSE=1` — set in the shared bootstrap and CI so it is never missing:
 
-1. `.env.ps1` — sourced by the default VS Code terminal profile at session start
-2. `.vscode/settings.json` → `terminal.integrated.env.windows` — belt-and-suspenders
+1. `..\.vscode\scripts\Initialize-CommonTooling.ps1` — shared terminal bootstrap for all projects under `MyScripts`
+2. `.env.ps1` — RegiLattice workspace bootstrap still forwards into the shared bootstrap when sourced directly
 3. `ci.yml` + `release.yml` → `env: MSBUILDDISABLENODEREUSE: 1` at job level
 
 ### Root Cause 2 — `-q` (Quiet Verbosity) Aborts on Question-Build Signals
@@ -830,8 +830,8 @@ before any target) and `BeforeTargets="GenerateTargetFrameworkMonikerAttribute;.
   now pre-creates `ref\` and `refint\` subdirs; new `RegiLatticeClearStaleCaches`
   target (`BeforeTargets="CoreGenerateAssemblyInfo"`) deletes `AssemblyInfoInputs.cache`
   pre-emptively on every build, eliminating MSB3492 as a defence-in-depth measure.
-- `.env.ps1` — `$env:MSBUILDDISABLENODEREUSE = '1'`
-- `.vscode/settings.json` — `"terminal.integrated.env.windows": { "MSBUILDDISABLENODEREUSE": "1" }`
+- `..\.vscode\scripts\Initialize-CommonTooling.ps1` — shared `$env:MSBUILDDISABLENODEREUSE = '1'`
+- `.env.ps1` — now workspace-specific only; forwards to the shared bootstrap unless `-SkipCommonBootstrap` is used
 - `.github/workflows/ci.yml` + `release.yml` — `env: MSBUILDDISABLENODEREUSE: 1`
 
 ### Normal Build Command (no workarounds needed)

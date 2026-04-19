@@ -6,7 +6,8 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests that require RegisterBuiltins — share a single engine via IClassFixture.</summary>
-public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class TweakEngineBuiltinsTests
 {
     private readonly TweakEngine _engine;
 
@@ -916,7 +917,8 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 
 // ── merged from NewTweakModulesTests.cs ──────────────────────────────────
 /// <summary>Tests for new tweak modules (50 new tweaks total).</summary>
-public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class NewTweakModulesTests
 {
     private readonly TweakEngine _engine;
 
@@ -1475,7 +1477,8 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 
 // ── merged from PolicyModulesV574Tests.cs ──────────────────────────────────
 /// <summary>Tests for the 94 new policy modules added in v5.74.0.</summary>
-public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class PolicyModulesV574Tests
 {
     private readonly TweakEngine _engine;
 

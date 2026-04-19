@@ -248,8 +248,6 @@ Update-File 'winget\RegiLattice.RegiLattice.installer.yaml' "PackageVersion: $Ol
 Update-File 'winget\RegiLattice.RegiLattice.locale.en-US.yaml' "PackageVersion: $OldVersion" "PackageVersion: $Version" 'winget locale version'
 Update-FileRegex 'winget\RegiLattice.RegiLattice.locale.en-US.yaml' '\d{4,5} tweaks' "$TweakCount tweaks" 'winget locale tweak count'
 
-Update-File 'powershell\RegiLattice.psd1' "ModuleVersion = '$OldVersion'" "ModuleVersion = '$Version'" 'psd1 version'
-
 # ---------------------------------------------------------------------------
 # Group E: Repo memory
 # ---------------------------------------------------------------------------

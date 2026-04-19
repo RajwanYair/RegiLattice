@@ -9,7 +9,8 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
-public sealed class SmartScanServiceTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class SmartScanServiceTests
 {
     private readonly TweakEngine _engine;
 

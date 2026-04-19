@@ -8,7 +8,8 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for TweakEngine: registration, lookup, search, profiles, dry-run ops.</summary>
-public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class TweakEngineTests
 {
     private readonly TweakEngine _builtins;
 
@@ -2108,7 +2109,8 @@ public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
 
 // ── ApplyProfile, CategoryCounts, ScopeCounts, utility paths ──
 
-public sealed class TweakEngineAdditionalTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class TweakEngineAdditionalTests
 {
     private readonly TweakEngine _engine;
 
@@ -2266,13 +2268,14 @@ public sealed class TweakEngineAdditionalTests : IClassFixture<BuiltinsFixture>
 
 // ── merged from TweakEngineSearchNlpTests.cs ──────────────────────────────────
 /// <summary>NLP synonym search tests for TweakEngine.Search().</summary>
+[Collection("Builtins")]
 public sealed class TweakEngineSearchNlpTests
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public TweakEngineSearchNlpTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
 
     // ── Direct term matching ──────────────────────────────────────────────
@@ -2281,20 +2284,18 @@ public sealed class TweakEngineSearchNlpTests
     public void Search_EmptyQuery_ReturnsAllTweaks()
     {
         // Empty query is treated as "show all" — returns the full tweak set.
-        var engine = BuildEngine();
-        var results = engine.Search("");
+        var results = _engine.Search("");
         Assert.NotEmpty(results);
-        Assert.Equal(engine.AllTweaks().Count, results.Count);
+        Assert.Equal(_engine.AllTweaks().Count, results.Count);
     }
 
     [Fact]
     public void Search_WhitespaceQuery_ReturnsAllTweaks()
     {
         // Whitespace-only query is treated as "show all" — same as empty.
-        var engine = BuildEngine();
-        var results = engine.Search("   ");
+        var results = _engine.Search("   ");
         Assert.NotEmpty(results);
-        Assert.Equal(engine.AllTweaks().Count, results.Count);
+        Assert.Equal(_engine.AllTweaks().Count, results.Count);
     }
 
     // ── Synonym expansion ─────────────────────────────────────────────────
@@ -2305,8 +2306,7 @@ public sealed class TweakEngineSearchNlpTests
     [InlineData("boost")]
     public void Search_PerformanceSynonym_ReturnsTweaks(string query)
     {
-        var engine = BuildEngine();
-        var results = engine.Search(query);
+        var results = _engine.Search(query);
         Assert.NotEmpty(results);
     }
 
@@ -2316,8 +2316,7 @@ public sealed class TweakEngineSearchNlpTests
     [InlineData("telemetry")]
     public void Search_PrivacySynonym_ReturnsTweaks(string query)
     {
-        var engine = BuildEngine();
-        var results = engine.Search(query);
+        var results = _engine.Search(query);
         Assert.NotEmpty(results);
     }
 
@@ -2327,8 +2326,7 @@ public sealed class TweakEngineSearchNlpTests
     [InlineData("unwanted")]
     public void Search_DebloatSynonym_ReturnsTweaks(string query)
     {
-        var engine = BuildEngine();
-        var results = engine.Search(query);
+        var results = _engine.Search(query);
         Assert.NotEmpty(results);
     }
 
@@ -2337,9 +2335,8 @@ public sealed class TweakEngineSearchNlpTests
     [Fact]
     public void Search_MultiWord_ReturnsIntersection()
     {
-        var engine = BuildEngine();
-        var single = engine.Search("telemetry");
-        var multi = engine.Search("disable telemetry");
+        var single = _engine.Search("telemetry");
+        var multi = _engine.Search("disable telemetry");
         // Multi-word should not return MORE results than single-keyword:
         Assert.True(multi.Count <= single.Count);
         // But should still return something
@@ -2351,8 +2348,7 @@ public sealed class TweakEngineSearchNlpTests
     [Fact]
     public void Search_UnknownTerm_ReturnsEmpty()
     {
-        var engine = BuildEngine();
-        var results = engine.Search("xyzzy_nonexistent_term_93812");
+        var results = _engine.Search("xyzzy_nonexistent_term_93812");
         Assert.Empty(results);
     }
 
@@ -2361,9 +2357,8 @@ public sealed class TweakEngineSearchNlpTests
     [Fact]
     public void Search_ResultIds_AreRegisteredTweaks()
     {
-        var engine = BuildEngine();
-        var allIds = engine.AllTweaks().Select(t => t.Id).ToHashSet(StringComparer.Ordinal);
-        var results = engine.Search("disable");
+        var allIds = _engine.AllTweaks().Select(t => t.Id).ToHashSet(StringComparer.Ordinal);
+        var results = _engine.Search("disable");
         Assert.All(results, t => Assert.Contains(t.Id, allIds));
     }
 }

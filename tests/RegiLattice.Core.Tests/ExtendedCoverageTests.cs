@@ -303,7 +303,8 @@ public sealed class AppConfigBrightnessBranchTests
 
 // ── merged from BranchCoverage2Tests.cs ──────────────────────────────────
 
-public sealed class ComplianceReportExporterBranchTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class ComplianceReportExporterBranchTests
 {
     private readonly TweakEngine _engine;
 
@@ -789,7 +790,8 @@ public sealed class PowerPlanManagerLiveTests
 // 4.  ComplianceDrift / ComplianceService — uncovered branch paths
 // ═══════════════════════════════════════════════════════════════════════════
 
-public sealed class ComplianceDriftAdditionalTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class ComplianceDriftAdditionalTests
 {
     private readonly TweakEngine _engine;
 

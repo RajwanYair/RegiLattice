@@ -10,11 +10,11 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 
 `MAJOR.MINOR.PATCH` — Semantic Versioning
 
-| Bump | When |
-|------|------|
+| Bump    | When                                                          |
+| ------- | ------------------------------------------------------------- |
 | `PATCH` | Bug fixes, refactoring, docs, dead code removal, config fixes |
-| `MINOR` | New tweaks, new features, new dialogs/services |
-| `MAJOR` | Breaking API changes, architectural overhauls |
+| `MINOR` | New tweaks, new features, new dialogs/services                |
+| `MAJOR` | Breaking API changes, architectural overhauls                 |
 
 ## Files to Update (31-item checklist — see full details in `lessons-learned.instructions.md`)
 
@@ -24,71 +24,73 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 
 ### Group A — Version properties (EVERY version bump)
 
-| # | File | Property / Pattern |
-|---|------|--------------------|
-| 1 | `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| 2 | `installer/Package.wxs` | `Version="X.Y.Z"` (inside `<Package ...>`) |
+| #   | File                    | Property / Pattern                                                          |
+| --- | ----------------------- | --------------------------------------------------------------------------- |
+| 1   | `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| 2   | `installer/Package.wxs` | `Version="X.Y.Z"` (inside `<Package ...>`)                                  |
 
 ### Group B — SVG graphics (when counts change)
 
-| # | File | What changes |
-|---|------|----|
-| 3 | `docs/assets/stats.svg` | Tweaks + categories + tests (space-separated thousands) |
-| 4 | `docs/assets/banner.svg` | Tweaks · categories · tests · themes · profiles |
-| 5 | `docs/assets/features.svg` | Per-category tweak count badges |
-| 6 | `docs/assets/architecture.svg` | Stats badge + category pills: tweak count · category count · module file count |
-| 7 | `docs/assets/how-it-works.svg` | Tweaks count in Browse step |
-| 8 | `docs/assets/project-structure.svg` | File count · tweak count · category count |
-| 9 | `docs/assets/solution-overview.svg` | File count · tweak count |
+| #   | File                                | What changes                                                                   |
+| --- | ----------------------------------- | ------------------------------------------------------------------------------ |
+| 3   | `docs/assets/stats.svg`             | Tweaks + categories + tests (space-separated thousands)                        |
+| 4   | `docs/assets/banner.svg`            | Tweaks · categories · tests · themes · profiles                                |
+| 5   | `docs/assets/features.svg`          | Per-category tweak count badges                                                |
+| 6   | `docs/assets/architecture.svg`      | Stats badge + category pills: tweak count · category count · module file count |
+| 7   | `docs/assets/how-it-works.svg`      | Tweaks count in Browse step                                                    |
+| 8   | `docs/assets/project-structure.svg` | File count · tweak count · category count                                      |
+| 9   | `docs/assets/solution-overview.svg` | File count · tweak count                                                       |
 
 ### Group C — Documentation & instruction files
 
-| # | File | What changes |
-|---|------|----|
-|10 | `README.md` | Version badge, test badge, download link, description, features, diagram counts |
-|11 | `CHANGELOG.md` (root stub) | Latest version entry summary |
-|12 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
-|13 | `docs/Development.md` | Header "Last updated" date + version |
-|14 | `docs/Roadmap.md` | Baseline counts if changed |
-|15 | `.github/copilot-instructions.md` | Header, version table, tweak/category/module/test counts |
-|16 | `.github/instructions/workspace.instructions.md` | Tweaks/module count in `Tweaks/` directory comment |
-|17 | `.github/instructions/lessons-learned.instructions.md` | Header date + version + counts |
-|18 | `.github/instructions/testing.instructions.md` | Test project counts table (Core/CLI/GUI/Total) |
-|19 | `.github/agents/regilattice.agent.md` | "Current state" line: tweak/category/module/test counts |
+| #   | File                                                   | What changes                                                                    |
+| --- | ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| 10  | `README.md`                                            | Version badge, test badge, download link, description, features, diagram counts |
+| 11  | `CHANGELOG.md` (root stub)                             | Latest version entry summary                                                    |
+| 12  | `docs/CHANGELOG.md`                                    | Prepend new `## [X.Y.Z]` section with Stats line                                |
+| 13  | `docs/Development.md`                                  | Header "Last updated" date + version                                            |
+| 14  | `docs/Roadmap.md`                                      | Baseline counts if changed                                                      |
+| 15  | `.github/copilot-instructions.md`                      | Header, version table, tweak/category/module/test counts                        |
+| 16  | `.github/instructions/workspace.instructions.md`       | Tweaks/module count in `Tweaks/` directory comment                              |
+| 17  | `.github/instructions/lessons-learned.instructions.md` | Header date + version + counts                                                  |
+| 18  | `.github/instructions/testing.instructions.md`         | Test project counts table (Core/CLI/GUI/Total)                                  |
+| 19  | `.github/agents/regilattice.agent.md`                  | "Current state" line: tweak/category/module/test counts                         |
 
 ### Group D — Package registry manifests (version + description counts)
 
-| # | File | What changes |
-|---|------|----|
-|20 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
-|21 | `scoop/regilattice.json` | `version`, `url`, `hash`, description counts |
-|22 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
-|23 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
-|24 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
-|25 | `powershell/RegiLattice.psd1` | `ModuleVersion` |
+| #   | File                                               | What changes                                               |
+| --- | -------------------------------------------------- | ---------------------------------------------------------- |
+| 20  | `chocolatey/regilattice.nuspec`                    | `<version>`, `<summary>`, description counts               |
+| 21  | `scoop/regilattice.json`                           | `version`, `url`, `hash`, description counts               |
+| 22  | `winget/RegiLattice.RegiLattice.yaml`              | `PackageVersion`                                           |
+| 23  | `winget/RegiLattice.RegiLattice.installer.yaml`    | `PackageVersion`, `InstallerUrl`                           |
+| 24  | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
+| 25  | `powershell/RegiLattice.psd1`                      | `ModuleVersion`                                            |
 
 ### Group E — Derived files (update AFTER release build)
 
-| # | File | What changes |
-|---|------|----|
-|26 | `Dockerfile` | `LABEL` description counts |
+| #   | File         | What changes               |
+| --- | ------------ | -------------------------- |
+| 26  | `Dockerfile` | `LABEL` description counts |
 
 ### Group F — External (post-push)
 
-| # | Action | What changes |
-|---|--------|----|
-|27 | GitHub About sidebar | `gh repo edit` — update tweak count in description |
+| #   | Action               | What changes                                       |
+| --- | -------------------- | -------------------------------------------------- |
+| 27  | GitHub About sidebar | `gh repo edit` — update tweak count in description |
 
 ## Step-by-Step Release Process
 
 ### 0. Create a release issue and branch (MANDATORY for version bumps)
 
-**Automated path** (preferred):
-1. Run `release-prep.yml` via GitHub Actions with version, bump type, and summary
-2. This auto-creates: a **release issue** (with full checklist), a `release/vX.Y.Z` branch, and a **draft PR**
-3. Check out the release branch locally: `git checkout release/vX.Y.Z; git pull`
+**Current path**:
+
+1. Create a release issue from `.github/ISSUE_TEMPLATE/release.yml`
+2. Create the release branch locally: `git checkout -b release/vX.Y.Z`
+3. Push the branch and open a draft PR to `main`
 
 **Manual path** (for local-only prep):
+
 ```powershell
 # Create branch
 git checkout -b release/vX.Y.Z
@@ -101,9 +103,15 @@ gh pr create --title "chore: release vX.Y.Z" --body "Closes #NN" --base main
 ```
 
 ### 1. Pre-flight checks
+
 ```powershell
 # Run all tests — must be 0 failures
-dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 30s
+
+# Validate tweak integrity before tagging
+dotnet run --project src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release --no-build -- --validate
 
 # Release build — must be 0 errors, 0 warnings (build each project sequentially)
 dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj  -c Release
@@ -112,7 +120,9 @@ dotnet build src/RegiLattice.CLI/RegiLattice.CLI.csproj    -c Release
 ```
 
 ### 2. Bump version in all files
+
 Update ALL properties simultaneously — never leave them out of sync:
+
 ```xml
 <!-- Directory.Build.props -->
 <Version>X.Y.Z</Version>
@@ -122,16 +132,20 @@ Update ALL properties simultaneously — never leave them out of sync:
 ```
 
 ### 3. Add CHANGELOG entry in `docs/CHANGELOG.md`
+
 ```markdown
 ## [X.Y.Z] — YYYY-MM-DD
 
 ### Added
+
 - ...
 
 ### Fixed
+
 - ...
 
 ### Stats
+
 - Tweaks: **N NNN**
 - Tests: **N NNN** passing (NNN Core + NNN CLI + NNN GUI)
 - Version bumped `X.Y.Z-1` → `X.Y.Z`
@@ -140,6 +154,7 @@ Update ALL properties simultaneously — never leave them out of sync:
 ### 4. Update root `CHANGELOG.md` stub with the latest entry summary
 
 ### 5. Push to release branch and merge PR
+
 ```powershell
 git add -A
 git commit -m "chore: bump version to vX.Y.Z
@@ -157,6 +172,7 @@ git push origin release/vX.Y.Z
 Mark the draft PR as ready for review. Wait for CI to pass. Merge to `main`.
 
 ### 6. Tag and push (triggers GitHub Actions release workflow)
+
 ```powershell
 git checkout main
 git pull
@@ -172,11 +188,12 @@ Wait 3–5 minutes then:
 2. Confirm the workflow for `vX.Y.Z` shows a green ✅ (not ❌ or ⏳)
 3. Open `https://github.com/RajwanYair/RegiLattice/releases/latest`
 4. Verify the release exists with all expected assets:
-   - `RegiLattice.GUI.exe` (GUI portable)
-   - `RegiLattice.exe` (CLI portable)
-   - `*.msi` (installer — may be absent if WiX build failed, which is OK)
+    - `RegiLattice-vX.Y.Z-win-x64.exe` (GUI portable)
+    - `RegiLatticeCLI-vX.Y.Z-win-x64.exe` (CLI portable)
+    - `SHA256SUMS.txt` (checksums)
+    - `RegiLattice-vX.Y.Z-win-x64.msi` (optional)
+    - `RegiLattice-vX.Y.Z-win-x64.msix` (optional)
 5. Close the release issue (auto-closed if PR body had `Closes #NN`)
-   - `SHA256SUMS.txt` (checksums)
 
 **Only after these checks pass** is the release complete. Do NOT skip this step — past releases
 failed silently (v3.5.0 succeeded; v3.7.3 workflow failed because the MSI build error cascaded
@@ -185,9 +202,11 @@ and killed the release upload step entirely).
 ## GitHub Actions Release Workflow
 
 The tag push triggers `.github/workflows/release.yml` which:
+
 1. Builds GUI + CLI as self-contained `win-x64` single-file executables
-2. *Optionally* builds the WiX `.msi` installer (`continue-on-error: true`)
-3. Creates a GitHub Release with all artifacts (`fail_on_unmatched_files: false`)
+2. _Optionally_ builds the WiX `.msi` installer (`continue-on-error: true`)
+3. _Optionally_ builds an `.msix` package and Chocolatey package
+4. Creates a GitHub Release with all matched artifacts
 
 The MSI build is **non-blocking** — if WiX toolchain fails, the EXEs are still released.
 
@@ -211,6 +230,7 @@ git push --tags
 ```
 
 Alternatively, use `workflow_dispatch` on GitHub Actions UI:
+
 - Go to Actions → Release → "Run workflow"
 - Select the `vX.Y.Z` tag as the ref
 - Optionally enter the tag name in the `tag_name` input
@@ -222,9 +242,11 @@ The actual uploaded filenames depend on the build and may not include the versio
 
 ```markdown
 # ✅ CORRECT — version in text, resolves to actual release page
+
 👉 **[Download RegiLattice vX.Y.Z](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE)
 
 # ❌ WRONG — hardcodes a specific filename that may not exist or may differ
+
 👉 **[Download RegiLattice-X.Y.Z-win-x64.msi](https://github.com/.../releases/latest)**
 ```
 
@@ -268,13 +290,13 @@ foreach ($pat in $patterns) {
 
 ### 2. Fix any hits before committing
 
-| Hit type | Action |
-|----------|--------|
-| Intel proxy URL in `.yml` / `.env` / config files | Delete the line or replace with an empty string / placeholder |
-| `http_proxy` / `https_proxy` env vars in workflow YAML | Remove entirely — GitHub-hosted runners don't need them |
-| `OneDrive - Intel Corporation` in a path embedded in source | Replace with a relative path or `%USERPROFILE%` placeholder |
-| `intel.com` in a comment, doc, or URL | Replace with the public equivalent or remove |
-| `ProxyAddress` / `ProxyServer` registry key in a tweak | This is a legitimate Windows registry tweak — keep it, but verify it uses the generic `HKCU\...\Internet Settings` path, not a hardcoded Intel URL |
+| Hit type                                                    | Action                                                                                                                                             |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Intel proxy URL in `.yml` / `.env` / config files           | Delete the line or replace with an empty string / placeholder                                                                                      |
+| `http_proxy` / `https_proxy` env vars in workflow YAML      | Remove entirely — GitHub-hosted runners don't need them                                                                                            |
+| `OneDrive - Intel Corporation` in a path embedded in source | Replace with a relative path or `%USERPROFILE%` placeholder                                                                                        |
+| `intel.com` in a comment, doc, or URL                       | Replace with the public equivalent or remove                                                                                                       |
+| `ProxyAddress` / `ProxyServer` registry key in a tweak      | This is a legitimate Windows registry tweak — keep it, but verify it uses the generic `HKCU\...\Internet Settings` path, not a hardcoded Intel URL |
 
 ### 3. Proxy-related registry tweaks are ALLOWED — with conditions
 

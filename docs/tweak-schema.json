@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/RajwanYair/RegiLattice/main/docs/tweak-schema.json",
+  "title": "RegiLattice TweakDef Schema",
+  "description": "JSON/YAML schema for a single RegiLattice tweak definition. Applicable to both built-in C# TweakDef objects and .rlpack.json tweak pack data-driven definitions.",
+  "type": "object",
+  "required": ["id", "label", "category"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+-[a-z0-9][a-z0-9-]*$",
+      "minLength": 5,
+      "maxLength": 80,
+      "description": "Globally unique kebab-case identifier. Pattern: {category-slug}-{descriptive-name}. Example: priv-disable-telemetry"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120,
+      "description": "Human-readable display name shown in the GUI and CLI."
+    },
+    "category": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 80,
+      "description": "UI grouping category. Must match an existing category name."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Detailed explanation of what this tweak does and why the user might want it."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 2, "maxLength": 40 },
+      "uniqueItems": true,
+      "description": "Searchable keyword tags (lowercase). Example: ['telemetry', 'privacy', 'data-collection']"
+    },
+    "needsAdmin": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this tweak requires administrator privileges to apply."
+    },
+    "corpSafe": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this tweak is safe to apply on corporate/Intune-managed machines."
+    },
+    "minBuild": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Minimum Windows build number required (e.g. 22000 for Windows 11). Tweak is skipped on older builds."
+    },
+    "registryKeys": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Registry key paths touched by this tweak. Used for informational display; not validated at runtime."
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of tweaks that must be applied before this one."
+    },
+    "sideEffects": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Known side effects or caveats the user should be aware of."
+    },
+    "sourceUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Reference URL (docs, blog post, security advisory) explaining the registry setting."
+    },
+    "expectedResult": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Short phrase describing the outcome after applying this tweak. Auto-generated if omitted."
+    },
+    "impactScore": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 3,
+      "description": "How beneficial this tweak is: 1=marginal, 3=moderate, 5=major impact."
+    },
+    "safetyRating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 4,
+      "description": "How safe this tweak is to apply: 1=risky, 3=moderate risk, 5=very safe."
+    },
+    "impactNote": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Short human description of the expected impact (used in Health Score dashboard)."
+    },
+    "kindHint": {
+      "type": "string",
+      "enum": [
+        "Registry",
+        "PowerShell",
+        "SystemCommand",
+        "ServiceControl",
+        "ScheduledTask",
+        "FileConfig",
+        "GroupPolicy",
+        "PackageManager"
+      ],
+      "description": "Override the auto-detected TweakKind. Supply only when auto-detection is wrong."
+    },
+    "applicabilityNote": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Reason shown in the GUI when the tweak is greyed out (IsApplicable returned false)."
+    },
+    "apply": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RegOp" },
+      "description": "Registry operations to apply this tweak. Preferred over applyScript for 95% of tweaks."
+    },
+    "remove": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RegOp" },
+      "description": "Registry operations to revert/remove this tweak."
+    },
+    "detect": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RegOp" },
+      "description": "Detection operations that confirm whether this tweak is currently applied."
+    }
+  },
+  "$defs": {
+    "RegOp": {
+      "title": "Registry Operation",
+      "description": "A single declarative registry operation (set, delete, or check a value/key).",
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/$defs/SetDword" },
+        { "$ref": "#/$defs/SetString" },
+        { "$ref": "#/$defs/SetExpandString" },
+        { "$ref": "#/$defs/SetQword" },
+        { "$ref": "#/$defs/SetBinary" },
+        { "$ref": "#/$defs/SetMultiSz" },
+        { "$ref": "#/$defs/DeleteValue" },
+        { "$ref": "#/$defs/DeleteTree" },
+        { "$ref": "#/$defs/CheckDword" },
+        { "$ref": "#/$defs/CheckString" },
+        { "$ref": "#/$defs/CheckMissing" },
+        { "$ref": "#/$defs/CheckKeyMissing" }
+      ]
+    },
+    "RegOpBase": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(HKEY_LOCAL_MACHINE|HKEY_CURRENT_USER|HKEY_CLASSES_ROOT|HKEY_USERS|HKLM|HKCU|HKCR|HKU)\\\\",
+          "description": "Full registry path including hive (HKEY_LOCAL_MACHINE\\... or HKLM\\...)."
+        }
+      }
+    },
+    "SetDword": {
+      "allOf": [{ "$ref": "#/$defs/RegOpBase" }],
+      "required": ["setDword"],
+      "properties": {
+        "setDword": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+          }
+        }
+      }
+    },
+    "SetString": {
+      "properties": {
+        "setString": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": { "type": "string" }
+          }
+        }
+      }
+    },
+    "SetExpandString": {
+      "properties": {
+        "setExpandString": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": { "type": "string", "description": "Value may contain %EnvVar% expansion tokens." }
+          }
+        }
+      }
+    },
+    "SetQword": {
+      "properties": {
+        "setQword": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "SetBinary": {
+      "properties": {
+        "setBinary": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+              "description": "Array of byte values (0-255)."
+            }
+          }
+        }
+      }
+    },
+    "SetMultiSz": {
+      "properties": {
+        "setMultiSz": {
+          "type": "object",
+          "required": ["path", "name", "value"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "value": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Array of strings (REG_MULTI_SZ)."
+            }
+          }
+        }
+      }
+    },
+    "DeleteValue": {
+      "properties": {
+        "deleteValue": {
+          "type": "object",
+          "required": ["path", "name"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        }
+      }
+    },
+    "DeleteTree": {
+      "properties": {
+        "deleteTree": {
+          "type": "object",
+          "required": ["path"],
+          "properties": {
+            "path": { "type": "string" }
+          }
+        }
+      }
+    },
+    "CheckDword": {
+      "properties": {
+        "checkDword": {
+          "type": "object",
+          "required": ["path", "name", "expected"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "expected": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "CheckString": {
+      "properties": {
+        "checkString": {
+          "type": "object",
+          "required": ["path", "name", "expected"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" },
+            "expected": { "type": "string" }
+          }
+        }
+      }
+    },
+    "CheckMissing": {
+      "properties": {
+        "checkMissing": {
+          "type": "object",
+          "required": ["path", "name"],
+          "properties": {
+            "path": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        }
+      }
+    },
+    "CheckKeyMissing": {
+      "properties": {
+        "checkKeyMissing": {
+          "type": "object",
+          "required": ["path"],
+          "properties": {
+            "path": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "priv-disable-telemetry",
+      "label": "Disable Telemetry",
+      "category": "Privacy",
+      "description": "Disables Windows diagnostic and usage data collection sent to Microsoft.",
+      "tags": ["telemetry", "privacy", "data-collection"],
+      "needsAdmin": true,
+      "corpSafe": true,
+      "impactScore": 5,
+      "safetyRating": 5,
+      "impactNote": "Prevents Windows from sending diagnostic data to Microsoft telemetry endpoints.",
+      "apply": [
+        { "setDword": { "path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "AllowTelemetry", "value": 0 } }
+      ],
+      "remove": [
+        { "deleteValue": { "path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "AllowTelemetry" } }
+      ],
+      "detect": [
+        { "checkDword": { "path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "name": "AllowTelemetry", "expected": 0 } }
+      ]
+    }
+  ]
+}

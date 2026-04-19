@@ -14,8 +14,15 @@ namespace RegiLattice.Core.Tests;
 /// Tests for Phase 2.3 (ConfirmApplyThreshold) and Phase 2.4 (EstimatedApplyTimeMs /
 /// CalculateBatchEtaMs).  All tests run without registry writes or WinForms instances.
 /// </summary>
-public sealed class Phase23Tests
+public sealed class Phase23Tests : IClassFixture<BuiltinsFixture>
 {
+    private readonly TweakEngine _builtins;
+
+    public Phase23Tests(BuiltinsFixture fixture)
+    {
+        _builtins = fixture.Engine;
+    }
+
     // ── EstimatedApplyTimeMs —————————————————————————————————————————————
 
     [Theory]
@@ -57,9 +64,7 @@ public sealed class Phase23Tests
     [Fact]
     public void EstimatedApplyTimeMs_IsNonNegative_ForAllBuiltins()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        Assert.All(engine.AllTweaks(), td => Assert.True(td.EstimatedApplyTimeMs >= 50));
+        Assert.All(_builtins.AllTweaks(), td => Assert.True(td.EstimatedApplyTimeMs >= 50));
     }
 
     // ── CalculateBatchEtaMs ——————————————————————————————————————————————
@@ -136,19 +141,15 @@ public sealed class Phase23Tests
     [Fact]
     public void CalculateBatchEtaMs_BuiltinsFirstTweak_ReturnsPositive()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var id = engine.AllTweaks().First().Id;
-        Assert.True(engine.CalculateBatchEtaMs([id]) > 0);
+        var id = _builtins.AllTweaks().First().Id;
+        Assert.True(_builtins.CalculateBatchEtaMs([id]) > 0);
     }
 
     [Fact]
     public void CalculateBatchEtaMs_FullBuiltinSet_IsPositiveAndReasonable()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var ids = engine.AllTweaks().Select(t => t.Id);
-        int total = engine.CalculateBatchEtaMs(ids);
+        var ids = _builtins.AllTweaks().Select(t => t.Id);
+        int total = _builtins.CalculateBatchEtaMs(ids);
         // With 7000+ mostly-Registry tweaks at 50ms each: total ≥ 100 000ms (100s)
         Assert.True(total > 100_000, $"Expected > 100 000 ms but got {total}");
     }

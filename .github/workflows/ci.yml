@@ -280,7 +280,7 @@ jobs:
           -c Release --no-build
           --filter "Category=OfficialPacks|FullyQualifiedName~OfficialPack"
           --settings tests/.runsettings
-          --blame-hang-timeout 60s
+          --blame-hang-timeout 30s
           --logger "console;verbosity=normal"
 
   # ---------------------------------------------------------------------------
@@ -360,5 +360,5 @@ jobs:
           -c Release --no-build
           --filter "Category=OfficialPacks|FullyQualifiedName~OfficialPack"
           --settings tests/.runsettings
-          --blame-hang-timeout 60s
+          --blame-hang-timeout 30s
           --logger "console;verbosity=normal"

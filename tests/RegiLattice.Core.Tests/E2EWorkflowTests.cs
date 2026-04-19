@@ -32,10 +32,9 @@ public sealed class E2EWorkflowTests : IDisposable
     private readonly TweakEngine _engine;
     private readonly string _tmpDir;
 
-    public E2EWorkflowTests()
+    public E2EWorkflowTests(BuiltinsFixture fixture)
     {
-        _engine = new TweakEngine(new RegistrySession(dryRun: true));
-        _engine.RegisterBuiltins();
+        _engine = fixture.Engine;
         CorporateGuard.StubCorporate = false;
         _tmpDir = Path.Combine(Path.GetTempPath(), $"RL-E2E-{Guid.NewGuid():N}");
         Directory.CreateDirectory(_tmpDir);
@@ -86,7 +85,8 @@ public sealed class E2EWorkflowTests : IDisposable
     [Fact]
     public void Scenario2_ApplyProfile_PrivacyProfile_ReturnsBatchResults()
     {
-        var results = _engine.ApplyProfile("privacy", forceCorp: false, parallel: false);
+        // Use parallel: true to stay within blame-hang-timeout budget (7,718 tweaks).
+        var results = _engine.ApplyProfile("privacy", forceCorp: false, parallel: true);
 
         Assert.NotNull(results);
         Assert.NotEmpty(results);
@@ -287,10 +287,9 @@ public sealed class ConcurrentSafetyTests : IDisposable
 {
     private readonly TweakEngine _engine;
 
-    public ConcurrentSafetyTests()
+    public ConcurrentSafetyTests(BuiltinsFixture fixture)
     {
-        _engine = new TweakEngine(new RegistrySession(dryRun: true));
-        _engine.RegisterBuiltins();
+        _engine = fixture.Engine;
         CorporateGuard.StubCorporate = false;
     }
 

@@ -9,7 +9,8 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>HealthScoreService tests.</summary>
-public sealed class HealthScoreServiceTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class HealthScoreServiceTests
 {
     private readonly TweakEngine _engine;
 
@@ -143,7 +144,8 @@ public sealed class HealthScoreServiceTests : IClassFixture<BuiltinsFixture>
 
 // ── merged from HealthScoreServicePreviewTests.cs ──────────────────────────────────
 /// <summary>HealthScoreService.PreviewCategoryImpact tests.</summary>
-public sealed class HealthScoreServicePreviewTests : IClassFixture<BuiltinsFixture>
+[Collection("Builtins")]
+public sealed class HealthScoreServicePreviewTests
 {
     private readonly TweakEngine _engine;
 

@@ -17,6 +17,9 @@ public sealed class BuiltinsFixture
     }
 }
 
+[CollectionDefinition("Builtins")]
+public sealed class BuiltinsCollection : ICollectionFixture<BuiltinsFixture> { }
+
 /// <summary>Shared factory methods for creating test data across all Core test files.</summary>
 internal static class TestHelpers
 {
