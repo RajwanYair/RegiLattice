@@ -1,131 +1,136 @@
-# RegiLattice — Strategic Roadmap
+# RegiLattice — Strategic Roadmap v2
 
 > **Baseline**: v6.33.0 — 7,718 tweaks · 158 categories · 195 modules · 3,296 tests · 11 themes
-> **Last updated**: 2026-04-11
+> **Last updated**: 2026-05-12
 > **Stack**: C# 13 / .NET 10.0-windows (x64) · WinForms · xUnit 2.9.3
 > **Repository**: [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice)
 
 This document is a **ground-up strategic reassessment** of every major project decision —
-language, framework, architecture, data layer, testing, distribution, documentation, and
-ecosystem. It replaces the previous incremental roadmap with a consolidated plan that
-questions existing choices, compares against best-in-class alternatives, harvests proven
-patterns from competitors, and charts a clear path from v6.33 through v10+.
+language, framework, architecture, data layer, testing, security, distribution, documentation,
+community, and ecosystem. It replaces all prior roadmap content with a consolidated plan that
+questions existing choices (including ones that seemed settled), compares against best-in-class
+alternatives, harvests proven patterns from competitors, and charts a clear path from v6.33
+through v10+.
+
+**Guiding principle**: *Ship less, ship better.* The project's current breadth (7,718 tweaks)
+is an overwhelming competitive advantage — but breadth without depth of quality, modern UX,
+and community trust is a liability. Every decision below optimizes for **user trust**,
+**maintainability by a single developer**, and **long-term project health**.
 
 ---
 
 ## Table of Contents
 
-- [Part I — Completed Work](#part-i--completed-work-v60v633)
+- [Part I — Project State Assessment](#part-i--project-state-assessment)
 - [Part II — Competitive Landscape](#part-ii--competitive-landscape)
-- [Part III — Strategic Decision Audit](#part-iii--strategic-decision-audit)
-  - [Decision 1: Programming Language](#decision-1-programming-language--c-13-vs-alternatives)
-  - [Decision 2: GUI Framework](#decision-2-gui-framework--winforms-vs-modern-alternatives)
-  - [Decision 3: Architecture](#decision-3-architecture--monolith-vs-di--cqrs)
-  - [Decision 4: Data Persistence](#decision-4-data-persistence--json-flat-files-vs-sqlite)
-  - [Decision 5: Tweak Definition Format](#decision-5-tweak-definition-format--c-classes-vs-yamljson-data)
-  - [Decision 6: Test Framework](#decision-6-test-framework--xunit-v2-vs-v3)
-  - [Decision 7: CI/CD & Distribution](#decision-7-cicd--distribution)
-  - [Decision 8: Documentation](#decision-8-documentation-strategy)
-  - [Decision 9: Platform Scope](#decision-9-platform-scope--windows-only-vs-cross-platform)
-  - [Decision 10: Installer Strategy](#decision-10-installer-strategy)
-- [Part IV — Improvement Roadmap](#part-iv--improvement-roadmap)
-  - [Phase A: Immediate Wins (v6.34–v6.39)](#phase-a-immediate-wins-v634v639)
-  - [Phase B: Architecture Modernisation (v7.0)](#phase-b-architecture-modernisation-v70)
-  - [Phase C: Data Layer Revolution (v7.1–v7.3)](#phase-c-data-layer-revolution-v71v73)
-  - [Phase D: Frontend Rewrite (v8.0)](#phase-d-frontend-rewrite-v80)
-  - [Phase E: Data-Driven Tweaks (v9.0)](#phase-e-data-driven-tweaks-v90)
-  - [Phase F: Security, Trust & Ecosystem (v9.1+)](#phase-f-security-trust--ecosystem-v91)
-- [Part V — Success Metrics](#part-v--success-metrics)
-- [Part VI — Risk Register](#part-vi--risk-register)
-- [Part VII — Migration Sequence](#part-vii--migration-sequence)
-- [Part VIII — Appendix: Completed Phase Details](#part-viii--appendix-completed-phase-details-v60v633)
+- [Part III — Strategic Decision Audit (15 Decisions)](#part-iii--strategic-decision-audit)
+- [Part IV — Technical Debt Inventory](#part-iv--technical-debt-inventory)
+- [Part V — Improvement Roadmap (Phases A–G)](#part-v--improvement-roadmap)
+- [Part VI — Success Metrics & KPIs](#part-vi--success-metrics--kpis)
+- [Part VII — Risk Register](#part-vii--risk-register)
+- [Part VIII — Migration Sequence](#part-viii--migration-sequence)
+- [Part IX — Appendix: Completed Work (v6.0–v6.33)](#part-ix--appendix-completed-work-v60v633)
 
 ---
 
-## Part I — Completed Work (v6.0–v6.33)
+## Part I — Project State Assessment
 
-Seven development phases have been delivered since the Python→C# migration.
-These represent thousands of engineering hours and should not be revisited:
+### What We Have (Strengths)
 
-| Phase | Focus | Version Range | Key Deliverables |
-|-------|-------|---------------|-----------------|
-| 1 | Engine Hardening | v6.14–v6.15 | Transactional apply, CancellationToken, TweakRisk flags, search ranking, custom profiles, recommendation engine |
-| 2 | UI/UX | v6.18–v6.20 | 19 keyboard shortcuts, risk confirmation, batch ETA, 11-item context menu, JSON user themes with hot-reload |
-| 3 | CLI & Integration | v6.16, v6.20 | `--json` output, conditional flags, interactive wizard, Ansible/DSC export |
-| 4 | Test & Quality | v6.21 | 13 E2E tests, concurrent safety, GDI leak fixes, ShellRunner kill-on-timeout |
-| 5 | Tweak Expansion | v6.22–v6.26 | +300 tweaks: security, gaming, accessibility, energy, developer, Office GP |
-| 6 | Services | v6.27–v6.28 | Audit logging, HealthScore, ConflictDetector, ScheduledTweakService, TweakMigrationService |
-| 7 | Ecosystem | v6.29–v6.30 | 10 locale stubs, 5 official packs, 22 PS cmdlets, pack-validation CI |
+| Asset | Scale | Notes |
+|-------|-------|-------|
+| Tweak library | **7,718** declarative tweaks | 10x–100x larger than any competitor |
+| Category coverage | **158** categories | Privacy, security, gaming, debloat, enterprise, accessibility |
+| CLI surface | **25+** commands | `--json` output, conditional flags, interactive wizard, Ansible/DSC export |
+| GUI themes | **11** colour themes | Catppuccin, Nord, Dracula, Tokyo Night, Gruvbox, etc. |
+| Profile system | **5** built-in + custom profiles | business, gaming, privacy, minimal, server |
+| Package managers | **5** GUI dialogs | WinGet, Scoop, Chocolatey, pip, PowerShell modules |
+| Plugin system | JSON `.rlpack` format | 5 official packs, marketplace foundation |
+| Test coverage | **3,296** tests, ≥90% line | Zero skipped, zero suppressed warnings |
+| Services layer | 15+ services | Analytics, favorites, ratings, history, snapshots, health scores |
+| Engine features | Transactional apply, conflict detection, dependency resolution, search ranking | Production-grade engine |
 
-**Post-Phase 7** (v6.31–v6.33): +150 policy tweaks across 15 modules, RegistrySession.Backup()
-DryRun fix, .runsettings HangTimeout fix.
+### What Hurts (Weaknesses)
+
+| Weakness | Impact | Root Cause |
+|----------|--------|------------|
+| **WinForms GUI** | Dated look, no GPU rendering, no MVVM, bitmap scaling, no vector icons | Migration speed choice (Tkinter → WinForms 1:1) |
+| **~40MB binary** | Distribution friction; WPD achieves same in 335KB | Self-contained .NET + framework overhead |
+| **Single developer** | Bus factor = 1; burnout risk (Optimizer cautionary tale) | No contributor pipeline |
+| **Zero stars / zero users** | No social proof; discoverability problem | New project, no marketing |
+| **No auto-updater** | Users must manually check for updates | Not yet implemented |
+| **No code signing** | Windows SmartScreen blocks unsigned EXEs | No certificate |
+| **No ARM64** | Missing Snapdragon X laptop market | .NET 10 WinForms ARM64 not yet shipped |
+| **8 JSON files for data** | File locks on OneDrive, no ACID, no queries | Quick-start persistence choice |
+| **28-file manual version bump** | Error-prone, time-consuming, drift | Organic growth of metadata files |
+| **Documentation sprawl** | 8 instruction files (~15K words), 10 skills, overwhelming for AI context | Accumulated organically |
+| **God class TweakEngine** | 3,000+ LOC, untestable in isolation, no interface contracts | Monolithic architecture |
+| **50K LOC of repetitive tweak data** | Contributor barrier (must know C#), recompilation for tweaks | All tweaks in C# static classes |
+| **No enterprise compliance features** | Missing CIS/STIG alignment, compliance audit reports | Consumer-focused design |
+| **No structured logging / observability** | Debugging requires manual log reading | Ad-hoc logging approach |
+
+### Where We Stand vs Competitors
+
+RegiLattice occupies a **unique niche**: the most comprehensive, typed, testable registry tweak
+toolkit with a real GUI, CLI, profiles, snapshots, and plugin system. No competitor matches
+this combination. But competitors lead in: **community** (WinUtil: 239 contributors),
+**distribution** (Sophia: `irm script.sophia.team | iex`), **binary size** (WPD: 335KB),
+**i18n** (Optimizer: 24 languages), and **GUI modernity** (WinUtil: WPF, SophiApp: WinUI 3).
 
 ---
 
 ## Part II — Competitive Landscape
 
-### Competitor Comparison Matrix
+### Competitor Matrix (May 2026, verified)
 
-| Feature | **RegiLattice** | **WinUtil** | **Sophia Script** | **Optimizer** | **BloatyNosy** | **Privatezilla** | **Win10Debloater** | **WPD** |
-|---|---|---|---|---|---|---|---|---|
-| **Language** | C# 13 / .NET 10 | PowerShell | PowerShell | C# / .NET FW 4.8 | C# + HTML/JS/PS | C# + PS | PowerShell | C++ (native) |
-| **GUI** | WinForms | WPF/XAML | CLI + SophiApp (WinUI 3) | WinForms | WebView2 + native | WinForms | PS GUI | Win32 API |
-| **Tweak count** | **7,718** | ~200 | ~150 functions | ~50 toggles | ~30 plugins | 60 settings | ~40 removals | ~30 toggles |
-| **Stars** | ~0 (new) | **52.3k** | **9.2k** | **18.1k** | 5.6k | 3.7k | 18.8k | N/A |
-| **CLI support** | 25+ commands | Partial | Full (PS7) | Silent mode | None | None | Switch params | CLI args |
-| **Profiles** | 5 built-in + custom | 3 presets | None | Templates | None | None | 3 modes | None |
-| **Undo/revert** | Per-tweak + snapshot | Limited | Per-function | Limited | None | Per-setting | Revert mode | None |
-| **Package mgmt** | 5 managers (UI) | WinGet integration | None | None | None | None | None | None |
-| **Themes** | 11 colour themes | System theme | N/A | Dark mode | 1 theme | 1 theme | N/A | Dark mode |
-| **Plugin system** | JSON packs | None | None | None | Plugin-based | Community pkg | None | None |
-| **ARM64** | No | No | **Yes** | No | No | No | No | No |
-| **i18n** | 2 + 8 stubs | English only | Multi-lang | **24 languages** | English only | English only | English only | Multi-lang |
-| **Code signing** | No | No | No | No | No | No | No | No |
-| **Status** | Active | Active | Active | **Archived** | Active | Stale (3yr) | **Archived** | Stale (2022) |
-| **License** | MIT | MIT | MIT | GPL-3.0 | MIT | MIT | MIT | Proprietary |
-| **Contributors** | 1 | **239** | ~15 | ~20 | ~5 | 7 | 31 | 2 |
-| **Install method** | EXE/MSI/MSIX | `irm | iex` | Scoop/Choco/WinGet | EXE download | EXE download | EXE download | PS download | ZIP portable |
-| **Portable size** | ~40MB | ~50MB | ~2MB (script) | ~5MB | ~3MB | ~500KB | ~100KB | **335KB** |
+| Dimension | **RegiLattice** | **WinUtil** | **Sophia Script** | **Optimizer** | **BloatyNosy/Winpilot** | **WPD** |
+|-----------|----------------|-------------|-------------------|---------------|------------------------|---------|
+| **Language** | C# 13 / .NET 10 | PowerShell | PowerShell 5.1/7 | C# / .NET FW 4.8.1 | C# + WebView2 | C++ (Win32) |
+| **GUI framework** | WinForms | **WPF/XAML** | CLI + SophiApp (**WinUI 3**) | WinForms | WebView2 + native | Raw Win32 API |
+| **GitHub stars** | ~0 (new) | **54.3k** | **9.3k** | 18.2k (archived) | 5.6k | N/A (closed) |
+| **Contributors** | 1 | **239** | ~15 | ~20 | ~5 | 2 |
+| **Tweak count** | **7,718** | ~200 | ~150 functions | ~50 toggles | ~30 plugins | ~30 |
+| **CLI depth** | **25+ cmds**, JSON, wizard | Launch only | Full PS7 module | Silent mode | None | CLI args |
+| **Profile system** | **5 built-in + custom** | 3 presets | None | Templates | None | None |
+| **Undo / revert** | **Per-tweak + snapshots** | Limited | Per-function | Limited | None | None |
+| **Package managers** | **5 integrated (GUI)** | WinGet | None | None | None | None |
+| **Plugin / pack system** | **JSON packs (5 official)** | None | None | None | Plugin arch | None |
+| **Themes** | **11** | System theme | N/A | Dark mode | 1 | Dark mode |
+| **ARM64** | No | No | **Yes** | No | No | No |
+| **i18n** | 2 + 8 stubs | English only | Multi-lang | **24 languages** | English | Multi-lang |
+| **Code signing** | No | No | No | No | No | No |
+| **Auto-updater** | No | N/A (script) | N/A (script) | Built-in | No | No |
+| **One-liner install** | No | **`irm christitus.com/win \| iex`** | **`irm script.sophia.team \| iex`** | EXE download | EXE download | ZIP |
+| **Binary size** | ~40MB | ~50MB (script) | ~2MB (script) | ~5MB | ~3MB | **335KB** |
+| **Test suite** | **3,296 xUnit tests** | Pester tests | None | None | None | None |
+| **License** | MIT | MIT | MIT | GPL-3.0 | MIT | Proprietary |
+| **Status** | Active (solo) | Active (community) | Active (small team) | **Archived** → NXT | Active (sporadic) | Stale (2022) |
+| **Docs** | Extensive (15K+ words) | **Docs site** (Docusaurus) | Wiki + README | FAQ + CHANGELOG | None | None |
 
-### Key Insights to Harvest
+### Best Practices to Harvest (Prioritized)
 
-**From WinUtil (52.3k stars)**:
-- **One-liner install** (`irm christitus.com/win | iex`) — dramatically lowers adoption friction
-- **WPF/XAML GUI** — modern, GPU-accelerated, MVVM-friendly; this is the industry direction
-- **JSON-driven tweak definitions** — similar to RegiLattice's declarative pattern; validates our approach
-- **Massive community** (239 contributors) — proves the market demand; we need contributor-friendliness
+| Priority | Source | Practice | How to Adopt |
+|----------|--------|----------|--------------|
+| **P0** | WinUtil | One-liner install: `irm ... \| iex` | Create `install.ps1` on GitHub Pages domain |
+| **P0** | WinUtil | WPF GUI with MVVM | Phase D migration (v8.0) |
+| **P0** | Optimizer | i18n (24 languages via community PRs) | Crowdin + `.resx` resources (Phase F.3) |
+| **P0** | Sophia | ARM64 support | Add `win-arm64` RID to publish matrix |
+| **P1** | WinUtil | Docs site (Docusaurus/MkDocs) | Deploy via GitHub Pages (Phase A) |
+| **P1** | Sophia | `gpedit.msc` visibility for policies | Verify all `HKLM\...\Policies\` tweaks appear |
+| **P1** | Optimizer | Automation via JSON templates | Already have profiles + packs; enhance with YAML recipes |
+| **P2** | WPD | Ultra-small portable binary | Investigate NativeAOT + trimming when WinForms supports it |
+| **P2** | BloatyNosy | Plugin architecture | Already have `.rlpack`; extend with DLL plugins |
+| **P2** | WinUtil | Community contribution pipeline | Good First Issues, CONTRIBUTING.md, Discord/Discussions |
+| **P3** | Optimizer | DNS/HOSTS management GUI | Add as RegiLattice.Tools dialog |
+| **P3** | WinUtil | EXE wrapper with code signing | SignPath.io for OSS (free) |
 
-**From Sophia Script (9.2k stars)**:
-- **ARM64 support** — forward-looking; Qualcomm Snapdragon X laptops are shipping now
-- **Group Policy integration** — applied policies visible in `gpedit.msc`; our policy tweaks should verify this
-- **Multi-distribution** (Scoop, Chocolatey, WinGet) — mirrors our package registry strategy
-- **SophiApp 2.0 → C# + WinUI 3** — the PS→C# migration path validates our architectural choice
+### Competitive Positioning Statement
 
-**From Optimizer (18.1k stars, archived)**:
-- **24 languages** — proves demand for internationalisation in this space
-- **Cautionary tale** — archived despite 18k stars; maintainer burnout kills projects. Keep scope tight
-- **DNS/HOSTS management** — practical feature gap in RegiLattice
-
-**From BloatyNosy (5.6k stars)**:
-- **Plugin architecture** — validates our pack system direction
-- **WebView2 hybrid GUI** — interesting alternative to WPF; HTML/CSS for layout, C# for logic
-- **"No AI/no web crap" philosophy** — resonates with privacy-conscious users
-
-**From WPD (335KB portable)**:
-- **Ultra-lightweight** — challenges our 40MB self-contained binary
-- **Windows API native** — no framework overhead; proves minimal footprint is possible
-- **CLI argument support** — even the smallest tools need automation hooks
-
-### Strategic Position
-
-RegiLattice has **unmatched breadth** (7,718 tweaks vs next-best ~200) and **unmatched depth**
-(profiles, snapshots, 25+ CLI commands, 5 package managers, 11 themes, plugin packs).
-Our weaknesses are: **GUI antiquity** (WinForms), **binary size** (40MB), **community** (single dev),
-**platform reach** (no ARM64), **discoverability** (0 stars vs competitors' thousands).
-
-The roadmap must preserve our breadth advantage while modernising the stack to match the
-best-in-class GUI (WinUtil's WPF), distribution (Sophia's multi-package), and community
-experience (WinUtil's 239 contributors).
+> **RegiLattice is the most comprehensive, typed, and testable Windows registry tweak engine
+> in the open-source ecosystem.** It offers 10x–100x more tweaks than any competitor, with
+> declarative tweak definitions, compile-time validation, 5 built-in profiles, per-tweak
+> undo, snapshot/restore, 5 integrated package managers, and a 3,296-test quality gate.
+> What it lacks in community and GUI modernity, it compensates with engineering rigour.
 
 ---
 
@@ -133,67 +138,68 @@ experience (WinUtil's 239 contributors).
 
 ### Decision 1: Programming Language — C# 13 vs Alternatives
 
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| **C# 13 / .NET 10** (current) | Strong Windows API interop, rich NuGet ecosystem, AOT compilation improving, excellent IDE tooling, type safety, `Microsoft.Win32.Registry` first-party | Windows-only for GUI, 40MB self-contained, no ARM64 yet | **KEEP** |
-| Rust | Zero-cost abstractions, tiny binaries (~2MB), memory safety, cross-platform potential | No `winreg` parity with .NET, steep learning curve, rewrite = 12+ months | Reject |
-| Go | Small binaries (~8MB), fast compilation, good Windows support | No GUI framework, no NuGet, weaker type system, manual registry interop | Reject |
-| PowerShell | Zero dependency on user machines, inline `gpedit` visibility (Sophia), community scripts | No compiled speed, no type safety, no real GUI, debugging hell at scale | Reject (keep PS module as wrapper only) |
-| C++ / Win32 | Ultra-small binary (WPD=335KB), direct API access, maximum performance | Maintenance nightmare, no modern tooling, memory unsafety, 10x dev time | Reject |
+**Previous verdict**: KEEP C# 13. **Reassessment**: **CONFIRMED — KEEP.**
 
-**Decision: RETAIN C# 13 / .NET 10.** The registry interop, NuGet ecosystem, and type safety
-are irreplaceable at our scale (7,718 tweaks, 195 modules). The language is not the bottleneck —
-the framework and architecture are.
+| Option | Binary Size | Dev Velocity | Registry Interop | Type Safety | Verdict |
+|--------|-------------|-------------|-----------------|-------------|---------|
+| **C# 13 / .NET 10** | ~40MB (self-contained) | High | Excellent (`Microsoft.Win32.Registry`) | Excellent | **KEEP** |
+| Rust | ~2MB | Low (rewrite) | Manual FFI | Excellent | Reject (rewrite cost prohibitive) |
+| Go | ~8MB | Medium | Manual `syscall` | Good | Reject (no GUI, no NuGet) |
+| PowerShell | ~2MB (script) | Medium | Native | Weak | Reject (not scalable at 7.7K tweaks) |
+| C++ / Win32 | ~335KB | Very Low | Native | Manual | Reject (maintenance nightmare) |
+
+**Rationale**: C# 13 with .NET 10 provides the best balance of registry API quality,
+development velocity, NuGet ecosystem access, and type safety. The 40MB binary is the
+main downside, addressable via NativeAOT when WinForms support ships.
 
 **Action items**:
-- [ ] Enable .NET Native AOT when WinForms support ships (tracked in dotnet/winforms#4649)
-- [ ] Add ARM64 RID to publish matrix when .NET 10 ships ARM64 WinForms support
+- [ ] Track dotnet/winforms#4649 (NativeAOT for WinForms) — when available, binary drops to ~10–15MB
+- [ ] Target .NET LTS releases for production (10 LTS → 12 LTS)
 - [ ] Maintain PowerShell module as a thin CLI wrapper, not a rewrite target
 
 ---
 
-### Decision 2: GUI Framework — WinForms vs Modern Alternatives
+### Decision 2: GUI Framework — WinForms → WPF
 
-This is the **single highest-impact decision** in the project. WinForms was chosen for
-migration speed (Python Tkinter → WinForms is a 1:1 mapping) but now limits us.
+**Previous verdict**: MIGRATE TO WPF (Phase D, v8.0). **Reassessment**: **CONFIRMED — but
+consider WinUI 3 as a stretch goal for v10+.**
 
 | Option | Pros | Cons | Migration Cost | Verdict |
 |--------|------|------|----------------|---------|
-| **WinForms** (current) | Working, stable, all features implemented, 11 themes | No MVVM, no GPU rendering, no vector icons, no XAML, bitmap scaling only, dated look | N/A | **MIGRATE AWAY** |
-| **WPF** | MVVM, GPU-accelerated, XAML data binding, vector graphics, mature ecosystem, `WindowsFormsHost` for incremental migration, WinUtil proves it works | Windows-only, steeper learning curve, ~6 month migration | Medium (incremental via interop) | **ADOPT** |
-| **WinUI 3** | Modern Fluent Design, recommended by Microsoft, SophiApp 2.0 uses it | Immature packaging (MSIX-only initially), fewer community packages, no `WindowsFormsHost` interop | High (full rewrite) | Defer |
-| **Avalonia UI** | Cross-platform (Linux/macOS), XAML-like, growing ecosystem | Registry tweaks are Windows-only → cross-platform GUI adds complexity with no user benefit | High | Reject |
-| **.NET MAUI** | Microsoft-backed cross-platform | Poor Windows desktop support, Blazor hybrid = web overhead, immature for desktop | High | Reject |
-| **WebView2 (Electron-lite)** | Modern HTML/CSS layout (BloatyNosy uses this), flexible theming | Web overhead, Chromium dependency (~150MB), security surface, not native | Medium | Reject |
-| **Spectre.Console TUI** | Terminal power users, zero GUI dependency, tiny binary | No mouse interaction, limited discoverability, niche audience | Low (additive) | **ADD as optional** |
-
-**Decision: MIGRATE TO WPF** (Phase D, v8.0). Use `WindowsFormsHost` for incremental
-migration — move one panel at a time. WinForms remains functional throughout. Additionally,
-add a **Spectre.Console TUI** as a `--tui` CLI mode for terminal power users.
+| **WinForms** (current) | Working, stable, 11 themes done | No MVVM, no GPU, no vector icons, dated look | N/A | **MIGRATE AWAY** |
+| **WPF** | MVVM, GPU-accelerated, XAML, `WindowsFormsHost` interop, WinUtil validates | Windows-only, ~6mo migration | Medium (incremental) | **ADOPT (v8.0)** |
+| **WinUI 3** | Modern Fluent Design, SophiApp 2.0 validates, Microsoft-recommended | No interop with WinForms, MSIX packaging complexity, less mature | High (full rewrite) | **STRETCH GOAL (v10+)** |
+| **Avalonia UI** | Cross-platform, XAML-like | Registry = Windows-only → zero cross-platform benefit | High | Reject |
+| **.NET MAUI Blazor** | Cross-platform, web tech | Poor desktop experience, Chromium overhead | High | Reject |
+| **WebView2** | HTML/CSS layout flexibility (BloatyNosy model) | ~150MB Chromium dependency, security surface | Medium | Reject |
 
 **Key WPF architecture decisions**:
-- MVVM with `CommunityToolkit.Mvvm` (source generators for `ObservableProperty`, `RelayCommand`)
-- `MaterialDesignThemes` or `HandyControl` for Fluent-style controls
-- Data virtualization for the 7,718-tweak list (VirtualizingStackPanel)
-- Theme system: XAML resource dictionaries (replace programmatic `Color` objects)
+- MVVM with `CommunityToolkit.Mvvm` (source generators)
+- `VirtualizingStackPanel` for 7,718 tweaks (mandatory)
+- XAML resource dictionaries for all 11 themes (replacing programmatic `Color` objects)
+- `WindowsFormsHost` for incremental migration — one panel per sprint
+- Consider `MaterialDesignThemes` or `WPF-UI` (Fluent 2 components) for modern controls
+
+**Why not WinUI 3 now**: SophiApp 2.0's WinUI 3 adoption validates the framework, but
+WinUI 3 has no `WindowsFormsHost` equivalent — migration is all-or-nothing. WPF allows
+incremental panel migration while keeping the app functional throughout. WinUI 3 becomes
+the v10+ candidate once the WPF migration is complete and stable.
 
 ---
 
-### Decision 3: Architecture — Monolith vs DI + CQRS
+### Decision 3: Architecture — DI + Interface Segregation
+
+**Previous verdict**: ADOPT DI. **Reassessment**: **CONFIRMED — but scope down from CQRS.
+Add Clean Architecture shell boundaries.**
 
 | Option | Pros | Cons | Verdict |
 |--------|------|------|---------|
-| **Monolithic TweakEngine** (current) | Simple, everything in one place, low ceremony | God class (3,000+ LOC), untestable in isolation, no interface contracts | **REFACTOR** |
-| **DI + Interface Segregation** | Testable, mockable, SOLID, standard .NET pattern | Startup overhead (~10ms), more files, learning curve for contributors | **ADOPT** |
-| **Full CQRS + MediatR** | Clean separation of reads/writes, event sourcing potential | Over-engineered for a desktop app, adds 5+ NuGet packages | **Reject** (too heavy) |
-| **Vertical Slice Architecture** | Feature-focused folders, minimal cross-cutting | Doesn't fit our domain (tweaks are the domain, not features) | Reject |
+| **Monolithic TweakEngine** (current) | Simple, everything in one place | God class (3K+ LOC), untestable, no contracts | **REFACTOR** |
+| **DI + Interface Segregation** | Testable, mockable, SOLID | More files, 10ms startup cost | **ADOPT** |
+| **Full Clean Architecture** | Strict layer boundaries, domain purity | Over-engineered for desktop | **Partial adopt** (boundaries yes, full ports/adapters no) |
+| **CQRS + MediatR** | Clean separation | 5+ NuGet deps, over-engineered | **Reject** |
 
-**Decision: ADOPT DI with interface segregation.** Extract 6 interfaces from `TweakEngine`,
-4 from `RegistrySession`. Use `Microsoft.Extensions.DependencyInjection` (already a transitive
-dependency). The existing `TweakEngine` becomes a backward-compatible facade that delegates
-to injected services.
-
-**Extracted interfaces**:
+**Extracted interfaces (6 from TweakEngine + 4 from RegistrySession)**:
 
 ```
 ITweakRegistry       — Register(), AllTweaks(), GetTweak(), Categories()
@@ -209,292 +215,35 @@ IRegistryExecutor    — Execute(), Evaluate()
 IRegistryBackup      — Backup()
 ```
 
----
-
-### Decision 4: Data Persistence — JSON Flat Files vs SQLite
-
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| **8 JSON files** (current) | Human-readable, zero dependencies, easy debugging | No ACID, no queries, no indexing, file locks on OneDrive, scattered across 8 locations | **MIGRATE AWAY** |
-| **SQLite** (`Microsoft.Data.Sqlite`) | ACID, structured queries, single file, migrations, indexing | Binary format (less debuggable), adds ~2MB, migration code needed | **ADOPT** |
-| **LiteDB** | Document DB (JSON-like), LINQ queries, embedded, .NET native | Less mature than SQLite, limited community, no SQL standard | Consider as fallback |
-| **SQL Server Express LocalDB** | Full SQL Server features | Requires installation, heavyweight, absurd for a desktop tool | Reject |
-
-**Decision: MIGRATE TO SQLite.** Single `regilattice.db` file replaces:
-- `config.json` → `config` table
-- `favorites.json` → `favorites` table
-- `ratings.json` → `ratings` table
-- `history.json` → `history` table with indexed timestamps
-- `analytics.json` → `analytics` table
-- `compliance-history.json` → `compliance` table
-- `snapshots/*.json` → `snapshots` table (BLOB storage)
-- `themes/*.json` → `user_themes` table
-
-**Migration strategy**: On first launch post-upgrade, detect JSON files → import into SQLite →
-rename JSON files to `.json.migrated` (don't delete — user can manually revert).
-
----
-
-### Decision 5: Tweak Definition Format — C# Classes vs YAML/JSON Data
-
-This is the most **controversial** decision. Currently, 7,718 tweaks are defined across
-195 C# files (~50K LOC). Each tweak is a `new TweakDef { ... }` object literal.
-
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| **C# classes** (current) | Compile-time validation, IDE autocompletion, type safety, `ApplyAction` delegates for complex tweaks, refactoring support | 50K LOC of repetitive data, recompilation required for tweak changes, contributor barrier (must know C#) | **KEEP with improvements** |
-| **YAML data files** | Human-editable, hot-reloadable, contributor-friendly (no C# knowledge), smaller codebase | Loses compile-time safety, `ApplyAction` delegates can't be expressed in YAML, JSON Schema validation is weaker than compiler | Partially adopt |
-| **JSON data files** (WinUtil pattern) | Machine-parseable, widely understood, WinUtil validates this approach | Verbose for 7,718 entries, same limitations as YAML for delegates | Partially adopt |
-| **Hybrid: YAML for registry-only, C# for delegates** | Best of both worlds — 95% of tweaks are pure `RegOp` and could be YAML | Two definition systems to maintain, loading complexity, ambiguous ownership | **ADOPT (long-term)** |
-
-**Decision: KEEP C# as primary, ADOPT YAML as secondary format.** The ~5% of tweaks
-with `ApplyAction`/`DetectAction` delegates (PowerShell, ServiceControl, SystemCommand, FileConfig,
-PackageManager kinds) cannot be expressed in data files. For the ~95% that are pure
-`ApplyOps`/`RemoveOps`/`DetectOps`, introduce **optional** YAML loading with JSON Schema
-validation. This is additive, not a replacement.
-
-**Immediate improvement for C# tweaks**: Eliminate the manual `RegisterBuiltins()` listing
-by using **assembly scanning** with a `[TweakModule]` attribute or source generators.
-
----
-
-### Decision 6: Test Framework — xUnit v2 vs v3
-
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| **xUnit 2.9.3** (current) | Stable, all 3,296 tests pass, well-understood | EOL soon, missing features (generic test classes, `Assert.Equivalent`) | **MIGRATE** (when v3 stabilizes) |
-| **xUnit 3.x** | Generic test classes, better parallelism, `IAsyncLifetime` improvements, `Assert.Equivalent` | Breaking changes in test class model, `FsCheck.Xunit` 2.x incompatible | **ADOPT in Phase A** |
-| **NUnit 4.x** | Constraint model, rich assertion library, `TestContext` | Migration cost from xUnit, different assertion style, less ecosystem momentum | Reject |
-| **MSTest 3.x** | Microsoft-backed, source generators, fast discovery | Least flexible, worst assertion library, no FsCheck integration | Reject |
-
-**Decision: MIGRATE TO xUnit v3** in a dedicated sprint. Update all 5 held packages
-simultaneously: `xunit` → 3.x, `xunit.runner.visualstudio` → 3.x, `FsCheck` → 3.x,
-`FsCheck.Xunit` → 3.x, `Microsoft.NET.Test.Sdk` → 18.x.
-
----
-
-### Decision 7: CI/CD & Distribution
-
-**Current state**: 6 workflows (`ci.yml`, `release.yml`, `weekly.yml`, `smoke.yml`,
-`pages.yml`, `packages.yml`) + 7 package registries (npm, maven, gem, winget, scoop,
-chocolatey, PowerShell Gallery).
-
-| Decision | Current | Proposed | Rationale |
-|----------|---------|----------|-----------|
-| Workflow count | 6 | **4** | Merge `smoke.yml` into `release.yml`, merge `pages.yml` into `ci.yml` |
-| Package registries | 7 | **4** | Remove npm/maven/gem (no evidence of users); keep winget/scoop/chocolatey/PSGallery |
-| Version bump process | 28 manual files | **1 script** | `Bump-Version.ps1` automates all 28 file updates |
-| Code signing | None | **SignPath.io** | Free for OSS; required for Windows SmartScreen trust |
-| One-liner install | None | **`irm regilattice.dev/install \| iex`** | Harvest from WinUtil; dramatically reduces adoption friction |
-| Mutation testing | Weekly CI | **Weekly CI** | Keep; move fully off per-push trigger |
-
----
-
-### Decision 8: Documentation Strategy
-
-| Area | Current | Proposed | Rationale |
-|------|---------|----------|-----------|
-| Instruction files | 8 files (~15K words) | **5 files** | Merge `no-duplication` into `csharp`; merge `cicd` into `git-workflow`; convert enforceable rules to Roslyn analyzers |
-| Skills | 10 skills | **12 skills** | Add `release-notes`, `perf-profiling` |
-| README.md | ~500 lines with Mermaid diagrams | **~150 lines** + link to docs site | Focused quick-start; detailed docs on GitHub Pages |
-| API docs | Manual `Api.md` | **DocFX auto-generated** | Source-of-truth from `///` XML comments |
-| SVG assets | 7 manually-updated SVGs | **CI-templated SVGs** | `Bump-Version.ps1` does string substitution; CI validates counts match |
-| CHANGELOG | Manual entries | **auto-generated from commits** | `git-cliff` or `standard-version` from Conventional Commits |
-
----
-
-### Decision 9: Platform Scope — Windows-Only vs Cross-Platform
-
-| Option | Pros | Cons | Verdict |
-|--------|------|------|---------|
-| **Windows x64 only** (current) | Focused, simple, all registry APIs available | Missing ARM64 laptops, no server-side use | **EXPAND to ARM64** |
-| **Windows x64 + ARM64** | Covers Snapdragon X laptops, future-proof | Dual RID publish, untested on ARM64 | **ADOPT** |
-| **Cross-platform (Linux/macOS)** | Wider audience | Registry tweaks are Windows-only — the entire value proposition is Windows | **Reject** |
-
-**Decision: ADD ARM64** as a second RID in publish matrix. The Core library and CLI are
-already architecture-neutral; only the GUI needs WinForms ARM64 testing.
-
----
-
-### Decision 10: Installer Strategy
-
-| Installer | Current | Proposed | Rationale |
-|-----------|---------|----------|-----------|
-| Portable EXE (GUI) | ✅ | ✅ Keep | Primary distribution; zero-install |
-| Portable EXE (CLI) | ✅ | ✅ Keep | Automation/scripting use case |
-| MSI (WiX) | ✅ | ✅ Keep | Enterprise deployment (GPO/SCCM) |
-| MSIX | ✅ | ❌ Remove | Low adoption, complex packaging, Store not needed |
-| WinGet manifest | ✅ | ✅ Keep | Primary package manager for Windows 11 |
-| Scoop manifest | ✅ | ✅ Keep | Developer/power-user channel |
-| Chocolatey | ✅ | ✅ Keep | Enterprise channel |
-| npm/maven/gem | ✅ | ❌ Remove | Zero evidence of usage; maintenance burden |
-| One-liner web install | ❌ | ✅ Add | Harvest from WinUtil; `irm ... \| iex` |
-
----
-
-## Part IV — Improvement Roadmap
-
-### Phase A: Immediate Wins (v6.34–v6.39)
-
-> **Timeline**: Next 2–4 sprints · **Risk**: Low · **Impact**: High
-> **Theme**: Clean house before building additions.
-
-#### A.1 — Test Suite Consolidation (v6.34)
-
-The test suite has accumulated structural debt:
-
-- [ ] Split `ExtendedCoverageTests.cs` monolith (58 test classes, ~4K lines) into per-topic files
-- [ ] Migrate remaining standalone test classes to use `BuiltinsFixture` (shared engine instance)
-- [ ] Identify and remove ~100–200 tests that duplicate `TweakEngineBuiltinsTests` assertions
-- [ ] Add `[Collection]` isolation to all file-writing test classes to prevent cross-assembly races
-- [ ] Standardize all performance budget tests with tweak-count comments
-
-**Measurable outcome**: Test count may decrease (dedup), but coverage stays ≥90%. Test run
-time decreases by ~20% from reduced engine initialization.
-
-#### A.2 — `.github/` Copilot Surface Overhaul (v6.35)
-
-- [ ] Update all hardcoded counts in `copilot-instructions.md`, 8 instruction files, agent definition
-- [ ] Add `Sync-CopilotInstructions.ps1` to auto-update counts from `TweakEngine.AllTweaks().Count`
-- [ ] Add 2 new skills: `release-notes` (auto-draft CHANGELOG from commits), `perf-profiling`
-- [ ] Add 3 new prompts: `review-pr`, `audit-categories`, `generate-pack`
-- [ ] Consolidate instruction files: merge `no-duplication` → `csharp`, merge `cicd` → `git-workflow`
-- [ ] Update agent mode routing (sprint/debug/review/release/explore)
-
-#### A.3 — CI/CD Cleanup (v6.36)
-
-- [ ] Merge `smoke.yml` post-release job into `release.yml`
-- [ ] Merge `pages.yml` into `ci.yml` as a conditional job
-- [ ] Delete npm/maven/gem package registry files and `packages.yml` GHCR job
-- [ ] Create `Bump-Version.ps1` script that updates all 28 version-bearing files
-- [ ] Add `paths-ignore` for docs-only changes to all workflows
-- [ ] Pin all action versions to verified latest (see `cicd.instructions.md` canonical table)
-
-#### A.4 — Scope Discipline: Extract Utility Dialogs (v6.37–v6.38)
-
-Audit the 67+ dialog/form classes and extract non-core ones to `RegiLattice.Tools`:
-
-**Core (keep in GUI — ~30 classes)**:
-- MainForm, AboutDialog, ConfirmApplyDialog, KeyboardShortcutsDialog
-- All 5 package manager dialogs + BasePackageManagerDialog
-- MarketplaceDialog, ToolVersionsDialog, WindowsHealthDialog
-- Theme-related, TweakBrowserPanel, TweakCardRow, all Controls/*
-
-**Tools (extract to plugin DLL — ~35 classes)**:
-- Battery/power monitoring dialogs
-- Network tools (port scanner, DNS lookup, ping, traceroute)
-- System tools (memory cleaner, disk analyzer, startup manager GUI)
-- Hardware info detail dialogs beyond the core AboutDialog
-
-- [ ] Create `src/RegiLattice.Tools/RegiLattice.Tools.csproj` (class library)
-- [ ] Move extracted dialog classes to Tools project
-- [ ] Add `RegiLattice.Tools.dll` as optional plugin loaded by MainForm
-- [ ] Update tests to reference the new project structure
-
-#### A.5 — xUnit v3 Migration (v6.39)
-
-- [ ] Update all 5 held packages simultaneously in `Directory.Packages.props`
-- [ ] Fix breaking API changes (test class model, `Assert` namespace)
-- [ ] Update `FsCheck.Xunit` to v3-compatible version
-- [ ] Update `.runsettings` for v3 test host
-- [ ] Verify all 3,296+ tests pass on the new framework
-
----
-
-### Phase B: Architecture Modernisation (v7.0)
-
-> **Timeline**: 1 MAJOR version · **Risk**: Medium · **Impact**: High
-> **Theme**: Replace the God class with testable, injectable services.
-
-#### B.1 — Dependency Injection Container
+**New consideration — Lightweight Event Bus**: Replace direct cross-cutting calls (Analytics,
+TweakHistory, HealthScore) with a simple in-process event bus. No external dependencies.
 
 ```csharp
-// Before: God class, everything static-ish
-var engine = new TweakEngine();
-engine.RegisterBuiltins();
-var results = engine.Search("privacy");
-
-// After: DI with interface contracts
-var services = new ServiceCollection()
-    .AddRegiLatticeCore()        // extension method registers all services
-    .AddSingleton<IRegistrySession>(new RegistrySession { DryRun = true })
-    .BuildServiceProvider();
-
-var search = services.GetRequiredService<ITweakSearch>();
-var results = search.Search("privacy");
-```
-
-- [ ] Extract 6 interfaces from `TweakEngine` (see Decision 3 table)
-- [ ] Extract 4 interfaces from `RegistrySession`
-- [ ] Create `ServiceCollectionExtensions.AddRegiLatticeCore()` registration
-- [ ] Keep `TweakEngine` as a backward-compatible facade
-- [ ] Update GUI and CLI to use DI container
-- [ ] Update all tests to inject mock interfaces where beneficial
-
-#### B.2 — Auto-Registration via `[TweakModule]` Attribute
-
-Eliminate the manual `RegisterBuiltins()` method that lists all 195 module classes:
-
-```csharp
-// Before: manual listing in TweakEngine.RegisterBuiltins()
-Register(Privacy.Tweaks);
-Register(Performance.Tweaks);
-Register(Security.Tweaks);
-// ... 192 more lines
-
-// After: assembly scanning
-[TweakModule]
-internal static class Privacy
-{
-    public static IReadOnlyList<TweakDef> Tweaks => [ ... ];
-}
-
-// TweakEngine discovers all [TweakModule] classes via reflection at startup
-```
-
-- [ ] Define `[TweakModule]` attribute
-- [ ] Implement assembly scanning in `TweakEngine.RegisterBuiltins()` (or source generator)
-- [ ] Remove manual registration lines
-- [ ] Add startup benchmark to verify scanning cost is <50ms
-
-#### B.3 — Event-Driven Architecture (Optional, Lightweight)
-
-Replace direct method calls for cross-cutting concerns with a simple event bus:
-
-```csharp
-// Events raised by engine operations
 public sealed record TweakAppliedEvent(string Id, TweakResult Result, TimeSpan Duration);
-public sealed record TweakRemovedEvent(string Id, TweakResult Result);
-public sealed record StatusMapCompletedEvent(int TweakCount, TimeSpan Duration);
-
-// Subscribers: Analytics, TweakHistory, HealthScore, UI status bar
 engine.Events.Subscribe<TweakAppliedEvent>(e => analytics.RecordApply(e.Id));
 ```
 
-- [ ] Define event types as sealed records
-- [ ] Implement minimal `IEventBus` (publish/subscribe, no external dependency)
-- [ ] Wire Analytics, TweakHistory, HealthScore as subscribers
-- [ ] Update GUI to subscribe to progress events instead of polling
-
 ---
 
-### Phase C: Data Layer Revolution (v7.1–v7.3)
+### Decision 4: Data Persistence — JSON Files → Repository Abstraction
 
-> **Timeline**: 3 MINOR versions · **Risk**: Medium-High · **Impact**: High
-> **Theme**: Replace 8 scattered JSON files with a single SQLite database.
+**Previous verdict**: MIGRATE TO SQLite. **Reassessment**: **REVISED — Repository
+abstraction first, SQLite as the _second_ backend. Keep JSON as the default until v9.0.**
 
-#### C.1 — SQLite Foundation (v7.1)
+| Option | Pros | Cons | Verdict |
+|--------|------|------|---------|
+| **8 JSON files** (current) | Human-readable, zero dependencies, easy debugging | No ACID, no queries, file locks on OneDrive | **Abstract away** |
+| **SQLite** | ACID, structured queries, single file, indexing | +2MB binary, migration code, less debuggable | **ADOPT as optional backend** |
+| **LiteDB** | Document DB, LINQ queries, embedded, .NET native | Less mature, limited community | Consider as fallback |
 
-- [ ] Add `Microsoft.Data.Sqlite` (already a well-known package, ~200KB)
-- [ ] Design schema: `config`, `favorites`, `ratings`, `history`, `analytics`,
-  `compliance`, `snapshots`, `user_themes`, `user_profiles`, `packs`
-- [ ] Implement `DbMigrationRunner` with versioned migration scripts
-- [ ] Create `IRegiLatticeDb` interface with connection management
-- [ ] Implement automatic JSON→SQLite migration on first launch
-
-#### C.2 — Repository Pattern (v7.2)
+**Revised approach**: The immediate win is **not** migrating to SQLite — it's introducing a
+**repository abstraction** (`IFavoritesRepository`, `IRatingsRepository`, etc.) that decouples
+services from file I/O. The JSON implementation stays as default (backward-compatible).
+SQLite becomes a second implementation, selectable via config. This avoids a forced data
+migration and reduces risk.
 
 ```csharp
+// Phase B: Repository interface
 public interface IFavoritesRepository
 {
     bool IsFavorite(string tweakId);
@@ -503,108 +252,463 @@ public interface IFavoritesRepository
     IReadOnlyList<string> All();
 }
 
-// SQLite implementation
-internal sealed class SqliteFavoritesRepository : IFavoritesRepository
-{
-    private readonly IRegiLatticeDb _db;
-    // ACID transactions, indexed lookups, no file-lock issues
-}
+// Phase B: JSON implementation (default, backward-compatible)
+internal sealed class JsonFavoritesRepository : IFavoritesRepository { ... }
+
+// Phase C: SQLite implementation (opt-in via config)
+internal sealed class SqliteFavoritesRepository : IFavoritesRepository { ... }
 ```
 
-- [ ] Create repository interfaces for all 8 data services
-- [ ] Implement SQLite-backed repositories
-- [ ] Update all service classes to use repository interfaces (DI)
-- [ ] Remove direct `File.ReadAllText`/`File.WriteAllText` calls from services
-
-#### C.3 — In-Memory Cache with Change Notifications (v7.3)
-
-- [ ] Implement `ICache<TKey, TValue>` with `MemoryCache`-backed storage
-- [ ] Add `IChangeNotifier` interface for cache invalidation
-- [ ] Cache frequently-accessed data: `AllTweaks()`, `Categories()`, `StatusMap()`
-- [ ] Wire `FileSystemWatcher` for external SQLite changes (multi-instance scenario)
+**Why this is better**: Users who haven't experienced JSON file issues keep their existing
+data format. Enterprise users or power users can switch to SQLite for ACID guarantees.
+No forced migration, no risk of data loss, no `.json.migrated` files cluttering the system.
 
 ---
 
-### Phase D: Frontend Rewrite (v8.0)
+### Decision 5: Tweak Definition Format — Hybrid C# + YAML
 
-> **Timeline**: 1 MAJOR version, 3–6 months · **Risk**: High · **Impact**: Very High
-> **Theme**: Replace WinForms with WPF for a modern, accessible, GPU-accelerated UI.
+**Previous verdict**: KEEP C# primary, ADOPT YAML secondary. **Reassessment**: **CONFIRMED —
+but defer YAML to v9.0. Focus on auto-registration now.**
 
-#### D.1 — WPF Shell + WinForms Interop
+The ~5% of tweaks with `ApplyAction`/`DetectAction` delegates cannot be expressed in data
+files. For the ~95% pure `ApplyOps`/`RemoveOps`/`DetectOps` tweaks, YAML is viable but
+lower priority than architecture and GUI work.
+
+**Immediate improvement (v7.0)**: Eliminate manual `RegisterBuiltins()` listing with
+`[TweakModule]` attribute + assembly scanning.
+
+```csharp
+// Before: 195 manual registration lines
+Register(Privacy.Tweaks);
+Register(Performance.Tweaks);
+// ... 193 more
+
+// After: automatic discovery
+[TweakModule]
+internal static class Privacy
+{
+    public static IReadOnlyList<TweakDef> Tweaks => [ ... ];
+}
+```
+
+---
+
+### Decision 6: Test Framework — xUnit v2 → v3
+
+**Previous verdict**: MIGRATE TO xUnit v3. **Reassessment**: **CONFIRMED — but only when
+FsCheck.Xunit v3 ships stable. Not before Phase A.5.**
+
+| Package | Pinned | Latest | Hold Reason |
+|---------|--------|--------|-------------|
+| `xunit` | 2.9.3 | 3.x | v3 test class model is breaking |
+| `xunit.runner.visualstudio` | 2.8.2 | 3.x | v3 runner only works with v3 framework |
+| `Microsoft.NET.Test.Sdk` | 17.14.1 | 18.x | New test-host protocol |
+| `FsCheck` | 2.16.6 | 3.x | Breaking attribute API |
+| `FsCheck.Xunit` | 2.16.6 | 3.x | Same as FsCheck |
+
+**All 5 packages must be updated simultaneously in one commit.** Attempting partial updates
+breaks the test build. Migration happens in a branch with one test project at a time.
+
+**New consideration — Snapshot Testing**: Add `Verify` (snapshot testing library) for
+regression testing of CLI output, JSON export format, and generated reports. This catches
+output regressions that unit tests miss.
+
+---
+
+### Decision 7: CI/CD & Distribution — Simplify
+
+**Previous verdict**: Reduce workflows 6→4, registries 7→4. **Reassessment**: **CONFIRMED —
+and add auto-updater + one-liner install.**
+
+| Dimension | Current | Proposed | Rationale |
+|-----------|---------|----------|-----------|
+| Workflow count | 6 | **4** | Merge `smoke.yml` → `release.yml`, `pages.yml` → `ci.yml` |
+| Package registries | 7 (npm/maven/gem/winget/scoop/choco/PSGallery) | **4** (winget/scoop/choco/PSGallery) | npm/maven/gem have zero evidence of usage |
+| Version bump process | 28 manual files | **1 script** (`Bump-Version.ps1`) | Automate all 28 file updates |
+| Code signing | None | **SignPath.io** | Free for OSS; eliminates SmartScreen blocks |
+| Auto-updater | None | **Squirrel.Windows** or `dotnet-deltas` | Check GitHub Releases API on startup |
+| One-liner install | None | **`irm regilattice.dev/install \| iex`** | Harvest from WinUtil; #1 distribution improvement |
+| Mutation testing | Weekly CI | Weekly CI (keep) | Adequate for single-dev cadence |
+
+**Auto-updater design**:
+- On startup, check GitHub Releases API for newer version (respect `--no-update-check` flag)
+- Show non-modal notification bar in GUI: "v6.35.0 available — [Update] [Skip]"
+- CLI: print one-line notice to stderr, never block execution
+- Enterprise: respect `HKLM\SOFTWARE\Policies\RegiLattice\DisableAutoUpdate` GPO
+- Privacy: no telemetry, no analytics — just HTTPS GET to `api.github.com/repos/.../releases/latest`
+
+---
+
+### Decision 8: Documentation Strategy — Reduce and Automate
+
+**Previous verdict**: Consolidate instruction files, add DocFX. **Reassessment**: **REVISED —
+MkDocs Material instead of DocFX, and aggressively reduce instruction files.**
+
+| Area | Current | Proposed | Rationale |
+|------|---------|----------|-----------|
+| Instruction files | 8 files (~15K words) | **4 files** | Merge: `no-duplication` → `csharp`; `cicd` → `git-workflow`; `lessons-learned` → split actionable rules into other files, archive the rest |
+| Skills | 12 skills | **8 skills** | Merge related skills; remove skills for operations that are now scripted |
+| API docs | Manual `Api.md` | **MkDocs Material auto-generated** | Source from `///` XML comments + `docfx metadata` |
+| Docs site | GitHub Pages (static HTML) | **MkDocs Material** | Better theming, search, versioning than DocFX; used by major .NET projects |
+| README.md | ~500 lines + Mermaid diagrams | **~200 lines** + link to docs site | Focused quick-start; detailed docs live on the site |
+| SVG assets | 7 manually-updated SVGs | **CI-generated from template** | `Bump-Version.ps1` does string substitution; CI validates |
+| CHANGELOG | Manual entries | **Auto-generated from Conventional Commits** | `git-cliff` or `standard-version` |
+
+**`lessons-learned.instructions.md` is the biggest problem**: At 1,000+ lines, it's the largest
+instruction file and consumes precious AI context window. Most entries are historical —
+"this happened, here's the fix" — not forward-looking rules. **Proposed split**:
+- Extract 10–15 still-relevant rules into `csharp.instructions.md` and `testing.instructions.md`
+- Archive the full file to `docs/archive/lessons-learned-v6.md`
+- New `lessons-learned` stays under 200 lines with only the most critical gotchas
+
+---
+
+### Decision 9: Platform Scope — Windows x64 + ARM64
+
+**Previous verdict**: ADD ARM64. **Reassessment**: **CONFIRMED.**
+
+ARM64 Snapdragon X laptops are shipping in volume. Sophia Script already supports ARM64.
+The Core library and CLI are architecture-neutral. Only the GUI needs ARM64 WinForms testing.
+
+**Action items**:
+- [ ] Add `win-arm64` to the publish matrix in `release.yml`
+- [ ] Add ARM64 CI runner (GitHub Actions `windows-11-arm` when available, or self-hosted)
+- [ ] Test WinForms rendering on ARM64 (DPI scaling, P/Invoke compatibility)
+
+**Cross-platform (Linux/macOS)**: **Reject.** Registry tweaks are Windows-only — the entire
+value proposition is Windows. Cross-platform GUI would add complexity with zero user benefit.
+
+---
+
+### Decision 10: Installer Strategy — Clean Up
+
+**Previous verdict**: Remove MSIX, remove npm/maven/gem. **Reassessment**: **CONFIRMED.**
+
+| Installer | Current | Proposed | Rationale |
+|-----------|---------|----------|-----------|
+| Portable EXE (GUI + CLI) | Yes | Yes (Keep) | Primary distribution; zero-install |
+| MSI (WiX) | Yes | Yes (Keep) | Enterprise (GPO/SCCM/Intune) |
+| MSIX | Yes | **Remove** | Low adoption, complex packaging |
+| WinGet manifest | Yes | Yes (Keep) | Primary Windows 11 package manager |
+| Scoop manifest | Yes | Yes (Keep) | Developer/power-user channel |
+| Chocolatey | Yes | Yes (Keep) | Enterprise channel |
+| PSGallery module | Yes | Yes (Keep) | PowerShell automation channel |
+| npm/maven/gem | Yes | **Remove** | Zero evidence of usage; pure maintenance burden |
+| One-liner web install | No | **Add** | Harvest from WinUtil/Sophia: `irm regilattice.dev/install \| iex` |
+
+---
+
+### Decision 11: Auto-Update Mechanism *(NEW)*
+
+No competitor in this space has a robust auto-updater (WinUtil and Sophia are scripts that
+re-download on each run). This is an **opportunity to leapfrog**.
+
+| Option | Pros | Cons | Verdict |
+|--------|------|------|---------|
+| **Squirrel.Windows** | Mature, delta updates, GitHub Releases integration | Requires installation location (not portable) | **ADOPT for MSI installs** |
+| **Manual GitHub API check** | Works for portable EXE, no dependencies | User must download manually | **ADOPT for portable** |
+| **Velopack** (Squirrel successor) | Modern, cross-platform, delta updates | Newer, less proven | **Monitor** |
+| **Microsoft Store** | Auto-updates built-in | Store submission process, MSIX-only | Reject |
+
+**Implementation**: Two-tier approach:
+1. **Portable EXE**: On startup, HTTPS GET to `api.github.com/repos/RajwanYair/RegiLattice/releases/latest`. If newer version exists, show notification bar. User clicks to open browser at release page.
+2. **MSI/WinGet/Scoop/Choco**: Managed by the package manager's own update mechanism.
+
+---
+
+### Decision 12: Security & Trust *(NEW)*
+
+No tool in this space is code-signed. **Being first to sign would be a major trust signal.**
+
+| Area | Current | Proposed | Priority |
+|------|---------|----------|----------|
+| Code signing | None | **SignPath.io** (free for OSS) | P0 |
+| SBOM | None | **CycloneDX** attached to every release | P1 |
+| Reproducible builds | `<Deterministic>true` (already set) | Verify + document | P1 |
+| Source Link | Not verified | `<EmbedAllSources>true</EmbedAllSources>` + SourceLink | P2 |
+| Binary hash verification | `SHA256SUMS.txt` (already produced) | **GPG-sign** the checksum file | P2 |
+| WDAC compatibility | Unknown | Test and document compatibility | P3 |
+| Vulnerability scanning | `dotnet list package --vulnerable` in CI | Add CodeQL weekly scan (already in `weekly.yml`) | Done |
+
+---
+
+### Decision 13: Enterprise Features *(NEW)*
+
+The enterprise market is underserved by all competitors. RegiLattice's profile system,
+snapshot/restore, and policy tweaks are natural enterprise foundations.
+
+| Feature | Status | Proposed | Target |
+|---------|--------|----------|--------|
+| CIS Benchmark alignment | Tweaks exist but not mapped | **Tag tweaks with CIS control IDs** | v7.x |
+| STIG compliance mapping | Not started | **Tag tweaks with DISA STIG IDs** | v8.x |
+| Compliance report export | Partial (CSV audit log) | **HTML/PDF compliance report** with pass/fail per CIS control | v7.x |
+| GPO deployment package | MSI exists | **ADMX template** for enterprise GPO-based deployment | v8.x |
+| Intune/SCCM integration | CorporateGuard detects only | **PowerShell DSC config** for managed deployment | v7.x |
+| Fleet management API | None | **REST API** for multi-machine status queries (stretch) | v10+ |
+
+**CIS Benchmark tagging**: Each tweak already has `Tags`. Adding `cis-l1-2.3.1` tags would
+allow `--profile cis-l1` to apply all CIS Level 1 recommendations automatically. This is
+a unique selling point no competitor offers.
+
+---
+
+### Decision 14: Community & Sustainability *(NEW)*
+
+Optimizer's archival (18.2k stars → abandoned) is the **strongest cautionary tale** in this
+space. A single-developer project with 7,718 tweaks and growing scope will hit the same wall
+without deliberate sustainability measures.
+
+| Strategy | Action | Priority |
+|----------|--------|----------|
+| **Reduce scope** | Extract non-core dialogs to `RegiLattice.Tools` plugin DLL | P0 |
+| **Automate everything** | `Bump-Version.ps1` (28 files), `Sync-CopilotInstructions.ps1` (counts), auto-CHANGELOG | P0 |
+| **Lower contributor barrier** | YAML tweak format for community contributions (no C# required) | P1 |
+| **Curate Good First Issues** | 10+ issues with file pointers, expected outcomes, and test requirements | P1 |
+| **Create `Setup-Dev.ps1`** | One-command dev environment bootstrap | P1 |
+| **Publish `RegiLattice.SDK`** | NuGet package for third-party pack authors | P2 |
+| **Enable GitHub Discussions** | Community Q&A, feature voting, tweak requests | P1 |
+| **Establish a GOVERNANCE.md** | Clear ownership, contribution acceptance criteria, CoC enforcement | P2 |
+| **Cap tweak growth** | Quality over quantity — audit and consolidate instead of endlessly adding | P0 |
+
+**Cap tweak growth**: At 7,718 tweaks, the library is already 10x–100x larger than any
+competitor. Further growth should focus on **quality** (correct registry values, proper
+`ImpactScore`/`SafetyRating` calibration, source URL citations) rather than quantity.
+Set a soft cap at 8,000 tweaks for v7.x; only add tweaks that fill documented gaps.
+
+---
+
+### Decision 15: Observability & Structured Logging *(NEW)*
+
+The current logging approach (`session.Log`, `AppendLog()`, `Console.WriteLine`) is ad-hoc.
+For a tool that modifies system registry, structured logging is a safety requirement.
+
+| Area | Current | Proposed | Rationale |
+|------|---------|----------|-----------|
+| Log framework | Ad-hoc string lists | **Microsoft.Extensions.Logging** | Standard .NET, DI-friendly, zero config |
+| Log output | `session.Log` (in-memory list) | **File + structured JSON** | Audit trail for registry modifications |
+| Log viewer | GUI RichTextBox | **Keep** (but also write to `%LOCALAPPDATA%\RegiLattice\logs\`) | Persistent, machine-readable |
+| Telemetry | None | **None** (explicitly opt-out) | Privacy-first tool must not phone home |
+| Diagnostic mode | None | **`--diagnostic` CLI flag** | Verbose logging for support/debugging |
+
+**Implementation**: Use `Microsoft.Extensions.Logging.Abstractions` (zero dependencies)
+in Core. GUI/CLI register their own log providers (RichTextBox sink, console sink, file sink).
+No telemetry, no analytics servers — all logs stay local.
+
+---
+
+## Part IV — Technical Debt Inventory
+
+| ID | Debt | Severity | Location | Resolution Phase |
+|----|------|----------|----------|-----------------|
+| TD-1 | `TweakEngine` god class (3K+ LOC) | High | `TweakEngine.cs` | Phase B (DI) |
+| TD-2 | Manual `RegisterBuiltins()` (195 lines) | Medium | `TweakEngine.cs` | Phase B (`[TweakModule]`) |
+| TD-3 | 8 JSON files for persistence | Medium | Services/ | Phase B (repository abstraction) |
+| TD-4 | 28-file manual version bump | High | Multiple | Phase A (`Bump-Version.ps1`) |
+| TD-5 | `lessons-learned.instructions.md` (1K+ lines) | Medium | `.github/instructions/` | Phase A (split + archive) |
+| TD-6 | `ExtendedCoverageTests.cs` monolith (58 classes) | Medium | Core.Tests/ | Phase A (split) |
+| TD-7 | WinForms bitmap scaling (no vector icons) | High | GUI/ | Phase D (WPF) |
+| TD-8 | No interface contracts on TweakEngine | High | Core/ | Phase B (DI) |
+| TD-9 | 50K LOC of repetitive `TweakDef` data in C# | Low | Tweaks/ | Phase E (YAML optional) |
+| TD-10 | `AppIcons.cs` programmatic bitmap generation | Low | GUI/ | Phase D (XAML vector icons) |
+| TD-11 | No structured logging | Medium | All projects | Phase B (MEL) |
+| TD-12 | npm/maven/gem registry files (dead weight) | Low | Root dirs | Phase A (remove) |
+| TD-13 | 7 SVGs with manually-updated counts | Medium | `docs/assets/` | Phase A (CI-templated) |
+| TD-14 | Hardcoded version in Mermaid diagrams | Low | `README.md` | Phase A (`Bump-Version.ps1`) |
+
+---
+
+## Part V — Improvement Roadmap
+
+### Phase A: House Cleaning (v6.34–v6.39)
+
+> **Risk**: Low · **Impact**: High · **Theme**: Reduce maintenance burden before building additions.
+
+#### A.1 — Test Suite Consolidation (v6.34)
+
+- [ ] Split `ExtendedCoverageTests.cs` monolith (58 test classes, ~4K LOC) into per-topic files
+- [ ] Migrate standalone test classes to `BuiltinsFixture` (shared engine instance)
+- [ ] Remove ~100–200 tests that duplicate `TweakEngineBuiltinsTests` assertions
+- [ ] Add `[Collection]` isolation to all file-writing test classes
+- [ ] Standardize performance budget tests with tweak-count comments
+
+**Measurable outcome**: Test count may decrease; coverage stays ≥90%; test run time decreases ~20%.
+
+#### A.2 — Documentation Reduction (v6.35)
+
+- [ ] Consolidate instruction files: 8 → 4 (merge `no-duplication` → `csharp`, `cicd` → `git-workflow`)
+- [ ] Archive `lessons-learned.instructions.md` to `docs/archive/`; new version < 200 lines
+- [ ] Reduce skills: 12 → 8 (merge related skills)
+- [ ] Deploy MkDocs Material docs site to GitHub Pages
+- [ ] Shrink `README.md` to ~200 lines + link to docs site
+- [ ] Add `Sync-CopilotInstructions.ps1` to auto-update counts
+
+#### A.3 — CI/CD Cleanup (v6.36)
+
+- [ ] Merge `smoke.yml` → `release.yml`, `pages.yml` → `ci.yml`
+- [ ] Delete npm/maven/gem package registry files
+- [ ] Create `Bump-Version.ps1` automating all 28 files
+- [ ] Add `paths-ignore` for docs-only changes
+- [ ] Add auto-CHANGELOG generation via `git-cliff`
+
+#### A.4 — Scope Discipline (v6.37–v6.38)
+
+- [ ] Audit 67+ dialog/form classes; split into Core (~30) and Tools (~35)
+- [ ] Create `RegiLattice.Tools` project for non-core dialogs (battery, network, disk)
+- [ ] Load `RegiLattice.Tools.dll` as optional plugin from MainForm
+- [ ] Cap tweak growth: soft cap at 8,000; focus on quality over quantity
+
+#### A.5 — xUnit v3 Migration (v6.39)
+
+- [ ] Update all 5 held packages simultaneously
+- [ ] Fix breaking API changes per project (Core → CLI → GUI)
+- [ ] Add `Verify` snapshot testing for CLI output regression
+- [ ] Verify all 3,296+ tests pass on xUnit v3
+
+---
+
+### Phase B: Architecture Modernisation (v7.0)
+
+> **Risk**: Medium · **Impact**: High · **Theme**: Replace the God class with testable services.
+
+#### B.1 — Dependency Injection Container
+
+```csharp
+var services = new ServiceCollection()
+    .AddRegiLatticeCore()                                    // registers all interfaces
+    .AddSingleton<IRegistrySession>(new RegistrySession())
+    .BuildServiceProvider();
+
+var search = services.GetRequiredService<ITweakSearch>();
+var results = search.Search("privacy");
+```
+
+- [ ] Extract 6 interfaces from `TweakEngine` + 4 from `RegistrySession`
+- [ ] Create `ServiceCollectionExtensions.AddRegiLatticeCore()`
+- [ ] Keep `TweakEngine` as backward-compatible facade
+- [ ] Update GUI and CLI to use DI container
+
+#### B.2 — Auto-Registration via `[TweakModule]` Attribute
+
+- [ ] Define `[TweakModule]` attribute
+- [ ] Implement assembly scanning (or source generator) in `RegisterBuiltins()`
+- [ ] Remove 195 manual registration lines
+- [ ] Benchmark: scanning must complete in <50ms
+
+#### B.3 — Repository Abstraction
+
+- [ ] Define `IFavoritesRepository`, `IRatingsRepository`, `IHistoryRepository`, etc.
+- [ ] Implement JSON-backed repositories (default, backward-compatible)
+- [ ] Remove direct `File.ReadAllText`/`File.WriteAllText` from services
+- [ ] All data access via DI-injected repositories
+
+#### B.4 — Structured Logging
+
+- [ ] Add `Microsoft.Extensions.Logging.Abstractions` to Core
+- [ ] Replace ad-hoc `session.Log` with `ILogger<T>` injection
+- [ ] Add file sink: `%LOCALAPPDATA%\RegiLattice\logs\regilattice-YYYY-MM-DD.log`
+- [ ] Add `--diagnostic` CLI flag for verbose output
+
+#### B.5 — Lightweight Event Bus
+
+- [ ] Define event types as sealed records (`TweakAppliedEvent`, `TweakRemovedEvent`, etc.)
+- [ ] Implement minimal `IEventBus` (publish/subscribe, no external dependency)
+- [ ] Wire Analytics, TweakHistory, HealthScore as event subscribers
+- [ ] Update GUI to subscribe to progress events instead of polling
+
+---
+
+### Phase C: Data Layer & Compliance (v7.1–v7.3)
+
+> **Risk**: Medium · **Impact**: High · **Theme**: Enterprise readiness.
+
+#### C.1 — SQLite Backend (Optional) (v7.1)
+
+- [ ] Add `Microsoft.Data.Sqlite` package
+- [ ] Implement SQLite-backed repositories (same interfaces as JSON)
+- [ ] Add `config.json` setting: `"dataBackend": "json" | "sqlite"`
+- [ ] Implement automatic JSON→SQLite migration when backend is switched
+- [ ] Keep JSON files intact (no forced migration, no `.migrated` renames)
+
+#### C.2 — CIS Benchmark Tagging (v7.2)
+
+- [ ] Map relevant tweaks to CIS Windows 11 Benchmark v3.0 control IDs
+- [ ] Add `cis-l1-X.Y.Z` and `cis-l2-X.Y.Z` tags to matching `TweakDef` entries
+- [ ] Implement `--profile cis-l1` and `--profile cis-l2`
+- [ ] Generate **CIS compliance report**: HTML with pass/fail per control
+
+#### C.3 — Enterprise Compliance Reporting (v7.3)
+
+- [ ] HTML/PDF compliance report with executive summary
+- [ ] CSV/JSON export of compliance posture
+- [ ] Integration with PowerShell DSC for managed deployment
+- [ ] ADMX template generation for GPO-based enterprise deployment
+
+---
+
+### Phase D: Frontend Rewrite — WPF (v8.0)
+
+> **Risk**: High · **Impact**: Very High · **Theme**: Modern, accessible, GPU-accelerated UI.
+
+#### D.1 — WPF Shell + WinForms Interop (v8.0)
 
 ```
-┌─────────────────────────────────────────────────┐
-│  WPF MainWindow (v8.0)                          │
-│  ┌───────────────┐  ┌────────────────────────┐  │
-│  │  WPF Sidebar   │  │  WindowsFormsHost      │  │
-│  │  (categories,  │  │  (existing TweakPanel)  │  │
-│  │   profiles,    │  │  Migrated to WPF in    │  │
-│  │   search)      │  │  v8.1, v8.2, v8.3...   │  │
-│  └───────────────┘  └────────────────────────┘  │
-│  ┌────────────────────────────────────────────┐  │
-│  │  WPF Log Panel                              │  │
-│  └────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────┘
++--------------------------------------------------+
+|  WPF MainWindow                                   |
+|  +--------------+  +---------------------------+  |
+|  |  WPF Sidebar  |  |  WindowsFormsHost         |  |
+|  |  (categories, |  |  (existing TweakPanel)    |  |
+|  |   profiles,   |  |  → migrated to WPF in    |  |
+|  |   search)     |  |    v8.1–v8.5             |  |
+|  +--------------+  +---------------------------+  |
+|  +---------------------------------------------+  |
+|  |  WPF Log Panel                               |  |
+|  +---------------------------------------------+  |
++--------------------------------------------------+
 ```
 
-- [ ] Create `RegiLattice.WPF` project (new project, not rename)
-- [ ] Implement WPF `MainWindow` with `WindowsFormsHost` hosting existing panels
-- [ ] Migrate sidebar (category tree) to WPF TreeView with data binding
-- [ ] Implement MVVM `TweakListViewModel` with `CommunityToolkit.Mvvm`
-- [ ] Data-virtualized `ListView` for 7,718 tweaks (VirtualizingStackPanel)
+- [ ] Create `RegiLattice.WPF` project
+- [ ] WPF `MainWindow` with `WindowsFormsHost` for existing panels
+- [ ] MVVM `TweakListViewModel` with `CommunityToolkit.Mvvm`
 - [ ] XAML resource dictionaries for all 11 themes
+- [ ] Data-virtualized `ListView` for 7,718 tweaks
 
 #### D.2 — Incremental Panel Migration (v8.1–v8.5)
-
-Each minor version migrates one panel from WinForms to native WPF:
 
 | Version | Panel | Key Challenge |
 |---------|-------|--------------|
 | v8.1 | TweakBrowserPanel → WPF DataGrid | Data virtualization for 7,718 rows |
-| v8.2 | TweakCardRow → WPF UserControl | Custom rendering, scope badges |
+| v8.2 | TweakCardRow → WPF UserControl | Scope badges, kind symbols |
 | v8.3 | Package manager dialogs → WPF | Template method pattern in MVVM |
-| v8.4 | Settings/About dialogs → WPF | Final WinForms dependency removal |
-| v8.5 | Remove WinForms project reference | Clean break; `RegiLattice.GUI` → archive |
+| v8.4 | Settings/About dialogs → WPF | Final WinForms removal |
+| v8.5 | Remove `RegiLattice.GUI` project | Clean break; archive WinForms code |
 
-#### D.3 — WCAG 2.1 AA Accessibility
+#### D.3 — Accessibility (WCAG 2.1 AA)
 
-- [ ] Keyboard navigation for all controls (Tab order, arrow keys in lists)
-- [ ] Screen reader support via UI Automation (WPF provides this natively)
+- [ ] Full keyboard navigation (Tab order, arrow keys)
+- [ ] Screen reader support via UI Automation (WPF native)
 - [ ] High-contrast theme support (detect Windows high-contrast mode)
-- [ ] Minimum 4.5:1 contrast ratio on all text (audit all 11 themes)
+- [ ] 4.5:1 minimum contrast ratio (audit all 11 themes)
 - [ ] Focus indicators on all interactive elements
 
-#### D.4 — Spectre.Console TUI (Optional, additive)
+#### D.4 — Auto-Updater
 
-```
-$ regilattice --tui
+- [ ] Implement GitHub Releases API check on startup
+- [ ] Non-modal notification bar: "v8.1.0 available — [Update] [Skip]"
+- [ ] CLI: print one-line notice to stderr
+- [ ] Respect `DisableAutoUpdate` registry policy for enterprise
 
-┌─ RegiLattice v8.0 ────────────────────────────────────────┐
-│ Search: telemetry_                                         │
-│                                                            │
-│ ▸ Privacy (142 tweaks)                                     │
-│   ☐ priv-disable-telemetry         Disable Telemetry       │
-│   ☑ priv-disable-ad-id             Disable Advertising ID  │
-│   ☐ priv-disable-activity-feed     Disable Activity Feed   │
-│                                                            │
-│ ▸ Telemetry Advanced (48 tweaks)                           │
-│   ☐ telem-disable-ceip             Disable CEIP            │
-│                                                            │
-│ [Space] Toggle · [Enter] Apply · [/] Search · [q] Quit    │
-└────────────────────────────────────────────────────────────┘
-```
+#### D.5 — Code Signing
 
-- [ ] Add `Spectre.Console` NuGet package
-- [ ] Implement `--tui` CLI command that launches an interactive terminal UI
-- [ ] Category tree, search, tweak toggle, status display
-- [ ] Profile selector and batch operations
+- [ ] Register with SignPath.io (free for OSS)
+- [ ] Add signing step to `release.yml`
+- [ ] Sign all EXE, DLL, and MSI artifacts
+- [ ] Document certificate for WinGet and Chocolatey manifests
 
 ---
 
-### Phase E: Data-Driven Tweaks (v9.0)
+### Phase E: Data-Driven Tweaks — YAML (v9.0)
 
-> **Timeline**: 1 MAJOR version · **Risk**: Medium · **Impact**: Medium
-> **Theme**: Allow non-developers to contribute tweaks without writing C#.
+> **Risk**: Medium · **Impact**: Medium · **Theme**: Lower the contribution barrier.
 
 #### E.1 — YAML Tweak Definitions (Registry-Only)
 
@@ -613,215 +717,237 @@ $ regilattice --tui
 id: priv-disable-telemetry
 label: Disable Telemetry
 category: Privacy
-tags: [telemetry, privacy, data-collection]
+tags: [telemetry, privacy, cis-l1-18.9.16.1]
 needs-admin: true
-corp-safe: false
 impact-score: 5
 safety-rating: 4
-impact-note: Stops all diagnostic and usage data from being sent to Microsoft.
-source-url: https://learn.microsoft.com/en-us/windows/privacy/
 
 apply:
-  - set-dword: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry, value: 0 }
-  - set-dword: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: MaxTelemetryAllowed, value: 0 }
+  - set-dword:
+      path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+      name: AllowTelemetry
+      value: 0
 
 remove:
-  - delete-value: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry }
-  - delete-value: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: MaxTelemetryAllowed }
+  - delete-value:
+      path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+      name: AllowTelemetry
 
 detect:
-  - check-dword: { path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", name: AllowTelemetry, expected: 0 }
+  - check-dword:
+      path: "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+      name: AllowTelemetry
+      expected: 0
 ```
 
-- [ ] Define YAML schema with JSON Schema validation (`tweaks.schema.json`)
-- [ ] Implement `YamlTweakLoader` that converts YAML files to `TweakDef` objects
+- [ ] Define YAML schema with JSON Schema validation
+- [ ] Implement `YamlTweakLoader` → `TweakDef` conversion
 - [ ] Load YAML tweaks alongside C# tweaks in `RegisterBuiltins()`
-- [ ] Support hot-reload: `FileSystemWatcher` on `tweaks/` directory
-- [ ] CLI command: `--validate-yaml <path>` for pack/community tweak validation
+- [ ] CLI: `--validate-yaml <path>` for community tweak validation
+- [ ] VS Code YAML schema setting for auto-validation
 
-#### E.2 — JSON Schema for Tweak Validation
+#### E.2 — Gradual C# → YAML Migration
 
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "required": ["id", "label", "category", "apply"],
-  "properties": {
-    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
-    "label": { "type": "string", "minLength": 3 },
-    "category": { "type": "string" },
-    "impact-score": { "type": "integer", "minimum": 1, "maximum": 5 },
-    "safety-rating": { "type": "integer", "minimum": 1, "maximum": 5 }
-  }
-}
-```
-
-- [ ] Publish schema to `schemas/tweak.schema.json` in the repository
-- [ ] Add VS Code `yaml.schemas` setting for auto-validation in editor
-- [ ] Integrate schema validation into `--validate` CLI command
-- [ ] Add schema to pack validation CI workflow
-
-#### E.3 — Gradual C# → YAML Migration
-
-- [ ] Identify "pure RegOp" tweaks (no `ApplyAction`/`DetectAction`) — expected ~95% of 7,718
-- [ ] Auto-generate YAML from C# `TweakDef` objects: `--export-yaml <directory>`
-- [ ] Validate round-trip: C# → YAML → load → compare (`TweakDef.Equals()`)
+- [ ] Auto-generate YAML from C# `TweakDef` objects: `--export-yaml <dir>`
+- [ ] Round-trip validation: C# → YAML → load → diff
 - [ ] Migrate 1 category per sprint as proof of concept
-- [ ] Keep C# modules for the ~5% with delegate-based logic
+- [ ] Keep C# for ~5% of tweaks with delegate-based logic
 
 ---
 
 ### Phase F: Security, Trust & Ecosystem (v9.1+)
 
-> **Timeline**: Ongoing · **Risk**: Low · **Impact**: Medium
-> **Theme**: Earn user trust and grow community.
+> **Risk**: Low · **Impact**: Medium · **Theme**: Earn user trust and grow community.
 
-#### F.1 — Code Signing (v9.1)
+#### F.1 — SBOM & Reproducible Builds (v9.1)
 
-- [ ] Register with [SignPath.io](https://signpath.io/) (free for OSS)
-- [ ] Add signing step to `release.yml` after build, before upload
-- [ ] Sign all EXE, DLL, and MSI artifacts
-- [ ] Document certificate pinning for `winget` and Chocolatey manifests
-
-#### F.2 — Lazy Admin Elevation (v9.1)
-
-Currently, the CLI checks `IsAdmin()` once at startup. Many HKCU tweaks don't need admin.
-
-- [ ] Categorize tweaks by `Scope`: User (no admin), Machine (admin), Both (admin)
-- [ ] In GUI: apply User tweaks immediately; prompt UAC only when Machine tweaks are selected
-- [ ] In CLI: `--no-elevate` flag to skip Machine tweaks silently
-- [ ] Use `runas` verb for per-operation elevation instead of requiring full-admin launch
-
-#### F.3 — SBOM & Reproducible Builds (v9.2)
-
-- [ ] Generate CycloneDX SBOM in `release.yml` (`dotnet-cyclonedx` tool)
+- [ ] Generate CycloneDX SBOM in `release.yml`
 - [ ] Attach `sbom.cdx.json` to every GitHub Release
-- [ ] Enable Source Link (`<EmbedAllSources>true</EmbedAllSources>`)
-- [ ] Verify deterministic builds with `<Deterministic>true</Deterministic>` (already set)
+- [ ] GPG-sign `SHA256SUMS.txt`
+- [ ] Document build reproducibility verification steps
 
-#### F.4 — Community & Contribution Experience (v9.3+)
+#### F.2 — Lazy Admin Elevation (v9.2)
+
+- [ ] Apply HKCU tweaks immediately (no admin needed)
+- [ ] Prompt UAC only when HKLM tweaks are selected
+- [ ] CLI: `--no-elevate` to skip Machine tweaks silently
+- [ ] Use per-operation `runas` verb instead of full-admin launch
+
+#### F.3 — Internationalisation (v9.3)
+
+- [ ] Evaluate Crowdin (free for OSS) for community translations
+- [ ] Prioritize: en, zh-CN, es, de, ja (top 5 by Windows market share)
+- [ ] Extract all UI strings to `.resx` resources
+- [ ] Harvest from Optimizer's 24-language community PR model
+
+#### F.4 — Community Experience (v9.4)
 
 - [ ] Create `Setup-Dev.ps1` — one-command dev environment bootstrap
-- [ ] Curate 10+ "Good First Issues" with detailed descriptions and file pointers
-- [ ] Publish `RegiLattice.SDK` NuGet package for third-party pack authors
-- [ ] Add `ARCHITECTURE.md` with data flow diagrams and onboarding guide
-- [ ] Set up GitHub Discussions for community Q&A
-- [ ] One-liner install script: `irm regilattice.dev/install | iex`
+- [ ] Curate 10+ Good First Issues with detailed descriptions
+- [ ] Publish `RegiLattice.SDK` NuGet package for pack authors
+- [ ] Enable GitHub Discussions
+- [ ] One-liner install: `irm regilattice.dev/install | iex`
 
-#### F.5 — Internationalisation (v9.4+)
+#### F.5 — Watch Mode & Batch Scripting (v9.5+)
 
-Currently: 2 real locales (en, de) + 8 stubs.
-
-- [ ] Evaluate Crowdin (free for OSS) vs manual `.resx` management
-- [ ] Prioritize top 5 languages by Windows market share: en, zh-CN, es, de, ja
-- [ ] Extract all UI strings to `.resx` resources (currently some are inline)
-- [ ] Harvest from Optimizer's 24-language approach (community PRs for translations)
-
-#### F.6 — Watch Mode & Batch Scripting (v9.5+)
-
-- [ ] CLI `--watch` mode: monitor registry for tweak drift, alert on reversion
-- [ ] CLI `--batch-file <yaml>`: YAML deployment recipes for enterprise use
+- [ ] CLI `--watch`: monitor registry for tweak drift, alert on reversion
+- [ ] CLI `--batch-file <yaml>`: deployment recipes for enterprise
 
 ```yaml
 # deploy-privacy.yaml
 profile: privacy
-additional:
-  - priv-disable-telemetry
-  - telem-disable-ceip
-skip:
-  - priv-disable-cortana  # needed for accessibility
+additional: [priv-disable-telemetry, telem-disable-ceip]
+skip: [priv-disable-cortana]  # needed for accessibility
 mode: apply
 dry-run: false
 ```
 
 ---
 
-## Part V — Success Metrics
+### Phase G: Next Generation (v10+) *(NEW)*
 
-| Metric | Current (v6.33) | Phase A Target | Phase D Target | Phase E Target |
-|--------|----------------|----------------|----------------|----------------|
-| **Tweaks** | 7,718 | 7,718 | 7,718 | 8,000+ |
-| **GUI framework** | WinForms | WinForms | WPF | WPF |
-| **Architecture** | Monolithic | Monolithic | DI + interfaces | DI + interfaces |
-| **Data persistence** | 8 JSON files | 8 JSON files | SQLite | SQLite + cache |
-| **Tweak format** | 195 C# files | 195 C# files | 195 C# files | Hybrid C#/YAML |
-| **Tests** | 3,296 (xUnit v2) | 3,200+ (xUnit v3) | 3,500+ | 4,000+ |
-| **CI workflows** | 6 | 4 | 4 | 4 |
-| **Version bump files** | 28 manual | 1 script | 1 script | 1 script |
-| **Package registries** | 7 | 4 | 4 | 4 |
-| **Dialogs in main app** | 67+ | ~30 | ~30 | ~25 |
-| **Code signing** | None | None | SignPath.io | SignPath.io |
-| **ARM64 support** | No | CI only | Published | Published |
-| **Locales** | 2 (en, de) | 2 | 5 | 5+ (Crowdin) |
-| **DPI support** | Bitmap scaling | Bitmap scaling | WPF vector | WPF vector |
-| **a11y compliance** | None | None | WCAG 2.1 AA | WCAG 2.1 AA |
-| **Startup time** | ~200ms | ~180ms | ~100ms (lazy) | ~50ms |
-| **Binary size (portable)** | ~40MB | ~38MB | ~35MB | ~30MB |
-| **Community contributors** | 1 | 1 | 5+ | 10+ |
-| **One-liner install** | No | No | Yes | Yes |
+> **Risk**: High · **Impact**: Transformative · **Theme**: Platform evolution.
+
+#### G.1 — WinUI 3 Migration (v10.0)
+
+Once WPF migration is stable and proven (v8.5+), evaluate WinUI 3 for the v10 generation:
+- Fluent Design 2 native controls
+- Mica/Acrylic materials
+- Windows App SDK integration
+- Modern notification system (Windows Toast)
+
+**Gate**: Only proceed if WinUI 3 ecosystem has matured (stable packaging without MSIX
+requirement, community controls, proven at scale by SophiApp 2.0 and other projects).
+
+#### G.2 — Spectre.Console TUI (v10.1)
+
+```
+$ regilattice --tui
+
++-- RegiLattice v10.0 ----------------------------------------+
+| Search: telemetry_                                           |
+|                                                              |
+| > Privacy (142 tweaks)                                       |
+|   [ ] priv-disable-telemetry    Disable Telemetry            |
+|   [x] priv-disable-ad-id       Disable Advertising ID       |
+|                                                              |
+| [Space] Toggle  [Enter] Apply  [/] Search  [q] Quit         |
++--------------------------------------------------------------+
+```
+
+- [ ] Add `Spectre.Console` NuGet package
+- [ ] `--tui` command for interactive terminal UI
+- [ ] Category tree, search, tweak toggle, profile selector
+
+#### G.3 — REST API for Fleet Management (v10.2+)
+
+For enterprise customers managing hundreds of machines:
+- Minimal ASP.NET Core API for multi-machine status queries
+- Agent mode: headless daemon that listens for commands
+- Dashboard: web UI for fleet-wide tweak compliance
+
+**Gate**: Only proceed if enterprise demand is validated through user feedback.
 
 ---
 
-## Part VI — Risk Register
+## Part VI — Success Metrics & KPIs
+
+| Metric | Current (v6.33) | Phase A | Phase D | Phase E | Phase G |
+|--------|----------------|---------|---------|---------|---------|
+| **Tweaks** | 7,718 | 7,718 (cap) | 7,718 | 8,000 | 8,000 |
+| **GUI framework** | WinForms | WinForms | **WPF** | WPF | WinUI 3? |
+| **Architecture** | Monolithic | Monolithic | **DI + interfaces** | DI | DI |
+| **Data persistence** | 8 JSON files | 8 JSON files | **Repo abstraction + optional SQLite** | SQLite default | SQLite |
+| **Tweak format** | 195 C# files | 195 C# files | 195 C# files | **Hybrid C#/YAML** | YAML primary |
+| **Tests** | 3,296 (xUnit v2) | 3,200+ (xUnit v3) | 3,500+ | 4,000+ | 4,000+ |
+| **CI workflows** | 6 | **4** | 4 | 4 | 4 |
+| **Version bump files** | 28 manual | **1 script** | 1 script | 1 script | 1 script |
+| **Package registries** | 7 | **4** | 4 | 4 | 4 |
+| **Code signing** | None | None | **SignPath.io** | SignPath.io | SignPath.io |
+| **ARM64** | No | CI testing | **Published** | Published | Published |
+| **Locales** | 2 (en, de) | 2 | 5 | **5+ (Crowdin)** | 10+ |
+| **a11y compliance** | None | None | **WCAG 2.1 AA** | WCAG 2.1 AA | WCAG 2.1 AA |
+| **Auto-updater** | No | No | **Yes** | Yes | Yes |
+| **One-liner install** | No | No | **Yes** | Yes | Yes |
+| **Binary size** | ~40MB | ~38MB | ~35MB | ~30MB | ~15MB (AOT) |
+| **Startup time** | ~200ms | ~180ms | ~100ms | ~50ms | ~30ms |
+| **Community contributors** | 1 | 1 | **5+** | **10+** | 20+ |
+| **CIS benchmark coverage** | 0% | 0% | **30%+** | 60%+ | 80%+ |
+| **Docs site** | Static HTML | **MkDocs Material** | MkDocs | MkDocs | MkDocs |
+| **Structured logging** | No | No | **Yes** | Yes | Yes |
+
+---
+
+## Part VII — Risk Register
 
 | ID | Risk | Impact | Probability | Mitigation |
 |----|------|--------|------------|------------|
-| R1 | **WPF migration takes longer than expected** | Months of dual-framework maintenance | High | Incremental migration via `WindowsFormsHost`; WinForms stays functional throughout; each panel is a separate PR |
-| R2 | **SQLite migration corrupts user data** | Users lose favorites, history, config | Medium | JSON backup before migration; `.json.migrated` files kept; automated rollback on failure; extensive migration tests |
-| R3 | **YAML tweak format has edge cases** | Broken tweaks, wrong registry values | Medium | Keep C# as authoritative; YAML is additive. Comprehensive round-trip tests: C# → YAML → load → diff |
-| R4 | **xUnit v3 breaks 3,296 tests** | CI blocked for days | Medium | Migrate in a branch; one test project at a time; hold `FsCheck.Xunit` v3 until verified compatible |
-| R5 | **Scope reduction upsets users** | Feature regression perception | Medium | Extract to downloadable plugin DLL, not deleted. Announce in CHANGELOG one version before |
-| R6 | **DI container adds startup overhead** | Slower cold start | Low | Benchmark before/after; typical DI registration is ~10ms; lazy module loading offsets it |
-| R7 | **Code signing certificate compromise** | Broken release pipeline, trust loss | Low | Auto-renew via SignPath; revocation procedure documented; HSM-backed key storage |
-| R8 | **Maintainer burnout** (Optimizer cautionary tale) | Project abandoned | Medium | Scope discipline (Phase A.4); attract contributors (Phase F.4); automate everything possible |
-| R9 | **ARM64 WinForms breaks at runtime** | Broken ARM64 builds | Low | Add ARM64 CI runner; test on Snapdragon X devkit before publishing |
-| R10 | **npm/maven/gem removal breaks downstream** | Unknown users lose install method | Low | Announce deprecation in CHANGELOG; add redirect note to package README |
+| R1 | **WPF migration takes longer than expected** | Months of dual-framework maintenance | High | Incremental via `WindowsFormsHost`; WinForms stays functional; each panel is a separate PR |
+| R2 | **Data migration corrupts user data** | Users lose favorites, history, config | Medium | Repository abstraction (no forced migration); JSON stays default; explicit opt-in to SQLite |
+| R3 | **YAML tweak format has edge cases** | Broken tweaks, wrong registry values | Medium | C# stays authoritative; YAML is additive; comprehensive round-trip tests |
+| R4 | **xUnit v3 breaks 3,296 tests** | CI blocked for days | Medium | Branch migration; one project at a time; hold FsCheck.Xunit v3 until verified |
+| R5 | **Scope reduction upsets users** | Feature regression perception | Medium | Extract to downloadable plugin DLL; announce one version before removal |
+| R6 | **Maintainer burnout** (Optimizer lesson) | Project abandoned | **High** | Scope cap, contributor pipeline, automate everything, reduce instruction files |
+| R7 | **Code signing certificate compromise** | Trust loss, broken pipeline | Low | SignPath HSM-backed keys, auto-renewal, documented revocation procedure |
+| R8 | **ARM64 WinForms breaks at runtime** | Broken ARM64 builds | Low | ARM64 CI runner; test before publishing |
+| R9 | **npm/maven/gem removal breaks unknown downstream** | Users lose install method | Low | Announce deprecation in CHANGELOG; add redirect note |
+| R10 | **DI container adds startup overhead** | Slower cold start | Low | Benchmark before/after; typical DI is ~10ms; lazy loading offsets |
+| R11 | **Auto-updater is blocked by corporate firewalls** | Update check fails silently | Medium | `--no-update-check` flag; respect `DisableAutoUpdate` GPO; graceful timeout (3s) |
+| R12 | **MkDocs Material docs site maintenance** | Stale docs, broken links | Low | CI build + deploy on every push; link checker in weekly workflow |
+| R13 | **CIS benchmark mapping is incorrect** | False compliance claims | Medium | Manual verification against official CIS PDF; disclaimer in reports |
 
 ---
 
-## Part VII — Migration Sequence
+## Part VIII — Migration Sequence
 
 ```
-v6.34  ─ Phase A.1  Test Suite Consolidation
-v6.35  ─ Phase A.2  Copilot Surface Overhaul
-v6.36  ─ Phase A.3  CI/CD Cleanup
-v6.37  ─ Phase A.4a Scope Discipline (audit + plan)
-v6.38  ─ Phase A.4b Scope Discipline (extract RegiLattice.Tools)
-v6.39  ─ Phase A.5  xUnit v3 Migration
-         ↓
-v7.0   ─ Phase B.1  DI Container + Interface Segregation     ← MAJOR (breaking: new service API)
-v7.1   ─ Phase B.2  Auto-Registration + Assembly Scanning
-v7.2   ─ Phase C.1  SQLite Foundation + Migration
-v7.3   ─ Phase C.2  Repository Pattern
-v7.4   ─ Phase C.3  In-Memory Cache
-         ↓
-v8.0   ─ Phase D.1  WPF Shell + WinForms Interop             ← MAJOR (new UI framework)
-v8.1   ─ Phase D.2a TweakBrowserPanel → WPF
-v8.2   ─ Phase D.2b TweakCardRow → WPF
-v8.3   ─ Phase D.2c Package Manager Dialogs → WPF
-v8.4   ─ Phase D.2d Settings/About → WPF
-v8.5   ─ Phase D.2e Remove WinForms dependency
-         ↓
-v9.0   ─ Phase E.1  YAML Tweak Definitions                   ← MAJOR (new tweak format)
-v9.1   ─ Phase F.1  Code Signing + F.2 Lazy Elevation
-v9.2   ─ Phase F.3  SBOM + Reproducible Builds
-v9.3   ─ Phase F.4  Community + Contribution Experience
-v9.4   ─ Phase F.5  Internationalisation (Crowdin)
-v9.5+  ─ Phase F.6  Watch Mode + Batch Scripting
+v6.34  - Phase A.1  Test Suite Consolidation
+v6.35  - Phase A.2  Documentation Reduction + Docs Site
+v6.36  - Phase A.3  CI/CD Cleanup + Bump-Version.ps1
+v6.37  - Phase A.4a Scope Discipline (audit + plan)
+v6.38  - Phase A.4b Scope Discipline (extract RegiLattice.Tools)
+v6.39  - Phase A.5  xUnit v3 Migration
+         |
+v7.0   - Phase B.1  DI Container + Interface Segregation     ← MAJOR
+v7.1   - Phase B.2  Auto-Registration + B.3 Repository Abstraction
+v7.2   - Phase B.4  Structured Logging + B.5 Event Bus
+v7.3   - Phase C.1  SQLite Backend (optional)
+v7.4   - Phase C.2  CIS Benchmark Tagging
+v7.5   - Phase C.3  Enterprise Compliance Reporting
+         |
+v8.0   - Phase D.1  WPF Shell + WinForms Interop             ← MAJOR
+v8.1   - Phase D.2a TweakBrowserPanel → WPF
+v8.2   - Phase D.2b TweakCardRow → WPF
+v8.3   - Phase D.2c Package Manager Dialogs → WPF
+v8.4   - Phase D.2d Settings/About → WPF + D.3 Accessibility
+v8.5   - Phase D.2e Remove WinForms + D.4 Auto-Updater + D.5 Code Signing
+         |
+v9.0   - Phase E.1  YAML Tweak Definitions                   ← MAJOR
+v9.1   - Phase F.1  SBOM + Reproducible Builds
+v9.2   - Phase F.2  Lazy Admin Elevation
+v9.3   - Phase F.3  Internationalisation (Crowdin)
+v9.4   - Phase F.4  Community Experience + One-Liner Install
+v9.5   - Phase F.5  Watch Mode + Batch Scripting
+         |
+v10.0  - Phase G.1  WinUI 3 Evaluation/Migration             ← MAJOR (gated)
+v10.1  - Phase G.2  Spectre.Console TUI
+v10.2+ - Phase G.3  REST API for Fleet Management (gated)
 ```
 
 **Key principles**:
 
 1. **Each phase is independently valuable.** No phase requires all prior phases.
-2. **MAJOR bumps are reserved for breaking changes**: DI API (v7.0), WPF (v8.0), YAML (v9.0).
+2. **MAJOR bumps are reserved for breaking changes**: DI API (v7.0), WPF (v8.0), YAML (v9.0), WinUI 3 (v10.0).
 3. **Phase A is entirely backward-compatible** — pure cleanup, no breaking changes.
-4. **WinForms remains functional** throughout Phase D migration (interop layer).
-5. **C# tweak modules remain authoritative** even after YAML support ships (Phase E).
-6. **Highest-ROI phases first**: Test cleanup → CI cleanup → scope reduction → DI → SQLite.
+4. **WinForms remains functional throughout Phase D** (interop layer).
+5. **C# tweak modules remain authoritative** even after YAML ships (Phase E).
+6. **Highest-ROI phases first**: Test cleanup → CI cleanup → scope cap → DI → WPF.
+7. **No data migration is forced.** JSON stays default; SQLite is opt-in.
+8. **Tweak growth is capped.** Quality and calibration over quantity.
 
 ---
 
-## Part VIII — Appendix: Completed Phase Details (v6.0–v6.33)
+## Part IX — Appendix: Completed Work (v6.0–v6.33)
 
 <details>
 <summary>Click to expand completed phase specifications</summary>
@@ -883,10 +1009,15 @@ v9.5+  ─ Phase F.6  Watch Mode + Batch Scripting
 
 ### Post-Phase 7 (v6.31–v6.33)
 
-- **v6.31**: 5 new policy modules (PolicyWindowsFeedback/PolicySettingSync/PolicyWindowsRAHardening/PolicyWindowsSecCenter/PolicyDeliveryOpt); fixed 3 duplicate tweak IDs
-- **v6.32**: 5 new policy modules (PolicyBITS/PolicyPersonalization/PolicyTabletPC/PolicyWindowsBackup/PolicyGameDVR); fix RegistrySession.Backup() DryRun short-circuit
-- **v6.33**: 5 new policy modules (PolicyWindowsDefenderATP/PolicyWindowsInstaller/PolicyCryptography/PolicyFVE/PolicyWindowsUpdateAU)
+- **v6.31**: 5 new policy modules (Feedback, SettingSync, RAHardening, SecCenter, DeliveryOpt); fixed 3 duplicate tweak IDs
+- **v6.32**: 5 new policy modules (BITS, Personalization, TabletPC, WindowsBackup, GameDVR); fix Backup() DryRun short-circuit
+- **v6.33**: 5 new policy modules (DefenderATP, WindowsInstaller, Cryptography, FVE, WindowsUpdateAU)
 
 **Totals at v6.33.0**: 7,718 tweaks · 158 categories · 195 modules · 3,296 tests
 
 </details>
+
+---
+
+*End of Roadmap v2. This document should be reviewed quarterly and updated after each
+MAJOR version release. Use `git log --oneline docs/Roadmap.md` to track revision history.*
