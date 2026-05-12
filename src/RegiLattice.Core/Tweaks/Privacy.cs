@@ -1,7 +1,10 @@
 namespace RegiLattice.Core.Tweaks;
 
+// Sprint B.2: attribute-based module discovery sample
+
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Privacy
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

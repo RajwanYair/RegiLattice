@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core.Models;
@@ -108,15 +109,23 @@ public sealed class TweakEngine
     {
         var sw = Stopwatch.StartNew();
 
-        // Discover all internal static classes in RegiLattice.Core.Tweaks that expose
-        // a static "Tweaks" property returning IReadOnlyList<TweakDef>.
+        // Two discovery paths, both additive:
+        //   1. Attribute path  — any static class in the assembly carrying [TweakModule], any namespace.
+        //   2. Namespace path  — static classes in RegiLattice.Core.Tweaks without the attribute
+        //                        (backward-compatible; no attribute required for existing modules).
         var tweaksNs = typeof(Tweaks.Accessibility).Namespace!;
-        var bindingFlags = System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+        var bindingFlags = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public;
 
         foreach (var type in typeof(Tweaks.Accessibility).Assembly.GetTypes())
         {
-            if (type.Namespace != tweaksNs || !type.IsClass || !type.IsAbstract || !type.IsSealed || type.IsNested)
-                continue; // skip non-static classes and nested helper classes
+            bool hasAttr = type.GetCustomAttribute<TweakModuleAttribute>() != null;
+            bool inNs = type.Namespace == tweaksNs && !type.IsNested;
+            if (!hasAttr && !inNs)
+                continue;
+
+            // Both paths require the type to be a static (abstract + sealed) class.
+            if (!type.IsClass || !type.IsAbstract || !type.IsSealed)
+                continue;
 
             var prop = type.GetProperty("Tweaks", bindingFlags);
             if (prop?.GetValue(null) is IReadOnlyList<TweakDef> tweaks)

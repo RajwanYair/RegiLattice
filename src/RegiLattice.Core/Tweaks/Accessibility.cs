@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Accessibility.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Accessibility
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
