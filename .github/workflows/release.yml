@@ -149,16 +149,40 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "MSIX: $out ($([math]::Round((Get-Item $out).Length / 1MB, 1)) MB)"
 
+      - name: Publish GUI (win-arm64, self-contained)
+        run: >-
+          dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
+          -c Release -r win-arm64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -o publish/gui-arm64
+
+      - name: Publish CLI (win-arm64, self-contained)
+        run: >-
+          dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj
+          -c Release -r win-arm64 --self-contained true
+          -p:PublishSingleFile=true
+          -o publish/cli-arm64
+
       - name: Rename artifacts for release
         shell: pwsh
         run: |
           $tag = '${{ inputs.tag_name || github.ref_name }}'
-          # GUI EXE: RegiLattice-vX.Y.Z-win-x64.exe
+          # GUI EXE (x64): RegiLattice-vX.Y.Z-win-x64.exe
           Copy-Item 'publish/gui/RegiLattice.GUI.exe' "publish/RegiLattice-$tag-win-x64.exe"
-          Write-Host "GUI EXE  : RegiLattice-$tag-win-x64.exe"
-          # CLI EXE: RegiLatticeCLI-vX.Y.Z-win-x64.exe
+          Write-Host "GUI EXE (x64)    : RegiLattice-$tag-win-x64.exe"
+          # CLI EXE (x64): RegiLatticeCLI-vX.Y.Z-win-x64.exe
           Copy-Item 'publish/cli/RegiLattice.exe' "publish/RegiLatticeCLI-$tag-win-x64.exe"
-          Write-Host "CLI EXE  : RegiLatticeCLI-$tag-win-x64.exe"
+          Write-Host "CLI EXE (x64)    : RegiLatticeCLI-$tag-win-x64.exe"
+          # GUI EXE (arm64): RegiLattice-vX.Y.Z-win-arm64.exe
+          if (Test-Path 'publish/gui-arm64/RegiLattice.GUI.exe') {
+            Copy-Item 'publish/gui-arm64/RegiLattice.GUI.exe' "publish/RegiLattice-$tag-win-arm64.exe"
+            Write-Host "GUI EXE (arm64)  : RegiLattice-$tag-win-arm64.exe"
+          }
+          # CLI EXE (arm64): RegiLatticeCLI-vX.Y.Z-win-arm64.exe
+          if (Test-Path 'publish/cli-arm64/RegiLattice.exe') {
+            Copy-Item 'publish/cli-arm64/RegiLattice.exe' "publish/RegiLatticeCLI-$tag-win-arm64.exe"
+            Write-Host "CLI EXE (arm64)  : RegiLatticeCLI-$tag-win-arm64.exe"
+          }
           # MSI (optional — copy from WiX build output if present)
           # WiX SDK with InstallerPlatform=x64 outputs to installer/bin/x64/Release/
           $msi = Get-ChildItem 'installer/bin' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -198,8 +222,9 @@ jobs:
         shell: pwsh
         run: |
           $all = @()
-          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.exe"  -ErrorAction SilentlyContinue
-          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.msi"  -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.exe"   -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*-win-arm64.exe" -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.msi"   -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish" -File -Filter "*.msix"          -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish" -File -Filter "*.zip"           -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish" -File -Filter "*.nupkg"         -ErrorAction SilentlyContinue
@@ -281,9 +306,12 @@ jobs:
           $files = [System.Collections.Generic.List[string]]::new()
 
           # Required artifacts (versioned names)
-          if (Test-Path "publish/RegiLattice-$tag-win-x64.exe")    { $files.Add("publish/RegiLattice-$tag-win-x64.exe") }
-          if (Test-Path "publish/RegiLatticeCLI-$tag-win-x64.exe") { $files.Add("publish/RegiLatticeCLI-$tag-win-x64.exe") }
-          if (Test-Path 'publish/SHA256SUMS.txt')                  { $files.Add('publish/SHA256SUMS.txt') }
+          if (Test-Path "publish/RegiLattice-$tag-win-x64.exe")     { $files.Add("publish/RegiLattice-$tag-win-x64.exe") }
+          if (Test-Path "publish/RegiLatticeCLI-$tag-win-x64.exe")  { $files.Add("publish/RegiLatticeCLI-$tag-win-x64.exe") }
+          if (Test-Path 'publish/SHA256SUMS.txt')                   { $files.Add('publish/SHA256SUMS.txt') }
+          # Optional ARM64 artifacts
+          if (Test-Path "publish/RegiLattice-$tag-win-arm64.exe")    { $files.Add("publish/RegiLattice-$tag-win-arm64.exe") }
+          if (Test-Path "publish/RegiLatticeCLI-$tag-win-arm64.exe") { $files.Add("publish/RegiLatticeCLI-$tag-win-arm64.exe") }
           # Optional artifacts (all versioned — continue-on-error steps may not produce them)
           Get-ChildItem 'publish' -Filter '*.zip'         -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
           Get-ChildItem 'publish' -Filter '*.nupkg'       -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
