@@ -122,12 +122,6 @@
     },
     {
       "file": ".github/instructions/lessons-learned.instructions.md"
-    },
-    {
-      "file": ".github/instructions/cicd.instructions.md"
-    },
-    {
-      "file": ".github/instructions/no-duplication.instructions.md"
     }
   ],
   "chat.promptFiles": true,

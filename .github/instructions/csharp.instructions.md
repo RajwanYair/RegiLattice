@@ -282,3 +282,41 @@ public async Task<string> ExportJsonAsync(string path)
 - Don't use `null!` to suppress CS8618 — use `required` + `init` or assign a real default
 - Don't use `!` (null-forgiving) unless the value is provably non-null at that point
 - Don't skip tests with `[Fact(Skip=...)]` or `[Theory(Skip=...)]` — fix the test or the code it tests
+
+---
+
+## Tweak Duplication Prevention
+
+> Prevention is cheaper than remediation. Apply when adding tweaks, reviewing code, or before every commit.
+
+### The 4 Duplication Layers
+
+| Layer | Severity | Auto-detected by |
+|---|---|---|
+| 1 — Duplicate ID | **HARD BLOCK** | `TweakEngine.Register()` + `RegisterBuiltins_AllIdsUnique` test |
+| 2 — Duplicate registry op (`PATH\ValueName`) | **Warning** | `TweakValidator.DetectDuplicateRegistryOps()` + builtins threshold test |
+| 3 — Duplicate label (same human name in 2+ modules) | **Smell** | Label scan + `RegisterBuiltins_NoCrossModuleLabelAndPathCollision` test |
+| 4 — Conceptual duplicate (same outcome, different code path) | **Debt** | Manual review + `Audit-Duplications.ps1` |
+
+### Pre-Commit Checklist (for Tweaks/ changes)
+
+```
+☐ Searched for the new tweak ID in all Tweaks/*.cs files — no match found
+☐ Searched for the registry PATH\ValueName in all Tweaks/*.cs files — no match found
+☐ Ran: dotnet build (0 errors — RegisterBuiltins throws on duplicate IDs)
+☐ Ran: dotnet test tests/RegiLattice.Core.Tests — all duplication guard tests green
+```
+
+### Fixing Duplicates
+
+```
+Found a duplicate registry op?
+├── Same category, same label → REMOVE the newer one (keep the original)
+├── Same category, different label → MERGE ApplyOps into one tweak
+├── Different categories, same label → Check if both are needed by different profiles
+│   ├── Both needed → add "// INTENTIONAL DUPLICATE: needed for {reason}" comment
+│   └── Only one needed → REMOVE the one with the wrong category
+└── Different categories, different labels → audit semantics; usually remove one
+```
+
+**Full audit**: `. .\scripts\Audit-Duplications.ps1` checks all 4 layers across the entire codebase.

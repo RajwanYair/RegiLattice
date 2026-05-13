@@ -343,3 +343,71 @@ git commit -m "chore: bump version to vX.Y.Z"
 git tag vX.Y.Z
 git push; git push --tags
 ```
+
+---
+
+## GitHub Actions — CI/CD Reference
+
+### Canonical Action Versions (verified 2026-04-10)
+
+> **Before pinning any action, verify the version exists on the action's GitHub releases page.**
+> Pinning a non-existent version silently fails the CI step.
+
+| Action | Stable Version |
+|--------|---------------|
+| `actions/checkout` | `@v6` |
+| `actions/setup-dotnet` | `@v5` |
+| `actions/cache` | `@v5` |
+| `actions/upload-artifact` | `@v7` |
+| `codecov/codecov-action` | `@v6` |
+| `github/codeql-action/init` | `@v4` |
+| `github/codeql-action/analyze` | `@v4` |
+| `github/codeql-action/upload-sarif` | `@v4` |
+| `actions/dependency-review-action` | `@v4` |
+| `actions/labeler` | `@v6` |
+| `actions/github-script` | `@v8` |
+| `actions/stale` | `@v10` |
+
+### Workflow Ecosystem
+
+| Workflow | Trigger | Purpose |
+| -------- | ------- | ------- |
+| `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, test, vulnerability check, dependency review, pack validation, weekly mutation testing |
+| `release.yml` | `v*` tag push, manual dispatch | Versioned release artifacts, GitHub Release, Chocolatey package |
+| `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale issue/PR management, PSScriptAnalyzer |
+
+### Post-Release Verification (MANDATORY after every tag push)
+
+After every `git push --tags`, wait 3–5 minutes then run:
+
+```powershell
+# 1. Check all workflow runs for the tag — all must show 'success'
+gh run list --repo RajwanYair/RegiLattice --limit 5
+
+# 2. Spot-check the release workflow job conclusions
+$runId = (gh run list --repo RajwanYair/RegiLattice --workflow release.yml --limit 1 --json databaseId | ConvertFrom-Json)[0].databaseId
+gh run view $runId --repo RajwanYair/RegiLattice --json jobs | ConvertFrom-Json | Select-Object -ExpandProperty jobs | Select-Object name,conclusion
+
+# 3. Verify the release exists with all expected artifacts
+gh release view vX.Y.Z --repo RajwanYair/RegiLattice
+```
+
+**Expected artifacts on every release:**
+- `RegiLattice-vX.Y.Z-win-x64.exe` — GUI portable (self-contained win-x64)
+- `RegiLatticeCLI-vX.Y.Z-win-x64.exe` — CLI portable (self-contained win-x64)
+- `SHA256SUMS.txt` — checksums file
+
+**If release.yml failed** — re-trigger by deleting and re-pushing the tag:
+```powershell
+git tag -d vX.Y.Z; git push origin :refs/tags/vX.Y.Z; git tag vX.Y.Z; git push --tags
+```
+
+### CI Best Practices
+
+- **`MSBUILDDISABLENODEREUSE: 1`** at job level — prevents MSBuild node file-lock (MSB3492)
+- **`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true`** at job level — avoids Node 16/20 deprecation warnings
+- **Per-project test runs** — NEVER use `dotnet test RegiLattice.sln`; run Core → CLI → GUI individually to avoid cross-assembly file-write races
+- **No `--no-build` for GUI.Tests** — always build before testing; Windows SDK runtime packs require the build copy step
+- **`paths-ignore` for docs-only changes** — skip CI on `.md`, `.svg`, `.txt`, instruction file changes
+- **No `-q`/`--verbosity quiet`** — causes question-build aborts; use `--verbosity minimal` or no flag
+- **Stryker mutation testing** — move to weekly cron schedule; adds ~15 min per push otherwise

@@ -14,10 +14,8 @@ All files below are auto-loaded into every Copilot chat session via `.vscode/set
 | `.github/instructions/workspace.instructions.md`       | `**`          | Solution structure, architecture, build commands |
 | `.github/instructions/csharp.instructions.md`          | `**/*.cs`     | C# 13 coding standards and patterns              |
 | `.github/instructions/testing.instructions.md`         | `**/tests/**` | xUnit test patterns, coverage targets            |
-| `.github/instructions/git-workflow.instructions.md`    | `**`          | Commit/push strategy, conventional commits       |
+| `.github/instructions/git-workflow.instructions.md`    | `**`          | Commit/push strategy, conventional commits, CI/CD actions |
 | `.github/instructions/lessons-learned.instructions.md` | `**/*.cs`     | Hard-won migration insights, common pitfalls     |
-| `.github/instructions/cicd.instructions.md`            | `**/*.yml`    | GitHub Actions, release workflow                 |
-| `.github/instructions/no-duplication.instructions.md`  | `**/*.cs`     | Duplication detection rules and prevention       |
 
 ### Environment Bootstrap
 
