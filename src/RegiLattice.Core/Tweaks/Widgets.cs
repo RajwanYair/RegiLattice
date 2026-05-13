@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: Widgets.cs ===
 
+[TweakModule]
 internal static class Widgets
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

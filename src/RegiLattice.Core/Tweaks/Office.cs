@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Office
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -499,6 +500,7 @@ internal static class Office
 }
 
 // ── merged from Adobe.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Adobe
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -910,6 +912,7 @@ internal static class Adobe
 }
 
 // ── merged from LibreOffice.cs ────────────────────────────────────────
+[TweakModule]
 internal static class LibreOffice
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

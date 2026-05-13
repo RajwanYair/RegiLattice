@@ -5,6 +5,7 @@ using RegiLattice.Core.Models;
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 645 — PolicyCloudClipboard (Cloud Clipboard & Clipboard History Policy)
 
+[TweakModule]
 internal static class PolicyCloudClipboard
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";

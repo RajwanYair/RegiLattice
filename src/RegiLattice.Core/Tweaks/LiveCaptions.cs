@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class LiveCaptions
 {
     private const string LcKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\LiveCaptions";

@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class SystemOptimization
 {
     private const string MemMgmt = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";

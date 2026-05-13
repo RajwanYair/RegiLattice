@@ -26,6 +26,7 @@ using RegiLattice.Core.Models;
 /// Controls Windows SmartScreen filters, enhanced phishing protection, and
 /// application reputation checks for downloaded files.
 /// </summary>
+[TweakModule]
 internal static class PolicySmartScreenWin
 {
     private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";

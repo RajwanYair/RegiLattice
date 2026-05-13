@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class ActiveDirectory
 {
     private const string Netlogon = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";

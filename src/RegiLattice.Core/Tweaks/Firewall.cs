@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Firewall.cs ──
+[TweakModule]
 internal static class Firewall
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

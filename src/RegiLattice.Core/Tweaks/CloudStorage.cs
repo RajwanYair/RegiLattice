@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from SystemRestore.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class CloudStorage
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

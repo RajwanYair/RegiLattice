@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Windows Subsystems Policy"
 // Consolidated from 16 modules.
 
+[TweakModule]
 internal static class PolicySubsystems
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

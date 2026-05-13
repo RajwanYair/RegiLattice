@@ -5,6 +5,7 @@ using RegiLattice.Core.Models;
 // ── Smart App Control ─────────────────────────────────────────────────────────
 // Merged from SmartAppControl.cs (SAC, HVCI/Memory Integrity, VBS controls)
 
+[TweakModule]
 internal static class SmartAppControl
 {
     // SAC state values: 0=Off, 1=Enforce, 2=Evaluate

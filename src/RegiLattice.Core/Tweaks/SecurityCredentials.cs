@@ -1,7 +1,8 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class PolicyWinRM
 {
     public static IReadOnlyList<TweakDef> Tweaks => [.. _WinRMServicePolicy.Data, .. _WinRMClientPolicy.Data];
@@ -57,6 +58,7 @@ internal static class PolicyWinRM
     }
 }
 
+[TweakModule]
 internal static class PolicyCredentialUI
 {
     public static IReadOnlyList<TweakDef> Tweaks => [.. _CredUIPolicy.Data, .. _CredProviderPolicy.Data];
@@ -146,6 +148,7 @@ internal static class PolicyCredentialUI
     }
 }
 
+[TweakModule]
 internal static class PolicyAutoRun
 {
     private const string ExplorerPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
@@ -254,6 +257,7 @@ internal static class PolicyAutoRun
     ];
 }
 
+[TweakModule]
 internal static class PolicyLockScreen
 {
     private const string PersonalKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
@@ -416,6 +420,7 @@ internal static class PolicyLockScreen
     ];
 }
 
+[TweakModule]
 internal static class PolicySmartCard
 {
     private const string ScCredProv = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
@@ -562,6 +567,7 @@ internal static class PolicySmartCard
     ];
 }
 
+[TweakModule]
 internal static class PolicyFido
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FIDO";
@@ -696,6 +702,7 @@ internal static class PolicyFido
     ];
 }
 
+[TweakModule]
 internal static class PolicyWindowsHello
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
@@ -742,6 +749,7 @@ internal static class PolicyWindowsHello
     ];
 }
 
+[TweakModule]
 internal static class PolicyEntraId
 {
     private const string JoinKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
@@ -880,6 +888,7 @@ internal static class PolicyEntraId
     ];
 }
 
+[TweakModule]
 internal static class PolicyKerberos
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters";
@@ -944,6 +953,7 @@ internal static class PolicyKerberos
     ];
 }
 
+[TweakModule]
 internal static class PolicyAppInstaller
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller";
@@ -1007,6 +1017,7 @@ internal static class PolicyAppInstaller
     ];
 }
 
+[TweakModule]
 internal static class PolicyNetworkIsolation
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkIsolation";

@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class GamingGPUPower
 {
     private const string GfxPowerKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power";

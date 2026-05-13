@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Encryption Policy"
 // Consolidated from 16 modules.
 
+[TweakModule]
 internal static class PolicyEncryption
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

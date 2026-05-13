@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from CloudExperience.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class CloudExperience
 {
     private const string Oobe = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE";

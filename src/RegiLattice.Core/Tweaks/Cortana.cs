@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: Cortana.cs ===
 
+[TweakModule]
 internal static class Cortana
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

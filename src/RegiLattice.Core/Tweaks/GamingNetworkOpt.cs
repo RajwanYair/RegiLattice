@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class GamingNetworkOpt
 {
     private const string AfdKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters";

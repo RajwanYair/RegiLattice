@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "AI & Copilot Policy"
 // Consolidated from 12 modules.
 
+[TweakModule]
 internal static class PolicyAI
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from PrinterAdvanced.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class PrinterAdvanced
 {
     private const string WsdPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WSD";

@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static partial class PolicyNetworkExt
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

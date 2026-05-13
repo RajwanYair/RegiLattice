@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from WindowsRecall.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class WindowsRecall
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

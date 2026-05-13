@@ -7,6 +7,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class AccessibilityVisual
 {
     private const string DesktopKey = @"HKEY_CURRENT_USER\Control Panel\Desktop";

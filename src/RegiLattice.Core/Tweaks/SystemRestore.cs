@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class SystemRestore
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class GamingVariableRefreshRate
 {
     private const string AdaptiveSyncKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\AdaptiveSync";

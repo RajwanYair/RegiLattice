@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from UserActivity.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class UserActivity
 {
     private const string ActivityPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";

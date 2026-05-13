@@ -1,7 +1,8 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Display
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -447,6 +448,7 @@ internal static class Display
 
 // ── Merged from NightLight.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class NightLight
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -726,6 +728,7 @@ internal static class NightLight
 }
 
 // ── merged from Fonts.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Fonts
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1078,6 +1081,7 @@ internal static class Fonts
 /// other desktop-level UX tweaks.
 /// Sprint 25 — Phase 5 roadmap items.
 /// </summary>
+[TweakModule]
 internal static class DesktopCustomization
 {
     private const string Explorer = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer";
@@ -1558,6 +1562,7 @@ internal static class DesktopCustomization
 
 // ── Merged from WindowAppearance.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class WindowAppearance
 {
     private const string Metrics = @"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics";

@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class MsStore
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

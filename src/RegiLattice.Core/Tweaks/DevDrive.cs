@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from DevDrive.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class DevDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

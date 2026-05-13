@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from SsdOptimization.cs ────────────────────────────────────────
+[TweakModule]
 internal static class SsdOptimization
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

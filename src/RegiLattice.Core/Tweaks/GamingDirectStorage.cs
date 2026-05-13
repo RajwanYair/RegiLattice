@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class GamingDirectStorage
 {
     private const string DxStoreKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX\DirectStorage";

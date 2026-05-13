@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from Screensaver.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class Screensaver
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

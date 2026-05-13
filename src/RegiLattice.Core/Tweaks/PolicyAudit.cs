@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Security Audit Policy"
 // Consolidated from 20 modules.
 
+[TweakModule]
 internal static partial class PolicyAudit
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

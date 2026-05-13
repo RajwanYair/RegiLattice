@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from Ms365Copilot.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class Ms365Copilot
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

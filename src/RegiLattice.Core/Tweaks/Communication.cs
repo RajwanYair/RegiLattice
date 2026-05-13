@@ -1,7 +1,8 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Communication
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -518,6 +519,7 @@ internal static class Communication
 
 // === Merged from: PhoneLink.cs ===
 
+[TweakModule]
 internal static class PhoneLink
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -975,6 +977,7 @@ internal static class PhoneLink
 // Category: "Communication Policy"
 // Consolidated from 8 modules.
 
+[TweakModule]
 internal static class PolicyCommunication
 {
     public static IReadOnlyList<TweakDef> Tweaks =>
@@ -2506,6 +2509,7 @@ internal static class PolicyCommunication
     }
 }
 
+[TweakModule]
 internal static class PolicyWindowsChat
 {
     // HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Chat — controls the Teams

@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from AppCompatibility.cs ────────────────────────────────────────
+[TweakModule]
 internal static class AppCompatibility
 {
     private const string CuKey = @"HKEY_CURRENT_USER";

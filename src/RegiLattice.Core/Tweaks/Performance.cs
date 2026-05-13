@@ -476,6 +476,7 @@ internal static class Power
 
 // ── Merged from EnergySaver.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class EnergySaver
 {
     private const string EnSaver = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\EnergySaver";
@@ -825,6 +826,7 @@ internal static class EnergySaver
 
 // ── Merged from PowerManagement.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class PowerManagement
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

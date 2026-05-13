@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from WindowsHello.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class WindowsHello
 {
     private const string BioPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics";

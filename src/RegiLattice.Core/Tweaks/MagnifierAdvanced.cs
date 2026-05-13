@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class MagnifierAdvanced
 {
     private const string MagKey = @"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier";

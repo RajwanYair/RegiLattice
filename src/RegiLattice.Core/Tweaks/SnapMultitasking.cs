@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from SnapMultitasking.cs ────────────────────────────────────────
+[TweakModule]
 internal static class SnapMultitasking
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

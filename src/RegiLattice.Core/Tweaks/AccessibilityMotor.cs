@@ -7,6 +7,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class AccessibilityMotor
 {
     private const string EaseKey = @"HKEY_CURRENT_USER\Control Panel\Accessibility";

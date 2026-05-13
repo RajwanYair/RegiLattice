@@ -5,6 +5,7 @@ using RegiLattice.Core.Models;
 /// <summary>
 /// Developer productivity tweaks — file system, Git, build, and development environment optimisation.
 /// </summary>
+[TweakModule]
 internal static class Developer
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

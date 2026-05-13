@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Chrome.cs ──
+[TweakModule]
 internal static class Chrome
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

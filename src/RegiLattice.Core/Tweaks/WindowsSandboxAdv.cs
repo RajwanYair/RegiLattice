@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from WindowsSandboxAdv.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class WindowsSandboxAdv
 {
     private const string SbPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox";

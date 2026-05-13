@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: Shell.cs ===
 
+[TweakModule]
 internal static class Shell
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

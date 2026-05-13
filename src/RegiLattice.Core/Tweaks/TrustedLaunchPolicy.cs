@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from TrustedLaunchPolicy.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class TrustedLaunchPolicy
 {
     private const string UefiPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UEFI";

@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from ScoopTools.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class ScoopTools
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

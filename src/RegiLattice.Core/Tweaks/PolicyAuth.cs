@@ -18,6 +18,7 @@ using RegiLattice.Core.Models;
 // Sprint 641 — PolicyAppInstaller (App Installer / WinGet MSIX policy)
 // ─────────────────────────────────────────────────────────────────────────────
 
+[TweakModule]
 internal static partial class PolicyAuth
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

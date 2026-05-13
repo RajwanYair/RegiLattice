@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: FileSystem.cs ===
 
+[TweakModule]
 internal static class FileSystem
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

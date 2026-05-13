@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from EventLogging.cs ────────────────────────────────────────
+[TweakModule]
 internal static class EventLogging
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

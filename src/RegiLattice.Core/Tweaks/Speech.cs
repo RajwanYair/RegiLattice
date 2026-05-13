@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Speech.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Speech
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

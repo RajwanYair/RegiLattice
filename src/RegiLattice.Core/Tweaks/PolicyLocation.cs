@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class PolicyLocation
 {
     public static IReadOnlyList<TweakDef> Tweaks => [.. _MapsPolicy.Data, .. _LocationSensorsPolicy.Data];

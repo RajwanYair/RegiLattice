@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Certificate Policy"
 // Consolidated from 8 modules.
 
+[TweakModule]
 internal static class PolicyCertificate
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from VirtualDesktops.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class VirtualDesktops
 {
     private const string VdKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops";

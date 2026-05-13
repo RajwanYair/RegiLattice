@@ -9,6 +9,7 @@ using RegiLattice.Core.Models;
 // Merged from ActiveDirectory.cs (AD domain membership hardening, Netlogon, Kerberos)
 
 // ── merged from Defender.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Defender
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

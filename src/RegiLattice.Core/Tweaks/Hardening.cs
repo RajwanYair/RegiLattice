@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Hardening.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Hardening
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

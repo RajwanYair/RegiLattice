@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class CPUPowerStates
 {
     // Processor performance subgroup GUID: 54533251-82be-4824-96c1-47b60b740d00

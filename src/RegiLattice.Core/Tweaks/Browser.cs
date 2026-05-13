@@ -7,6 +7,7 @@ using RegiLattice.Core.Models;
 /// all browsers via system-wide policies for DNS-over-HTTPS, preloading, tracking prevention,
 /// and cache management.
 /// </summary>
+[TweakModule]
 internal static class Browser
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Debloat.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Debloat
 {
     private const string CuKey = @"HKEY_CURRENT_USER";

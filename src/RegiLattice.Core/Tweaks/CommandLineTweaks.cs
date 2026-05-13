@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from CommandLineTweaks.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class CommandLineTweaks
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

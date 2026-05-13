@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from HyperVAdvanced.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class HyperVAdvanced
 {
     private const string HvPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV";

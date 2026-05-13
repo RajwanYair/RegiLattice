@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class PolicyDataCollection
 {
     public static IReadOnlyList<TweakDef> Tweaks => [.. _DataCollectionPolicy.Data, .. _AppCompatPolicy.Data];

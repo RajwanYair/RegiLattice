@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── merged from VsCode.cs ────────────────────────────────────────
 
+[TweakModule]
 internal static class PolicyPowerShell
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

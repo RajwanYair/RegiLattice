@@ -6,6 +6,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from WindowsInk.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class PolicyTextInputExt
 {
     // HKLM\SOFTWARE\Policies\Microsoft\Windows\TextInput — additional values beyond

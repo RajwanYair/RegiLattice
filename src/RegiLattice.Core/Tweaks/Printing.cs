@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: Printing.cs ===
 
+[TweakModule]
 internal static class Printing
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

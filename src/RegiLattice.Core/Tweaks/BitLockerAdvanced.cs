@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from BitLockerAdvanced.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class BitLockerAdvanced
 {
     private const string FvePol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";

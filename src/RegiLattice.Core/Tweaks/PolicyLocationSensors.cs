@@ -5,6 +5,7 @@ using RegiLattice.Core.Models;
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 644 — PolicyLocationSensors (Location & Sensors Group Policy)
 
+[TweakModule]
 internal static class PolicyLocationSensors
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";

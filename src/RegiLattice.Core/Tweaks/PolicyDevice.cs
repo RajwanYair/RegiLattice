@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Device & Hardware Policy"
 // Consolidated from 23 modules.
 
+[TweakModule]
 internal static partial class PolicyDevice
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

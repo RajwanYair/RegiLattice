@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from IndexingSearch.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class IndexingSearch
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Notifications.cs ──
+[TweakModule]
 internal static class Notifications
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

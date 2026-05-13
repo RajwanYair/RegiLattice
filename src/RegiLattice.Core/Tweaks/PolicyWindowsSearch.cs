@@ -6,6 +6,7 @@ using RegiLattice.Core.Models;
 // Sprint 646 (1 existing) + Sprint 688 (+9 new) — PolicyWindowsSearch
 // Windows Search Group Policy hardening — 10 tweaks total.
 
+[TweakModule]
 internal static class PolicyWindowsSearch
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";

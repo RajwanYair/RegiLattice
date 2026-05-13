@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: Bluetooth.cs ===
 
+[TweakModule]
 internal static class Bluetooth
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

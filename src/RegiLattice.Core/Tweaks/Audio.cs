@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Audio
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -934,6 +935,7 @@ internal static class Audio
 
 // === Merged from: Multimedia.cs ===
 
+[TweakModule]
 internal static class Multimedia
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1206,6 +1208,7 @@ internal static class Multimedia
     ];
 }
 
+[TweakModule]
 internal static class PolicyMediaPlayer
 {
     public static IReadOnlyList<TweakDef> Tweaks => [.. _WmpPolicy.Data];

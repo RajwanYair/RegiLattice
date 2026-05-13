@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from TimeSync.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class TimeSync
 {
     private const string W32TimeParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Parameters";

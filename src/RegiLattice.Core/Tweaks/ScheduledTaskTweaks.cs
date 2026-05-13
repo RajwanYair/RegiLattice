@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from ScheduledTaskTweaks.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class ScheduledTaskTweaks
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

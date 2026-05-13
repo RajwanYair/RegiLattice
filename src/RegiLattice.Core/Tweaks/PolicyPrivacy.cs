@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 // Category: "Privacy & Telemetry Policy"
 // Consolidated from 18 modules.
 
+[TweakModule]
 internal static class PolicyPrivacy
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

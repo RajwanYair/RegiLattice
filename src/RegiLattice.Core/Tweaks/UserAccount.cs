@@ -6,6 +6,7 @@ using RegiLattice.Core.Models;
 /// User Account Control (UAC) and account policy tweaks — configures UAC behaviour,
 /// account lockout policies, auto-login, and credential management.
 /// </summary>
+[TweakModule]
 internal static class UserAccount
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";

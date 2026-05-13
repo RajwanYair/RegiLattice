@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Edge.cs ──
+[TweakModule]
 internal static class Edge
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

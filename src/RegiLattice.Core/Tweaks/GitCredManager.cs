@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class GitCredManager
 {
     private const string GcmKey = @"HKEY_CURRENT_USER\Software\Microsoft\GCM";

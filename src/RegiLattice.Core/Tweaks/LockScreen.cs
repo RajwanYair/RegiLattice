@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: LockScreen.cs ===
 
+[TweakModule]
 internal static class LockScreen
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

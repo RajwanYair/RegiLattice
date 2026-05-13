@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class PolicyWindowsFeeds
 {
     // HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsFeeds — Windows RSS Feeds/

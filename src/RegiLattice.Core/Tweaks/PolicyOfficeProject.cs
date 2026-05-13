@@ -10,6 +10,7 @@ using RegiLattice.Core.Models;
 // users cannot weaken them in the Trust Center. Distinct from the user-preference
 // paths in Office.cs (HKCU\Software\Microsoft\Office\16.0\...).
 
+[TweakModule]
 internal static class PolicyOfficeProject
 {
     private const string SecKey = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\MS Project\Security";

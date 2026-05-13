@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Java.cs ──
+[TweakModule]
 internal static class Java
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

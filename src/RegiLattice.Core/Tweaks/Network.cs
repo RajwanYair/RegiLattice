@@ -1,7 +1,8 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Network
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -607,6 +608,7 @@ internal static class Network
 
 // ── Merged from NetworkOptimization.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class NetworkOptimization
 {
     private const string LmKey = @"HKEY_LOCAL_MACHINE";
@@ -1126,6 +1128,7 @@ internal static class NetworkOptimization
 
 // ── Merged from DnsNetworking.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class DnsNetworking
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1700,6 +1703,7 @@ internal static class DnsNetworking
 /// Proxy, VPN, and network tunneling tweaks — configures system proxy settings,
 /// VPN auto-connect behaviour, and WinHTTP/WinINet proxy policies.
 /// </summary>
+[TweakModule]
 internal static class ProxyVpn
 {
     private const string CuKey = @"HKEY_CURRENT_USER";

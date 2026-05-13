@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 /// Disk cleanup and storage hygiene tweaks — automated cleanup, temp files, caches,
 /// thumbnail databases, delivery optimisation, and Windows Update cleanup.
 /// </summary>
+[TweakModule]
 internal static class DiskCleanup
 {
     private const string CuKey = @"HKEY_CURRENT_USER";

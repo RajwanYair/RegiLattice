@@ -10,6 +10,7 @@ using RegiLattice.Core.Models;
 // users cannot weaken them in the Trust Center / Options. Distinct from user-preference
 // paths in Office.cs (HKCU\Software\Microsoft\Office\16.0\...).
 
+[TweakModule]
 internal static class PolicyOfficeOutlook
 {
     private const string SecKey = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Outlook\Security";

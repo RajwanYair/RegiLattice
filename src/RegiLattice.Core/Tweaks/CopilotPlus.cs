@@ -5,6 +5,7 @@ using RegiLattice.Core.Models;
 // ── Copilot+ PC Features ──────────────────────────────────────────────────────
 // Merged from CopilotPlus.cs (NPU, Recall advanced, AI Paint, Live Captions AI)
 
+[TweakModule]
 internal static class CopilotPlus
 {
     // Snapshots / Recall advanced controls

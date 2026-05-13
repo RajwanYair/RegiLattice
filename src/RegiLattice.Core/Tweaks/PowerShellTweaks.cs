@@ -8,6 +8,7 @@ using RegiLattice.Core.Models;
 /// Tweaks executed via PowerShell cmdlets (Set-Service, Get-Service, Enable-WindowsOptionalFeature, etc.).
 /// These use ApplyAction/RemoveAction/DetectAction delegates via ShellRunner.RunPowerShell.
 /// </summary>
+[TweakModule]
 internal static class PowerShellTweaks
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

@@ -9,6 +9,7 @@ using RegiLattice.Core.Models;
 /// Controls domain controller secure channel signing, sealing,
 /// NT4 crypto restrictions, and DNS-only domain joining.
 /// </summary>
+[TweakModule]
 internal static class PolicyNetLogon
 {
     private const string GpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\NetLogon";

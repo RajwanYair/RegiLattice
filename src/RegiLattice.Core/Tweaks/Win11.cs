@@ -2,6 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class Win11
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: OneDrive.cs ===
 
+[TweakModule]
 internal static class OneDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

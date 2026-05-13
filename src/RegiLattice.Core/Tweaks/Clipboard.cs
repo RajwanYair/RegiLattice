@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Clipboard.cs ────────────────────────────────────────
+[TweakModule]
 internal static class Clipboard
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

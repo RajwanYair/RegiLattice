@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class DisplayPower
 {
     // Display subgroup GUID: 7516b95f-f776-4464-8c53-06167f40cc99

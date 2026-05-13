@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // === Merged from: TelemetryAdvanced.cs ===
 
+[TweakModule]
 internal static class TelemetryAdvanced
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

@@ -4,6 +4,7 @@ using RegiLattice.Core.Models;
 
 // ── Merged from CrashDiagnostics.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class CrashDiagnostics
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

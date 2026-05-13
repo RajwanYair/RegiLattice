@@ -1,7 +1,8 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
+[TweakModule]
 internal static class RemoteDesktop
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -239,6 +240,7 @@ internal static class RemoteDesktop
 // ── Remote Management ─────────────────────────────────────────────────────────
 // Merged from RemoteManagement.cs (WinRM policy hardening and RPC restriction tweaks)
 
+[TweakModule]
 internal static class RemoteManagement
 {
     private const string WinRmSvcPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
@@ -270,6 +272,7 @@ internal static class RemoteManagement
 
 // ── Merged from RealVnc.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class RealVnc
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -568,6 +571,7 @@ internal static class RealVnc
 // Category: "Remote Access Policy"
 // Consolidated from 14 modules.
 
+[TweakModule]
 internal static class PolicyRemoteAccess
 {
     public static IReadOnlyList<TweakDef> Tweaks =>
@@ -2250,6 +2254,7 @@ internal static class PolicyRemoteAccess
     }
 }
 
+[TweakModule]
 internal static class PolicyRemoteAssistance
 {
     private const string RemAssist = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";

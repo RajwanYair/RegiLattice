@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 // Sprint B.2: attribute-based module discovery sample
 
@@ -740,6 +740,7 @@ internal static class Gaming
 
 // ── Merged from XboxGameBar.cs ──────────────────────────────────────────────────
 
+[TweakModule]
 internal static class XboxGameBar
 {
     private const string GameBar = @"HKEY_CURRENT_USER\Software\Microsoft\GameBar";
@@ -960,6 +961,7 @@ internal static class XboxGameBar
 // Category: "Gaming Policy"
 // Consolidated from 8 modules.
 
+[TweakModule]
 internal static class PolicyGaming
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

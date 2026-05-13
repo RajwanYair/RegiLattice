@@ -4,6 +4,7 @@ using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core.Tweaks;
 
+[TweakModule]
 internal static class VoiceAccessControl
 {
     private const string VaKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VoiceAccess";

@@ -3,6 +3,7 @@ namespace RegiLattice.Core.Tweaks;
 using RegiLattice.Core.Models;
 
 // ── merged from Firefox.cs ──
+[TweakModule]
 internal static class Firefox
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
