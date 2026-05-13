@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # RegiLattice CLI — Windows Nano Server container.
 #
-# The CI workflow (packages.yml) downloads the self-contained CLI binary from
+# The CI workflow (release.yml) downloads the self-contained CLI binary from
 # the GitHub Release and places it as `regilattice.exe` in the build context
 # before running `docker build`.
 #

@@ -215,14 +215,11 @@ Update-FileRegex 'README.md' "v$([regex]::Escape($OldVersion))" "v$Version" "REA
 $changelogEntry = @"
 ## [$Version] — $Today
 
-### Added
-
-- Roadmap Phase 8/12/14/15 implementations: Bump-Version.ps1 automation (12.2), CI workflow consolidation (12.1), tweak JSON schema (15.2), clean build configuration (12.5), template SVG pipeline (14.3)
-
 ### Stats
 
-- Tweaks: $TweakCount (+ new policy modules)
+- Tweaks: $TweakCount
 - Categories: $CategoryCount
+- Modules: $ModuleCount
 - Tests: $TestCount
 
 "@
@@ -255,6 +252,17 @@ Write-Host "`n--- Group E: Instruction files ---" -ForegroundColor Cyan
 
 Update-FileRegex '.github\instructions\lessons-learned.instructions.md' '\*\*Current version\*\*: v[\d.]+ —' "**Current version**: v$Version —" 'lessons-learned current version'
 Update-FileRegex '.github\instructions\lessons-learned.instructions.md' '\d{4,5} tweaks, \d{3,4} categories, \d{3,4} files, \d{4,5} tests' "$TweakCount tweaks, $CategoryCount categories, $ModuleCount files, $TestCount tests" 'lessons-learned counts'
+
+Update-FileRegex '.github\instructions\workspace.instructions.md' '\d{3,4} module files.*?\d{4,5} tweaks across \d{3,4} categories' "$ModuleCount module files (31 original + $($ModuleCount - 31) extracted/split), $TweakCount tweaks across $CategoryCount categories" 'workspace.instructions tweaks line'
+Update-FileRegex '.github\instructions\testing.instructions.md' '\*\*Total\*\*\s+\| \*\*[\d,]+\*\*' "**Total**                | **$("{0:N0}" -f $TestCount)**" 'testing.instructions total'
+
+Update-FileRegex '.github\agents\regilattice.agent.md' '\d{4,5} tweaks across \d{3,4} categories, \d{3,4} modules, \d{4,5} tests' "$TweakCount tweaks across $CategoryCount categories, $ModuleCount modules, $TestCount tests" 'agent current state'
+
+Update-FileRegex 'docs\Development.md' 'Last updated: \d{4}-\d{2}-\d{2} . v[\d.]+' "Last updated: $Today · v$Version" 'Development.md header'
+Update-FileRegex 'docs\Roadmap.md' '\*\*Baseline\*\*: v[\d.]+ — [\d,]+ tweaks' "**Baseline**: v$Version — $TweakCount tweaks" 'Roadmap.md baseline'
+
+Update-File 'powershell\RegiLattice.psd1' "ModuleVersion     = '$OldVersion'" "ModuleVersion     = '$Version'" 'PowerShell module version'
+Update-FileRegex 'Dockerfile' '\d{4,5} tweaks across \d{3,4} categories' "$TweakCount tweaks across $CategoryCount categories" 'Dockerfile description'
 
 # ---------------------------------------------------------------------------
 # Summary

@@ -1292,22 +1292,19 @@ must match the exact format including the space.
 |22 | `winget/RegiLattice.RegiLattice.yaml`               | `PackageVersion`                                                                                      |
 |23 | `winget/RegiLattice.RegiLattice.installer.yaml`     | `PackageVersion`, `InstallerUrl`                                                                      |
 |24 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml`  | `PackageVersion`, `ShortDescription`, `Description` counts                                            |
-|25 | `npm/package.json`                                  | `version`, `description` counts                                                                       |
-|26 | `maven/pom.xml`                                     | `<version>`, `<description>` counts                                                                   |
-|27 | `powershell/RegiLattice.psd1`                       | `ModuleVersion`                                                                                       |
+|25 | `powershell/RegiLattice.psd1`                       | `ModuleVersion`                                                                                       |
 
 **Group E — Derived files (version in filename/URL, update AFTER release build)**:
 
 | # | File                                                | What changes                                                                                          |
 | - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-|28 | `gem/lib/regilattice/version.rb`                    | `VERSION` string                                                                                      |
-|29 | `Dockerfile`                                        | `LABEL` description counts                                                                            |
+|26 | `Dockerfile`                                        | `LABEL` description counts                                                                            |
 
 **Group F — External (post-push, after CI publishes release)**:
 
 | # | Action                                              | What changes                                                                                          |
 | - | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-|30 | GitHub About sidebar                                | `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."` — update tweak count       |
+|27 | GitHub About sidebar                                | `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."` — update tweak count       |
 
 **Release artifact naming convention (from v6.2.0 onward)** — all EXE, MSI, and MSIX files
 include the version tag in their filename. The `release.yml` "Rename artifacts for release" step

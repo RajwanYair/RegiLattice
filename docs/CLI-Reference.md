@@ -1,7 +1,7 @@
 # RegiLattice CLI — Command Reference
 
 > Complete reference for all RegiLattice CLI commands, subcommands, and flags.
-> Version: v6.24.0 · 40+ commands · Windows 10/11 x64
+> Version: v6.33.0 · 40+ commands · Windows 10/11 x64
 
 ---
 
@@ -13,7 +13,7 @@ RegiLatticeCLI.exe --help
 RegiLatticeCLI.exe --list
 
 # Portable EXE:
-.\RegiLatticeCLI-v6.24.0-win-x64.exe --list
+.\RegiLatticeCLI-v6.33.0-win-x64.exe --list
 
 # From source:
 dotnet run --project src/RegiLattice.CLI -- --list

@@ -67,9 +67,6 @@ Know the active automation surface before suggesting process changes:
 | `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, sequential tests, dependency review, pack validation, weekly mutation testing |
 | `release.yml` | `v*` tag push, manual dispatch | Versioned GUI/CLI artifacts, optional MSI/MSIX, GitHub Release |
 | `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale cleanup, PSScriptAnalyzer |
-| `smoke.yml` | release published | Smoke-test released CLI artifact on Windows 2022/2025 |
-| `pages.yml` | `push` to `main`, manual dispatch | Deploy GitHub Pages site |
-| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR image |
 
 For version bumps, the current repo path is: create a release issue from `.github/ISSUE_TEMPLATE/release.yml`, create `release/vX.Y.Z`, open a draft PR, merge, then tag and push.
 

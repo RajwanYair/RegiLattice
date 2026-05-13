@@ -1,7 +1,7 @@
 # RegiLattice — Tweak Categories Reference
 
-> Complete reference for all 122 tweak categories in RegiLattice v6.24.0.
-> Total: 7,429 tweaks across 122 categories.
+> Complete reference for all 158 tweak categories in RegiLattice v6.33.0.
+> Total: 7,718 tweaks across 158 categories.
 
 Run `RegiLatticeCLI.exe --categories` to get live counts from your installed version.
 

@@ -317,13 +317,13 @@ output regressions that unit tests miss.
 
 ### Decision 7: CI/CD & Distribution — Simplify
 
-**Previous verdict**: Reduce workflows 6→4, registries 7→4. **Reassessment**: **CONFIRMED —
+**Previous verdict**: Reduce workflows 6→3, registries 7→4. **Reassessment**: **CONFIRMED —
 and add auto-updater + one-liner install.**
 
 | Dimension | Current | Proposed | Rationale |
 |-----------|---------|----------|-----------|
-| Workflow count | 6 | **4** | Merge `smoke.yml` → `release.yml`, `pages.yml` → `ci.yml` |
-| Package registries | 7 (npm/maven/gem/winget/scoop/choco/PSGallery) | **4** (winget/scoop/choco/PSGallery) | npm/maven/gem have zero evidence of usage |
+| Workflow count | 3 | **3** | `smoke.yml` merged → `release.yml`, `pages.yml` merged → `ci.yml` (done) |
+| Package registries | 4 (winget/scoop/choco/PSGallery) | **4** (winget/scoop/choco/PSGallery) | npm/maven/gem removed (zero evidence of usage) |
 | Version bump process | 28 manual files | **1 script** (`Bump-Version.ps1`) | Automate all 28 file updates |
 | Code signing | None | **SignPath.io** | Free for OSS; eliminates SmartScreen blocks |
 | Auto-updater | None | **Squirrel.Windows** or `dotnet-deltas` | Check GitHub Releases API on startup |
@@ -544,8 +544,8 @@ No telemetry, no analytics servers — all logs stay local.
 
 #### A.3 — CI/CD Cleanup (v6.36)
 
-- [ ] Merge `smoke.yml` → `release.yml`, `pages.yml` → `ci.yml`
-- [ ] Delete npm/maven/gem package registry files
+- [x] Merge `smoke.yml` → `release.yml`, `pages.yml` → `ci.yml`
+- [x] Delete npm/maven/gem package registry files
 - [ ] Create `Bump-Version.ps1` automating all 28 files
 - [ ] Add `paths-ignore` for docs-only changes
 - [ ] Add auto-CHANGELOG generation via `git-cliff`

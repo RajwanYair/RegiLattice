@@ -96,9 +96,6 @@ Rules:
 | `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, test, dependency review, pack validation, weekly mutation testing |
 | `release.yml` | `v*` tag push, manual dispatch | Build versioned GUI/CLI artifacts, optional MSI/MSIX, GitHub Release |
 | `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale issues/PRs, PSScriptAnalyzer |
-| `smoke.yml` | release published | Download released CLI artifact and smoke-test it on Windows 2022/2025 |
-| `pages.yml` | `push` to `main`, manual dispatch | Publish the static site to GitHub Pages |
-| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR container |
 
 ## MCP Servers
 

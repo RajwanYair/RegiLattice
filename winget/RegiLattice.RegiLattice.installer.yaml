@@ -7,6 +7,6 @@ Commands:
 Installers:
   - Architecture: x64
     InstallerUrl: https://github.com/RajwanYair/RegiLattice/releases/download/v6.33.0/RegiLattice-v6.33.0-win-x64.exe
-    InstallerSha256: "0000000000000000000000000000000000000000000000000000000000000000" # TODO: update after release build
+    InstallerSha256: "c1143f402c1005988f24868bf3614787c3d215ea33f4d61ac3bce10b2a7e3fe0"
 ManifestType: installer
 ManifestVersion: 1.6.0

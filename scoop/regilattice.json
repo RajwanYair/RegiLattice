@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v6.33.0/RegiLattice-v6.33.0-win-x64.zip",
-            "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+            "hash": "e0769fd534d0c989f443760d2c06a70507490173ec1771a3da4533d5566f6666"
         }
     },
     "extract_dir": "RegiLattice",

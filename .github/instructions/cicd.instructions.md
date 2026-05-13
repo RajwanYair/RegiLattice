@@ -75,9 +75,6 @@ gh release list --repo actions/upload-artifact --limit 5
 | `ci.yml` | `push`, `pull_request`, weekly schedule, manual dispatch | Build, test, vulnerability check, dependency review, pack validation, weekly mutation testing |
 | `release.yml` | `v*` tag push, manual dispatch | Versioned release artifacts, GitHub Release, Chocolatey package |
 | `weekly.yml` | Monday schedules, manual dispatch | CodeQL, stale issue/PR management, PSScriptAnalyzer |
-| `smoke.yml` | release published | Cross-runner smoke test for the published CLI artifact |
-| `pages.yml` | `push` to `main`, manual dispatch | GitHub Pages deployment |
-| `packages.yml` | release published, manual dispatch | Publish GitHub Packages NuGet package and GHCR container |
 
 ## Standard .NET CI Workflow Pattern
 

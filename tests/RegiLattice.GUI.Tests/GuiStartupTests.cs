@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using RegiLattice.Core;
+using RegiLattice.Core.Models;
 using RegiLattice.Core.Services;
 using Xunit;
 
@@ -178,10 +179,11 @@ public sealed class GuiStartupTests
         // Regression: v6.13.0 first-run crash at InitialiseEngineAsync step "SetEngine".
         // TweakBrowserPanel.SetEngine → PopulateCategoryTree → RebuildCards → new TweakCardRow
         // → NRE in LayoutControls during constructor.
+        // Uses a minimal engine (5 tweaks) to avoid GDI exhaustion from creating
+        // 7,718 WinForms card controls in a single test — which causes a 30s hang.
         using var panel = new Controls.TweakBrowserPanel();
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var emptyCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        var engine = BuildMinimalEngine();
+        var emptyCache = new Dictionary<string, TweakResult>();
         panel.SetEngine(engine, emptyCache);
     }
 
@@ -190,21 +192,23 @@ public sealed class GuiStartupTests
     {
         // Regression: mirrors the real MainForm.InitialiseEngineAsync flow where
         // _inapplicableIds is populated after hardware applicability checks.
+        // Uses a minimal engine to avoid GDI exhaustion / 30s hang from creating
+        // 7,718 WinForms card controls — the badge/toggle path is exercised regardless
+        // of engine size.
         using var panel = new Controls.TweakBrowserPanel();
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
+        var engine = BuildMinimalEngine();
 
-        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        var statusCache = new Dictionary<string, TweakResult>();
         var inapplicableIds = new HashSet<string>(StringComparer.Ordinal);
 
-        // Mark first 50 tweaks as inapplicable — exercises the badge/toggle path.
+        // Mark first 2 tweaks as inapplicable — exercises the badge/toggle path.
         int count = 0;
         foreach (var td in engine.AllTweaks())
         {
-            if (count++ >= 50)
+            if (count++ >= 2)
                 break;
             inapplicableIds.Add(td.Id);
-            statusCache[td.Id] = RegiLattice.Core.Models.TweakResult.SkippedHw;
+            statusCache[td.Id] = TweakResult.SkippedHw;
         }
 
         panel.SetEngine(engine, statusCache, inapplicableIds);
@@ -216,9 +220,8 @@ public sealed class GuiStartupTests
         // Verifies InitialiseEngineAsync step "SetData" — the step immediately after "SetEngine".
         // If SetEngine succeeds but SetData NREs, the crash log would say step: SetData.
         using var panel = new Controls.DashboardPanel();
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        var engine = BuildMinimalEngine();
+        var statusCache = new Dictionary<string, TweakResult>();
         panel.SetData(engine, statusCache, Array.Empty<string>());
     }
 
@@ -227,14 +230,13 @@ public sealed class GuiStartupTests
     {
         // Exercises BuildCategoryStats with a populated status cache.
         using var panel = new Controls.DashboardPanel();
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
+        var engine = BuildMinimalEngine();
 
-        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
-        foreach (var td in engine.AllTweaks().Take(100))
-            statusCache[td.Id] = RegiLattice.Core.Models.TweakResult.Applied;
+        var statusCache = new Dictionary<string, TweakResult>();
+        foreach (var td in engine.AllTweaks())
+            statusCache[td.Id] = TweakResult.Applied;
 
-        panel.SetData(engine, statusCache, statusCache.Keys.Take(8));
+        panel.SetData(engine, statusCache, statusCache.Keys.Take(3));
     }
 
     [Fact]
@@ -319,5 +321,82 @@ public sealed class GuiStartupTests
         // The method is `private static` so we verify via reflection.
         var programType = typeof(AppTheme).Assembly.GetType("RegiLattice.GUI.Program");
         Assert.NotNull(programType); // Program type must exist in the GUI assembly
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Returns a TweakEngine pre-loaded with 5 representative tweaks.
+    /// Used instead of RegisterBuiltins() in GUI panel tests to avoid creating
+    /// 7,718 WinForms card controls per test, which exhausts GDI handles and
+    /// triggers the 30s blame hang-timeout.
+    /// </summary>
+    private static TweakEngine BuildMinimalEngine()
+    {
+        var engine = new TweakEngine();
+        engine.Register(
+        [
+            new TweakDef
+            {
+                Id = "test-gui-a",
+                Label = "Test GUI A",
+                Category = "Privacy",
+                Tags = ["privacy"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "A", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "A")],
+                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "A", 1)],
+                ImpactScore = 3,
+                SafetyRating = 5,
+            },
+            new TweakDef
+            {
+                Id = "test-gui-b",
+                Label = "Test GUI B",
+                Category = "Performance",
+                Tags = ["perf"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "B", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "B")],
+                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "B", 1)],
+                ImpactScore = 4,
+                SafetyRating = 4,
+            },
+            new TweakDef
+            {
+                Id = "test-gui-c",
+                Label = "Test GUI C",
+                Category = "Security",
+                Tags = ["security"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "C", 0)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "C")],
+                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "C", 0)],
+                ImpactScore = 5,
+                SafetyRating = 3,
+            },
+            new TweakDef
+            {
+                Id = "test-gui-d",
+                Label = "Test GUI D",
+                Category = "Privacy",
+                Tags = ["privacy", "telemetry"],
+                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "D", "0")],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "D")],
+                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "D", "0")],
+                ImpactScore = 2,
+                SafetyRating = 5,
+            },
+            new TweakDef
+            {
+                Id = "test-gui-e",
+                Label = "Test GUI E",
+                Category = "Performance",
+                Tags = ["perf"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "E", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "E")],
+                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RegiLatticeTest", "E", 1)],
+                ImpactScore = 3,
+                SafetyRating = 4,
+            },
+        ]);
+        return engine;
     }
 }

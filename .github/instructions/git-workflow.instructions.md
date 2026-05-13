@@ -288,7 +288,7 @@ When bumping:
     # Quick bulk-replace for SVGs (run after counts change):
     (Get-Content "docs\assets\stats.svg") -replace 'OLD_TWEAK_COUNT', 'NEW_TWEAK_COUNT' | Set-Content "docs\assets\stats.svg"
     ```
-7. Update package registry manifests: `npm/package.json`, `maven/pom.xml`, `gem/lib/regilattice/version.rb`, `powershell/RegiLattice.psd1`, `Dockerfile` — version + description counts
+7. Update package registry manifests: `powershell/RegiLattice.psd1`, `Dockerfile` — version + description counts
 8. Update GitHub About sidebar: `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."`
 9. Commit: `chore: bump version to vX.Y.Z`
 10. Tag: `git tag vX.Y.Z`
