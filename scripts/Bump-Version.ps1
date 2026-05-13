@@ -79,11 +79,14 @@ if ($AutoDetectCounts -or $TweakCount -eq 0) {
         $CategoryCount = ($categoryMatches | ForEach-Object { $_.Matches[0].Groups[1].Value } | Sort-Object -Unique).Count
     }
 
-    # Count tests by scanning test files for [Fact] and [Theory]
+    # Count tests by scanning test files.
+    # [Fact] = 1 test each. [Theory] with n [InlineData] = n tests.
+    # We count [Fact] + [InlineData] for an accurate total (each InlineData is one test case).
     $testDir = Join-Path $Root 'tests'
-    $testMatches = Select-String -Path (Get-ChildItem -Path $testDir -Filter '*.cs' -Recurse) `
-        -Pattern '\[Fact\]|\[Theory\]' -ErrorAction SilentlyContinue
-    if ($TestCount -eq 0 -and $testMatches) { $TestCount = $testMatches.Count }
+    $testFiles = Get-ChildItem -Path $testDir -Filter '*.cs' -Recurse
+    $factMatches  = (Select-String -Path $testFiles -Pattern '\[Fact\]'       -ErrorAction SilentlyContinue)?.Count ?? 0
+    $inlineMatches = (Select-String -Path $testFiles -Pattern '\[InlineData\(' -ErrorAction SilentlyContinue)?.Count ?? 0
+    if ($TestCount -eq 0) { $TestCount = $factMatches + $inlineMatches }
 
     Write-Host "  Tweaks   : $TweakCount" -ForegroundColor Gray
     Write-Host "  Categories: $CategoryCount" -ForegroundColor Gray
@@ -228,6 +231,8 @@ Prepend-File 'docs\CHANGELOG.md' $changelogEntry "Prepend CHANGELOG entry"
 # copilot-instructions.md
 Update-FileRegex '.github\copilot-instructions.md' 'Last verified: \d{4}-\d{2}-\d{2} \(v[\d.]+' "Last verified: $Today (v$Version" 'copilot-instructions header'
 Update-FileRegex '.github\copilot-instructions.md' '\| Version\s+\| [\d.]+' "| Version  | $Version" 'copilot-instructions version row'
+Update-FileRegex '.github\copilot-instructions.md' '\| Test\s+\| xUnit [\d.]+ — \d{4,5} tests' "| Test     | xUnit 2.9.3 — $TestCount tests" 'copilot-instructions test row'
+Update-FileRegex '.github\copilot-instructions.md' '\| Tests\s+\| \d{4,5} passing' "| Tests    | $TestCount passing" 'copilot-instructions tests passing row'
 Update-FileRegex '.github\copilot-instructions.md' '\| Tweaks\s+\| \d{4,5} across' "| Tweaks   | $TweakCount across" 'copilot-instructions tweaks row'
 Update-FileRegex '.github\copilot-instructions.md' '~\d{4,5} tweaks, \d{3,4} categories, \d{4} tests' "~$TweakCount tweaks, $CategoryCount categories, $TestCount tests" 'copilot-instructions header stats'
 
@@ -254,6 +259,8 @@ Update-FileRegex '.github\instructions\lessons-learned.instructions.md' '\*\*Cur
 Update-FileRegex '.github\instructions\lessons-learned.instructions.md' '\d{4,5} tweaks, \d{3,4} categories, \d{3,4} files, \d{4,5} tests' "$TweakCount tweaks, $CategoryCount categories, $ModuleCount files, $TestCount tests" 'lessons-learned counts'
 
 Update-FileRegex '.github\instructions\workspace.instructions.md' '\d{3,4} module files.*?\d{4,5} tweaks across \d{3,4} categories' "$ModuleCount module files (31 original + $($ModuleCount - 31) extracted/split), $TweakCount tweaks across $CategoryCount categories" 'workspace.instructions tweaks line'
+Update-FileRegex '.github\instructions\workspace.instructions.md' '\| Tweaks\s+\| \d{4,5} across \d{3,4} categories \(\d{3,4} files\)' "| Tweaks   | $TweakCount across $CategoryCount categories ($ModuleCount files)" 'workspace.instructions Quick Facts tweaks row'
+Update-FileRegex '.github\instructions\workspace.instructions.md' '\| Tests\s+\| \d{4,5} passing' "| Tests    | $TestCount passing" 'workspace.instructions Quick Facts tests row'
 Update-FileRegex '.github\instructions\testing.instructions.md' '\*\*Total\*\*\s+\| \*\*[\d,]+\*\*' "**Total**                | **$("{0:N0}" -f $TestCount)**" 'testing.instructions total'
 
 Update-FileRegex '.github\agents\regilattice.agent.md' '\d{4,5} tweaks across \d{3,4} categories, \d{3,4} modules, \d{4,5} tests' "$TweakCount tweaks across $CategoryCount categories, $ModuleCount modules, $TestCount tests" 'agent current state'
@@ -263,6 +270,14 @@ Update-FileRegex 'docs\Roadmap.md' '\*\*Baseline\*\*: v[\d.]+ — [\d,]+ tweaks'
 
 Update-File 'powershell\RegiLattice.psd1' "ModuleVersion     = '$OldVersion'" "ModuleVersion     = '$Version'" 'PowerShell module version'
 Update-FileRegex 'Dockerfile' '\d{4,5} tweaks across \d{3,4} categories' "$TweakCount tweaks across $CategoryCount categories" 'Dockerfile description'
+
+# Root CHANGELOG.md (brief stub — separate from docs/CHANGELOG.md)
+Update-FileRegex 'CHANGELOG.md' 'Latest: \*\*v[\d.]+\*\* \([\d-]+\).*[\d,]+ tests\.' "Latest: **v$Version** ($Today) — $TweakCount tweaks, $CategoryCount categories, $ModuleCount modules, $TestCount tests." 'root CHANGELOG.md latest line'
+
+# Skills files (tweak/test counts)
+Update-FileRegex '.github\skills\architecture\SKILL.md' '\d{3,4} module files, \d{4,5} tweaks across \d{3,4} categories' "$ModuleCount module files, $TweakCount tweaks across $CategoryCount categories" 'architecture SKILL module/tweak count'
+Update-FileRegex '.github\skills\architecture\SKILL.md' '\d{4,5}\+ Core \+ \d{3,4}\+ CLI \+ \d{3,4}\+ GUI = \d{4,5} tests' "$($TestCount - 434 - 363)+ Core + 434+ CLI + 363+ GUI = $TestCount tests" 'architecture SKILL test count'
+Update-FileRegex '.github\skills\testing\SKILL.md' 'all \d{4,5}\+ tests must pass' "all $TestCount+ tests must pass" 'testing SKILL test count'
 
 # ---------------------------------------------------------------------------
 # Summary
