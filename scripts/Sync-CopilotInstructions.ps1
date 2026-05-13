@@ -87,19 +87,19 @@ $TweakFmtK = if ($TweakCount -ge 1000) { "$([math]::Floor($TweakCount/1000)),$($
 
 $Replacements = @(
     # copilot-instructions.md and agent — use comma-separated thousands for human text
-    @{ File = '.github\copilot-instructions.md'; Old = '~7,718 tweaks, 158 categories, 3,296 tests'; New = "~$TweakFmtK tweaks, $CategoryCount categories, $TestCount tests" }
+    @{ File = '.github\copilot-instructions.md'; Old = '~7,718 tweaks, 158 categories, 3,304 tests'; New = "~$TweakFmtK tweaks, $CategoryCount categories, $TestCount tests" }
     @{ File = '.github\copilot-instructions.md'; Old = '7,718 tweaks across 158 categories (195 files)'; New = "$TweakFmtK tweaks across $CategoryCount categories ($ModuleCount files)" }
     @{ File = '.github\copilot-instructions.md'; Old = '7,718 across 158 categories (195 files)'; New = "$TweakFmtK across $CategoryCount categories ($ModuleCount files)" }
-    @{ File = '.github\copilot-instructions.md'; Old = '3,296 tests (0 failures)'; New = "$TestCount tests (0 failures)" }
-    @{ File = '.github\copilot-instructions.md'; Old = '3,296 passing (0 consistent failures)'; New = "$TestCount passing (0 consistent failures)" }
+    @{ File = '.github\copilot-instructions.md'; Old = '3,304 tests (0 failures)'; New = "$TestCount tests (0 failures)" }
+    @{ File = '.github\copilot-instructions.md'; Old = '3,304 passing (0 consistent failures)'; New = "$TestCount passing (0 consistent failures)" }
     # Agent
-    @{ File = '.github\agents\regilattice.agent.md'; Old = '7,718 tweaks across 158 categories, 195 modules, 3,296 tests'; New = "$TweakFmtK tweaks across $CategoryCount categories, $ModuleCount modules, $TestCount tests" }
+    @{ File = '.github\agents\regilattice.agent.md'; Old = '7,718 tweaks across 158 categories, 195 modules, 3,304 tests'; New = "$TweakFmtK tweaks across $CategoryCount categories, $ModuleCount modules, $TestCount tests" }
     # Workspace instructions
     @{ File = '.github\instructions\workspace.instructions.md'; Old = '195 module files'; New = "$ModuleCount module files" }
     @{ File = '.github\instructions\workspace.instructions.md'; Old = '7,718 tweaks across 158 categories'; New = "$TweakFmtK tweaks across $CategoryCount categories" }
     # Testing instructions
-    @{ File = '.github\instructions\testing.instructions.md'; Old = '| **Total**                | **3,296+**|'; New = "| **Total**                | **$TestCount+**|" }
-    @{ File = '.github\instructions\testing.instructions.md'; Old = "all 3,296+ tests must pass"; New = "all $TestCount+ tests must pass" }
+    @{ File = '.github\instructions\testing.instructions.md'; Old = '| **Total**                | **3,304+**|'; New = "| **Total**                | **$TestCount+**|" }
+    @{ File = '.github\instructions\testing.instructions.md'; Old = "all 3,304+ tests must pass"; New = "all $TestCount+ tests must pass" }
 )
 
 # ─── 4. Apply replacements ───────────────────────────────────────────────────

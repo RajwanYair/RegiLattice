@@ -19,8 +19,7 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 ## Files to Update (31-item checklist — see full details in `lessons-learned.instructions.md`)
 
 > The canonical checklist with all 28 files + 3 external actions lives in
-> `.github/instructions/lessons-learned.instructions.md` (section "stats.svg Uses
-> Space-Separated Thousands"). Always reference that as the source of truth.
+> `.github/instructions/lessons-learned.instructions.md` (section "SVG Count Update Checklist"). Always reference that as the source of truth.
 
 ### Group A — Version properties (EVERY version bump)
 
@@ -33,7 +32,7 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 
 | #   | File                                | What changes                                                                   |
 | --- | ----------------------------------- | ------------------------------------------------------------------------------ |
-| 3   | `docs/assets/stats.svg`             | Tweaks + categories + tests (space-separated thousands)                        |
+| 3   | `docs/assets/stats.svg`             | Tweaks + categories + tests (plain digits — `7718`, never space-separated)     |
 | 4   | `docs/assets/banner.svg`            | Tweaks · categories · tests · themes · profiles                                |
 | 5   | `docs/assets/features.svg`          | Per-category tweak count badges                                                |
 | 6   | `docs/assets/architecture.svg`      | Stats badge + category pills: tweak count · category count · module file count |

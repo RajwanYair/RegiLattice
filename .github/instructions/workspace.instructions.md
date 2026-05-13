@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 6.33.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 6.34.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 

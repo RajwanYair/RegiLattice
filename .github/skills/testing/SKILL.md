@@ -10,7 +10,7 @@ argument-hint: "What to test (e.g. 'TweakEngine.Search', 'new service class', 'C
 
 | Project                         | Tests | Covers                                                                                                                                      |
 | ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/RegiLattice.Core.Tests/` | 2,499+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
+| `tests/RegiLattice.Core.Tests/` | 2,507+ | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
 | `tests/RegiLattice.CLI.Tests/`  | 434+   | CLI argument parsing, ConsoleColorizer                                                                                                      |
 | `tests/RegiLattice.GUI.Tests/`  | 363+   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
 
@@ -170,7 +170,7 @@ Every test run must satisfy ALL conditions before committing:
 | Build fatals | **0** — hard CI fail |
 | Build warnings | **0** — `TreatWarningsAsErrors=true`; any warning is a build error |
 | Build errors | **0** — hard fail |
-| Test failures | **0** — all 3,296+ tests must pass |
+| Test failures | **0** — all 3,304+ tests must pass |
 | Skipped tests | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` are **FORBIDDEN** |
 | Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// NOLINT` in test code **FORBIDDEN** |
 | Waivers / lint ignores | **0** — `// csharpier-ignore`, `// coverage: ignore`, `// HACK:` etc. equally forbidden |

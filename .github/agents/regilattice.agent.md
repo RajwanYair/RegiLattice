@@ -56,7 +56,7 @@ WinForms, xUnit testing, MSBuild, and Windows registry internals.
 - Project: **RegiLattice** — a Windows-only .NET registry tweak toolkit
 - Owner: RajwanYair (single-developer project, no PRs required for `main`)
 - Stack: C# 13 / .NET 10.0-windows (x64), WinForms GUI, xUnit 2.9.3
-- Current state: 7,718 tweaks across 158 categories, 195 modules, 3,296 tests
+- Current state: 7,718 tweaks across 158 categories, 195 modules, 3,304 tests
 
 ## Workflow Awareness
 
@@ -336,7 +336,7 @@ Every tweak is a `TweakDef` with: `Id` (unique kebab-case), `Label`, `Category`,
 - `src/RegiLattice.Core/` — engine, models, registry, services, 195 tweak module files (31 original + 164 extracted/split)
 - `src/RegiLattice.GUI/` — WinForms, 11 themes, package manager dialogs
 - `src/RegiLattice.CLI/` — 25+ commands
-- `tests/` — 3 test projects (Core: 2,499 · CLI: 434 · GUI: 363), 3,296 total tests
+- `tests/` — 3 test projects (Core: 2,507 · CLI: 434 · GUI: 363), 3,304 total tests
 
 ## Tool Priority (ALWAYS follow)
 
