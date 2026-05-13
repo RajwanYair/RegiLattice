@@ -5,6 +5,7 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for the TweakHistory service — record, retrieve, rolling limit.</summary>
+[Collection("TweakHistory")]
 public sealed class TweakHistoryTests : IDisposable
 {
     public TweakHistoryTests()

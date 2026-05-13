@@ -7,6 +7,7 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for ConfigExporter — export, import, validate.</summary>
+[Collection("ConfigExporter")]
 public sealed class ConfigExporterTests : IDisposable
 {
     private readonly string _tempDir;

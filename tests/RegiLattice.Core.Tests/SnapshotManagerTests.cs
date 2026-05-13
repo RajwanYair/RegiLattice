@@ -7,6 +7,7 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Direct tests for <see cref="SnapshotManager"/> — save, load, restore snapshot logic.</summary>
+[Collection("Snapshot")]
 public sealed class SnapshotManagerTests
 {
     // ── Save ────────────────────────────────────────────────────────────

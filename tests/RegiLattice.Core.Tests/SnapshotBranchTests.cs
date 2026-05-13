@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,7 @@ using RegiLattice.Core.Services;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;
+[Collection("Snapshot")]
 public sealed class SnapshotNullJsonBranchTests
 {
     [Fact]

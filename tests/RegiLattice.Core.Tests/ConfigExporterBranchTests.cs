@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,7 @@ using RegiLattice.Core.Services;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;
+[Collection("ConfigExporter")]
 public sealed class ConfigExporterFormat3BranchTests : IDisposable
 {
     private readonly string _tempDir;

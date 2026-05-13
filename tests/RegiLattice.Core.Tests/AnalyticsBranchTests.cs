@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +22,7 @@ namespace RegiLattice.Core.Tests;
 //    Existing tests always call Reset() first (deletes file) → T-branch covered.
 //    This test writes a file first so the F-branch is taken.
 
+[Collection("Analytics")]
 public sealed class AnalyticsFileExistsBranchTests : IDisposable
 {
     public AnalyticsFileExistsBranchTests() => Analytics.Reset();
