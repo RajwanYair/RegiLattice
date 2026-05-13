@@ -2,9 +2,9 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Runtime: aligned to .NET 10.0 release train -->
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
     <PackageVersion Include="System.Management" Version="10.0.5" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
     <!--

@@ -3,6 +3,7 @@
 // Replaces the Python RegistrySession entirely — zero subprocess, zero P/Invoke.
 
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using RegiLattice.Core.Models;
 
@@ -22,15 +23,17 @@ public sealed class RegistrySession
     private readonly object _logLock = new();
     private readonly List<string> _log = [];
     private readonly string _backupDir;
+    private readonly ILogger<RegistrySession>? _logger;
 
     public bool DryRun => _dryRun;
     public int DryOps => _dryOps;
     public IReadOnlyList<string> Log => _log;
 
-    public RegistrySession(bool dryRun = false, string? backupDir = null)
+    public RegistrySession(bool dryRun = false, string? backupDir = null, ILogger<RegistrySession>? logger = null)
     {
         _dryRun = dryRun;
         _backupDir = backupDir ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "backups");
+        _logger = logger;
     }
 
     // ── Write operations ────────────────────────────────────────────────
@@ -375,6 +378,7 @@ public sealed class RegistrySession
         {
             _log.Add(entry);
         }
+        _logger?.LogInformation("{Entry}", entry);
         LogWritten?.Invoke(entry);
     }
 
