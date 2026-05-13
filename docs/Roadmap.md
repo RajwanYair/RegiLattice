@@ -1,6 +1,6 @@
 # RegiLattice — Strategic Roadmap v2
 
-> **Baseline**: v6.33.0 — 7,718 tweaks · 158 categories · 195 modules · 3,296 tests · 11 themes
+> **Baseline**: v6.34.0 — 7718 tweaks · 158 categories · 195 modules · 3,296 tests · 11 themes
 > **Last updated**: 2026-05-12
 > **Stack**: C# 13 / .NET 10.0-windows (x64) · WinForms · xUnit 2.9.3
 > **Repository**: [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice)
