@@ -1,0 +1,80 @@
+# git-cliff configuration for RegiLattice
+# Reference: https://git-cliff.org/docs/configuration
+#
+# Usage:
+#   git-cliff --config .cliff.toml --output docs/CHANGELOG.md
+#   git-cliff --config .cliff.toml vX.Y.Z..HEAD --output /tmp/release-notes.md
+
+[changelog]
+# Header inserted at the top of the generated file.
+header = """
+# Changelog
+
+All notable changes to RegiLattice are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+This project adheres to [Semantic Versioning](https://semver.org/).
+
+"""
+
+# Tera template for each release section.
+body = """
+{% if version %}\
+## [{{ version | trim_start_matches(pat="v") }}] — {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+## [Unreleased]
+{% endif %}\
+
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+
+{% for commit in commits %}\
+- **{{ commit.scope | default(value="core") }}**: {{ commit.message | upper_first }}\
+{% if commit.body %} — {{ commit.body | trim }}{% endif %}
+
+{% endfor %}\
+{% endfor %}\
+
+"""
+
+# Strip any trailing whitespace from each line and collapse blank lines.
+trim = true
+
+# Output file path (relative to project root; can be overridden on CLI).
+output = "docs/CHANGELOG.md"
+
+# ── Git log filtering ────────────────────────────────────────────────────────
+
+[git]
+# Only include commits that match Conventional Commits.
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+
+# Map commit types to CHANGELOG section headings.
+commit_parsers = [
+  { message = "^feat",     group = "Features"        },
+  { message = "^fix",      group = "Bug Fixes"       },
+  { message = "^perf",     group = "Performance"     },
+  { message = "^refactor", group = "Refactoring"     },
+  { message = "^test",     group = "Testing"         },
+  { message = "^docs",     group = "Documentation"   },
+  { message = "^chore",    group = "Maintenance"     },
+  { message = "^style",    group = "Style"           },
+  { message = "^ci",       group = "CI / CD"         },
+  { message = "^build",    group = "Build"           },
+  # Skip dependency bump commits that add noise
+  { message = "^chore\\(deps\\)",  skip = true       },
+  { message = "^chore\\(dep\\)",   skip = true       },
+]
+
+# Skip commits that are tagged as release prep (version bumps).
+filter_commits = false
+
+# Include all tags that look like semver, prefixed with "v".
+tag_pattern = "v[0-9].*"
+
+# Sort commits newest first within each section.
+sort_commits = "newest"
+
+# Do not include ignored files in commit filtering.
+protect_breaking_commits = false
