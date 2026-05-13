@@ -59,6 +59,7 @@ public static class ServiceCollectionExtensions
         // ── Repository layer ─────────────────────────────────────────────────────
         services.AddSingleton<IFavoritesRepository, JsonFavoritesRepository>();
         services.AddSingleton<IRatingsRepository, JsonRatingsRepository>();
+        services.AddSingleton<IHistoryRepository, JsonHistoryRepository>();
 
         return services;
     }
