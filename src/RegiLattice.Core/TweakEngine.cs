@@ -24,6 +24,7 @@ namespace RegiLattice.Core;
 public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, ITweakStatus, IProfileManager, ITweakValidator
 {
     private readonly RegistrySession _session;
+    private readonly IEventBus? _eventBus;
     private readonly List<TweakDef> _allTweaks = new(10_000);
     private readonly Dictionary<string, TweakDef> _tweakById = new(10_000, StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<TweakDef>> _tweaksByCat = new(64, StringComparer.OrdinalIgnoreCase);
@@ -50,9 +51,10 @@ public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, 
     /// </summary>
     public long LastRegistrationMs { get; private set; }
 
-    public TweakEngine(RegistrySession? session = null)
+    public TweakEngine(RegistrySession? session = null, IEventBus? eventBus = null)
     {
         _session = session ?? new RegistrySession();
+        _eventBus = eventBus;
     }
 
     // ── Registration ────────────────────────────────────────────────────
@@ -579,11 +581,13 @@ public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, 
                 _session.Backup(td.RegistryKeys, td.Id);
                 _session.Execute(td.ApplyOps);
             }
+            _eventBus?.Publish(new TweakApplied(td.Id, td.Label, DateTimeOffset.UtcNow));
             return TweakResult.Applied;
         }
         catch (Exception ex)
         {
             _session.WriteLog($"ERROR applying {td.Id}: {ex.Message}");
+            _eventBus?.Publish(new TweakFailed(td.Id, td.Label, "Apply", ex.Message, DateTimeOffset.UtcNow));
             return TweakResult.Error;
         }
     }
@@ -604,11 +608,13 @@ public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, 
                 _session.Backup(td.RegistryKeys, td.Id);
                 _session.Execute(td.RemoveOps);
             }
+            _eventBus?.Publish(new TweakRemoved(td.Id, td.Label, DateTimeOffset.UtcNow));
             return TweakResult.NotApplied;
         }
         catch (Exception ex)
         {
             _session.WriteLog($"ERROR removing {td.Id}: {ex.Message}");
+            _eventBus?.Publish(new TweakFailed(td.Id, td.Label, "Remove", ex.Message, DateTimeOffset.UtcNow));
             return TweakResult.Error;
         }
     }
