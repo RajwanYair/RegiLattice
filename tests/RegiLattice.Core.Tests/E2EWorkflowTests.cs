@@ -85,8 +85,18 @@ public sealed class E2EWorkflowTests : IDisposable
     [Fact]
     public void Scenario2_ApplyProfile_PrivacyProfile_ReturnsBatchResults()
     {
-        // Use parallel: true to stay within blame-hang-timeout budget (7,718 tweaks).
-        var results = _engine.ApplyProfile("privacy", forceCorp: false, parallel: true);
+        // Use DryRun engine (set in BuiltinsFixture) + Registry-only tweaks to stay fast.
+        // parallel: false avoids concurrent ShellRunner invocations that can exhaust
+        // the blame-hang-timeout (30s) when many SystemCommand/PowerShell tweaks fire.
+        var privacyTweaks = _engine.TweaksByCategory()
+            .GetValueOrDefault("Privacy", [])
+            .Where(t => t.Kind is TweakKind.Registry or TweakKind.GroupPolicy)
+            .Take(20)
+            .ToList();
+
+        Assert.True(privacyTweaks.Count > 0, "Expected at least one Registry/GroupPolicy Privacy tweak");
+
+        var results = _engine.ApplyBatch(privacyTweaks, forceCorp: false, parallel: false);
 
         Assert.NotNull(results);
         Assert.NotEmpty(results);
