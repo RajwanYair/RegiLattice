@@ -18,8 +18,10 @@ namespace RegiLattice.Core;
 /// <summary>
 /// The tweak engine: loads tweak definitions, executes apply/remove/detect,
 /// manages profiles, search, snapshots, and batch operations.
+/// Implements the full ITweakEngine interface suite (ITweakRegistry, ITweakSearch,
+/// ITweakExecutor, ITweakStatus, IProfileManager, ITweakValidator).
 /// </summary>
-public sealed class TweakEngine
+public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, ITweakStatus, IProfileManager, ITweakValidator
 {
     private readonly RegistrySession _session;
     private readonly List<TweakDef> _allTweaks = new(10_000);
@@ -663,6 +665,11 @@ public sealed class TweakEngine
     public static IReadOnlyList<ProfileDef> Profiles { get; } = ProfileDefinitions.All;
 
     public static ProfileDef? GetProfile(string name) => Profiles.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+    // Explicit IProfileManager implementations forwarding to the static members above.
+    IReadOnlyList<ProfileDef> IProfileManager.Profiles => Profiles;
+
+    ProfileDef? IProfileManager.GetProfile(string name) => GetProfile(name);
 
     public IReadOnlyList<TweakDef> TweaksForProfile(string name)
     {
