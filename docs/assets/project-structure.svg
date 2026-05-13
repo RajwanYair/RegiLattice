@@ -27,7 +27,7 @@
     <text x="60" y="168" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">RegistrySession &#x2022; CorporateGuard</text>
     <text x="60" y="184" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">14 Services &#x2022; Plugins</text>
     <rect x="60" y="196" width="270" height="22" rx="4" fill="#45475a"/>
-    <text x="195" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-weight="700" font-size="11" fill="#a6e3a1">195 Files &#x2022; 7 718 Tweaks &#x2022; 158 Categories</text>
+    <text x="195" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-weight="700" font-size="11" fill="#a6e3a1">195 Files &#x2022; 7718 Tweaks &#x2022; 158 Categories</text>
   </g>
 
   <!-- GUI -->
@@ -109,3 +109,4 @@
   <rect x="40" y="440" width="1020" height="28" rx="6" fill="#316044" stroke="#585b70" stroke-width="0.5"/>
   <text x="550" y="460" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="11" fill="#cdd6f4">RegiLattice.sln &#x2022; C# 13 &#x2022; .NET 10.0-windows &#x2022; x64 &#x2022; Open Source (MIT)</text>
 </svg>
+

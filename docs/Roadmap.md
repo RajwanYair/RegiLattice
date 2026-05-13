@@ -1,6 +1,6 @@
 # RegiLattice — Strategic Roadmap v2
 
-> **Baseline**: v6.33.0 — 7,718 tweaks · 158 categories · 195 modules · 3,296 tests · 11 themes
+> **Baseline**: v6.34.0 — 7718 tweaks · 158 categories · 195 modules · 3,304 tests · 11 themes
 > **Last updated**: 2026-05-12
 > **Stack**: C# 13 / .NET 10.0-windows (x64) · WinForms · xUnit 2.9.3
 > **Repository**: [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice)
@@ -46,7 +46,7 @@ and community trust is a liability. Every decision below optimizes for **user tr
 | Profile system | **5** built-in + custom profiles | business, gaming, privacy, minimal, server |
 | Package managers | **5** GUI dialogs | WinGet, Scoop, Chocolatey, pip, PowerShell modules |
 | Plugin system | JSON `.rlpack` format | 5 official packs, marketplace foundation |
-| Test coverage | **3,296** tests, ≥90% line | Zero skipped, zero suppressed warnings |
+| Test coverage | **3,304** tests, ≥90% line | Zero skipped, zero suppressed warnings |
 | Services layer | 15+ services | Analytics, favorites, ratings, history, snapshots, health scores |
 | Engine features | Transactional apply, conflict detection, dependency resolution, search ranking | Production-grade engine |
 
@@ -102,7 +102,7 @@ this combination. But competitors lead in: **community** (WinUtil: 239 contribut
 | **Auto-updater** | No | N/A (script) | N/A (script) | Built-in | No | No |
 | **One-liner install** | No | **`irm christitus.com/win \| iex`** | **`irm script.sophia.team \| iex`** | EXE download | EXE download | ZIP |
 | **Binary size** | ~40MB | ~50MB (script) | ~2MB (script) | ~5MB | ~3MB | **335KB** |
-| **Test suite** | **3,296 xUnit tests** | Pester tests | None | None | None | None |
+| **Test suite** | **3,304 xUnit tests** | Pester tests | None | None | None | None |
 | **License** | MIT | MIT | MIT | GPL-3.0 | MIT | Proprietary |
 | **Status** | Active (solo) | Active (community) | Active (small team) | **Archived** → NXT | Active (sporadic) | Stale (2022) |
 | **Docs** | Extensive (15K+ words) | **Docs site** (Docusaurus) | Wiki + README | FAQ + CHANGELOG | None | None |
@@ -129,7 +129,7 @@ this combination. But competitors lead in: **community** (WinUtil: 239 contribut
 > **RegiLattice is the most comprehensive, typed, and testable Windows registry tweak engine
 > in the open-source ecosystem.** It offers 10x–100x more tweaks than any competitor, with
 > declarative tweak definitions, compile-time validation, 5 built-in profiles, per-tweak
-> undo, snapshot/restore, 5 integrated package managers, and a 3,296-test quality gate.
+> undo, snapshot/restore, 5 integrated package managers, and a 3,304-test quality gate.
 > What it lacks in community and GUI modernity, it compensates with engineering rigour.
 
 ---
@@ -562,7 +562,7 @@ No telemetry, no analytics servers — all logs stay local.
 - [ ] Update all 5 held packages simultaneously
 - [ ] Fix breaking API changes per project (Core → CLI → GUI)
 - [ ] Add `Verify` snapshot testing for CLI output regression
-- [ ] Verify all 3,296+ tests pass on xUnit v3
+- [ ] Verify all 3,304+ tests pass on xUnit v3
 
 ---
 
@@ -859,7 +859,7 @@ For enterprise customers managing hundreds of machines:
 | **Architecture** | Monolithic | Monolithic | **DI + interfaces** | DI | DI |
 | **Data persistence** | 8 JSON files | 8 JSON files | **Repo abstraction + optional SQLite** | SQLite default | SQLite |
 | **Tweak format** | 195 C# files | 195 C# files | 195 C# files | **Hybrid C#/YAML** | YAML primary |
-| **Tests** | 3,296 (xUnit v2) | 3,200+ (xUnit v3) | 3,500+ | 4,000+ | 4,000+ |
+| **Tests** | 3,304 (xUnit v2) | 3,200+ (xUnit v3) | 3,500+ | 4,000+ | 4,000+ |
 | **CI workflows** | 6 | **4** | 4 | 4 | 4 |
 | **Version bump files** | 28 manual | **1 script** | 1 script | 1 script | 1 script |
 | **Package registries** | 7 | **4** | 4 | 4 | 4 |
@@ -885,7 +885,7 @@ For enterprise customers managing hundreds of machines:
 | R1 | **WPF migration takes longer than expected** | Months of dual-framework maintenance | High | Incremental via `WindowsFormsHost`; WinForms stays functional; each panel is a separate PR |
 | R2 | **Data migration corrupts user data** | Users lose favorites, history, config | Medium | Repository abstraction (no forced migration); JSON stays default; explicit opt-in to SQLite |
 | R3 | **YAML tweak format has edge cases** | Broken tweaks, wrong registry values | Medium | C# stays authoritative; YAML is additive; comprehensive round-trip tests |
-| R4 | **xUnit v3 breaks 3,296 tests** | CI blocked for days | Medium | Branch migration; one project at a time; hold FsCheck.Xunit v3 until verified |
+| R4 | **xUnit v3 breaks 3,304 tests** | CI blocked for days | Medium | Branch migration; one project at a time; hold FsCheck.Xunit v3 until verified |
 | R5 | **Scope reduction upsets users** | Feature regression perception | Medium | Extract to downloadable plugin DLL; announce one version before removal |
 | R6 | **Maintainer burnout** (Optimizer lesson) | Project abandoned | **High** | Scope cap, contributor pipeline, automate everything, reduce instruction files |
 | R7 | **Code signing certificate compromise** | Trust loss, broken pipeline | Low | SignPath HSM-backed keys, auto-renewal, documented revocation procedure |
@@ -1013,7 +1013,7 @@ v10.2+ - Phase G.3  REST API for Fleet Management (gated)
 - **v6.32**: 5 new policy modules (BITS, Personalization, TabletPC, WindowsBackup, GameDVR); fix Backup() DryRun short-circuit
 - **v6.33**: 5 new policy modules (DefenderATP, WindowsInstaller, Cryptography, FVE, WindowsUpdateAU)
 
-**Totals at v6.33.0**: 7,718 tweaks · 158 categories · 195 modules · 3,296 tests
+**Totals at v6.34.0**: 7,718 tweaks · 158 categories · 195 modules · 3,304 tests
 
 </details>
 

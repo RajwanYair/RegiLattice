@@ -275,9 +275,9 @@ When bumping:
 2. Update `installer/Package.wxs` → `Version="X.Y.Z.0"`
 3. Add `## [X.Y.Z] — YYYY-MM-DD` section to `docs/CHANGELOG.md`
 4. Update `Readme.md` version badge, test badge, tweak/test counts, and Mermaid diagram counts if changed
-5. Update all count-bearing metadata files — **see the full 28-file checklist** in `lessons-learned.instructions.md` (section "stats.svg Uses Space-Separated Thousands"). Counts tracked across files: **tweaks · categories · modules · tests · themes · profiles · pkg-managers**
+5. Update all count-bearing metadata files — **see the full 28-file checklist** in `lessons-learned.instructions.md` (section "SVG Count Update Checklist"). Counts tracked across files: **tweaks · categories · modules · tests · themes · profiles · pkg-managers**
 6. **Update all SVG graphics** — every version bump where counts change MUST update the SVG files in `docs/assets/`:
-    - `stats.svg` — tweaks + categories + tests (space-separated thousands: `7 189`)
+    - `stats.svg` — tweaks + categories + tests (plain digits: `7718`, never space-separated)
     - `banner.svg` — tweaks, categories, tests, themes, profiles
     - `architecture.svg` — stats badge + category pills: tweak count · category count · module file count
     - `how-it-works.svg` — tweaks count in Browse step

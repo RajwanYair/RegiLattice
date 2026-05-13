@@ -19,22 +19,22 @@
          Configuration Manager to the x64 platform.  Both are required. -->
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
-            <Version>6.33.0</Version>
-            <AssemblyVersion>6.33.0.0</AssemblyVersion>
-            <FileVersion>6.33.0.0</FileVersion>
-            <InformationalVersion>6.33.0</InformationalVersion>
+                <Version>6.34.0</Version>
+                <AssemblyVersion>6.34.0.0</AssemblyVersion>
+                <FileVersion>6.34.0.0</FileVersion>
+                <InformationalVersion>6.34.0</InformationalVersion>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
-            <!-- Quick JIT for loops: allows tier-0 compilation of loop-bearing methods
+                <!-- Quick JIT for loops: allows tier-0 compilation of loop-bearing methods
          for faster startup. Tiered PGO re-compiles hot methods to optimised
          native code after profiling — so initial speed cost is temporary. -->
     <TieredCompilation_QuickJitForLoops>true</TieredCompilation_QuickJitForLoops>
-            <!-- ReadyToRun: ahead-of-time compile during publish for faster cold-start
+                <!-- ReadyToRun: ahead-of-time compile during publish for faster cold-start
          (~200-400ms improvement). Only applies to dotnet publish -r win-x64. -->
     <PublishReadyToRun>true</PublishReadyToRun>
-            <!-- ── Build output redirection (OneDrive lock workaround) ─────────────
+                <!-- ── Build output redirection (OneDrive lock workaround) ─────────────
          Redirect obj/ and bin/ to %TEMP%\RegiLattice-build\<ProjectName> so
          MSBuild never touches OneDrive-synced paths during compilation.
          This eliminates AssemblyInfoInputs.cache locking, Roslyn server file-
@@ -46,18 +46,18 @@
 
          CI: GITHUB_ACTIONS is always set, so the same env-var expansion works
          on both developer machines and GitHub Actions runners automatically. -->
-            <!-- STRYKER_BUILD=1 disables the temp-path redirect so Stryker's Buildalyzer
+                <!-- STRYKER_BUILD=1 disables the temp-path redirect so Stryker's Buildalyzer
          can analyze the project with standard local bin/obj paths. -->
     <RegiLatticeLocalBuildRoot Condition="'$(STRYKER_BUILD)' == ''">$(TEMP)\RegiLattice-build\$(MSBuildProjectName)</RegiLatticeLocalBuildRoot>
     <BaseIntermediateOutputPath Condition="'$(STRYKER_BUILD)' == ''">$(RegiLatticeLocalBuildRoot)\obj\</BaseIntermediateOutputPath>
     <BaseOutputPath Condition="'$(STRYKER_BUILD)' == ''">$(RegiLatticeLocalBuildRoot)\bin\</BaseOutputPath>
 
-            <!-- Keep UseSharedCompilation=false as a belt-and-suspenders guard for
+                <!-- Keep UseSharedCompilation=false as a belt-and-suspenders guard for
          any edge cases where the above redirect does not apply (e.g. custom
          project files that override BaseIntermediateOutputPath). -->
     <UseSharedCompilation>false</UseSharedCompilation>
 
-            <!-- Exclude local obj/ and bin/ directories from compile globs.
+                <!-- Exclude local obj/ and bin/ directories from compile globs.
          The SDK normally excludes $(BaseIntermediateOutputPath)** and
          $(BaseOutputPath)** from Compile/Content/None globs. After
          redirecting those paths to %TEMP%, the old in-repo obj/ and bin/
@@ -68,50 +68,50 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
   </PropertyGroup>
 
-      <!-- ── Release publish optimizations ─────────────────────────────────── -->
-      <!-- These properties only affect `dotnet publish -c Release`. They have
+        <!-- ── Release publish optimizations ─────────────────────────────────── -->
+        <!-- These properties only affect `dotnet publish -c Release`. They have
        no effect on Debug builds, `dotnet build`, or `dotnet test`. -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release' and '$(UsingMicrosoftNETSdk)' == 'true'">
-            <!-- Embedded PDB: debug info baked into the assembly — no loose .pdb
+                <!-- Embedded PDB: debug info baked into the assembly — no loose .pdb
          files in publish output. Still provides full stack traces. -->
     <DebugType>embedded</DebugType>
 
-            <!-- NOTE: IL trimming (PublishTrimmed) is set per-project, not here.
+                <!-- NOTE: IL trimming (PublishTrimmed) is set per-project, not here.
          WinForms blocks trimming entirely (NETSDK1175). CLI.csproj enables
          it; GUI.csproj does not. -->
 
-            <!-- Compress the single-file bundle for ~40% smaller download.
+                <!-- Compress the single-file bundle for ~40% smaller download.
          First launch decompresses to a temp cache (~200ms one-time cost);
          subsequent launches use the cached extraction. -->
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 
-            <!-- Strip native debug symbols from ReadyToRun pre-compiled images. -->
+                <!-- Strip native debug symbols from ReadyToRun pre-compiled images. -->
     <StripSymbols>true</StripSymbols>
 
-            <!-- ── Feature switches ────────────────────────────────────────────
+                <!-- ── Feature switches ────────────────────────────────────────────
          Disable unused runtime subsystems so the linker can remove them.
          Each switch reduces binary size and memory footprint. -->
 
-            <!-- Hot reload is a dev-time feature — not needed in release binaries. -->
+                <!-- Hot reload is a dev-time feature — not needed in release binaries. -->
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
 
-            <!-- Distributed tracing activity propagation — not used. -->
+                <!-- Distributed tracing activity propagation — not used. -->
     <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
 
-            <!-- BinaryFormatter is deprecated, dangerous, and not used (project
+                <!-- BinaryFormatter is deprecated, dangerous, and not used (project
          uses System.Text.Json). Disabling hardens against deserialization
          attacks and lets the linker trim the formatter code. -->
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 
-            <!-- Startup hooks are a diagnostic/testing mechanism — not needed in
+                <!-- Startup hooks are a diagnostic/testing mechanism — not needed in
          release binaries. Disabling removes the hook discovery overhead. -->
     <StartupHookSupport>false</StartupHookSupport>
 
-            <!-- EventSource tracing infrastructure — not used by this project.
+                <!-- EventSource tracing infrastructure — not used by this project.
          Disabling removes ETW event-pipe initialization at startup. -->
     <EventSourceSupport>false</EventSourceSupport>
 
-            <!-- Optimize for speed over size in Release. Enables aggressive inlining,
+                <!-- Optimize for speed over size in Release. Enables aggressive inlining,
          loop optimizations, and larger method bodies in R2R pre-compilation. -->
     <OptimizationPreference>Speed</OptimizationPreference>
   </PropertyGroup>

@@ -5,7 +5,7 @@
      shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
      windows 11 tweaks windows 10 tweaks gaming optimization security hardening
      registry backup corporate IT sysadmin gpo intune-compatible compliance audit
-     7718 tweaks 158 categories declarative regop engine dry-run snapshot diff
+     7718 tweaks across 158 categories declarative regop engine dry-run snapshot diff
      RegiLattice windows-optimizer tweak-manager registry-automation open-source
 -->
 
@@ -20,10 +20,10 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-3296%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-3304%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-6.33.0-blue)
+![Version](https://img.shields.io/badge/version-6.34.0-blue)
 
 A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7,718 verified tweaks** across **158 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
@@ -31,7 +31,7 @@ A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system op
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v6.33.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v6.34.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -67,7 +67,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **3,296 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **3,304 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification

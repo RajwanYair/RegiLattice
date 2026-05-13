@@ -1,4 +1,21 @@
-﻿# Changelog
+## [6.34.0] — 2026-05-13
+
+### Stats
+
+- Tweaks: 7,718
+- Categories: 158
+- Modules: 195
+- Tests: 3,304
+
+### Changes
+
+- **feat(core)**: Added optional `ILogger<RegistrySession>` injection to `RegistrySession` via `Microsoft.Extensions.Logging.Abstractions 10.0.0` (B.4 MEL structured logging)
+- **feat(tools)**: Added `RegiLattice.Tools` project skeleton — `net10.0-windows` WinForms class library for future optional tool panels (A.4)
+- **docs(readme)**: Trimmed README from 367 to 226 lines; archived full version to `docs/archive/README-v6.33-full.md` (A.2c)
+- **test(core)**: Added `[Collection]` isolation to 9 file-writing test classes to prevent parallel test collisions (A.1)
+- **feat(tweaks)**: Annotated all 195 tweak modules with `[TweakModule]` for source-generator readiness (B.2)
+
+# Changelog
 
 All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
