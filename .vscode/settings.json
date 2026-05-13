@@ -5,6 +5,8 @@
     "editor.defaultFormatter": "csharpier.csharpier-vscode",
     "editor.formatOnSave": true
   },
+  // ── Python (disable venv auto-activation — this is a .NET project) ──
+  "python.terminal.activateEnvironment": false,
   // ── PowerShell ──────────────────────────────────────────────────────
   "powershell.codeFormatting.preset": "OTBS",
   "powershell.codeFormatting.autoCorrectAliases": true,
