@@ -188,65 +188,29 @@ dotnet run --project src/RegiLattice.CLI -- --profile server     # 28 categories
 .\Launch-RegiLattice.ps1 --gui        # launch GUI directly
 ```
 
-## Screenshots
-
-> Place screenshot images in `docs/screenshots/` and reference them here.
-
-| View | Description |
-|------|-------------|
-| **GUI — Catppuccin Mocha** | Main window with collapsible categories, scope badges, and search bar |
-| **GUI — Nord Theme** | Same layout with the Nord colour palette |
-| **CLI — --list** | Terminal output with categories, status badges, and descriptions |
-| **Snapshot Diff** | Coloured terminal or HTML diff comparing two snapshot files |
-| **Profile Selector** | GUI dropdown showing Business / Gaming / Privacy / Minimal / Server profiles |
-| **About Dialog** | System info, hardware detection, and version details |
-
 ## Corporate Network Safety
 
-Automatically detects corporate environments and **blocks non-safe tweaks** to prevent policy violations:
-
-- **Active Directory** domain membership (P/Invoke `GetComputerNameExW`)
-- **Azure AD / Entra ID** join status (`dsregcmd /status`)
-- **VPN adapters** — Cisco AnyConnect, GlobalProtect, Zscaler, WireGuard, etc.
-- **Group Policy** registry indicators
-- **SCCM / Intune** management agents
-
-Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
-
-## Project Structure
-
-<p align="center">
-  <img src="docs/assets/project-structure.svg" alt="RegiLattice Project Structure — src, tests, infrastructure" width="100%"/>
-</p>
+Automatically detects corporate environments (AD domain, Azure AD, VPN, GPO, SCCM/Intune) and **blocks non-safe tweaks** to prevent policy violations. Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 
 ## Adding a Custom Tweak
 
-Create a new `.cs` file in `src/RegiLattice.Core/Tweaks/` and register it in `TweakEngine.RegisterBuiltins()`.
-
-**Example — declarative RegOp pattern** (preferred for simple registry tweaks):
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full guide. Quick example:
 
 ```csharp
 // src/RegiLattice.Core/Tweaks/MyCategory.cs
-using RegiLattice.Core.Models;
-
-namespace RegiLattice.Core.Tweaks;
-
-public static class MyCategory
+[TweakModule]
+internal static class MyCategory
 {
     private const string Key = @"HKEY_CURRENT_USER\Software\MyApp";
-
-    public static List<TweakDef> Tweaks { get; } =
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
         new TweakDef
         {
             Id = "myapp-fancy-mode",
             Label = "Enable Fancy Mode",
             Category = "My App",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            RegistryKeys = [Key],
-            Description = "Enables Fancy Mode in MyApp.",
-            Tags = ["myapp", "fancy", "ui"],
+            ImpactScore = 2,
+            SafetyRating = 5,
             ApplyOps = [RegOp.SetDword(Key, "FancyMode", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "FancyMode")],
             DetectOps = [RegOp.CheckDword(Key, "FancyMode", 1)],
@@ -255,113 +219,8 @@ public static class MyCategory
 }
 ```
 
-For complex tweaks that need custom logic, use `ApplyAction`/`RemoveAction`/`DetectAction` delegates instead:
-
-```csharp
-new TweakDef
-{
-    Id = "myapp-complex-tweak",
-    Label = "Complex Custom Logic",
-    Category = "My App",
-    RegistryKeys = [Key],
-    ApplyAction = (requireAdmin) => { /* custom apply logic */ },
-    RemoveAction = (requireAdmin) => { /* custom remove logic */ },
-    DetectAction = () => { /* return true if applied */ return false; },
-}
-```
-
-See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full guide.
-
-## Building the Installer
-
-The MSI installer is built with [WiX Toolset v6](https://wixtoolset.org/). It requires the self-contained publish outputs to exist first:
-
-```powershell
-# 1. Publish self-contained executables
-dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/gui
-dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/cli
-
-# 2. Build the MSI
-dotnet build installer/RegiLattice.Installer.wixproj -c Release
-
-# Output: installer/bin/Release/RegiLattice.msi
-```
-
-Install WiX toolset (if not already installed):
-
-```powershell
-dotnet tool install --global wix
-# or update:
-dotnet tool update --global wix
-```
-
-## Trademark Notices
-
-RegiLattice is an **independent open-source project** and is **not affiliated with, endorsed by, or sponsored by** Microsoft Corporation or any other company whose products are mentioned.
-
-Third-party names referenced in this project are trademarks or registered trademarks of their respective owners:
-
-- **Windows®**, **Windows 10**, **Windows 11**, **.NET**, **WinForms**, **Group Policy**, **Intune**, **OneDrive**, **Cortana**, **Microsoft Copilot**, and **Edge** are trademarks of **Microsoft Corporation**.
-- **Catppuccin**, **Nord**, **Dracula**, **Tokyo Night**, **Gruvbox**, **Solarized**, **One Dark Pro**, **Rosé Pine**, and **Everforest** are names of independent open-source colour-palette projects, used here as theme names only with attribution to their respective communities.
-- All other product and company names are trademarks™ or registered trademarks® of their respective owners.
-
-Use of these names is for **identification and descriptive purposes only** and does not imply any endorsement or affiliation.
-
 ---
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
-
----
-
-## Keywords & GitHub Topics
-
-### Repository Description *(GitHub UI → "About" gear → Description)*
-
-Paste this into the repository **Description** field for maximum GitHub search visibility:
-
-> Windows 10/11 registry tweaks toolkit — 7,718 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
-
-### Recommended GitHub Topics
-
-Set the following topics on the repository (GitHub UI → "About" gear → Topics):
-
-`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager` `group-policy` `privacy-tools` `windows-debloat` `registry-automation` `tweak-engine` `gpo-alternative` `windows-11-tweaks` `windows-11-debloat` `windows-11-privacy` `windows-11-gaming` `windows-11-hardening` `disable-telemetry` `windows-decrapifier` `sysadmin-tools` `corporate-it` `compliance-audit` `drift-detection` `snapshot-diff` `dry-run` `declarative-config` `registry-policy` `winget` `chocolatey` `scoop`
-
-### Repository Description *(paste into GitHub → About gear → Description)*
-
-> Windows 10/11 registry tweaks toolkit — 7,718 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
-
-### Search Keywords
-
-<!-- GitHub indexes this content for code/repository search -->
-
-**Registry & System:**
-`windows-registry` · `registry-editor` · `registry-optimizer` · `registry-backup` · `registry-cleaner` · `registry-automation` · `registry-scripting` · `registry-policy` · `group-policy-alternative` · `windows-settings-manager` · `windows-configuration`
-
-**Privacy & Security:**
-`disable-telemetry` · `anti-telemetry` · `privacy-tools` · `privacy-tweaks` · `disable-tracking` · `windows-privacy` · `block-microsoft-telemetry` · `disable-cortana` · `disable-windows-search` · `disable-activity-tracking` · `windows-hardening` · `security-hardening` · `uac-management` · `lsa-protection` · `aslr-sehop` · `windows-firewall-rules` · `windows-defender-policy` · `bitlocker-policy` · `corporate-hardening` · `cis-benchmarks`
-
-**Performance & Gaming:**
-`windows-performance` · `performance-tweaks` · `gaming-optimization` · `latency-reduction` · `gpu-tweaks` · `cpu-optimization` · `ram-optimization` · `ssd-optimization` · `windows-gaming` · `game-mode` · `disable-animations` · `windows-startup-optimizer` · `power-plan` · `reduce-ram-usage` · `network-optimization` · `tcp-optimization` · `boot-optimization` · `responsiveness` · `input-lag` · `turbo-boost`
-
-**Debloat & Cleanup:**
-`debloat` · `debloat-windows` · `remove-bloatware` · `uninstall-apps` · `disable-bloatware` · `windows-cleanup` · `disk-cleanup` · `cortana-removal` · `onedrive-removal` · `telemetry-removal` · `windows-decrapifier` · `trim-windows` · `minimal-windows`
-
-**Windows Versions:**
-`windows-11-tweaks` · `windows-10-tweaks` · `win11` · `win10` · `windows-11-optimization` · `windows-11-privacy` · `windows-11-gaming` · `windows-11-debloat` · `windows-11-hardening`
-
-**Developer & IT:**
-`dotnet` · `dotnet-10` · `csharp-13` · `winforms` · `windows-forms` · `cli-tool` · `powershell-tool` · `windows-automation` · `sysadmin-tools` · `it-management` · `group-policy` · `gpo` · `intune-compatible` · `corporate-it` · `windows-deployment` · `scripting-windows` · `winget` · `chocolatey` · `scoop`
-
-**Package & Tool Management:**
-`package-manager` · `winget-integration` · `chocolatey-integration` · `scoop-integration` · `pip-integration` · `powershell-modules` · `tool-management` · `software-management`
-
-**Compliance & Audit:**
-`compliance-audit` · `drift-detection` · `policy-compliance` · `configuration-audit` · `baseline-hardening` · `cis-benchmarks` · `security-baseline` · `windows-compliance` · `it-policy-enforcement` · `change-tracking`
-
-**Similar / Related Tools:**
-RegiLattice is a programmatic, fully reversible, and enterprise-safe alternative to tools in the same space as O\&O ShutUp10, W10Privacy, Winaero Tweaker, Chris Titus WinUtil, BloatyNosy, sophia-script, and Windows10Debloater — built on .NET 10 with a declarative engine, CLI, WinForms GUI, xUnit test suite, and corporate network guard.
-
-`shutup10-alternative` · `w10privacy-alternative` · `winaero-alternative` · `chris-titus-winutil-alternative` · `windows-decrapifier` · `debloat-windows-11` · `debloat-windows-10`
+MIT — see [LICENSE](LICENSE) for details. RegiLattice is an independent open-source project, not affiliated with Microsoft Corporation.
