@@ -1,3 +1,21 @@
+## [6.35.0] — 2026-05-14
+
+### Stats
+
+- Tweaks: 7,718
+- Categories: 158
+- Modules: 195
+- Tests: 3,304
+
+### Changes
+
+- **feat(core)**: Added `IFavoritesRepository` interface + `JsonFavoritesRepository` implementation — decouples favorites persistence from consumers (B.3)
+- **feat(core)**: Added `IEventBus` + `InProcessEventBus` with `TweakApplied`/`TweakRemoved`/`TweakFailed` event records; `TweakEngine` publishes events on Apply/Remove (B.5)
+- **feat(scripts)**: Added `scripts/Setup-Dev.ps1` — one-command developer bootstrap (checks prereqs, restores NuGet, builds, runs tests) (F.4)
+- **ci(release)**: Added win-arm64 publish targets for GUI and CLI EXEs in `release.yml` (CI Sprint 9)
+- **docs(ci)**: Added `mkdocs.yml` with MkDocs Material theme, 11-page nav, dark/light mode; `ci.yml` pages-deploy job builds and deploys MkDocs site to GitHub Pages (A.2)
+- **docs(ci)**: Added `.cliff.toml` for git-cliff automated CHANGELOG generation from Conventional Commits (A.3)
+
 ## [6.34.0] — 2026-05-13
 
 ### Stats
