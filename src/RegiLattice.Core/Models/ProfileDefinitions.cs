@@ -195,5 +195,19 @@ internal static class ProfileDefinitions
                 "Windows Update",
             ],
         },
+        new ProfileDef
+        {
+            Name = "cis-l1",
+            Description = "CIS Windows 11 Benchmark Level 1 — mandatory controls for corporate-managed workstations",
+            ApplyCategories = [],
+            RequireTags = ["cis-l1"],
+        },
+        new ProfileDef
+        {
+            Name = "cis-l2",
+            Description = "CIS Windows 11 Benchmark Level 2 — high-security environment controls (includes Level 1)",
+            ApplyCategories = [],
+            RequireTags = ["cis-l2"],
+        },
     ];
 }

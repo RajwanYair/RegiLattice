@@ -682,7 +682,16 @@ public sealed class TweakEngine : ITweakRegistry, ITweakSearch, ITweakExecutor, 
         var profile = GetProfile(name);
         if (profile is null)
             return [];
-        // Harvest from per-category buckets — avoids a full O(n) scan of _allTweaks.
+
+        // Tag-driven profiles (e.g. cis-l1, cis-l2): return all tweaks that carry every required tag.
+        if (profile.RequireTags.Count > 0)
+        {
+            return _allTweaks
+                .Where(t => profile.RequireTags.All(tag => t.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
+                .ToList();
+        }
+
+        // Category-driven profiles: harvest from per-category buckets — avoids a full O(n) scan of _allTweaks.
         var cats = new HashSet<string>(profile.ApplyCategories, StringComparer.OrdinalIgnoreCase);
         var result = new List<TweakDef>();
         foreach (var cat in cats)

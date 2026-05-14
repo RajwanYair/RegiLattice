@@ -163,9 +163,9 @@ public sealed class TweakEngineTests
 
     // ── Profiles ────────────────────────────────────────────────────────
     [Fact]
-    public void Profiles_HasFiveBuiltIn()
+    public void Profiles_HasSevenBuiltIn()
     {
-        Assert.Equal(5, TweakEngine.Profiles.Count);
+        Assert.Equal(7, TweakEngine.Profiles.Count);
     }
 
     [Fact]
