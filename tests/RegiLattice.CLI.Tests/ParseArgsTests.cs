@@ -1918,4 +1918,31 @@ public sealed class BatchSubcmdParseTests
         Assert.True(a.Diagnostic);
         Assert.True(a.DryRun);
     }
+
+    // ── D.4 — --check-update flag ──────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_CheckUpdate_SetsCheckUpdateTrue()
+    {
+        var a = Program.ParseArgs(["--check-update"]);
+        Assert.NotNull(a);
+        Assert.True(a.CheckUpdate);
+    }
+
+    [Fact]
+    public void ParseArgs_CheckUpdate_DefaultFalse()
+    {
+        var a = Program.ParseArgs(["--list"]);
+        Assert.NotNull(a);
+        Assert.False(a.CheckUpdate);
+    }
+
+    [Fact]
+    public void ParseArgs_CheckUpdate_CombinedWithNoColor_BothSet()
+    {
+        var a = Program.ParseArgs(["--check-update", "--no-color"]);
+        Assert.NotNull(a);
+        Assert.True(a.CheckUpdate);
+        Assert.True(a.NoColor);
+    }
 }

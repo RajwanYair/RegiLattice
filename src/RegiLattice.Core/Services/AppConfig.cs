@@ -29,6 +29,10 @@ public sealed class AppConfig
     [JsonPropertyName("check_tool_updates")]
     public bool CheckToolUpdates { get; set; } = true;
 
+    /// <summary>When true, RegiLattice checks GitHub Releases for a newer version on startup.</summary>
+    [JsonPropertyName("check_for_updates")]
+    public bool CheckForUpdates { get; set; } = true;
+
     [JsonPropertyName("minimize_to_tray")]
     public bool MinimizeToTray { get; set; } = true;
 

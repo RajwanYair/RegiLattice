@@ -211,6 +211,49 @@ public partial class MainForm : Form
             dlg.ShowDialog(this);
             WhatsNewDialog.MarkSeen();
         }
+
+        // D.4 — background update check (non-blocking, best-effort)
+        var cfg2 = AppConfig.Load();
+        if (cfg2.CheckForUpdates && !UpdateCheckService.IsDisabledByPolicy())
+            _ = CheckForUpdateAsync();
+    }
+
+    private async Task CheckForUpdateAsync()
+    {
+        try
+        {
+            var info = await UpdateCheckService.CheckAsync().ConfigureAwait(true);
+            if (!info.UpdateAvailable || string.IsNullOrEmpty(info.LatestVersion))
+                return;
+
+            // Marshal to UI thread (ConfigureAwait(true) should already do this on WinForms
+            // SynchronizationContext, but guard with InvokeRequired for safety)
+            if (InvokeRequired)
+            {
+                Invoke(() => ShowUpdateBanner(info));
+            }
+            else
+            {
+                ShowUpdateBanner(info);
+            }
+        }
+        catch
+        {
+            // Network failures are silently ignored — update check is best-effort.
+        }
+    }
+
+    private void ShowUpdateBanner(UpdateInfo info)
+    {
+        _updateBannerLabel.Text =
+            $"  ✦ RegiLattice {info.LatestVersion} is available — you are running {info.CurrentVersion}.  "
+            + "[Download at github.com/RajwanYair/RegiLattice/releases]";
+        _updateBanner.BackColor = AppTheme.Accent;
+        _updateBanner.ForeColor = AppTheme.Bg;
+        _updateBannerLabel.ForeColor = AppTheme.Bg;
+        _updateBannerDismiss.ForeColor = AppTheme.Bg;
+        _updateBannerDismiss.BackColor = AppTheme.Accent;
+        _updateBanner.Visible = true;
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -434,6 +477,15 @@ public partial class MainForm : Form
         _statusStrip.BackColor = AppTheme.Overlay;
         _statusStrip.ForeColor = AppTheme.Fg;
         _statusStrip.SizingGrip = false;
+
+        // D.4 — re-colour update banner when theme changes (if banner is visible)
+        if (_updateBanner.Visible)
+        {
+            _updateBanner.BackColor = AppTheme.Accent;
+            _updateBannerLabel.ForeColor = AppTheme.Bg;
+            _updateBannerDismiss.BackColor = AppTheme.Accent;
+            _updateBannerDismiss.ForeColor = AppTheme.Bg;
+        }
 
         _searchBox.BackColor = AppTheme.Overlay;
         _searchBox.ForeColor = AppTheme.Fg;

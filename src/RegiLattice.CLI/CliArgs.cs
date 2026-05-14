@@ -221,4 +221,11 @@ internal sealed class CliArgs
     /// Activates FileLoggerProvider at startup.
     /// </summary>
     public bool Diagnostic { get; set; }
+
+    // ── D.4 — auto-update check ─────────────────────────────────────────
+    /// <summary>
+    /// When <c>true</c>, queries GitHub Releases API and prints a one-line
+    /// notice to stderr if a newer version is available, then exits.
+    /// </summary>
+    public bool CheckUpdate { get; set; }
 }

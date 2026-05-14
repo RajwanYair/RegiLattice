@@ -134,6 +134,11 @@ partial class MainForm
     private NotifyIcon _trayIcon = null!;
     private ContextMenuStrip _trayMenu = null!;
 
+    // ── Update notification banner ─────────────────────────────────────────
+    private Panel _updateBanner = null!;
+    private Label _updateBannerLabel = null!;
+    private Button _updateBannerDismiss = null!;
+
     // ── Dispose ────────────────────────────────────────────────────────────
     protected override void Dispose(bool disposing)
     {
@@ -754,6 +759,36 @@ partial class MainForm
         Controls.Add(_contentArea);
         Controls.Add(_sidebar);
         Controls.Add(_toolStrip);
+
+        // ── Update notification banner (hidden until update found) ──────────
+        _updateBannerLabel = new Label
+        {
+            AutoSize = false,
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Padding = new Padding(8, 0, 0, 0),
+            Font = AppTheme.Regular,
+        };
+        _updateBannerDismiss = new Button
+        {
+            Text = "✕",
+            Width = 28,
+            Dock = DockStyle.Right,
+            FlatStyle = FlatStyle.Flat,
+            Font = AppTheme.Regular,
+        };
+        _updateBannerDismiss.FlatAppearance.BorderSize = 0;
+        _updateBannerDismiss.Click += (_, _) => _updateBanner.Visible = false;
+        _updateBanner = new Panel
+        {
+            Height = 28,
+            Dock = DockStyle.Top,
+            Visible = false,
+        };
+        _updateBanner.Controls.Add(_updateBannerLabel);
+        _updateBanner.Controls.Add(_updateBannerDismiss);
+        Controls.Add(_updateBanner);
+
         Controls.Add(_menuStrip);
         Controls.Add(_logPanel);
         Controls.Add(_statusStrip);

@@ -70,6 +70,41 @@ internal static class Program
                 $"[diagnostic] Logging enabled → {provider.CurrentLogFilePath}");
         }
 
+        // D.4 — update check (non-blocking; prints notice and exits when --check-update)
+        if (parsed.CheckUpdate)
+        {
+            var info = UpdateCheckService.CheckAsync().GetAwaiter().GetResult();
+            if (info.Error is not null)
+                Console.Error.WriteLine($"[update] Check failed: {info.Error}");
+            else if (info.UpdateAvailable)
+                Console.Error.WriteLine(
+                    $"[update] RegiLattice {info.LatestVersion} is available (you have {info.CurrentVersion}). " + $"Download: {info.DownloadUrl}"
+                );
+            else
+                Console.Error.WriteLine($"[update] RegiLattice {info.CurrentVersion} is up-to-date.");
+            return 0;
+        }
+
+        // Background update notice (non-blocking, best-effort, respects config + policy)
+        var bgUpdateCfg = AppConfig.Load(parsed.ConfigPath);
+        if (bgUpdateCfg.CheckForUpdates && !UpdateCheckService.IsDisabledByPolicy())
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var info = await UpdateCheckService.CheckAsync().ConfigureAwait(false);
+                    if (info.UpdateAvailable)
+                        Console.Error.WriteLine(
+                            $"\n[update] RegiLattice {info.LatestVersion} is available! " + $"Run with --check-update for details.\n"
+                        );
+                }
+                catch
+                { /* best-effort */
+                }
+            });
+        }
+
         _session = new RegistrySession(dryRun: parsed.DryRun);
         _engine = new TweakEngine(_session);
         _engine.RegisterBuiltins();
@@ -3515,6 +3550,11 @@ internal static class Program
                 // ── B.4 — diagnostic / file logging ────────────────────────────
                 case "--diagnostic":
                     p.Diagnostic = true;
+                    break;
+
+                // ── D.4 — update check ──────────────────────────────────────────
+                case "--check-update":
+                    p.CheckUpdate = true;
                     break;
 
                 default:

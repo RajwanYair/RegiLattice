@@ -133,6 +133,25 @@ public static class UpdateCheckService
             vb = new Version(0, 0, 0);
         return va.CompareTo(vb);
     }
+
+    /// <summary>
+    /// Returns <c>true</c> if the enterprise Group Policy key
+    /// <c>HKLM\SOFTWARE\Policies\RegiLattice\DisableAutoUpdate</c> is set to <c>1</c>.
+    /// </summary>
+    public static bool IsDisabledByPolicy()
+    {
+        try
+        {
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Policies\RegiLattice", writable: false);
+            if (key is null)
+                return false;
+            return key.GetValue("DisableAutoUpdate") is int v && v != 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
 
 // ---- JSON model & source-gen context ----
