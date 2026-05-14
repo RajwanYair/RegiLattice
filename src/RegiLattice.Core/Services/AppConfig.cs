@@ -217,6 +217,18 @@ public sealed class AppConfig
 
     public static string DefaultConfigPath => Path.Combine(ConfigDir, "config.json");
 
+    // ── Data backend ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Selects the persistence backend for Favorites, Ratings, and History.
+    /// <list type="bullet">
+    ///   <item><description><c>"json"</c> (default) — plain JSON files in <see cref="ConfigDir"/>.</description></item>
+    ///   <item><description><c>"sqlite"</c> — single SQLite database (<c>regilattice.db</c>) in <see cref="ConfigDir"/>. Migrated automatically from JSON on first use.</description></item>
+    /// </list>
+    /// </summary>
+    [JsonPropertyName("data_backend")]
+    public string DataBackend { get; set; } = "json";
+
     /// <summary>
     /// Validates all config fields and returns a list of human-readable error messages.
     /// Returns an empty list when configuration is valid.
@@ -248,6 +260,9 @@ public sealed class AppConfig
 
         if (AutoCleanMemoryThreshold < 0 || AutoCleanMemoryThreshold > 100)
             errors.Add($"auto_clean_memory_threshold must be between 0 and 100 (current: {AutoCleanMemoryThreshold}).");
+
+        if (DataBackend is not ("json" or "sqlite"))
+            errors.Add($"data_backend must be 'json' or 'sqlite' (current: '{DataBackend}').");
 
         if (BrightnessDayPct < 0 || BrightnessDayPct > 100)
             errors.Add($"brightness_day_pct must be between 0 and 100 (current: {BrightnessDayPct}).");
