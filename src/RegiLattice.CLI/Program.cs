@@ -1544,6 +1544,23 @@ internal static class Program
             return 1;
         }
 
+        // ── F.2: lazy elevation guard ────────────────────────────────────
+        // When --no-elevate is set and the process is not admin, allow HKCU-only
+        // tweaks to proceed; skip HKLM/NeedsAdmin tweaks with a warning.
+        if (a.NoElevate && !Elevation.IsAdmin() && !Elevation.CanRunWithoutElevation(td))
+        {
+            if (a.OutputFormat == "json")
+                Console.WriteLine(
+                    JsonSerializer.Serialize(
+                        new TweakSkipDto(td.Id, true, "requires-elevation", TweakResult.Error.ToString()),
+                        CliJsonContext.Default.TweakSkipDto
+                    )
+                );
+            else
+                Console.WriteLine($"Skipped: '{td.Label}' requires elevation (HKLM). Re-run as admin or omit --no-elevate.");
+            return 2;
+        }
+
         var result = isApply ? _engine.Apply(td, forceCorp: a.Force) : _engine.Remove(td, forceCorp: a.Force);
 
         if (result is TweakResult.Applied && isApply)
@@ -2965,6 +2982,7 @@ internal static class Program
               --config <path>                Specify config file path
               -y, --assume-yes               Skip confirmation prompts
               --no-color                     Disable ANSI colour output
+              --no-elevate                   Skip UAC prompt; HKCU tweaks run unelevated, HKLM tweaks are skipped
               --portable                     Store all data in .\data\ (portable mode)
               --silent                       No console output; exit code only
               --log-file <path>              Write JSON result log (with --silent)
@@ -3363,6 +3381,9 @@ internal static class Program
                     break;
                 case "--no-color":
                     p.NoColor = true;
+                    break;
+                case "--no-elevate":
+                    p.NoElevate = true;
                     break;
                 case "--depends-on":
                     if (++i < args.Length)

@@ -228,4 +228,13 @@ internal sealed class CliArgs
     /// notice to stderr if a newer version is available, then exits.
     /// </summary>
     public bool CheckUpdate { get; set; }
+
+    // ── F.2 — lazy admin elevation ───────────────────────────────────────
+    /// <summary>
+    /// When <c>true</c>, skips UAC elevation and runs in the current security
+    /// context.  Tweaks that only touch HKCU will still be applied; tweaks that
+    /// require HKLM or NeedsAdmin=true will be skipped with a warning instead of
+    /// triggering a UAC prompt.
+    /// </summary>
+    public bool NoElevate { get; set; }
 }

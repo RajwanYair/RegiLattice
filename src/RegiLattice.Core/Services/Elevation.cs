@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using System.Security.Principal;
+using RegiLattice.Core.Models;
 
 namespace RegiLattice.Core;
 
@@ -91,6 +92,35 @@ public static class Elevation
     {
         if (requireAdmin && !IsAdmin())
             throw new UnauthorizedAccessException("This operation requires administrator privileges.");
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when a tweak can be executed without administrator
+    /// privileges.  A tweak is elevation-free when ALL of the following hold:
+    /// <list type="bullet">
+    ///   <item><description><see cref="TweakDef.NeedsAdmin"/> is <c>false</c>, OR every registry
+    ///   operation targets HKEY_CURRENT_USER exclusively.</description></item>
+    ///   <item><description>The tweak has no <see cref="TweakDef.ApplyAction"/> delegate
+    ///   (custom actions may call system tools that require elevation).</description></item>
+    /// </list>
+    /// </summary>
+    public static bool CanRunWithoutElevation(TweakDef td)
+    {
+        // Custom-action tweaks may run arbitrary code — conservatively require elevation.
+        if (td.ApplyAction is not null)
+            return false;
+
+        // If the tweak itself declares it doesn't need admin, honour that.
+        if (!td.NeedsAdmin)
+            return true;
+
+        // If every registry op is under HKCU, Windows will allow it without elevation.
+        if (td.ApplyOps.Count == 0)
+            return false;
+
+        return td.ApplyOps.All(op =>
+            op.Path.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase) ||
+            op.Path.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase));
     }
 
     private static string QuoteArg(string arg) => arg.Contains(' ') || arg.Contains('"') ? $"\"{arg.Replace("\"", "\\\"")}\"" : arg;
