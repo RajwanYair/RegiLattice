@@ -62,6 +62,14 @@ internal static class Program
 
         ConsoleColorizer.NoColor = parsed.NoColor || Console.IsOutputRedirected;
 
+        // Diagnostic mode: activate file logging at Debug/Trace level.
+        if (parsed.Diagnostic)
+        {
+            var provider = new RegiLattice.Core.Services.FileLoggerProvider();
+            Console.Error.WriteLine(
+                $"[diagnostic] Logging enabled → {provider.CurrentLogFilePath}");
+        }
+
         _session = new RegistrySession(dryRun: parsed.DryRun);
         _engine = new TweakEngine(_session);
         _engine.RegisterBuiltins();
@@ -3502,6 +3510,11 @@ internal static class Program
                 case "--watch-file":
                     if (++i < args.Length)
                         p.WatchFile = args[i];
+                    break;
+
+                // ── B.4 — diagnostic / file logging ────────────────────────────
+                case "--diagnostic":
+                    p.Diagnostic = true;
                     break;
 
                 default:

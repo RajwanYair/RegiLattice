@@ -1891,4 +1891,31 @@ public sealed class BatchSubcmdParseTests
         Assert.NotNull(a);
         Assert.Equal("ids.txt", a.WatchFile);
     }
+
+    // ── B.4 — --diagnostic flag ────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Diagnostic_SetsDiagnosticTrue()
+    {
+        var a = Program.ParseArgs(["--diagnostic"]);
+        Assert.NotNull(a);
+        Assert.True(a.Diagnostic);
+    }
+
+    [Fact]
+    public void ParseArgs_Diagnostic_DefaultFalse()
+    {
+        var a = Program.ParseArgs(["--list"]);
+        Assert.NotNull(a);
+        Assert.False(a.Diagnostic);
+    }
+
+    [Fact]
+    public void ParseArgs_Diagnostic_CombinedWithDryRun_BothSet()
+    {
+        var a = Program.ParseArgs(["--diagnostic", "--dry-run"]);
+        Assert.NotNull(a);
+        Assert.True(a.Diagnostic);
+        Assert.True(a.DryRun);
+    }
 }

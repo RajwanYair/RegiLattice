@@ -213,4 +213,12 @@ internal sealed class CliArgs
 
     /// <summary>When non-null, exports all Registry/GroupPolicy tweaks as a PowerShell DSC .ps1 script to this path.</summary>
     public string? ExportDsc { get; set; }
+
+    // ── B.4 — file logging + diagnostic mode ────────────────────────────
+    /// <summary>
+    /// When <c>true</c>, enables verbose file logging (Debug/Trace level) to
+    /// <c>%LOCALAPPDATA%\RegiLattice\logs\regilattice-YYYY-MM-DD.log</c>.
+    /// Activates FileLoggerProvider at startup.
+    /// </summary>
+    public bool Diagnostic { get; set; }
 }
