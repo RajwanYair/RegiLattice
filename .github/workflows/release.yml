@@ -440,12 +440,12 @@ jobs:
           $os     = "${{ matrix.os }}"
           $status = $env:JOB_STATUS
           $icon   = if ($status -eq "success") { ":white_check_mark:" } else { ":x:" }
-          $body   = @"
-          ## $icon Smoke Tests — $tag on $os
-
-          | Commands tested | --help, --list-profiles, --show-categories, --validate, --stats, --list --dry-run |
-          |---|---|
-          | **Overall status** | $status |
-
-"@
+          $body = @(
+            "## $icon Smoke Tests - $tag on $os"
+            ""
+            "| Commands tested | --help, --list-profiles, --show-categories, --validate, --stats, --list --dry-run |"
+            "|---|---|"
+            "| **Overall status** | $status |"
+            ""
+          ) -join "`n"
           $body | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
