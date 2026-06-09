@@ -1,7 +1,7 @@
 # RegiLattice — Strategic Roadmap v2
 
-> **Baseline**: v6.34.0 — 7718 tweaks · 158 categories · 195 modules · 3,304 tests · 11 themes
-> **Last updated**: 2026-05-12
+> **Baseline**: v6.35.0 — 7718 tweaks · 158 categories · 195 modules · 3373 tests · 11 themes
+> **Last updated**: 2026-06-09
 > **Stack**: C# 13 / .NET 10.0-windows (x64) · WinForms · xUnit 2.9.3
 > **Repository**: [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice)
 
@@ -228,7 +228,7 @@ engine.Events.Subscribe<TweakAppliedEvent>(e => analytics.RecordApply(e.Id));
 ### Decision 4: Data Persistence — JSON Files → Repository Abstraction
 
 **Previous verdict**: MIGRATE TO SQLite. **Reassessment**: **REVISED — Repository
-abstraction first, SQLite as the _second_ backend. Keep JSON as the default until v9.0.**
+abstraction first, SQLite as the *second* backend. Keep JSON as the default until v9.0.**
 
 | Option | Pros | Cons | Verdict |
 |--------|------|------|---------|

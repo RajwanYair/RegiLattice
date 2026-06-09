@@ -242,6 +242,9 @@ internal static class Program
         // Phase 3.5: watch mode drift detection
         if (a.Watch)
             return RunWatch(a);
+        // G.2: Spectre.Console interactive TUI
+        if (a.Tui)
+            return RunTui(a);
 
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null)
@@ -2140,8 +2143,223 @@ internal static class Program
         return ExitCodes.Success;
     }
 
-    private static int RunMarketplace(CliArgs a)
+    // ── G.2: Spectre.Console Interactive TUI ────────────────────────────────
+
+    private static int RunTui(CliArgs a)
     {
+        var engine = _engine;
+
+        var allTweaks = engine.AllTweaks();
+        var categories = engine.Categories();
+
+        // Build category → tweak lookup
+        var byCategory = engine.TweaksByCategory();
+
+        string query = string.Empty;
+        int selectedCatIdx = 0;
+        int selectedTweakIdx = 0;
+        bool showingTweaks = false;
+
+        Spectre.Console.AnsiConsole.Clear();
+
+        while (true)
+        {
+            Spectre.Console.AnsiConsole.Clear();
+
+            // Header
+            Spectre.Console.AnsiConsole.Write(
+                new Spectre.Console.Panel(
+                    new Spectre.Console.Markup(
+                        $"[bold yellow]RegiLattice {Version} — Interactive TUI[/]  " +
+                        $"[grey]{allTweaks.Count:N0} tweaks · {categories.Count} categories[/]"))
+                {
+                    Padding = new Spectre.Console.Padding(0, 0)
+                });
+
+            // Filtered lists
+            List<string> visibleCats;
+            if (!string.IsNullOrEmpty(query))
+            {
+                var matched = engine
+                    .Search(query)
+                    .Select(t => t.Category)
+                    .Distinct()
+                    .OrderBy(c => c)
+                    .ToList();
+                visibleCats = matched;
+            }
+            else
+            {
+                visibleCats = categories.OrderBy(c => c).ToList();
+            }
+
+            if (visibleCats.Count == 0)
+            {
+                Spectre.Console.AnsiConsole.MarkupLine("[red]No categories match your query.[/]");
+            }
+            else
+            {
+                selectedCatIdx = Math.Clamp(selectedCatIdx, 0, visibleCats.Count - 1);
+                string selectedCat = visibleCats[selectedCatIdx];
+
+                List<TweakDef> tweaksInCat = string.IsNullOrEmpty(query)
+                    ? byCategory.TryGetValue(selectedCat, out var catTweaks)
+                        ? catTweaks.ToList()
+                        : []
+                    : engine.Search(query).Where(t => t.Category == selectedCat).ToList();
+
+                // Render two-column layout: category list (left) | tweak list (right)
+                var catTable = new Spectre.Console.Table()
+                    .AddColumn(new Spectre.Console.TableColumn("Cat") { Width = 28 })
+                    .AddColumn(new Spectre.Console.TableColumn("#") { Width = 5 });
+
+                for (int ci = 0; ci < Math.Min(visibleCats.Count, 30); ci++)
+                {
+                    string c = visibleCats[ci];
+                    int cnt = string.IsNullOrEmpty(query)
+                        ? (byCategory.TryGetValue(c, out var ct) ? ct.Count : 0)
+                        : engine.Search(query).Count(t => t.Category == c);
+                    bool isSel = ci == selectedCatIdx;
+                    string catText = Spectre.Console.Markup.Escape(c);
+                    string label = isSel ? $"[bold yellow]> {catText}[/]" : $"  {catText}";
+                    catTable.Rows.Add([new Spectre.Console.Markup(label), new Spectre.Console.Text(cnt.ToString())]);
+                }
+
+                var tweakTable = new Spectre.Console.Table()
+                    .AddColumn(new Spectre.Console.TableColumn("Tweak") { Width = 45 })
+                    .AddColumn(new Spectre.Console.TableColumn("Status") { Width = 8 });
+
+                selectedTweakIdx = Math.Clamp(selectedTweakIdx, 0, Math.Max(0, tweaksInCat.Count - 1));
+                for (int ti = 0; ti < Math.Min(tweaksInCat.Count, 25); ti++)
+                {
+                    var td = tweaksInCat[ti];
+                    bool isSel = showingTweaks && ti == selectedTweakIdx;
+                    string label = isSel ? $"[bold cyan]> {Spectre.Console.Markup.Escape(td.Label)}[/]" : $"  {Spectre.Console.Markup.Escape(td.Label)}";
+                    tweakTable.Rows.Add([new Spectre.Console.Markup(label), new Spectre.Console.Markup("[grey]?[/]")]);
+                }
+
+                var grid = new Spectre.Console.Grid();
+                grid.AddColumn(new Spectre.Console.GridColumn { Width = 36 });
+                grid.AddColumn(new Spectre.Console.GridColumn());
+                grid.AddRow(catTable, tweakTable);
+                Spectre.Console.AnsiConsole.Write(grid);
+            }
+
+            // Status bar
+            string searchDisplay = string.IsNullOrEmpty(query) ? "[grey]<no filter>[/]" : $"[yellow]{Spectre.Console.Markup.Escape(query)}[/]";
+            Spectre.Console.AnsiConsole.MarkupLine(
+                $"\n[grey]Search: {searchDisplay} | " +
+                "[white]↑↓[/] nav  [white]Tab[/] switch pane  " +
+                "[white]Enter[/] apply  [white]Del[/] remove  " +
+                "[white]/[/] search  [white]Esc[/] clear  [white]q[/] quit[/]");
+
+            // Input handling
+            var key = Console.ReadKey(intercept: true);
+
+            if (key.KeyChar == '/')
+            {
+                Spectre.Console.AnsiConsole.Markup("\n[yellow]Search:[/] ");
+                query = Console.ReadLine() ?? string.Empty;
+                selectedCatIdx = 0;
+                selectedTweakIdx = 0;
+                continue;
+            }
+
+            switch (key.Key)
+            {
+                case ConsoleKey.Q:
+                    if (key.Modifiers == 0)
+                    {
+                        Spectre.Console.AnsiConsole.Clear();
+                        return ExitCodes.Success;
+                    }
+                    break;
+
+                case ConsoleKey.Tab:
+                    showingTweaks = !showingTweaks;
+                    break;
+
+                case ConsoleKey.UpArrow:
+                    if (showingTweaks)
+                        selectedTweakIdx = Math.Max(0, selectedTweakIdx - 1);
+                    else
+                        selectedCatIdx = Math.Max(0, selectedCatIdx - 1);
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    if (showingTweaks)
+                        selectedTweakIdx++;
+                    else
+                        selectedCatIdx++;
+                    break;
+
+                case ConsoleKey.Escape:
+                    if (!string.IsNullOrEmpty(query))
+                        query = string.Empty;
+                    else
+                        showingTweaks = false;
+                    break;
+
+                case ConsoleKey.Enter when showingTweaks:
+                {
+                    var cats = string.IsNullOrEmpty(query)
+                        ? categories.OrderBy(c => c).ToList()
+                        : engine.Search(query).Select(t => t.Category).Distinct().OrderBy(c => c).ToList();
+
+                    if (selectedCatIdx < cats.Count)
+                    {
+                        string cat = cats[selectedCatIdx];
+                        var tweaksInCat2 = string.IsNullOrEmpty(query)
+                            ? (byCategory.TryGetValue(cat, out var ct2) ? ct2.ToList() : new List<TweakDef>())
+                            : engine.Search(query).Where(t => t.Category == cat).ToList();
+
+                        if (selectedTweakIdx < tweaksInCat2.Count)
+                        {
+                            var td = tweaksInCat2[selectedTweakIdx];
+                            Spectre.Console.AnsiConsole.MarkupLine($"\nApplying [cyan]{Spectre.Console.Markup.Escape(td.Label)}[/]...");
+                            var result = engine.Apply(td, requireAdmin: !a.NoElevate, forceCorp: a.Force);
+                            Spectre.Console.AnsiConsole.MarkupLine(
+                                result == TweakResult.Applied
+                                    ? "[green]✓ Applied[/]"
+                                    : $"[red]✗ {result}[/]");
+                            System.Threading.Thread.Sleep(800);
+                        }
+                    }
+                    break;
+                }
+
+                case ConsoleKey.Delete when showingTweaks:
+                {
+                    var cats = string.IsNullOrEmpty(query)
+                        ? categories.OrderBy(c => c).ToList()
+                        : engine.Search(query).Select(t => t.Category).Distinct().OrderBy(c => c).ToList();
+
+                    if (selectedCatIdx < cats.Count)
+                    {
+                        string cat = cats[selectedCatIdx];
+                        var tweaksInCat3 = string.IsNullOrEmpty(query)
+                            ? (byCategory.TryGetValue(cat, out var ct3) ? ct3.ToList() : new List<TweakDef>())
+                            : engine.Search(query).Where(t => t.Category == cat).ToList();
+
+                        if (selectedTweakIdx < tweaksInCat3.Count)
+                        {
+                            var td = tweaksInCat3[selectedTweakIdx];
+                            Spectre.Console.AnsiConsole.MarkupLine($"\nRemoving [cyan]{Spectre.Console.Markup.Escape(td.Label)}[/]...");
+                            var result = engine.Remove(td, requireAdmin: !a.NoElevate, forceCorp: a.Force);
+                            Spectre.Console.AnsiConsole.MarkupLine(
+                                result == TweakResult.NotApplied
+                                    ? "[green]✓ Removed[/]"
+                                    : $"[red]✗ {result}[/]");
+                            System.Threading.Thread.Sleep(800);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private static int RunMarketplace(CliArgs a)    {
         return a.Marketplace?.ToLowerInvariant() switch
         {
             "list" => RunMarketplaceList(),
@@ -2988,6 +3206,7 @@ internal static class Program
               --log-file <path>              Write JSON result log (with --silent)
               --gui                          Launch the graphical interface
               --menu                         Launch the interactive terminal menu
+              --tui                          Launch the Spectre.Console interactive terminal UI
               --version                      Show version info
               --help, -h                     Show this help
 
@@ -3384,6 +3603,9 @@ internal static class Program
                     break;
                 case "--no-elevate":
                     p.NoElevate = true;
+                    break;
+                case "--tui":
+                    p.Tui = true;
                     break;
                 case "--depends-on":
                     if (++i < args.Length)

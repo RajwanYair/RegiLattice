@@ -237,4 +237,12 @@ internal sealed class CliArgs
     /// triggering a UAC prompt.
     /// </summary>
     public bool NoElevate { get; set; }
+
+    // ── G.2 — Spectre.Console interactive TUI ────────────────────────────
+    /// <summary>
+    /// When <c>true</c>, launches the full-screen Spectre.Console interactive
+    /// terminal UI.  Allows browsing categories, searching tweaks, toggling
+    /// status, and applying/removing tweaks — all from the terminal.
+    /// </summary>
+    public bool Tui { get; set; }
 }

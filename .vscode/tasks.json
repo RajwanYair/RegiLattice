@@ -29,7 +29,7 @@
 		{
 			"label": "test: All",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build }; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build } }",
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build && dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build",
 			"group": {
 				"kind": "test",
 				"isDefault": true
@@ -43,7 +43,7 @@
 		{
 			"label": "test: Core",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build",
 			"group": "test",
 			"problemMatcher": "$msCompile",
 			"presentation": {
@@ -54,7 +54,7 @@
 		{
 			"label": "test: GUI",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build",
 			"group": "test",
 			"problemMatcher": "$msCompile",
 			"presentation": {
@@ -65,7 +65,7 @@
 		{
 			"label": "test: CLI",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build",
 			"group": "test",
 			"problemMatcher": "$msCompile",
 			"presentation": {
@@ -98,7 +98,7 @@
 		{
 			"label": "verify: Release Gate",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Release -m:1; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui; dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli }",
+			"command": "dotnet build RegiLattice.sln -c Release -m:1 && dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build && dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build && dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui && dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli",
 			"group": "build",
 			"problemMatcher": "$msCompile",
 			"presentation": {
@@ -214,32 +214,32 @@
 		{
 			"label": "build-and-test-gui",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
 		},
 		{
 			"label": "test-exe-validation",
 			"type": "shell",
-			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
+			"command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
 		},
 		{
 			"label": "rebuild-test-gui",
 			"type": "shell",
-			"command": "dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Debug -m:1 --verbosity minimal; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
+			"command": "dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Debug -m:1 --verbosity minimal && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
 		},
 		{
 			"label": "force-rebuild-gui-tests",
 			"type": "shell",
-			"command": "dotnet build-server shutdown; Remove-Item \"$env:TEMP\\RegiLattice-build\\RegiLattice.GUI.Tests\" -Recurse -Force -ErrorAction SilentlyContinue; dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Debug -m:1; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
+			"command": "dotnet build-server shutdown && (if exist \"%TEMP%\\RegiLattice-build\\RegiLattice.GUI.Tests\" rmdir /s /q \"%TEMP%\\RegiLattice-build\\RegiLattice.GUI.Tests\") && dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Debug -m:1 && dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
 		},
 		{
 			"label": "build-verify-fix",
 			"type": "shell",
-			"command": "$env:MSBUILDDISABLENODEREUSE = '1'; dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
+			"command": "set MSBUILDDISABLENODEREUSE=1 && dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
 		},
 		{
 			"label": "build-fix-verify",
 			"type": "shell",
-			"command": "$env:MSBUILDDISABLENODEREUSE = '1'; dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
+			"command": "set MSBUILDDISABLENODEREUSE=1 && dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
 		},
 		{
 			"label": "test-regression-gui",
