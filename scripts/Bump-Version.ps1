@@ -8,7 +8,7 @@
     .github/copilot-instructions.md, all SVG assets, and all package registry manifests.
 
 .PARAMETER Version
-    New semantic version string (e.g. "6.34.0").
+    New semantic version string (e.g. "6.35.0").
 
 .PARAMETER TweakCount
     Total tweak count after this bump. Pass 0 to auto-detect from the compiled assembly.
@@ -29,9 +29,9 @@
     Auto-detect tweak/category/test/module counts from the build output.
 
 .EXAMPLE
-    .\scripts\Bump-Version.ps1 -Version "6.34.0" -TweakCount 7768 -CategoryCount 163 -TestCount 3346
-    .\scripts\Bump-Version.ps1 -Version "6.34.0" -AutoDetectCounts
-    .\scripts\Bump-Version.ps1 -Version "6.34.0" -AutoDetectCounts -DryRun
+    .\scripts\Bump-Version.ps1 -Version "6.35.0" -TweakCount 7718 -CategoryCount 158 -TestCount 3373
+    .\scripts\Bump-Version.ps1 -Version "6.35.0" -AutoDetectCounts
+    .\scripts\Bump-Version.ps1 -Version "6.35.0" -AutoDetectCounts -DryRun
 #>
 
 [CmdletBinding(SupportsShouldProcess)]

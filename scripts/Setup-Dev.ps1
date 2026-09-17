@@ -8,11 +8,27 @@
     test suite. Designed to get a new contributor from zero to green
     in a single command.
 
+    Use -PrerequisitesOnly for an audit that does not restore, build, or test.
+    Use -InstallMachineTools from an elevated PowerShell session to install
+    the repository's pinned CSharpier and Stryker tools for all users.
+
 .PARAMETER SkipBuild
     Skip the dotnet build step (useful when you only want a prerequisite report).
 
 .PARAMETER SkipTests
     Skip the dotnet test step.
+
+.PARAMETER SkipRestore
+    Skip the dotnet restore step.
+
+.PARAMETER PrerequisitesOnly
+    Check prerequisites and exit without restoring, building, or testing.
+
+.PARAMETER InstallMachineTools
+    Install the pinned repository tools to the machine-wide tool directory.
+
+.PARAMETER MachineToolPath
+    Machine-wide .NET tool directory. Defaults to %ProgramData%\RegiLattice\dotnet-tools.
 
 .PARAMETER Quiet
     Suppress informational output; only print warnings and errors.
@@ -21,11 +37,17 @@
     .\scripts\Setup-Dev.ps1
     .\scripts\Setup-Dev.ps1 -SkipTests
     .\scripts\Setup-Dev.ps1 -SkipBuild -SkipTests
+    .\scripts\Setup-Dev.ps1 -PrerequisitesOnly
+    .\scripts\Setup-Dev.ps1 -PrerequisitesOnly -InstallMachineTools
 #>
 [CmdletBinding()]
 param(
     [switch] $SkipBuild,
     [switch] $SkipTests,
+    [switch] $SkipRestore,
+    [switch] $PrerequisitesOnly,
+    [switch] $InstallMachineTools,
+    [string] $MachineToolPath = "$env:ProgramData\RegiLattice\dotnet-tools",
     [switch] $Quiet
 )
 
@@ -53,11 +75,62 @@ function Require-Command([string]$Name, [string]$InstallHint) {
 
 function Get-Version([string]$Cmd, [string]$Args) {
     try {
-        $out = & $Cmd @Args.Split(' ') 2>&1
+        $argumentList = @()
+        if (-not [string]::IsNullOrWhiteSpace($Args)) {
+            $argumentList = $Args -split '\s+'
+        }
+        $out = & $Cmd @argumentList 2>&1
         return ($out | Select-Object -First 1).ToString().Trim()
     } catch {
         return '<unknown>'
     }
+}
+
+function Install-MachineTools {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+    if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Write-Fail 'Machine-wide tool installation requires an elevated PowerShell session.'
+        return $false
+    }
+
+    $tools = [ordered]@{
+        csharpier     = '1.2.6'
+        'dotnet-stryker' = '4.14.0'
+    }
+
+    New-Item -ItemType Directory -Path $MachineToolPath -Force | Out-Null
+    foreach ($tool in $tools.GetEnumerator()) {
+        $toolName = $tool.Key
+        $toolVersion = $tool.Value
+        $toolExe = Join-Path $MachineToolPath "$toolName.exe"
+        if (Test-Path $toolExe -PathType Leaf) {
+            Write-Ok "$toolName is present in $MachineToolPath"
+            continue
+        }
+
+        Write-Status "Installing $toolName $toolVersion to $MachineToolPath..."
+        & dotnet tool install --tool-path $MachineToolPath $toolName --version $toolVersion
+        if ($LASTEXITCODE -ne 0) {
+            Write-Fail "Could not install $toolName $toolVersion"
+            return $false
+        }
+        Write-Ok "$toolName $toolVersion installed"
+    }
+
+    $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $pathEntries = @($machinePath -split ';' | Where-Object { $_ })
+    $alreadyRegistered = $pathEntries | Where-Object {
+        $_.TrimEnd('\').Equals($MachineToolPath.TrimEnd('\'), [StringComparison]::OrdinalIgnoreCase)
+    }
+    if (-not $alreadyRegistered) {
+        [Environment]::SetEnvironmentVariable('Path', (($pathEntries + $MachineToolPath) -join ';'), 'Machine')
+        Write-Ok "Registered $MachineToolPath in the machine PATH"
+    } else {
+        Write-Ok "$MachineToolPath is already in the machine PATH"
+    }
+
+    return $true
 }
 
 # ── Header ───────────────────────────────────────────────────────────────────
@@ -132,17 +205,31 @@ if (-not $ok) {
     exit 1
 }
 
-# ── Restore ───────────────────────────────────────────────────────────────────
-
-Write-Host '  Restoring NuGet packages...' -ForegroundColor Cyan
-$restoreOut = dotnet restore RegiLattice.sln 2>&1
-if ($LASTEXITCODE -ne 0) {
-    $restoreOut | ForEach-Object { Write-Host "    $_" }
-    Write-Fail "NuGet restore failed (exit $LASTEXITCODE)"
+if ($InstallMachineTools -and -not (Install-MachineTools)) {
     exit 1
 }
-Write-Ok "NuGet packages restored"
-Write-Host ''
+
+if ($PrerequisitesOnly) {
+    Write-Host ''
+    Write-Host '  Prerequisite audit complete; restore, build, and test steps were skipped.' -ForegroundColor Green
+    exit 0
+}
+
+# ── Restore ───────────────────────────────────────────────────────────────────
+
+if (-not $SkipRestore) {
+    Write-Host '  Restoring NuGet packages...' -ForegroundColor Cyan
+    $restoreOut = dotnet restore RegiLattice.sln 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        $restoreOut | ForEach-Object { Write-Host "    $_" }
+        Write-Fail "NuGet restore failed (exit $LASTEXITCODE)"
+        exit 1
+    }
+    Write-Ok "NuGet packages restored"
+    Write-Host ''
+} else {
+    Write-Status 'Skipping NuGet restore.'
+}
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 

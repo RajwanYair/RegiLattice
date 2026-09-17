@@ -5,7 +5,7 @@
 - Tweaks: 7,718
 - Categories: 158
 - Modules: 195
-- Tests: 3,304
+- Tests: 3,373
 
 ### Changes
 

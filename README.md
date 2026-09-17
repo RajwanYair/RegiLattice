@@ -110,7 +110,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (153)
+## Tweak Categories (158)
 
 158 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, cloud storage, remote desktop, virtualization, and more. Each tweak is fully reversible with apply/remove/detect operations.
 

@@ -1,7 +1,7 @@
 # RegiLattice — Development Guide
 
 > Local setup, workflow, testing, and contribution instructions for the C# codebase.
-> Last updated: 2026-05-13 · v6.34.0
+> Last updated: 2026-05-14 · v6.35.0
 
 ---
 
@@ -13,6 +13,8 @@
 | Git | 2.40+ | For version control |
 | Windows | 10/11 (build 19041+) | Required for registry operations and WinForms GUI |
 | VS Code | 1.85+ | Recommended editor with C# Dev Kit extension |
+| CSharpier | 1.2.6 | Repository formatting tool |
+| dotnet-stryker | 4.14.0 | Mutation-testing tool |
 
 ---
 
@@ -23,11 +25,19 @@
 git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 
+# Audit prerequisites without restoring, building, or testing
+.\scripts\Setup-Dev.ps1 -PrerequisitesOnly
+
+# From an elevated PowerShell session, install the pinned tools machine-wide
+.\scripts\Setup-Dev.ps1 -PrerequisitesOnly -InstallMachineTools
+
 # Restore NuGet packages and build
 dotnet build RegiLattice.sln
 
-# Run all tests
-dotnet test RegiLattice.sln --logger "console;verbosity=normal"
+# Run each test project sequentially
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings
 
 # Run the CLI
 dotnet run --project src/RegiLattice.CLI -- --list | Select-Object -First 10
@@ -45,8 +55,8 @@ RegiLattice.sln
 ├── src/RegiLattice.Core/      # Class library — engine, models, registry, services, plugins
 ├── src/RegiLattice.GUI/       # WinForms application (11 themes)
 ├── src/RegiLattice.CLI/       # Console application (25+ commands)
-├── tests/RegiLattice.Core.Tests/   # 2,434 xUnit tests
-├── tests/RegiLattice.CLI.Tests/    # 434 xUnit tests
+├── tests/RegiLattice.Core.Tests/   # 2,570 xUnit tests
+├── tests/RegiLattice.CLI.Tests/    # 440 xUnit tests
 └── tests/RegiLattice.GUI.Tests/    # 363 xUnit tests
 ```
 
@@ -65,12 +75,12 @@ This means project files only keep project-specific settings and references.
 
 | Package | Version | Scope |
 |---|---|---|
-| System.Management | 10.0.5 | Core |
-| System.ServiceProcess.ServiceController | 10.0.5 | Core |
+| System.Management | 10.0.12 | Core |
+| System.ServiceProcess.ServiceController | 10.0.12 | Core |
 | xunit | 2.9.3 | Test projects |
 | xunit.runner.visualstudio | 2.8.2 | Test projects |
 | Microsoft.NET.Test.Sdk | 17.14.1 | Test projects |
-| coverlet.collector | 6.0.4 | Test projects |
+| coverlet.collector | 8.0.1 | Test projects |
 | BenchmarkDotNet | 0.15.8 | Benchmarks |
 | FsCheck.Xunit | 2.16.6 | Property-based tests |
 
@@ -82,7 +92,7 @@ This means project files only keep project-specific settings and references.
 |---|---|
 | Build (Debug) | `dotnet build RegiLattice.sln` |
 | Build (Release) | `dotnet build RegiLattice.sln -c Release` |
-| Run tests | `dotnet test RegiLattice.sln` |
+| Run tests (sequential) | `dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj` (then CLI and GUI) |
 | Run tests (verbose) | `dotnet test --logger "console;verbosity=normal"` |
 | Run CLI | `dotnet run --project src/RegiLattice.CLI -- <args>` |
 | Run GUI | `dotnet run --project src/RegiLattice.GUI` |
@@ -96,7 +106,9 @@ Production gate task:
 
 ```powershell
 dotnet build RegiLattice.sln -c Release
-dotnet test RegiLattice.sln -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
 dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui
 dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli
 ```
@@ -134,10 +146,12 @@ new TweakDef
 
 ## Testing
 
-Run the full test suite:
+Run the full test suite sequentially:
 
 ```powershell
-dotnet test RegiLattice.sln --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --logger "console;verbosity=normal"
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --logger "console;verbosity=normal"
 ```
 
 Run a specific test project:

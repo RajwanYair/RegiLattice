@@ -21,7 +21,7 @@
 
     // ── Filesystem — full workspace access (MIT: @modelcontextprotocol/server-filesystem) ──
     "filesystem": {
-      "command": "npx",
+      "command": "${env:PROGRAMFILES}\\nodejs\\npx.cmd",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
@@ -42,7 +42,7 @@
 
     // ── Project docs — .github + docs directory access (MIT: @modelcontextprotocol/server-filesystem) ──
     "project-docs": {
-      "command": "npx",
+      "command": "${env:PROGRAMFILES}\\nodejs\\npx.cmd",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
@@ -67,11 +67,8 @@
     // across chat sessions. Persisted to .github/mcp-memory.jsonl (gitignored).
     // Tools: create_entities, create_relations, search_nodes, open_nodes, read_graph
     "memory": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
+      "command": "${env:PROGRAMFILES}\\nodejs\\npx.cmd",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
         "MEMORY_FILE_PATH": "${workspaceFolder}\\.github\\mcp-memory.jsonl",
         "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
@@ -91,11 +88,8 @@
     // chain, sprint planning) into explicit reasoning steps with backtracking support.
     // Tool: sequentialthinking
     "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ],
+      "command": "${env:PROGRAMFILES}\\nodejs\\npx.cmd",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "env": {
         "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
         "HTTP_PROXY": "${env:HTTP_PROXY}",

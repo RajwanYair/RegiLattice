@@ -6,7 +6,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 
 > This file contains the top critical pitfalls only.
 > **Full archived version** (2,500+ lines): `docs/archive/lessons-learned-v6.md`
-> Last updated: 2026-05-13 (v6.34.0)
+> Last updated: 2026-05-14 (v6.35.0)
 
 ---
 

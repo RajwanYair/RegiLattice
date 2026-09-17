@@ -170,7 +170,7 @@ Every test run must satisfy ALL conditions before committing:
 | Build fatals | **0** — hard CI fail |
 | Build warnings | **0** — `TreatWarningsAsErrors=true`; any warning is a build error |
 | Build errors | **0** — hard fail |
-| Test failures | **0** — all 3,304+ tests must pass |
+| Test failures | **0** — all 3,373+ tests must pass |
 | Skipped tests | **0** — `[Fact(Skip=...)]` / `[Theory(Skip=...)]` are **FORBIDDEN** |
 | Inline suppressions | **0** — `#pragma warning disable` / `[SuppressMessage]` / `// NOSONAR` / `// NCA` / `// NOLINT` in test code **FORBIDDEN** |
 | Waivers / lint ignores | **0** — `// csharpier-ignore`, `// coverage: ignore`, `// HACK:` etc. equally forbidden |

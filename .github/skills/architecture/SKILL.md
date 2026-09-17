@@ -31,7 +31,7 @@ RegiLattice.sln
 ├── src/RegiLattice.CLI/                # Console app (depends on Core)
 │   ├── Program.cs                      # 25+ commands via args parsing
 │   └── CliArgs.cs                      # Extracted CLI argument model
-└── tests/                              # 2,507+ Core + 434+ CLI + 363+ GUI = 3,304 tests
+└── tests/                              # 2,570+ Core + 440+ CLI + 363+ GUI = 3,373 tests
 ```
 
 ## Data Flow — Tweak Lifecycle
