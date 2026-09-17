@@ -153,6 +153,7 @@ jobs:
         run: >-
           dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
           -c Release -r win-arm64 --self-contained true
+          -p:PlatformTarget=ARM64
           -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
           -o publish/gui-arm64
 
@@ -160,6 +161,7 @@ jobs:
         run: >-
           dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj
           -c Release -r win-arm64 --self-contained true
+          -p:PlatformTarget=ARM64
           -p:PublishSingleFile=true
           -o publish/cli-arm64
 

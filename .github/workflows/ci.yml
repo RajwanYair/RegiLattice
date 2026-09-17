@@ -262,7 +262,7 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build (for pack tests)
-        run: dotnet build RegiLattice.sln -c Release --no-restore
+        run: dotnet build RegiLattice.sln -c Release
 
       - name: Validate pack index
         shell: pwsh
